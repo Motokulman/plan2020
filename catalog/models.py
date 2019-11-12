@@ -115,33 +115,33 @@ class DirectProducer(models.Model):
         return self.name
 
 
-class BinderSolutionType(models.Model):
-    """Модель, представляющая тип связующего раствора"""
-    identifier = models.CharField(unique = True, default = 'default_identifiter', max_length=200, help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
-    name = models.CharField(max_length=200, help_text='Введите тип связующего раствора. Например, цементный раствор, клей на цементной основе и т.д.')
+# class BinderSolutionType(models.Model):
+#     """Модель, представляющая тип связующего раствора"""
+#     identifier = models.CharField(unique = True, default = 'default_identifiter', max_length=200, help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
+#     name = models.CharField(max_length=200, help_text='Введите тип связующего раствора. Например, цементный раствор, клей на цементной основе и т.д.')
 
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Тип связующего раствора'
-        verbose_name_plural = 'Типы связующих растворов'
+#     class Meta:
+#         ordering = ('name',)
+#         verbose_name = 'Тип связующего раствора'
+#         verbose_name_plural = 'Типы связующих растворов'
     
-    def __str__(self):
-        """String for representing the Model object."""
-        return self.name
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return self.name
 
-class WallReinforcementType(models.Model):
-    """Модель, представляющая тип армирования стены из какого-л материала"""
-    identifier = models.CharField(unique = True, default = 'default_identifier', max_length=200, help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
-    name = models.CharField(max_length=200, help_text='Введите тип армирования')
+# class WallReinforcementType(models.Model):
+#     """Модель, представляющая тип армирования стены из какого-л материала"""
+#     identifier = models.CharField(unique = True, default = 'default_identifier', max_length=200, help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
+#     name = models.CharField(max_length=200, help_text='Введите тип армирования')
 
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Тип армирования'
-        verbose_name_plural = 'Типы армирования'
+#     class Meta:
+#         ordering = ('name',)
+#         verbose_name = 'Тип армирования'
+#         verbose_name_plural = 'Типы армирования'
     
-    def __str__(self):
-        """String for representing the Model object."""
-        return self.name
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return self.name
 
 class ProviderActivityType(models.Model):
     """Модель, представляющая доступные наименования видов деятельности: проектирование, строительный подряд, поставка/продажа материалов, юридические услуги"""
@@ -291,20 +291,23 @@ class ClassBLight(models.Model):
         return f'{self.name} ({self.identifier})'
 
 class RockWallMaterialUnit(models.Model):
-    """Модель описывает единицу общепринятого стенового каменного материала. У единицы могут быть разные производители, названия, продавцы и конечно цена"""
-    name = models.CharField(max_length=200, help_text='Введите общепринятое название данного материала')
-    standard_size = models.ManyToManyField('RockWallMaterialStandardSize', help_text='Выберите тип стандартного размера, если есть', blank=True)
-    a_size = models.IntegerField(blank=True, help_text='Введите размеры, если они нестандарнтые')
-    b_size = models.IntegerField(blank=True)
-    c_size = models.IntegerField(blank=True)
+    """Модель описывает единицу стенового каменного материала, конкретное изделие конкретного производителя. Но без цены."""
+    # name = models.CharField(max_length=200, help_text='Введите общепринятое название данного материала')
+    standard_size = models.ForeignKey('RockWallMaterialStandardSize', on_delete=models.CASCADE, help_text='Выберите тип стандартного размера, если есть', blank=True)
+    a_size = models.IntegerField(blank=True, null=True, help_text='Введите размеры, если они нестандарнтые')
+    b_size = models.IntegerField(blank=True, null=True)
+    c_size = models.IntegerField(blank=True, null=True)
     mark_m = models.ManyToManyField(MarkM, help_text='Выберите стандартную марку М для данного материала, если есть', blank=True)
     mark_d = models.ManyToManyField(MarkD, help_text='Выберите стандартную марку D для данного материала, если есть', blank=True)
     class_b = models.ManyToManyField(ClassBLight, help_text='Выберите стандартный класс В для данного материала, если есть', blank=True)
-    wall_material_type = models.ManyToManyField(WallMaterialType, help_text='Выберите тип стены, к которому отностится материал')
-    application = models.ManyToManyField(Application, help_text='Выберите область применения материала')
-    binding_solution = models.ManyToManyField(BinderSolutionType, help_text='Выберите тип связующего для данного материала')
-    reinforcement_type = models.ManyToManyField(WallReinforcementType, help_text='Выберите тип армирования для данного материала')
-    thermal_conductivity = models.IntegerField(help_text='Введите коэффициент теплопроводности')
+    # wall_material_type = models.ManyToManyField(WallMaterialType, help_text='Выберите тип стены, к которому отностится материал')
+    # application = models.ManyToManyField(Application, help_text='Выберите область применения материала')
+    # binding_solution = models.ManyToManyField(BinderSolutionType, help_text='Выберите тип связующего для данного материала')
+    # reinforcement_type = models.ManyToManyField(WallReinforcementType, help_text='Выберите тип армирования для данного материала')
+    thermal_conductivity = models.IntegerField(help_text='Введите коэффициент теплопроводности', blank=True, null=True)
+    producer = models.ManyToManyField('DirectProducer', help_text='Выберите производителя', blank=True)
+    brand = models.ManyToManyField('ProductBrand', help_text='Выберите основной бренд (например, Wienerberger)', blank=True)
+    trade_mark = models.ManyToManyField('TradeMark', help_text='Выберите торговую марку изделия (например, Porotherm 44)', blank=True)
 
 
 
@@ -318,10 +321,23 @@ class RockWallMaterialUnit(models.Model):
         ('a', 'Доборный'),
     )
 
+    BODY = (
+        ('r', 'Полнотелый красный'),
+        ('s', 'Полнотелый силикатный'),
+        ('h', 'Пустотелый керамический'),
+        ('a', 'Газобетонный'),
+        ('k', 'Керамзитобетонный'),
+    )
+
+    TYPE_BRICK = (
+        ('f', 'Облицовочный'),
+        ('o', 'Рядовой'),
+        ('m', 'Рядовой c гранью под облицовку'),
+    )
+
     type_size = models.CharField(
         max_length=2,
         choices=SIZE_TYPE,
-        # blank=True,
         default='br',
         help_text='Тип материала по размеру: блок или кирпич',
     )
@@ -329,19 +345,31 @@ class RockWallMaterialUnit(models.Model):
     primary_or_additional = models.CharField(
         max_length=1,
         choices=PRIMARY_OR_ADDITIONAL,
-        # blank=True,
         default='p',
         help_text='Тип элемента: основной или доборный',
     )
 
+    body_type = models.CharField(
+        max_length=1,
+        choices=BODY,
+        default='r',
+        help_text='Тип кирпича или блока',
+    )
+
+    brick_type = models.CharField(
+        max_length=1,
+        choices=TYPE_BRICK,
+        blank=True, 
+        help_text='Тип кирпича - рядовой или облицовочный',
+    )
+    
     class Meta:
-        ordering = ('name',)
-        verbose_name = 'Единица каменного материала'
-        verbose_name_plural = 'Единицы каменных материалов'
+        verbose_name = 'Единица стенового материала'
+        verbose_name_plural = 'Единицы стеновых материалов'
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.name} ({self.application.name})'
+        return f'{self.type_size}, {self.standard_size.name},  {self.primary_or_additional}, {self.body_type}, {self.brick_type}, {self.producer.name}, {self.brand.name}, {self.trade_mark.name}'
 
     def get_absolute_url(self):
         """Returns the url to access a detail record for this material."""
@@ -361,4 +389,4 @@ class RockWallMaterialPricePosition(models.Model):
     
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.name.name} ({self.price})'
+        return f'{self.name.type_size},  {self.name.standard_size}, {self.name.primary_or_additional}, {self.name.body_type}, {self.name.brick_type}, {self.name.producer}, {self.name.brand}, {self.name.trade_mark}({self.price})'
