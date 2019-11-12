@@ -1,0 +1,13 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Калейдоплан</h1>
+  <p>Электронные проекты домов</p>
+  <h3>Сейчас в системе:</h3>
+  <ul>
+    <li><strong>Проектов:</strong> {{ num_plans }}</li>
+    <li><strong>Подрядчиков (бригад):</strong> {{ num_contractors }}</li>
+    <li><strong>Поставщков материалов:</strong> {{ num_sellers }}</li>
+    <li><strong>Архитекторов:</strong> {{ num_architects }}</li>
+  </ul>
+{% endblock %}

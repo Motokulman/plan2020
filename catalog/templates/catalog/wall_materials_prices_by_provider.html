@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Мои цены на каменные стеновые материалы</h1>
+
+    {% if rockwallmaterialpriceposition_list %}
+    <ul>
+
+      {% for priceposition in rockwallmaterialpriceposition_list %} 
+      <li class="">
+        <a href="">{{priceposition.name.name}}, {{priceposition.outlet.name}}</a> ({{ priceposition.price }})        
+      </li>
+      {% endfor %}
+    </ul>
+
+    {% else %}
+      <p>Пока здесь нет ни одной ценовой позиции.</p>
+    {% endif %}       
+{% endblock %}
