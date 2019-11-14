@@ -8,7 +8,7 @@
 
       {% for priceposition in rockwallmaterialpriceposition_list %} 
       <li class="">
-        <a href="">{{priceposition.name.name}}, {{priceposition.outlet.name}}</a> ({{ priceposition.price }})        
+        <a href="">{{priceposition.name}}, {{priceposition.owner}}</a> ({{ priceposition.price }})        
       </li>
       {% endfor %}
     </ul>

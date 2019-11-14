@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from catalog.models import WallMaterialType, ClassBLight, MarkD, MarkM, RockWallMaterialStandardSize, Application, ProductBrand, TradeMark, TradeMarkSeries, DirectProducer, ProviderActivityType, TaxSystemType, Provider, ProviderOutlet, City, RockWallMaterialUnit, RockWallMaterialPricePosition
+from catalog.models import PileGrillageFoundationCost, WallMaterialType, ClassBLight, MarkD, MarkM, RockWallMaterialStandardSize, Application, ProductBrand, TradeMark, TradeMarkSeries, DirectProducer, ProviderActivityType, TaxSystemType, Provider, ProviderOutlet, City, RockWallMaterialUnit, RockWallMaterialPricePosition
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.contrib.auth.decorators import permission_required
@@ -37,7 +37,8 @@ class WallMaterialPricesByProviderListView(LoginRequiredMixin,generic.ListView):
     """Generic class-based view listing books on loan to current user."""
     model = RockWallMaterialPricePosition
     template_name ='catalog/wall_materials_prices_by_provider.html'
-    paginate_by = 10
+    paginate_by = 100
 
     def get_queryset(self):
         return RockWallMaterialPricePosition.objects.filter(owner=self.request.user)
+

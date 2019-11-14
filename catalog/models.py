@@ -239,6 +239,18 @@ class RockWallMaterialStandardSize(models.Model):
     b_size = models.IntegerField(blank=True)
     c_size = models.IntegerField(blank=True)
     
+    SIZE_TYPE = (
+        ('bl', 'Блок'),
+        ('br', 'Кирпич'),
+    )  
+    
+    size_type = models.CharField(
+        max_length=2,
+        choices=SIZE_TYPE,
+        default='br',
+        help_text='Тип материала по размеру: блок или кирпич',
+    )
+    
     class Meta:
         ordering = ('name',)
         verbose_name = 'Размер каменного материала'
@@ -246,7 +258,7 @@ class RockWallMaterialStandardSize(models.Model):
    
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.name} ({self.identifier})'
+        return f'{self.name}, {self.size_type}  ({self.identifier})'
 
 class MarkM(models.Model):
     """Модель описывает марки материалов с индексом М. Например, марка М300 или М125"""
@@ -293,10 +305,10 @@ class ClassBLight(models.Model):
 class RockWallMaterialUnit(models.Model):
     """Модель описывает единицу стенового каменного материала, конкретное изделие конкретного производителя. Но без цены."""
     # name = models.CharField(max_length=200, help_text='Введите общепринятое название данного материала')
-    standard_size = models.ForeignKey('RockWallMaterialStandardSize', on_delete=models.CASCADE, help_text='Выберите тип стандартного размера, если есть', blank=True)
-    a_size = models.IntegerField(blank=True, null=True, help_text='Введите размеры, если они нестандарнтые')
-    b_size = models.IntegerField(blank=True, null=True)
-    c_size = models.IntegerField(blank=True, null=True)
+    standard_size = models.ForeignKey('RockWallMaterialStandardSize', on_delete=models.CASCADE, help_text='Выберите стандартный размер', blank=True, null=True)
+    # a_size = models.IntegerField(blank=True, null=True, help_text='Введите размеры, если они нестандарнтые')
+    # b_size = models.IntegerField(blank=True, null=True)
+    # c_size = models.IntegerField(blank=True, null=True)
     mark_m = models.ManyToManyField(MarkM, help_text='Выберите стандартную марку М для данного материала, если есть', blank=True)
     mark_d = models.ManyToManyField(MarkD, help_text='Выберите стандартную марку D для данного материала, если есть', blank=True)
     class_b = models.ManyToManyField(ClassBLight, help_text='Выберите стандартный класс В для данного материала, если есть', blank=True)
@@ -309,19 +321,12 @@ class RockWallMaterialUnit(models.Model):
     brand = models.ManyToManyField('ProductBrand', help_text='Выберите основной бренд (например, Wienerberger)', blank=True)
     trade_mark = models.ManyToManyField('TradeMark', help_text='Выберите торговую марку изделия (например, Porotherm 44)', blank=True)
 
-
-
-    SIZE_TYPE = (
-        ('bl', 'Блок'),
-        ('br', 'Кирпич'),
-    )   
-
     PRIMARY_OR_ADDITIONAL = (
         ('p', 'Основной'),
         ('a', 'Доборный'),
     )
 
-    BODY = (
+    BODY_TYPE = (
         ('r', 'Полнотелый красный'),
         ('s', 'Полнотелый силикатный'),
         ('h', 'Пустотелый керамический'),
@@ -333,13 +338,7 @@ class RockWallMaterialUnit(models.Model):
         ('f', 'Облицовочный'),
         ('o', 'Рядовой'),
         ('m', 'Рядовой c гранью под облицовку'),
-    )
-
-    type_size = models.CharField(
-        max_length=2,
-        choices=SIZE_TYPE,
-        default='br',
-        help_text='Тип материала по размеру: блок или кирпич',
+        ('p', 'Перегородочный'),
     )
 
     primary_or_additional = models.CharField(
@@ -351,7 +350,7 @@ class RockWallMaterialUnit(models.Model):
 
     body_type = models.CharField(
         max_length=1,
-        choices=BODY,
+        choices=BODY_TYPE,
         default='r',
         help_text='Тип кирпича или блока',
     )
@@ -369,7 +368,7 @@ class RockWallMaterialUnit(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.type_size}, {self.standard_size.name},  {self.primary_or_additional}, {self.body_type}, {self.brick_type}, {self.producer.name}, {self.brand.name}, {self.trade_mark.name}'
+        return f'{self.body_type}, {self.standard_size.name},  {self.primary_or_additional}, {self.brick_type}, {self.producer.name}, {self.brand.name}, {self.trade_mark.name}'
 
     def get_absolute_url(self):
         """Returns the url to access a detail record for this material."""
@@ -389,4 +388,29 @@ class RockWallMaterialPricePosition(models.Model):
     
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.name.type_size},  {self.name.standard_size}, {self.name.primary_or_additional}, {self.name.body_type}, {self.name.brick_type}, {self.name.producer}, {self.name.brand}, {self.name.trade_mark}({self.price})'
+        return f'{self.name}, {self.price}, {self.owner}'
+
+class PileGrillageFoundationCost(models.Model):
+    """Модель, представляющая стоимость фундамента с ценой"""
+    const_expenditure = models.FloatField(verbose_name='Постоянные трудозатраты, чел.час')
+    transportation_procurement_cost = models.FloatField(verbose_name='Транспортно-заготовительные расходы, рублей')
+    reinforcement_binding = models.FloatField(verbose_name='Вязка 1м арматуры ростверка, чел.час')
+    clamp = models.FloatField(verbose_name='Изготовление 1 хомута, чел.час')
+    pile_frame = models.FloatField(verbose_name='Изготовление свайного каркаса, чел.час')
+    formwork = models.FloatField(verbose_name='Установка 1кв.м. опалубки (ламфанера), чел.час')
+    ground_leveling = models.FloatField(verbose_name='Выравнивание 1кв.м. грунта, чел.час')
+    ruberoid_lining = models.FloatField(verbose_name='Гидроизоляция рубероидом 1пог.м. опалубки, чел.час')
+    pile_pour = models.FloatField(verbose_name='Заливка 1 сваи, чел.час')
+    grillage_pour = models.FloatField(verbose_name='Заливка 1куб.м. бетона, чел.час')
+    man_hours_cost = models.IntegerField(verbose_name='Оплата рабочим за 1 чел.час')
+    man_hours_profit = models.IntegerField(verbose_name='Прибыль с 1 чел.часа')
+
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Стоимость свайно-ростверкового фундамента'
+        verbose_name_plural = 'Стоимость свайно-ростверковых фундаментов'
+    
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.owner}'
