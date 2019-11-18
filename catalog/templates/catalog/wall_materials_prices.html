@@ -1,7 +1,8 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <h1>Мои цены на каменные стеновые материалы</h1>
+    <h1>Мои цены на материалы</h1>
+    <h3>Стеновые каменные материалы</h3>
 
     {% if rockwallmaterialpriceposition_list %}
     <ul>
@@ -15,5 +16,8 @@
 
     {% else %}
       <p>Пока здесь нет ни одной ценовой позиции.</p>
-    {% endif %}       
+    {% endif %}      
+    
+    <h3>Металлопрокат</h3>
+
 {% endblock %}

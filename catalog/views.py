@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from catalog.models import PileGrillageFoundationCost, WallMaterialType, ClassBLight, MarkD, MarkM, RockWallMaterialStandardSize, Application, ProductBrand, TradeMark, TradeMarkSeries, DirectProducer, ProviderActivityType, TaxSystemType, Provider, ProviderOutlet, City, RockWallMaterialUnit, RockWallMaterialPricePosition
+from catalog.models import Plan, PileGrillageFoundationWorkPrices, WallMaterialType, ClassBLight, MarkD, MarkM, RockWallMaterialStandardSize, Application, ProductBrand, TradeMark, TradeMarkSeries, DirectProducer, ProviderActivityType, TaxSystemType, Provider, ProviderOutlet, City, RockWallMaterialUnit, RockWallMaterialPricePosition
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.contrib.auth.decorators import permission_required
@@ -33,12 +33,46 @@ def index(request):
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'index.html', context=context)
 
-class WallMaterialPricesByProviderListView(LoginRequiredMixin,generic.ListView):
+class WallMaterialPricesListView(LoginRequiredMixin,generic.ListView):
     """Generic class-based view listing books on loan to current user."""
     model = RockWallMaterialPricePosition
-    template_name ='catalog/wall_materials_prices_by_provider.html'
+    template_name ='catalog/wall_materials_prices.html'
     paginate_by = 100
 
     def get_queryset(self):
         return RockWallMaterialPricePosition.objects.filter(owner=self.request.user)
 
+
+class PileGrillageFoundationWorkPricesDetailView(generic.DetailView):
+    model = PileGrillageFoundationWorkPrices
+
+
+
+
+def works_content_list(request):
+    """View function for списка работ/услуг, оказываемых данных подрядчиком."""
+    
+    context = {
+
+    }
+
+    return render(request, 'works_content_list.html', context=context)
+
+
+class PlanListView(generic.ListView):
+    model = Plan
+
+
+class PlanDetailView(generic.DetailView):
+    model = Plan
+
+
+class PlanCreate(CreateView):
+    model = Plan
+    fields = '__all__'
+    initial = {'title': 'New plan'}
+
+
+class PlanDelete(DeleteView):
+    model = Plan
+    success_url = reverse_lazy('plans')
