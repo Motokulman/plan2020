@@ -1,9 +1,9 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Title: {{ plan.title }}</h1>
-  <a href="{% url 'plan_delete' plan.id %}">Delete this plan</a>
-  <a href="{% url 'edit-scheme' plan.id %}">Edit scheme of this plan</a>
+  <h3>Проект: {{ plan.title }}</h3>
+  <a href="{% url 'plan_delete' plan.id %}">Удалить</a>
+  <a href="{% url 'edit-scheme' plan.id %}">Редактировать</a>
 
   <!-- <div style="margin-left:20px;margin-top:20px">
 

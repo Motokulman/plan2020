@@ -15,5 +15,15 @@ urlpatterns += [
     path('plan/<int:pk>', views.PlanDetailView.as_view(), name='plan-detail'),
     path('plan/create/', views.PlanCreate.as_view(), name='plan_create'),
     path('plan/<int:pk>/delete/', views.PlanDelete.as_view(), name='plan_delete'),
+]
 
+# Редактирование схемы
+urlpatterns += [
+    path('plan/<int:pk>/edit_scheme/', views.edit_scheme, name='edit-scheme'),
+
+]
+
+# Создание пользователя
+urlpatterns += [   
+    path('register/', views.register, name='register'),
 ]

@@ -1,7 +1,11 @@
 from django.db import models
 # Used to generate URLs by reversing the URL patterns
 from django.urls import reverse
+from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
+
+# Добавим классу пользователя новые поля, в которых будем хранить настройки
+
 
 
 class Application(models.Model):
@@ -422,12 +426,29 @@ class PileGrillageFoundationWorkPrices(models.Model):
         """Returns the url to access a detail record for this position."""
         return reverse('my-pile-grillage-foundation-prices', args=[str(self.id)])
 
+class Castomization(models.Model):
+    """Модель, представляющая индивидуальные настройки для проекта, привязанные к самому проекту или к пользователю"""
+    # У пользователя может быть множество кастомизаций, по которым он сравнивает проекты. У проекта - только одна.
+    name = models.CharField(max_length=200)
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True) 
+
+    def __str__(self):
+        """String for representing the Plan object."""
+        return self.name
+
+    def get_absolute_url(self):
+        """Returns the url to access a detail record for this Plan."""
+        return reverse('plan-detail', args=[str(self.id)])
+        
 class Plan(models.Model):
     """Модель, представляющая Информацию о проекте"""
     title = models.CharField(max_length=200)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Автор') # Автор проекта. Если копировать один и тот же проект автор не меняется!
+    castomization = models.ForeignKey(Castomization, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Кастомизация') # Кастомизация проекта. Если нет, то нет. Если есть, то высчитываем цену.
+    
     # paddingX = models.IntegerField(null=True, blank=True)
     # paddingY = models.IntegerField(null=True, blank=True)
-    # scale = models.FloatField(null=True, blank=True)
+    scheme_scale = models.FloatField(null=True, blank=True, verbose_name='Масштаб схемы') 
 
     def __str__(self):
         """String for representing the Plan object."""
@@ -436,3 +457,4 @@ class Plan(models.Model):
     def get_absolute_url(self):
         """Returns the url to access a detail record for this Plan."""
         return reverse('plan-detail', args=[str(self.id)])
+

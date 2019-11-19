@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from catalog.models import Plan, PileGrillageFoundationWorkPrices, WallMaterialType, ClassBLight, MarkD, MarkM, RockWallMaterialStandardSize, Application, ProductBrand, TradeMark, TradeMarkSeries, DirectProducer, ProviderActivityType, TaxSystemType, Provider, ProviderOutlet, City, RockWallMaterialUnit, RockWallMaterialPricePosition
+from catalog.models import Castomization, Plan, PileGrillageFoundationWorkPrices, WallMaterialType, ClassBLight, MarkD, MarkM, RockWallMaterialStandardSize, Application, ProductBrand, TradeMark, TradeMarkSeries, DirectProducer, ProviderActivityType, TaxSystemType, Provider, ProviderOutlet, City, RockWallMaterialUnit, RockWallMaterialPricePosition
 
 admin.site.register(WallMaterialType)
 admin.site.register(ClassBLight)
@@ -18,8 +18,8 @@ admin.site.register(TaxSystemType)
 admin.site.register(Provider)
 admin.site.register(ProviderOutlet)
 admin.site.register(City)
-# admin.site.register(RockWallMaterialUnit)
-# admin.site.register(RockWallMaterialPricePosition)
+admin.site.register(Castomization)
+#admin.site.register(UserSettings)
 
 @admin.register(RockWallMaterialUnit) 
 class RockWallMaterialUnitAdmin(admin.ModelAdmin):

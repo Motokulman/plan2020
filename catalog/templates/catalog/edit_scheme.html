@@ -1,0 +1,61 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h3>Проект: {{ plan_title }}</h3>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-10">
+      <div class="row">
+        <div class="col-sm-12" id="top-edit-field">
+          Верхние числа
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-1" id="left-edit-field">
+          числа слева
+        </div>
+
+        <div class="col-sm-10" id="edit-field">
+
+          <canvas id="canvas" style="border: 1px solid" width="700" height="700"></canvas>
+
+        </div>
+
+        <div class="col-sm-1" id="right-edit-field">
+          Числа справа
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12" id="bottom-edit-field">
+            видимо, числа снизу
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-sm-2">
+      <div id="line_type_selector" class="btn-group">
+        <button id="straight" type="button" class="btn btn-light">Прямая</button>
+        <button id="curve" type="button" class="btn btn-light">Кривая</button>
+      </div>
+
+      <div id="element_selector" class="btn-group">
+        <button id="none" type="button" class="btn btn-light">Сброс</button>
+        <button id="wall" type="button" class="btn btn-light">Стена</button>
+      </div>
+    </div>
+
+
+  </div>
+
+</div>
+
+
+
+{% load static %}
+<script type="text/javascript" src="{% static 'js/canvas.js' %}"></script>
+
+{% endblock %}
