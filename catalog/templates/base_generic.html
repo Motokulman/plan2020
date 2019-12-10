@@ -26,7 +26,7 @@
           <a href="{% url 'logout'%}?next={{request.path}}" class="btn ">Выйти</a>
           {% else %}
           <a href="{% url 'login'%}?next={{request.path}}" class="btn ">Войти</a>
-          <a href="{% url 'index'%}?next={{request.path}}" class="btn ">Регистрация</a>
+          <a href="{% url 'register'%}?next={{request.path}}" class="btn ">Регистрация</a>
           {% endif %}
         </div>
         <div class="col-sm-12 ">{% block content %}{% endblock %}</div>

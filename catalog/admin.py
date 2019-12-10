@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from catalog.models import Castomization, Plan, PileGrillageFoundationWorkPrices, WallMaterialType, ClassBLight, MarkD, MarkM, RockWallMaterialStandardSize, Application, ProductBrand, TradeMark, TradeMarkSeries, DirectProducer, ProviderActivityType, TaxSystemType, Provider, ProviderOutlet, City, RockWallMaterialUnit, RockWallMaterialPricePosition
+from catalog.models import Profile, Customization, Plan, PileGrillageFoundationWorkPrices, WallMaterialType, ClassBLight, MarkD, MarkM, RockWallMaterialStandardSize, Application, ProductBrand, TradeMark, TradeMarkSeries, DirectProducer, ProviderActivityType, TaxSystemType, Provider, ProviderOutlet, City, RockWallMaterialUnit, RockWallMaterialPricePosition
 
 admin.site.register(WallMaterialType)
 admin.site.register(ClassBLight)
@@ -18,7 +18,7 @@ admin.site.register(TaxSystemType)
 admin.site.register(Provider)
 admin.site.register(ProviderOutlet)
 admin.site.register(City)
-admin.site.register(Castomization)
+admin.site.register(Customization)
 #admin.site.register(UserSettings)
 
 @admin.register(RockWallMaterialUnit) 
@@ -38,4 +38,7 @@ class RockWallMaterialPricePositionAdmin(admin.ModelAdmin):
 class PileGrillageFoundationWorkPricesAdmin(admin.ModelAdmin):
     list_display = ('const_expenditure', 'transportation_procurement_cost', 'owner')
 
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'scheme_scale']
 

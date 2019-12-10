@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from catalog.models import Castomization, Plan, PileGrillageFoundationWorkPrices, WallMaterialType, ClassBLight, MarkD, MarkM, RockWallMaterialStandardSize, Application, ProductBrand, TradeMark, TradeMarkSeries, DirectProducer, ProviderActivityType, TaxSystemType, Provider, ProviderOutlet, City, RockWallMaterialUnit, RockWallMaterialPricePosition
+from catalog.models import Profile, Customization, Plan, PileGrillageFoundationWorkPrices, WallMaterialType, ClassBLight, MarkD, MarkM, RockWallMaterialStandardSize, Application, ProductBrand, TradeMark, TradeMarkSeries, DirectProducer, ProviderActivityType, TaxSystemType, Provider, ProviderOutlet, City, RockWallMaterialUnit, RockWallMaterialPricePosition
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.contrib.auth.decorators import permission_required
@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
-from catalog.forms import UserRegistrationForm
+from catalog.forms import UserRegistrationForm, UserEditForm, ProfileEditForm
 
 
 def index(request):
@@ -97,7 +97,6 @@ def edit_scheme(request, pk):
     return render(request, 'catalog/edit_scheme.html', context)
 
 
-
 # Создаем нового пользователя
 def register(request):
     if request.method == 'POST':
@@ -109,7 +108,24 @@ def register(request):
             new_user.set_password(user_form.cleaned_data['password'])
             # Сохраняем пользователя в базе данных.
             new_user.save()
-            return render(request, 'account/register_done.html', {'new_user': new_user})
+            # Создание профиля пользователя
+            Profile.objects.create(user=new_user)
+            return render(request, 'register/register_done.html', {'new_user': new_user})
     else:
         user_form = UserRegistrationForm()
     return render(request, 'register/register.html', {'user_form': user_form})
+
+
+# Изменение профиля пользователя
+@login_required
+def edit(request):
+    if request.method == 'POST':
+        user_form = UserEditForm(instance=request.user,data=request.POST)
+        profile_form = ProfileEditForm(instance=request.user.profile, data=request.POST, files=request.FILES)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+    else:
+        user_form = UserEditForm(instance=request.user)
+        profile_form = ProfileEditForm(instance=request.user.profile)
+    return render(request,'account/edit.html', {'user_form': user_form,'profile_form': profile_form})

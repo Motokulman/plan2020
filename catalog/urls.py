@@ -27,3 +27,8 @@ urlpatterns += [
 urlpatterns += [   
     path('register/', views.register, name='register'),
 ]
+
+# Изменение настроек пользователя
+urlpatterns += [
+    path('edit/', views.edit, name='edit'),
+]
