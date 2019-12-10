@@ -6,7 +6,10 @@ var selectedLineType = "straight"; // Тип линии при рисовани�
 var selectedTool = "none"; // Выбранный элемент для рисования, стена, или еще что-то. Изначально - ничего не выбрано
 var mousePosArray = []; // массив позиций мыши при рисовании. 
 var mousePos; // Позиции мыши по х и у, с учетом положения канвы на экране
+var points = []; // Массив точек в миллиметрах. Первая точка - точка отсчета, начало коопдинат
+var zeroPointPadding = []; // Смещение начала координат схемы относительно начала координат канвы. Попробуем в мм.
 var walls = []; // Массив стен
+var scaling = 25; // Сделать получение из настроек и сохранение в них
 
 
 // рисуем прямую линию или 
@@ -16,7 +19,7 @@ function drawLine(p, p1) {
     ctx.lineTo(p1.x, p1.y);
     ctx.fillStyle = '#333333';
     ctx.stroke();
-  }
+}
 
 // рисуем точку
 function drawPoint(p) {
@@ -25,17 +28,29 @@ function drawPoint(p) {
     ctx.fillStyle = '#333333';
     ctx.fill();
     ctx.closePath();
-  }
+}
 
 
 // В случае клика по канве определяем какой элемент хочет нарисовать пользователь и действуем
 canvas.addEventListener('click', function (e) {
-    switch(selectedTool){
-        case 'wall' : 
+    if (selectedTool != 'none') { // если хоть что то выбрано
+        if (points.length == 0) { // если это первая точка в схеме, то она становится центром координат
+            points.push([0, 0]);
+            zeroPointPadding.x = mousePos.x * scaling;
+            zeroPointPadding.y = mousePos.y * scaling;
+            //console.log("zeroPointPadding = ", zeroPointPadding);
+        } else {
+            points.push([mousePos.x * scaling - zeroPointPadding.x, mousePos.y * scaling - zeroPointPadding.y]); // переводим в мм и вносим в массив
+        }
+    }
+    //console.log("points = ", points);
+    switch (selectedTool) {
+        case 'wall':
             if (selectedLineType == 'straight') { // если выбран прямой тип линии
                 if (mousePosArray.length == 0) { // если это первый клик в этом цикле рисования прямой стены
-                    mousePosArray[0] = getMousePos(canvas, e);
-                    drawPoint(mousePosArray[0]);
+                    mousePosArray[0] = mousePos;
+                    drawPoint(mousePos);
+
                 } else { // если это второй клик в этом цикле рисования прямой стены
                     //console.log("Второй клик");
                     mousePosArray[1] = getMousePos(canvas, e);
@@ -50,7 +65,7 @@ canvas.addEventListener('click', function (e) {
             }
             //console.log("Выбрана стена");
             break;
-        case 'none' : 
+        case 'none':
             //console.log("Ничего не выбрано");
             break;
     }
@@ -62,35 +77,36 @@ $('#line_type_selector button').click(function () {
     $(this).addClass('active').siblings().removeClass('active');
     selectedLineType = this.id;
     console.log("selectedLineType = ", selectedLineType);
-  });
+});
 
-  // Определяем, какой элемент выбрал пользователь (стена или что-то иное)
-  $('#element_selector button').click(function () {
-      $(this).addClass('active').siblings().removeClass('active');
-      selectedTool = this.id;
-      //console.log("selectedTool = ", selectedTool);
-    });
+// Определяем, какой элемент выбрал пользователь (стена или что-то иное)
+$('#element_selector button').click(function () {
+    $(this).addClass('active').siblings().removeClass('active');
+    selectedTool = this.id;
+    //console.log("selectedTool = ", selectedTool);
+});
 
 // Получаем координаты курсора в зависимости от положения канвы на экране
 function getMousePos(canvas, e) {
     var rect = canvas.getBoundingClientRect();
     return {
-      x: e.clientX - Math.round(rect.left),
-      y: e.clientY - Math.round(rect.top)
+        x: e.clientX - Math.round(rect.left),
+        y: e.clientY - Math.round(rect.top)
     };
-  }
+}
 
 // Определяем координаты курсора
-canvas.addEventListener('move', function (e) {
+canvas.addEventListener('mousemove', function (e) {
     mousePos = getMousePos(canvas, e);
+    //console.log("mousePos = ", mousePos);
 });
 
 // Приклеиваем координаты к уже имеющимся точкам
-function sticking() {
-    for (item of walls.values()) { // перебор стен в массиве стен * (см. сноску внизу)
-        if (mousePos.x == item)
-    }
-}
+// function sticking() {
+//     for (item of walls.values()) { // перебор стен в массиве стен * (см. сноску внизу)
+//         if (mousePos.x == item)
+//     }
+// }
 
 
 //   function sticking(canvas, e, data) {
