@@ -30,6 +30,15 @@ function drawPoint(p) {
     ctx.closePath();
 }
 
+// Функция сохранения вновь введенных точек
+// function savePoints() {
+//     for (point of mousePosArray.values()) {
+//         if (points.length == 0) {
+//             zeroPointPadding.x = points.x*scaling;
+//             zeroPointPadding.y = points.y*scaling;
+//         }
+// }
+
 
 // В случае клика по канве определяем какой элемент хочет нарисовать пользователь и действуем
 canvas.addEventListener('click', function (e) {
