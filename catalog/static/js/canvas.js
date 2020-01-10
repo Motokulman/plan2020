@@ -6,10 +6,11 @@ var selectedLineType = "straight"; // Тип линии при рисовани�
 var selectedTool = "none"; // Выбранный элемент для рисования, стена, или еще что-то. Изначально - ничего не выбрано
 var mousePosArray = []; // массив позиций мыши при рисовании. 
 var mousePos; // Позиции мыши по х и у, с учетом положения канвы на экране
-var points = []; // Массив точек в миллиметрах. Первая точка - точка отсчета, начало коопдинат
+var points_mm = []; // Массив точек в миллиметрах. Первая точка - точка отсчета, начало коопдинат
 var zeroPointPadding = []; // Смещение начала координат схемы относительно начала координат канвы. Попробуем в мм.
 var walls = []; // Массив стен
 var scaling = 25; // Сделать получение из настроек и сохранение в них
+var empty_scheme = true;// Правда, если еще нет ни одного элемента в схеме
 
 
 // рисуем прямую линию или 
@@ -43,13 +44,14 @@ function drawPoint(p) {
 // В случае клика по канве определяем какой элемент хочет нарисовать пользователь и действуем
 canvas.addEventListener('click', function (e) {
     if (selectedTool != 'none') { // если хоть что то выбрано
-        if (points.length == 0) { // если это первая точка в схеме, то она становится центром координат
-            points.push([0, 0]);
-            zeroPointPadding.x = mousePos.x * scaling;
-            zeroPointPadding.y = mousePos.y * scaling;
+        if (empty_scheme) { // если это первая точка в схеме, то она становится центром координат
+            points_mm.push([0, 0]);
+            zeroPointPadding.x = mousePos.x;
+            zeroPointPadding.y = mousePos.y;
+            empty_scheme = false;
             //console.log("zeroPointPadding = ", zeroPointPadding);
         } else {
-            points.push([mousePos.x * scaling - zeroPointPadding.x, mousePos.y * scaling - zeroPointPadding.y]); // переводим в мм и вносим в массив
+            points_mm.push([(mousePos.x - zeroPointPadding.x) * scaling, (mousePos.y - zeroPointPadding.y) * scaling]); // переводим в мм и вносим в массив
         }
     }
     //console.log("points = ", points);
@@ -65,8 +67,9 @@ canvas.addEventListener('click', function (e) {
                     mousePosArray[1] = getMousePos(canvas, e);
                     drawPoint(mousePosArray[1]); // Нарисовали вторую точку
                     drawLine(mousePosArray[0], mousePosArray[1]); // Нарисовали прямую
-                    walls.push([mousePosArray[0], mousePosArray[1], null]); // Заносим стену в массив стен
+                    walls.push([points_mm[0], points_mm[1], null]); // Заносим стену в массив стен в мм
                     mousePosArray = []; // Обнуляем массив
+                    points_mm = []; // Обнуляем массив точек в мм
                     console.log("walls = ", walls);
                 }
             } else { // если это не прямая
@@ -78,6 +81,53 @@ canvas.addEventListener('click', function (e) {
             //console.log("Ничего не выбрано");
             break;
     }
+});
+
+// функция очистки канвы
+function clear(context, canvas) {
+    context.fillStyle = 'rgba(255, 255, 255, 1)';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
+// Приклейка
+function stick() {
+    // Перебор всех стен
+    for (item of walls.values()) {
+        var a = [];
+        var b = [];
+        a.x = item[0][0]/scaling + zeroPointPadding.x;
+        a.y = item[0][1]/scaling + zeroPointPadding.y;
+        b.x = item[1][0]/scaling + zeroPointPadding.x;
+        b.y = item[1][1]/scaling + zeroPointPadding.y;
+
+        
+    }
+
+}
+
+
+// Проверочные действия
+$('#test_buttons button').click(function () {
+clear(ctx, canvas);
+
+    for (item of walls.values()) {
+        var a = [];
+        var b = [];
+        // console.log("item[0][0] = ", item[0][0]);
+        // console.log("zeroPointPadding.x = ", zeroPointPadding.x);
+
+        a.x = item[0][0]/scaling + zeroPointPadding.x;
+        a.y = item[0][1]/scaling + zeroPointPadding.y;
+        b.x = item[1][0]/scaling + zeroPointPadding.x;
+        b.y = item[1][1]/scaling + zeroPointPadding.y;
+        console.log("a = ", a);
+        console.log("b = ", b);
+        drawLine(a, b);
+    }
+
+    //$(this).addClass('active').siblings().removeClass('active');
+    //selectedTool = this.id;
+    //console.log("test button = ", this.id);
 });
 
 

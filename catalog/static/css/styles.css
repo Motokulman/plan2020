@@ -3,3 +3,15 @@
     padding: 0;
     list-style: none;
 }
+
+
+#stage {
+    width: 700px;
+    height: 700px;
+    position: relative;
+    border: 0px solid black;
+  }
+      
+        canvas { position: absolute; }
+        #canvas { z-index: 2; }
+        #stick_layer { z-index: 1; }
