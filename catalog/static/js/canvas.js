@@ -1,12 +1,12 @@
-var canvas = document.getElementById('canvas');
-var stick_lines_canvas = document.getElementById('stick_layer');
-var ctx = canvas.getContext('2d');
-var stick_lines_ctx = stick_lines_canvas.getContext('2d');
+var canvas_0 = document.getElementById('canvas_0');
+var canvas_1 = document.getElementById('canvas_1');
+var ctx_0 = canvas_0.getContext('2d');
+var ctx_1 = canvas_1.getContext('2d');
 var selectedLineType = "straight"; // Тип линии при рисовании - прямая или кривая
 var selectedTool = "none"; // Выбранный элемент для рисования, стена, или еще что-то. Изначально - ничего не выбрано
 var mousePosArray = []; // массив позиций мыши при рисовании. 
 var mousePos; // Позиции мыши по х и у, с учетом положения канвы на экране
-var points_mm = []; // Массив точек в миллиметрах. Первая точка - точка отсчета, начало коопдинат
+var points = []; // Массив точек в миллиметрах. Первая точка - точка отсчета, начало коопдинат
 var zeroPointPadding = []; // Смещение начала координат схемы относительно начала координат канвы. Попробуем в мм.
 var walls = []; // Массив стен
 var scaling = 25; // Сделать получение из настроек и сохранение в них
@@ -15,44 +15,52 @@ var empty_scheme = true;// Правда, если еще нет ни одног�
 
 // рисуем прямую линию или 
 function drawLine(p, p1) {
-    ctx.beginPath();
-    ctx.moveTo(p.x, p.y);
-    ctx.lineTo(p1.x, p1.y);
-    ctx.fillStyle = '#333333';
-    ctx.stroke();
+    ctx_0.beginPath();
+    ctx_0.moveTo(p.x, p.y);
+    ctx_0.lineTo(p1.x, p1.y);
+    ctx_0.fillStyle = '#333333';
+    ctx_0.stroke();
 }
+
+// рисуем прямую линию, проходящую через всю канву - для линий приклейки
+function drawHVLine(type) {
+    ctx_1.beginPath();
+    if (type == "h") {
+        ctx_1.moveTo(0, mousePos.y);
+        ctx_1.lineTo(canvas_0.width, mousePos.y);
+    } else if (type == "v") {
+        ctx_1.moveTo(mousePos.x, 0);
+        ctx_1.lineTo(mousePos.x, canvas_0.height);
+    }
+    ctx_1.fillStyle = '#333333';
+    ctx_1.stroke();
+}
+
 
 // рисуем точку
 function drawPoint(p) {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, 5, 0, 2 * Math.PI);
-    ctx.fillStyle = '#333333';
-    ctx.fill();
-    ctx.closePath();
+    ctx_0.beginPath();
+    ctx_0.arc(p.x, p.y, 5, 0, 2 * Math.PI);
+    ctx_0.fillStyle = '#333333';
+    ctx_0.fill();
+    ctx_0.closePath();
 }
-
-// Функция сохранения вновь введенных точек
-// function savePoints() {
-//     for (point of mousePosArray.values()) {
-//         if (points.length == 0) {
-//             zeroPointPadding.x = points.x*scaling;
-//             zeroPointPadding.y = points.y*scaling;
-//         }
-// }
 
 
 // В случае клика по канве определяем какой элемент хочет нарисовать пользователь и действуем
-canvas.addEventListener('click', function (e) {
+canvas_0.addEventListener('click', function (e) {
     if (selectedTool != 'none') { // если хоть что то выбрано
         if (empty_scheme) { // если это первая точка в схеме, то она становится центром координат
-            points_mm.push([0, 0]);
+            points.push([0, 0, 0]);
             zeroPointPadding.x = mousePos.x;
             zeroPointPadding.y = mousePos.y;
             empty_scheme = false;
             //console.log("zeroPointPadding = ", zeroPointPadding);
         } else {
-            points_mm.push([(mousePos.x - zeroPointPadding.x) * scaling, (mousePos.y - zeroPointPadding.y) * scaling]); // переводим в мм и вносим в массив
+            points.push([points[points.length - 1][0] + 1, (mousePos.x - zeroPointPadding.x) * scaling, (mousePos.y - zeroPointPadding.y) * scaling]); // переводим в мм и вносим в массив
+            //  console.log("points = ", points);
         }
+        stick();
     }
     //console.log("points = ", points);
     switch (selectedTool) {
@@ -64,19 +72,18 @@ canvas.addEventListener('click', function (e) {
 
                 } else { // если это второй клик в этом цикле рисования прямой стены
                     //console.log("Второй клик");
-                    mousePosArray[1] = getMousePos(canvas, e);
-                    drawPoint(mousePosArray[1]); // Нарисовали вторую точку
-                    drawLine(mousePosArray[0], mousePosArray[1]); // Нарисовали прямую
-                    walls.push([points_mm[0], points_mm[1], null]); // Заносим стену в массив стен в мм
+                    mousePosArray[1] = mousePos;
+                    drawPoint(mousePos); // Нарисовали вторую точку
+                    drawLine(mousePosArray[0], mousePosArray[1], ctx_0); // Нарисовали прямую
+                    walls.push([points[points.length - 2][0], points[points.length - 1][0], null]); // Заносим id Точек в массив стен в мм
                     mousePosArray = []; // Обнуляем массив
-                    points_mm = []; // Обнуляем массив точек в мм
-                    console.log("walls = ", walls);
+                    //console.log("walls = ", walls);
                 }
             } else { // если это не прямая
 
             }
             //console.log("Выбрана стена");
-            break;
+            break;  
         case 'none':
             //console.log("Ничего не выбрано");
             break;
@@ -86,48 +93,44 @@ canvas.addEventListener('click', function (e) {
 // функция очистки канвы
 function clear(context, canvas) {
     context.fillStyle = 'rgba(255, 255, 255, 1)';
-    context.fillRect(0, 0, canvas.width, canvas.height);
-  }
+    context.fillRect(0, 0, canvas_0.width, canvas_0.height);
+}
 
 // Приклейка
 function stick() {
-    // Перебор всех стен
-    for (item of walls.values()) {
+    var stick_pix = 3;
+    clear(ctx_1, canvas_1);
+    // Перебор всех точек
+    for (item of points.values()) {
         var a = [];
-        var b = [];
-        a.x = item[0][0]/scaling + zeroPointPadding.x;
-        a.y = item[0][1]/scaling + zeroPointPadding.y;
-        b.x = item[1][0]/scaling + zeroPointPadding.x;
-        b.y = item[1][1]/scaling + zeroPointPadding.y;
-
-        
+        a.x = item[1] / scaling + zeroPointPadding.x;
+        a.y = item[2] / scaling + zeroPointPadding.y;
+        if (Math.abs(mousePos.x - a.x) <= stick_pix) {
+            mousePos.x = a.x;
+            drawHVLine("v");
+        }
+        if (Math.abs(mousePos.y - a.y) <= stick_pix) {
+            mousePos.y = a.y;
+            drawHVLine("h");
+        }
     }
-
 }
 
 
 // Проверочные действия
 $('#test_buttons button').click(function () {
-clear(ctx, canvas);
-
+    clear(ctx_0, canvas_0);
     for (item of walls.values()) {
         var a = [];
         var b = [];
-        // console.log("item[0][0] = ", item[0][0]);
-        // console.log("zeroPointPadding.x = ", zeroPointPadding.x);
-
-        a.x = item[0][0]/scaling + zeroPointPadding.x;
-        a.y = item[0][1]/scaling + zeroPointPadding.y;
-        b.x = item[1][0]/scaling + zeroPointPadding.x;
-        b.y = item[1][1]/scaling + zeroPointPadding.y;
+        a.x = item[0][0] / scaling + zeroPointPadding.x;
+        a.y = item[0][1] / scaling + zeroPointPadding.y;
+        b.x = item[1][0] / scaling + zeroPointPadding.x;
+        b.y = item[1][1] / scaling + zeroPointPadding.y;
         console.log("a = ", a);
         console.log("b = ", b);
-        drawLine(a, b);
+        drawLine(a, b, ctx_0);
     }
-
-    //$(this).addClass('active').siblings().removeClass('active');
-    //selectedTool = this.id;
-    //console.log("test button = ", this.id);
 });
 
 
@@ -146,8 +149,8 @@ $('#element_selector button').click(function () {
 });
 
 // Получаем координаты курсора в зависимости от положения канвы на экране
-function getMousePos(canvas, e) {
-    var rect = canvas.getBoundingClientRect();
+function getMousePos(canvas_0, e) {
+    var rect = canvas_0.getBoundingClientRect();
     return {
         x: e.clientX - Math.round(rect.left),
         y: e.clientY - Math.round(rect.top)
@@ -155,69 +158,10 @@ function getMousePos(canvas, e) {
 }
 
 // Определяем координаты курсора
-canvas.addEventListener('mousemove', function (e) {
-    mousePos = getMousePos(canvas, e);
-    //console.log("mousePos = ", mousePos);
+canvas_0.addEventListener('mousemove', function (e) {
+    mousePos = getMousePos(canvas_0, e);
+    stick();
+    //console.log("mousePos 0= ", mousePos);
 });
 
-// Приклеиваем координаты к уже имеющимся точкам
-// function sticking() {
-//     for (item of walls.values()) { // перебор стен в массиве стен * (см. сноску внизу)
-//         if (mousePos.x == item)
-//     }
-// }
-
-
-//   function sticking(canvas, e, data) {
-//     mousePos = getMousePos(canvas, e);
-//     var flagX = false;
-//     var flagY = false;
-//     // Sticking to horizont and vertical
-//     if (running) {
-//       if (Math.abs(mousePos.x - mouseOldPos0.x) <= stickPixels) {
-//         mousePos.x = mouseOldPos0.x;
-//         flagX = true;
-//       }
-//       if (Math.abs(mousePos.y - mouseOldPos0.y) <= stickPixels) {
-//         mousePos.y = mouseOldPos0.y;
-//         flagY = true;
-//       }
-//     }
-//     // Sticking to other points
-//     // for (item of existedElements.values()) {
-//     //   if (Math.abs(mousePos.x - item.fields.x0 / scale - paddingX) <= stickPixels) {
-//     //     mousePos.x = item.fields.x0 / scale + paddingX;
-//     //     flagX = true;
-//     //   } else if (Math.abs(mousePos.x - item.fields.x1 / scale - paddingX) <= stickPixels) {
-//     //     mousePos.x = item.fields.x1 / scale + paddingX;
-//     //     flagX = true;
-//     //   }
-//     //   if (Math.abs(mousePos.y - item.fields.y0 / scale - paddingY) <= stickPixels) {
-//     //     mousePos.y = item.fields.y0 / scale + paddingY;
-//     //     flagY = true;
-//     //   } else if (Math.abs(mousePos.y - item.fields.y1 / scale - paddingY) <= stickPixels) {
-//     //     mousePos.y = item.fields.y1 / scale + paddingY;
-//     //     flagY = true;
-//     //   }
-//     // }
-//     // draw guidelines
-//     if (flagX || flagY) {
-//       ctx.lineWidth = guideLineWidth;
-//       ctx.setLineDash([10, 5]);
-//       ctx.lineWidth = 1;
-//       if (flagX) {
-//         ctx.beginPath();
-//         ctx.moveTo(mousePos.x, 0);
-//         ctx.lineTo(mousePos.x, canvas.height);
-//         ctx.stroke();
-//       }
-//       if (flagY) {
-//         ctx.beginPath();
-//         ctx.moveTo(0, mousePos.y);
-//         ctx.lineTo(canvas.width, mousePos.y);
-//         ctx.stroke();
-//       }
-//       ctx.setLineDash([0, 0]);
-//     }
-//   }
 

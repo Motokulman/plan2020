@@ -13,5 +13,5 @@
   }
       
         canvas { position: absolute; }
-        #canvas { z-index: 2; }
-        #stick_layer { z-index: 1; }
+        #canvas_0 { z-index: 2; }
+        #canvas_1 { z-index: 1; }
