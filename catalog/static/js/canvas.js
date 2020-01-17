@@ -48,22 +48,21 @@ function drawPoint(p) {
     ctx_0.closePath();
 }
 
-
+//***************************************************************
 // В случае клика по канве определяем какой элемент хочет нарисовать пользователь и действуем
 canvas_0.addEventListener('click', function (e) {
     if (selectedTool != 'none') { // если хоть что то выбрано
         if (empty_scheme) { // если это первая точка в схеме, то она становится центром координат
-            points.push([0, { x: 0, y: 0 }]);
+            points.push({ id: 0, x: 0, y: 0 });
             zeroPointPadding.x = mousePos.x * scale;
             zeroPointPadding.y = mousePos.y * scale;
             empty_scheme = false;
-            //console.log("zeroPointPadding = ", zeroPointPadding);
+
         } else {
-            if (stick()) {
-                console.log("stick = ");
-            }
-            points.push([points[points.length - 1][0] + 1, mmOfMousePos]); // переводим в мм и вносим в массив, приваивая индекс, соджержащийся в последней ячейке + 1
+            console.log("findMaxId(points) + 1 = ", findMaxId(points) + 1);
+            points.push({ id: findMaxId(points) + 1, x: mmOfMousePos.x, y: mmOfMousePos.y }); // переводим в мм и вносим в массив, приваивая индекс, соджержащийся в последней ячейке + 1
         }
+        //  console.log("findMaxId(points) 0 = ", findMaxId(points));
         stick(); // чтобы линии рисовались даже если пользователь только поставил точку и еще не двинул мышь
         drawAxeSize();
     }
@@ -80,8 +79,9 @@ canvas_0.addEventListener('click', function (e) {
                     mousePosArray[1] = mousePos;
                     drawPoint(mousePos); // Нарисовали вторую точку
                     drawLine(mousePosArray[0], mousePosArray[1], ctx_0); // Нарисовали прямую
-                    walls.push([points[points.length - 2][0], points[points.length - 1][0], null]); // Заносим id Точек в массив стен в мм
+                    walls.push([points[points.length - 2].id, points[points.length - 1].id, null]); // Заносим id Точек в массив стен в мм
                     mousePosArray = []; // Обнуляем массив
+                    console.log("walls = ", walls);
                 }
             } else { // если это не прямая
 
@@ -99,40 +99,41 @@ function clear(context, canvas) {
 
 // Приклейка
 function stick() {
-    var stick_pix = 3;
+    var stick_pix = 5;
     clear(ctx_1, canvas_1);
     // Перебор всех точек
     for (item of points.values()) {
         var a = [];
-        a.x = mmToPix(item[1]).x;
-        a.y = mmToPix(item[1]).y;
+        a.x = mmToPix(item).x;
+        //console.log("a.x = ", a.x);
+        a.y = mmToPix(item).y;
         if (Math.abs(mousePos.x - a.x) <= stick_pix) {
             //console.log("пMath.abs(mousePos.x - a.x) = ", Math.abs(mousePos.x - a.x));
             mousePos.x = a.x;
-            mmOfMousePos.x = item[1].x;
+            mmOfMousePos.x = item.x;
             drawHVLine("v");
         }
         if (Math.abs(mousePos.y - a.y) <= stick_pix) {
             mousePos.y = a.y;
-            mmOfMousePos.y = item[1].y;
+            mmOfMousePos.y = item.y;
             drawHVLine("h");
         }
     }
 }
 
 // Перевод миллиметров в пиксели
-function mmToPix(mmArr) {
+function mmToPix(arr) {
     return {
-        x: Math.round((mmArr.x + zeroPointPadding.x) / scale),
-        y: Math.round((mmArr.y + zeroPointPadding.y) / scale)
+        x: Math.round((arr.x + zeroPointPadding.x) / scale),
+        y: Math.round((arr.y + zeroPointPadding.y) / scale)
     };
 }
 
 // Перевод пикселей в миллиметры
-function pixToMm(pixArr) {
+function pixToMm(arr) {
     return {
-        x: Math.round(pixArr.x * scale - zeroPointPadding.x),
-        y: Math.round(pixArr.y * scale - zeroPointPadding.y)
+        x: Math.round(arr.x * scale - zeroPointPadding.x),
+        y: Math.round(arr.y * scale - zeroPointPadding.y)
     };
 }
 
@@ -147,7 +148,7 @@ $('#test_buttons button').click(function () {
 $('#line_type_selector button').click(function () {
     $(this).addClass('active').siblings().removeClass('active');
     selectedLineType = this.id;
-    console.log("selectedLineType = ", selectedLineType);
+    // console.log("selectedLineType = ", selectedLineType);
 });
 
 // Определяем, какой элемент выбрал пользователь (стена или что-то иное)
@@ -179,23 +180,72 @@ function drawWalls() {
     clear(ctx_0, canvas_0);
     for (wall of walls.values()) {
         for (point of points.values()) {
-            if (wall[0] == point[0]) {
-                drawPoint(mmToPix(point[1], point[2]));
+            // console.log("wall= ", wall);
+            // console.log("point= ", point);
+            if (wall[0] == point.id) {
+                drawPoint(mmToPix(point));
             }
-            if (wall[1] == point[0]) {
-                drawPoint(mmToPix(point[1], point[2]));
+            if (wall[1] == point.id) {
+                drawPoint(mmToPix(point));
             }
         }
     }
 }
 
+// Сортировка масиива точек по x
+function sortArrByX(arr) {
+    arr.sort(function (a, b) {
+        if (a.x > b.x) {
+            return 1;
+        }
+        if (a.x < b.x) {
+            return -1;
+        } else {
+            return 0;
+        }
+    });
+}
+// Сортировка масиива точек по y
+function sortArrByY(arr) {
+    arr.sort(function (a, b) {
+        if (a.y > b.y) {
+            return 1;
+        }
+        if (a.y < b.y) {
+            return -1;
+        } else {
+            return 0;
+        }
+    });
+}
+
+// Определение максимального поля id массива
+function findMaxId(arr) {
+    var a = 0;
+    for (item of arr.values()) {
+        if (item.id > a) {
+            a = item.id;
+        }
+    }
+    return a;
+}
+
 // Вывод текста - координат осей
 function drawAxeSize() {
     clear(ctx_2, canvas_2);
+    sortArrByX(points);
+    for (let i = 0; i < points.length; i++) {
+        ctx_2.fillText(points[i].x - points[0].x, mmToPix(points[i]).x, 10); // верхние х - сами оси
+        console.log("mmToPix(points[i]).x = ", mmToPix(points[i]).x);
+        if (i > 0) {
+            ctx_2.fillText(points[i].x - points[i - 1].x, mmToPix(points[i]).x - mmToPix(points[i - 1]).x + zeroPointPadding.x/scale, canvas_2.height - 30); // нижние х - расстояния между осями
+        }
+        
+    }
     // var xMin = 0, yMin = 0;
     // for (point of points.values()) {// Определяем минимальные координаты чтоб скорректировать все остальные
-    //     if (point[1].x < xMin) xMin = point[1].x;
-    //     if (point[1].y < yMin) yMin = point[1].y;
+    //     if (point.x < xMin) xMin = point.x;
+    //     if (point.y < yMin) yMin = point.y;
     // }
     // for (let i = 0; i < points.length; i++) {
     //     ctx_2.fillText(points[i][1].x - xMin, mmToPix(points[i][1]).x, 10); // верхние х - сами оси
@@ -203,28 +253,18 @@ function drawAxeSize() {
     //     if (i > 0) {
     //         ctx_2.fillText(points[i][1].x - xMin - , mmToPix(points[i][1]).x, 10); // левые х - расстояния между осями
     //     }
-        
-    // }
-    console.log("points = ", points);
-    //console.log("sort ");
-    points.sort(function (a, b) {
-        console.log("ax = ", a.x);
-        if (a.x > b.x) {
-          return 1;
-        }
-        if (a.x < b.x) {
-          return -1;
-        }
-        // a должно быть равным b
-        return 0;
-      });
-   //   console.log("points = ", points);
-   //   console.log("-------------------- ");
+
+    // // }
+    // console.log("points = ", points);
+    // console.log("sort ");
+    // sortArrByX(points);
+    // console.log("points = ", points);
+    // console.log("-------------------- ");
     // for (point of points.values()) {
 
 
 
-        
+
     //     }
 }
 
@@ -254,7 +294,7 @@ function onWheel(e) {
 
     if (scale_old > scale) {
         zeroPointPadding.x = Math.round((zeroPointPadding.x / scale_old + (zeroPointPadding.x / scale_old - mousePos.x) / scale) * scale);
-        console.log("zeroPointPadding.x = ", zeroPointPadding.x);
+        // console.log("zeroPointPadding.x = ", zeroPointPadding.x);
         zeroPointPadding.y = Math.round((zeroPointPadding.y / scale_old + (zeroPointPadding.y / scale_old - mousePos.y) / scale) * scale);
     } else {
         zeroPointPadding.x = Math.round((zeroPointPadding.x / scale_old - (zeroPointPadding.x / scale_old - mousePos.x) / scale) * scale);
