@@ -79,9 +79,10 @@ canvas_0.addEventListener('click', function (e) {
                     mousePosArray[1] = mousePos;
                     drawPoint(mousePos); // Нарисовали вторую точку
                     drawLine(mousePosArray[0], mousePosArray[1], ctx_0); // Нарисовали прямую
-                    walls.push([points[points.length - 2].id, points[points.length - 1].id, null]); // Заносим id Точек в массив стен в мм
+                    walls.push({ id0: findMaxId(points), id1: findMaxId(points) - 1, id2: null }); // Заносим id Точек в массив стен в мм
                     mousePosArray = []; // Обнуляем массив
                     console.log("walls = ", walls);
+                    console.log("points = ", points);
                 }
             } else { // если это не прямая
 
@@ -182,10 +183,10 @@ function drawWalls() {
         for (point of points.values()) {
             // console.log("wall= ", wall);
             // console.log("point= ", point);
-            if (wall[0] == point.id) {
+            if (wall.id0 == point.id) {
                 drawPoint(mmToPix(point));
             }
-            if (wall[1] == point.id) {
+            if (wall.id1 == point.id) {
                 drawPoint(mmToPix(point));
             }
         }
@@ -234,40 +235,24 @@ function findMaxId(arr) {
 function drawAxeSize() {
     clear(ctx_2, canvas_2);
     sortArrByX(points);
-    for (let i = 0; i < points.length; i++) {
-        ctx_2.fillText(points[i].x - points[0].x, mmToPix(points[i]).x, 10); // верхние х - сами оси
-        console.log("mmToPix(points[i]).x = ", mmToPix(points[i]).x);
-        if (i > 0) {
-            ctx_2.fillText(points[i].x - points[i - 1].x, mmToPix(points[i]).x - mmToPix(points[i - 1]).x + zeroPointPadding.x/scale, canvas_2.height - 30); // нижние х - расстояния между осями
+    ctx_2.fillText(0, mmToPix(points[0]).x, 10); // верхнияя нулевая ось х
+    for (let i = 1; i < points.length; i++) {
+        if (points[i].x != points[i - 1].x) {
+            ctx_2.fillText(points[i].x - points[0].x, mmToPix(points[i]).x, 10); // верхние х - сами оси
+            var a = mmToPix(points[i]).x - mmToPix(points[i - 1]).x;
+            ctx_2.fillText(points[i].x - points[i - 1].x, a / 2 + mmToPix(points[i - 1]).x, canvas_2.height - 5); // нижние х - расстояния между осями
         }
-        
+    }    
+    sortArrByY(points);
+    ctx_2.fillText(0, canvas_2.width - 30, mmToPix(points[points.length - 1]).y); // правая нулевая ось Y
+    for (let i = points.length - 2; i >= 0; i--) {
+        if  (points[i].y != points[i + 1].y) {
+            ctx_2.fillText(points[points.length - 1].y - points[i].y, canvas_2.width - 30, mmToPix(points[i]).y); // правые y - сами оси
+            var a = mmToPix(points[i + 1]).y - mmToPix(points[i]).y;
+            ctx_2.fillText(points[i + 1].y - points[i].y, 5, a / 2 + mmToPix(points[i]).y); // левые y - расстояния между осями
+        }
     }
-    // var xMin = 0, yMin = 0;
-    // for (point of points.values()) {// Определяем минимальные координаты чтоб скорректировать все остальные
-    //     if (point.x < xMin) xMin = point.x;
-    //     if (point.y < yMin) yMin = point.y;
-    // }
-    // for (let i = 0; i < points.length; i++) {
-    //     ctx_2.fillText(points[i][1].x - xMin, mmToPix(points[i][1]).x, 10); // верхние х - сами оси
-    //     ctx_2.fillText(points[i][1].y - yMin, canvas_2.width - 30, mmToPix(points[i][1]).y); // правые y - сами оси
-    //     if (i > 0) {
-    //         ctx_2.fillText(points[i][1].x - xMin - , mmToPix(points[i][1]).x, 10); // левые х - расстояния между осями
-    //     }
-
-    // // }
-    // console.log("points = ", points);
-    // console.log("sort ");
-    // sortArrByX(points);
-    // console.log("points = ", points);
-    // console.log("-------------------- ");
-    // for (point of points.values()) {
-
-
-
-
-    //     }
 }
-
 
 
 // Масштабирование колесиком мыши
