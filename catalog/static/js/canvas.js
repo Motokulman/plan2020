@@ -1,9 +1,11 @@
-var canvas_0 = document.getElementById('canvas_0'); // основная канва
+var canvas_0 = document.getElementById('canvas_0'); // канва для рисования схемы
 var canvas_1 = document.getElementById('canvas_1'); // канва для линий приклейки
 var canvas_2 = document.getElementById('canvas_2'); // канва для размеров
+var canvas_3 = document.getElementById('canvas_3'); // канва для подсвечивания выделенного размера
 var ctx_0 = canvas_0.getContext('2d');
 var ctx_1 = canvas_1.getContext('2d');
 var ctx_2 = canvas_2.getContext('2d');
+var ctx_3 = canvas_3.getContext('2d');
 var selectedLineType = "straight"; // Тип линии при рисовании - прямая или кривая
 var selectedTool = "none"; // Выбранный элемент для рисования, стена, или еще что-то. Изначально - ничего не выбрано
 var mousePosArray = []; // массив позиций мыши при рисовании. 
@@ -32,11 +34,11 @@ function drawLine(p, p1, context) {
 function drawHVLine(type) {
     ctx_1.beginPath();
     if (type == "h") {
-        ctx_1.moveTo(sizeTextSettings.leftPadding + 20, mousePos.y);
-        ctx_1.lineTo(canvas_1.width - sizeTextSettings.rightPadding - 2, mousePos.y);
+        ctx_1.moveTo(0, mousePos.y);
+        ctx_1.lineTo(canvas_1.width, mousePos.y);
     } else if (type == "v") {
-        ctx_1.moveTo(mousePos.x, sizeTextSettings.topPadding + 2);
-        ctx_1.lineTo(mousePos.x, canvas_1.height - sizeTextSettings.bottomPadding - 2);
+        ctx_1.moveTo(mousePos.x, 0);
+        ctx_1.lineTo(mousePos.x, canvas_1.height);
     }
     ctx_1.fillStyle = '#333333';
     ctx_1.stroke();
@@ -101,43 +103,7 @@ function clear(context, canvas) {
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-// Приклейка
-function stick() {
-    var stick_pix = 5;
-    clear(ctx_1, canvas_1);
-    // Перебор всех точек
-    for (item of points.values()) {
-        var a = [];
-        a.x = mmToPix(item).x;
-        //console.log("a.x = ", a.x);
-        a.y = mmToPix(item).y;
-        if (Math.abs(mousePos.x - a.x) <= stick_pix) {// поиск совпадений по х
-            //console.log("пMath.abs(mousePos.x - a.x) = ", Math.abs(mousePos.x - a.x));
-            mousePos.x = a.x;
-            mmOfMousePos.x = item.x;
-            drawHVLine("v");
-            // выделим верхний размер, если курсор попал на него
-            if (mousePos.y - sizeTextSettings.topPadding + ctx_2.measureText("0").actualBoundingBoxAscent / 2 <= ctx_2.measureText("0").actualBoundingBoxAscent) {
-                clear(ctx_1, canvas_1);
-                var p = { x: a.x - 10, y: sizeTextSettings.topPadding + 2 };
-                var p1 = { x: a.x + 10, y: sizeTextSettings.topPadding + 2 };
-                drawLine(p, p1, ctx_1);
-            }
-        }
-        if (Math.abs(mousePos.y - a.y) <= stick_pix) { // поиск совпадений по у
-            mousePos.y = a.y;
-            mmOfMousePos.y = item.y;
-            drawHVLine("h");
-            // выделим правый размер, если курсор попал на него
-            if (mousePos.x >= canvas_0.width - sizeTextSettings.rightPadding) {
-                clear(ctx_1, canvas_1);
-                var p = { x: canvas_0.width - sizeTextSettings.rightPadding, y: a.y + ctx_2.measureText("0").actualBoundingBoxAscent + 1 };
-                var p1 = { x: canvas_0.width - sizeTextSettings.rightPadding + 20, y: a.y + ctx_2.measureText("0").actualBoundingBoxAscent + 1 };
-                drawLine(p, p1, ctx_1);
-            }
-        }
-    }
-}
+
 
 // Перевод миллиметров в пиксели
 function mmToPix(arr) {
@@ -177,42 +143,39 @@ $('#element_selector button').click(function () {
 });
 
 // Получаем координаты курсора в зависимости от положения канвы на экране
-function getMousePos(canvas_0, e) {
-    var rect = canvas_0.getBoundingClientRect();
+function getMousePos(canvas, e) {
+    var rect = canvas.getBoundingClientRect();
     return {
         x: e.clientX - Math.round(rect.left),
         y: e.clientY - Math.round(rect.top)
     };
 }
 
-// Определяем координаты курсора
+// Определяем координаты курсора для схемной канвы
 canvas_0.addEventListener('mousemove', function (e) {
     mousePos = getMousePos(canvas_0, e);
     mmOfMousePos = pixToMm(mousePos);
     stick();
-    //detectSize();
-    //console.log("mousePos 0= ", mousePos);
 });
 
-canvas_1.addEventListener('mousemove', function (e) {
-
-    console.log("mousePos 0= ", mousePos);
+// Определяем координаты курсора для канвы с размерами
+canvas_2.addEventListener('mousemove', function (e) {
+    mousePos = getMousePos(canvas_2, e);
+    defineTextSize();
 });
 
 // Воспроизведение из массива стен
 function drawWalls() {
     clear(ctx_0, canvas_0);
+    var p = [];
+    var p1 = [];    
     for (wall of walls.values()) {
-        for (point of points.values()) {
-            // console.log("wall= ", wall);
-            // console.log("point= ", point);
-            if (wall.id0 == point.id) {
-                drawPoint(mmToPix(point));
-            }
-            if (wall.id1 == point.id) {
-                drawPoint(mmToPix(point));
-            }
-        }
+        p = points.find(item => item.id == wall.id0);
+        p1 = points.find(item => item.id == wall.id1);
+        drawPoint(mmToPix(p));
+        drawPoint(mmToPix(p1));
+        drawLine(mmToPix(p), mmToPix(p1), ctx_0);
+
     }
 }
 
@@ -254,80 +217,203 @@ function findMaxId(arr) {
     return a;
 }
 
+// Приклейка
+function stick() {
+    var stick_pix = 10;
+    clear(ctx_1, canvas_1);
+    // Перебор всех точек
+    for (item of points.values()) {
+        var a = [];
+        a.x = mmToPix(item).x;
+        //console.log("a.x = ", a.x);
+        a.y = mmToPix(item).y;
+        if (Math.abs(mousePos.x - a.x) <= stick_pix) {// поиск совпадений по х
+            //console.log("пMath.abs(mousePos.x - a.x) = ", Math.abs(mousePos.x - a.x));
+            mousePos.x = a.x;
+            mmOfMousePos.x = item.x;
+            drawHVLine("v");
+        }
+        if (Math.abs(mousePos.y - a.y) <= stick_pix) { // поиск совпадений по у
+            mousePos.y = a.y;
+            mmOfMousePos.y = item.y;
+            drawHVLine("h");
+        }
+    }
+}
+
+// Определение наведения на размер
+function defineTextSize() {
+    var axis = "";
+    var type = "";
+    var size = 0;
+
+    clear(ctx_3, canvas_3);
+    sortArrByX(points);
+    var text;
+    var a = [];
+    // Перебор всех точек
+    for (let i = 0; i < points.length; i++) {
+        a.x = mmToPix(points[i]).x;
+        text = points[i].x - points[0].x;
+        // выделим верхний размер, если курсор попал на него
+        if ((Math.abs(mousePos.x - a.x - parseInt(canvas_0.style.left, 10)) <= 10) && (text != "0")) {// поиск совпадений по х, причем наводить можно на всю ширины текста (<= ctx_2.measureText(text).width/2). Сделать защиту от наложенных текстов 
+            if (Math.abs((mousePos.y - parseInt(canvas_0.style.top, 10) / 2)) <= 5) {
+                var p = { x: a.x + parseInt(canvas_0.style.left, 10) - ctx_2.measureText(text).width / 2, y: parseInt(canvas_0.style.top, 10) * 0.8 };
+                var p1 = { x: a.x + parseInt(canvas_0.style.left, 10) + ctx_2.measureText(text).width / 2, y: parseInt(canvas_0.style.top, 10) * 0.8 };
+                drawLine(p, p1, ctx_3);
+                axis = "x";
+                type = "abs";
+                size = points[i].x;
+            }
+        }
+        // выделим нижний размер, если курсор попал на него
+        if (i > 0) {
+            if (Math.abs(mousePos.x - mmToPix(points[i - 1]).x - (mmToPix(points[i]).x - mmToPix(points[i - 1]).x) / 2 - parseInt(canvas_0.style.left, 10)) <= 10) {
+                text = points[i].x - points[i - 1].x;
+                if (Math.abs((parseInt(canvas_2.height, 10) - mousePos.y - ctx_2.measureText("0").actualBoundingBoxAscent)) <= 5) {
+
+                    var p = { x: mmToPix(points[i - 1]).x + (mmToPix(points[i]).x - mmToPix(points[i - 1]).x) / 2 - ctx_2.measureText(text).width / 2 + parseInt(canvas_0.style.left, 10), y: canvas_2.height - 2 };
+                    var p1 = { x: mmToPix(points[i - 1]).x + (mmToPix(points[i]).x - mmToPix(points[i - 1]).x) / 2 + ctx_2.measureText(text).width / 2 + parseInt(canvas_0.style.left, 10), y: canvas_2.height - 2 };
+                    drawLine(p, p1, ctx_3);
+                    axis = "x";
+                    type = "rel";
+                    size = points[i].x;
+                }
+            }
+        }
+    }
+
+    // выделим правый размер, если курсор попал на него
+    sortArrByY(points);
+    for (let i = 0; i < points.length; i++) {
+        a.y = mmToPix(points[i]).y;
+        text = points[points.length - 1].y - points[i].y;
+        // выделим правый размер
+        if ((Math.abs(mousePos.y - a.y - parseInt(canvas_0.style.top, 10)) <= ctx_2.measureText("0").actualBoundingBoxAscent) && (text != "0")) {// поиск совпадений по y, причем наводить можно на всю ширины текста (<= ctx_2.measureText(text).width/2). Сделать защиту от наложенных текстов 
+            if (Math.abs((parseInt(canvas_2.width, 10) - parseInt(canvas_0.style.left, 10) / 2 - mousePos.x)) < parseInt(canvas_0.style.left, 10) / 2 - 10) {
+                var p = { x: parseInt(canvas_2.width, 10) - parseInt(canvas_0.style.left, 10) + 2, y: a.y + parseInt(canvas_0.style.top, 10) + ctx_2.measureText("0").actualBoundingBoxAscent };
+                var p1 = { x: parseInt(canvas_2.width, 10) - 2, y: a.y + parseInt(canvas_0.style.top, 10) + ctx_2.measureText("0").actualBoundingBoxAscent };
+                drawLine(p, p1, ctx_3);
+                axis = "y";
+                type = "abs";
+                size = points[i].y;
+            }
+        }
+    }
+
+    // выделим левый размер, если курсор попал на него
+    if (mousePos.x < parseInt(canvas_0.style.left, 10)) {
+        for (let i = points.length - 2; i >= 0; i--) {
+            a.y = mmToPix(points[i]).y - mmToPix(points[i + 1]).y;
+            if (Math.abs(mousePos.y - mmToPix(points[i]).y + a.y / 2 - parseInt(canvas_0.style.top, 10)) < ctx_2.measureText("0").actualBoundingBoxAscent) {
+                // console.log("Math.abs(mousePos.x - canvas_0.style.left/2) ", Math.abs(mousePos.x - parseInt(canvas_0.style.left, 10)/2));
+                // console.log("canvas_0.style.left/2 ", parseInt(canvas_0.style.left, 10)/2);
+                if (Math.abs(mousePos.x - parseInt(canvas_0.style.left, 10) / 2) < parseInt(canvas_0.style.left, 10) / 2 - 15) {
+                    var p = { x: 2, y: a.y / 2 + mmToPix(points[i + 1]).y + parseInt(canvas_0.style.top, 10) + ctx_2.measureText("0").actualBoundingBoxAscent };
+                    var p1 = { x: parseInt(canvas_0.style.left, 10) - 10, y: a.y / 2 + mmToPix(points[i + 1]).y + parseInt(canvas_0.style.top, 10) + ctx_2.measureText("0").actualBoundingBoxAscent };
+                    drawLine(p, p1, ctx_3);
+                    axis = "y";
+                    type = "rel";
+                    size = points[i + 1].y;
+                }
+            }
+        }
+    }
+    return {
+        axis: axis,
+        type: type,
+        size: size
+    };
+}
+
+// правка размеров
+// function setSize() {
+//     console.log("defineTextSize() ", defineTextSize());
+// }
+
+// Изменение размеров
+canvas_2.addEventListener('click', function (e) {
+
+    var data = defineTextSize();
+    if (data.type != "") {
+        var size;
+        // сначала иксы
+        sortArrByX(points);
+        if (data.axis == "x") {
+            if (data.type == "abs") { // если это абсолютные значения
+                size = data.size - points[0].x;
+                size = prompt('', size);
+                console.log("size ", size);
+                // меняем размеры
+                if ((size != null) || (size != "")) { // если значение было введено
+                for (let i = 1; i < points.length; i++) {
+                    if (data.size <= points[i].x) {
+                        var delta = + size - data.size + points[0].x;
+                        var newSize = points[i].x + delta;
+                        console.log("newSize ", newSize);
+                        var c = { id: points[i].id, x: newSize, y: points[i].y };
+                        points.splice(i, 1, c);
+                        console.log("points ", points);
+                        //points.push({ id: 0, x: 0, y: 0 });
+                    }
+                }
+            }
+                
+            } else if (data.type == "rel") { // если это расстояния между осями
+                for (let i = 1; i < points.length; i++) {
+                    if ((data.size == points[i].x) && (points[i].x > points[i - 1].x)){
+                        size = data.size - points[i - 1].x;
+                    }
+                }
+                
+            }
+        }
+ 
+
+
+        drawAxeSize();
+        drawWalls();
+
+
+    }
+});
+
 // Вывод текста - координат осей
 function drawAxeSize() {
+    ctx_2.font = "14px Verdana";
     clear(ctx_2, canvas_2);
     sortArrByX(points);
     var text = "0"; // текст, выводимый на экран
+    //  console.log("canvas_0.style.left ", parseInt(canvas_0.style.left, 10));
     var textMiddle = ctx_2.measureText(text).width / 2; // длина текста, поделеная пополам для центровки по осям
-    ctx_2.fillText(0, mmToPix(points[0]).x - textMiddle, sizeTextSettings.topPadding); // верхнияя нулевая ось х
+    ctx_2.fillText(0, mmToPix(points[0]).x - textMiddle + parseInt(canvas_0.style.left, 10), ctx_2.measureText("0").actualBoundingBoxAscent * 1.25); // верхнияя нулевая ось х
     for (let i = 1; i < points.length; i++) {
         if (points[i].x != points[i - 1].x) {
             text = points[i].x - points[0].x;
             textMiddle = ctx_2.measureText(text).width / 2;
-            ctx_2.fillText(text, mmToPix(points[i]).x - textMiddle, sizeTextSettings.topPadding); // верхние х - сами оси
+            ctx_2.fillText(text, mmToPix(points[i]).x - textMiddle + parseInt(canvas_0.style.left, 10), ctx_2.measureText("0").actualBoundingBoxAscent * 1.25); // верхние х - сами оси
             var a = mmToPix(points[i]).x - mmToPix(points[i - 1]).x; // расстояние между осями в пикселях
             text = points[i].x - points[i - 1].x;
             textMiddle = ctx_2.measureText(text).width / 2;
-            ctx_2.fillText(text, a / 2 + mmToPix(points[i - 1]).x - textMiddle, canvas_2.height - sizeTextSettings.bottomPadding); // нижние х - расстояния между осями
+            ctx_2.fillText(text, a / 2 + mmToPix(points[i - 1]).x - textMiddle + parseInt(canvas_0.style.left, 10), canvas_2.height - ctx_2.measureText("0").actualBoundingBoxAscent * 0.6); // нижние х - расстояния между осями
         }
     }
     sortArrByY(points);
     text = "0";
     textMiddle = ctx_2.measureText(text).actualBoundingBoxAscent / 2; // высота текста
-    console.log("textMiddle.x = ", textMiddle);
-    ctx_2.fillText(text, canvas_2.width - sizeTextSettings.rightPadding, mmToPix(points[points.length - 1]).y + textMiddle); // правая нулевая ось Y
+    // console.log("textMiddle.x = ", textMiddle);
+    ctx_2.fillText(text, canvas_2.width - parseInt(canvas_0.style.left, 10) * 0.93, mmToPix(points[points.length - 1]).y + textMiddle + parseInt(canvas_0.style.top, 10)); // правая нулевая ось Y
     for (let i = points.length - 2; i >= 0; i--) {
         if (points[i].y != points[i + 1].y) {
             text = points[points.length - 1].y - points[i].y;
             textMiddle = ctx_2.measureText(text).actualBoundingBoxAscent / 2; // высота текста
-            ctx_2.fillText(text, canvas_2.width - sizeTextSettings.rightPadding, mmToPix(points[i]).y + textMiddle); // правые y - сами оси
+            ctx_2.fillText(text, canvas_2.width - parseInt(canvas_0.style.left, 10) * 0.93, mmToPix(points[i]).y + textMiddle + parseInt(canvas_0.style.top, 10)); // правые y - сами оси
             var a = mmToPix(points[i + 1]).y - mmToPix(points[i]).y;
             text = points[i + 1].y - points[i].y;
             textMiddle = ctx_2.measureText(text).actualBoundingBoxAscent / 2; // высота текста
-            ctx_2.fillText(points[i + 1].y - points[i].y, sizeTextSettings.leftPadding, a / 2 + mmToPix(points[i]).y + textMiddle); // левые y - расстояния между осями
+            ctx_2.fillText(points[i + 1].y - points[i].y, 3, a / 2 + mmToPix(points[i]).y + textMiddle + parseInt(canvas_0.style.top, 10)); // левые y - расстояния между осями
         }
     }
-}
-
-// Определение текстового размера, над которым находится мышь
-function detectSize() {
-    // for (item of points.values()) {
-    //     var a = []; // массив с координатами в пикселях, воспроизведенных из массива с точками, где размеры в мм
-    //     a.x = mmToPix(item).x;
-    //     a.y = mmToPix(item).y;
-    //     if (Math.abs(mousePos.x - a.x) <= ctx_2.measureText("0").actualBoundingBoxAscent) { 
-    //         if (Math.abs(mousePos.y - sizeTextSettings.topPadding + ctx_2.measureText("0").actualBoundingBoxAscent/2) <= ctx_2.measureText("0").actualBoundingBoxAscent) {
-    //             console.log("item.id ", item.id);
-    //         }
-    //     }
-
-    // }
-
-
-
-
-    // var stick_pix = 5;
-    // clear(ctx_1, canvas_1);
-    // // Перебор всех точек
-    // for (item of points.values()) {
-    //     var a = [];
-    //     a.x = mmToPix(item).x;
-    //     //console.log("a.x = ", a.x);
-    //     a.y = mmToPix(item).y;
-    //     if (Math.abs(mousePos.x - a.x) <= stick_pix) {
-    //         //console.log("пMath.abs(mousePos.x - a.x) = ", Math.abs(mousePos.x - a.x));
-    //         mousePos.x = a.x;
-    //         mmOfMousePos.x = item.x;
-    //         drawHVLine("v");
-    //     }
-    //     if (Math.abs(mousePos.y - a.y) <= stick_pix) {
-    //         mousePos.y = a.y;
-    //         mmOfMousePos.y = item.y;
-    //         drawHVLine("h");
-    //     }
-    // }
-
 }
 
 
