@@ -13,5 +13,6 @@
   }
       
         canvas { position: absolute; }
-        #canvas_0 { z-index: 2; }
-        #canvas_1 { z-index: 1; }
+        #canvas_0 { z-index: 3; }
+        #canvas_1 { z-index: 1; }    
+        #canvas_2 { z-index: 2; }
