@@ -168,7 +168,7 @@ canvas_2.addEventListener('mousemove', function (e) {
 function drawWalls() {
     clear(ctx_0, canvas_0);
     var p = [];
-    var p1 = [];    
+    var p1 = [];
     for (wall of walls.values()) {
         p = points.find(item => item.id == wall.id0);
         p1 = points.find(item => item.id == wall.id1);
@@ -246,6 +246,7 @@ function defineTextSize() {
     var axis = "";
     var type = "";
     var size = 0;
+    var sizePrevious = 0;
 
     clear(ctx_3, canvas_3);
     sortArrByX(points);
@@ -278,6 +279,7 @@ function defineTextSize() {
                     axis = "x";
                     type = "rel";
                     size = points[i].x;
+                    sizePrevious = points[i - 1].x;
                 }
             }
         }
@@ -322,7 +324,8 @@ function defineTextSize() {
     return {
         axis: axis,
         type: type,
-        size: size
+        size: size,
+        sizePrevious: sizePrevious
     };
 }
 
@@ -337,39 +340,82 @@ canvas_2.addEventListener('click', function (e) {
     var data = defineTextSize();
     if (data.type != "") {
         var size;
+        var newSize;
+        var delta;
+        var replacement;
         // сначала иксы
         sortArrByX(points);
         if (data.axis == "x") {
             if (data.type == "abs") { // если это абсолютные значения
                 size = data.size - points[0].x;
                 size = prompt('', size);
-                console.log("size ", size);
+                //console.log("size ", size);
                 // меняем размеры
-                if ((size != null) || (size != "")) { // если значение было введено
-                for (let i = 1; i < points.length; i++) {
-                    if (data.size <= points[i].x) {
-                        var delta = + size - data.size + points[0].x;
-                        var newSize = points[i].x + delta;
-                        console.log("newSize ", newSize);
-                        var c = { id: points[i].id, x: newSize, y: points[i].y };
-                        points.splice(i, 1, c);
-                        console.log("points ", points);
-                        //points.push({ id: 0, x: 0, y: 0 });
+                if (((size != null) || (size != "")) && (+ size >= 0)) { // если значение было введено
+                    for (let i = 1; i < points.length; i++) {
+                        if (data.size <= points[i].x) {
+                            delta = + size - data.size + points[0].x;
+                            newSize = points[i].x + delta;
+                            console.log("newSize ", newSize);
+                            replacement = { id: points[i].id, x: newSize, y: points[i].y };
+                            points.splice(i, 1, replacement);
+                        }
                     }
                 }
-            }
-                
+
             } else if (data.type == "rel") { // если это расстояния между осями
-                for (let i = 1; i < points.length; i++) {
-                    if ((data.size == points[i].x) && (points[i].x > points[i - 1].x)){
-                        size = data.size - points[i - 1].x;
+                size = Math.abs(data.size - data.sizePrevious);
+                newSize = prompt('', size);
+                if (((newSize != null) || (newSize != "")) && (newSize != size) && (+ newSize >= 0)) { // если значение было введено
+                    delta = + newSize - Math.abs(data.size - data.sizePrevious);
+                    for (let i = 1; i < points.length; i++) {
+                        if (points[i].x >= data.size) {
+                            newSize = points[i].x + delta;
+                            replacement = { id: points[i].id, x: newSize, y: points[i].y };
+                            points.splice(i, 1, replacement);
+                        }
                     }
                 }
-                
+
             }
         }
- 
 
+        // затем игрики
+        sortArrByY(points);
+        if (data.axis == "y") {
+            if (data.type == "abs") { // если это абсолютные значения
+                size = data.size - points[0].x;
+                size = prompt('', size);
+                //console.log("size ", size);
+                // меняем размеры
+                if (((size != null) || (size != "")) && (+ size >= 0)) { // если значение было введено
+                    for (let i = 1; i < points.length; i++) {
+                        if (data.size <= points[i].x) {
+                            delta = + size - data.size + points[0].x;
+                            newSize = points[i].x + delta;
+                            console.log("newSize ", newSize);
+                            replacement = { id: points[i].id, x: newSize, y: points[i].y };
+                            points.splice(i, 1, replacement);
+                        }
+                    }
+                }
+
+            } else if (data.type == "rel") { // если это расстояния между осями
+                size = Math.abs(data.size - data.sizePrevious);
+                newSize = prompt('', size);
+                if (((newSize != null) || (newSize != "")) && (newSize != size) && (+ newSize >= 0)) { // если значение было введено
+                    delta = + newSize - Math.abs(data.size - data.sizePrevious);
+                    for (let i = 1; i < points.length; i++) {
+                        if (points[i].x >= data.size) {
+                            newSize = points[i].x + delta;
+                            replacement = { id: points[i].id, x: newSize, y: points[i].y };
+                            points.splice(i, 1, replacement);
+                        }
+                    }
+                }
+
+            }
+        }
 
         drawAxeSize();
         drawWalls();
