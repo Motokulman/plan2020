@@ -7,6 +7,7 @@ var ctx_1 = canvas_1.getContext('2d');
 var ctx_2 = canvas_2.getContext('2d');
 var ctx_3 = canvas_3.getContext('2d');
 var selectedLineType = "straight"; // Тип линии при рисовании - прямая или кривая
+var selectedEdge = "1"; // Количество граней стены
 var selectedTool = "none"; // Выбранный элемент для рисования, стена, или еще что-то. Изначально - ничего не выбрано
 var mousePosArray = []; // массив позиций мыши при рисовании. 
 var mousePos; // Позиции мыши по х и у, с учетом положения канвы на экране
@@ -27,7 +28,6 @@ function drawLine(p, p1, context) {
     context.lineTo(p1.x, p1.y);
     context.fillStyle = '#333333';
     context.stroke();
-
 }
 
 // рисуем прямую линию, проходящую через всю канву - для линий приклейки
@@ -75,19 +75,40 @@ canvas_0.addEventListener('click', function (e) {
     switch (selectedTool) {
         case 'wall':
             if (selectedLineType == 'straight') { // если выбран прямой тип линии
-                if (mousePosArray.length == 0) { // если это первый клик в этом цикле рисования прямой стены
-                    mousePosArray[0] = mousePos;
-                    drawPoint(mousePos);
-
-                } else { // если это второй клик в этом цикле рисования прямой стены
-                    //console.log("Второй клик");
-                    mousePosArray[1] = mousePos;
-                    drawPoint(mousePos); // Нарисовали вторую точку
-                    drawLine(mousePosArray[0], mousePosArray[1], ctx_0); // Нарисовали прямую
-                    walls.push({ id0: findMaxId(points), id1: findMaxId(points) - 1, id2: null }); // Заносим id Точек в массив стен в мм
-                    mousePosArray = []; // Обнуляем массив
-                    console.log("walls = ", walls);
-                    console.log("points = ", points);
+                if (selectedEdge == 1) { // если грань одна, то есть это одна стена
+                    if (mousePosArray.length == 0) { // если это первый клик в этом цикле рисования прямой стены
+                        mousePosArray[0] = mousePos;
+                        drawPoint(mousePos);
+                    } else { // если это второй клик в этом цикле рисования прямой стены
+                        //console.log("Второй клик");
+                        mousePosArray[1] = mousePos;
+                        drawPoint(mousePos); // Нарисовали вторую точку
+                        drawLine(mousePosArray[0], mousePosArray[1], ctx_0); // Нарисовали прямую
+                        walls.push({ id0: findMaxId(points), id1: findMaxId(points) - 1, id2: null }); // Заносим id Точек в массив стен в мм
+                        mousePosArray = []; // Обнуляем массив
+                        console.log("walls = ", walls);
+                        console.log("points = ", points);
+                    }
+                } else if (selectedEdge == 3) { // если это эркер
+                    if (mousePosArray.length == 0) { // если это первый клик в этом цикле рисования эркера из трех граней
+                        mousePosArray[0] = mousePos;
+                        drawPoint(mousePos);
+                    } else if (mousePosArray.length == 1) { // если это второй клик в этом цикле рисования эркера из трех граней
+                        mousePosArray[1] = mousePos;
+                        drawPoint(mousePos); // Нарисовали вторую точку
+                    } else if (mousePosArray.length == 2) { // если это третий клик в этом цикле рисования эркера из трех граней
+                        mousePosArray[2].x = Math.min(mousePosArray[0].x, mousePosArray[1].x) + Math.abs(mousePosArray[0].x - mousePosArray[1].x) / 3;
+                        mousePosArray[3].x = Math.min(mousePosArray[0].x, mousePosArray[1].x) + 2 * Math.abs(mousePosArray[0].x - mousePosArray[1].x) / 3;
+                        mousePosArray[2].y = Math.min(mousePosArray[0].y, mousePosArray[1].y) + Math.abs(mousePosArray[0].y - mousePosArray[1].y) / 3;
+                        mousePosArray[3].y = Math.min(mousePosArray[0].y, mousePosArray[1].y) + 2 * Math.abs(mousePosArray[0].y - mousePosArray[1].y) / 3;
+                        drawPoint(mousePosArray[2]); // Нарисовали Третью точку
+                        drawPoint(mousePosArray[3]); // Нарисовали Третью точку
+                        // drawLine(mousePosArray[0], mousePosArray[1], ctx_0); // Нарисовали прямую
+                        // walls.push({ id0: findMaxId(points), id1: findMaxId(points) - 1, id2: null }); // Заносим id Точек в массив стен в мм
+                        // mousePosArray = []; // Обнуляем массив
+                        // console.log("walls = ", walls);
+                        // console.log("points = ", points);
+                    }
                 }
             } else { // если это не прямая
 
@@ -102,8 +123,6 @@ canvas_0.addEventListener('click', function (e) {
 function clear(context, canvas) {
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
-
-
 
 // Перевод миллиметров в пиксели
 function mmToPix(arr) {
@@ -133,6 +152,12 @@ $('#line_type_selector button').click(function () {
     $(this).addClass('active').siblings().removeClass('active');
     selectedLineType = this.id;
     // console.log("selectedLineType = ", selectedLineType);
+});
+
+$('#edge').change(function () { // определим, сколько граней выбрал пользователь
+    $(this).addClass('active').siblings().removeClass('active');
+    selectedEdge = this.value;
+    // alert(selectedEdge);
 });
 
 // Определяем, какой элемент выбрал пользователь (стена или что-то иное)
@@ -273,7 +298,7 @@ function defineTextSize() {
         if (i > 0) {
             text = points[i].x - points[i - 1].x;
             if ((Math.abs(mousePos.x - mmToPix(points[i - 1]).x - (mmToPix(points[i]).x - mmToPix(points[i - 1]).x) / 2 - parseInt(canvas_0.style.left, 10)) <= 10) && (text != 0)) {
-                
+
                 if (Math.abs((parseInt(canvas_2.height, 10) - mousePos.y - ctx_2.measureText("0").actualBoundingBoxAscent)) <= 5) {
                     var p = { x: mmToPix(points[i - 1]).x + (mmToPix(points[i]).x - mmToPix(points[i - 1]).x) / 2 - ctx_2.measureText(text).width / 2 + parseInt(canvas_0.style.left, 10), y: canvas_2.height - 2 };
                     var p1 = { x: mmToPix(points[i - 1]).x + (mmToPix(points[i]).x - mmToPix(points[i - 1]).x) / 2 + ctx_2.measureText(text).width / 2 + parseInt(canvas_0.style.left, 10), y: canvas_2.height - 2 };
@@ -289,7 +314,7 @@ function defineTextSize() {
 
     // выделим правый размер, если курсор попал на него
     sortArrByY(points);
-     for (let i = points.length - 2; i >= 0; i--) {
+    for (let i = points.length - 2; i >= 0; i--) {
         if (points[i].y != points[i + 1].y) {
             a.y = mmToPix(points[i]).y;
             text = points[points.length - 1].y - points[i].y;
@@ -393,7 +418,7 @@ canvas_2.addEventListener('click', function (e) {
                 if ((size != "") && (+ size > 0)) { // если значение было введено
                     for (let i = points.length - 1; i >= 0; i--) {
                         if (data.size >= points[i].y) {
-                            delta = + size - Math.abs(data.size -  points[points.length - 1].y);
+                            delta = + size - Math.abs(data.size - points[points.length - 1].y);
                             newSize = points[i].y - delta;
                             console.log("newSize ", newSize);
                             replacement = { id: points[i].id, x: points[i].x, y: newSize };
