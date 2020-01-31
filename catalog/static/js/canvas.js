@@ -271,10 +271,10 @@ function defineTextSize() {
         }
         // выделим нижний размер, если курсор попал на него
         if (i > 0) {
-            if (Math.abs(mousePos.x - mmToPix(points[i - 1]).x - (mmToPix(points[i]).x - mmToPix(points[i - 1]).x) / 2 - parseInt(canvas_0.style.left, 10)) <= 10) {
-                text = points[i].x - points[i - 1].x;
+            text = points[i].x - points[i - 1].x;
+            if ((Math.abs(mousePos.x - mmToPix(points[i - 1]).x - (mmToPix(points[i]).x - mmToPix(points[i - 1]).x) / 2 - parseInt(canvas_0.style.left, 10)) <= 10) && (text != 0)) {
+                
                 if (Math.abs((parseInt(canvas_2.height, 10) - mousePos.y - ctx_2.measureText("0").actualBoundingBoxAscent)) <= 5) {
-
                     var p = { x: mmToPix(points[i - 1]).x + (mmToPix(points[i]).x - mmToPix(points[i - 1]).x) / 2 - ctx_2.measureText(text).width / 2 + parseInt(canvas_0.style.left, 10), y: canvas_2.height - 2 };
                     var p1 = { x: mmToPix(points[i - 1]).x + (mmToPix(points[i]).x - mmToPix(points[i - 1]).x) / 2 + ctx_2.measureText(text).width / 2 + parseInt(canvas_0.style.left, 10), y: canvas_2.height - 2 };
                     drawLine(p, p1, ctx_3);
@@ -289,15 +289,7 @@ function defineTextSize() {
 
     // выделим правый размер, если курсор попал на него
     sortArrByY(points);
-    // for (let i = 0; i < points.length; i++) {
-
-    // }
-    // sortArrByY(points);
-    // text = "0";
-    //  textMiddle = ctx_2.measureText(text).actualBoundingBoxAscent / 2; // высота текста
-    // console.log("textMiddle.x = ", textMiddle);
-    //  ctx_2.fillText(text, canvas_2.width - parseInt(canvas_0.style.left, 10) * 0.93, mmToPix(points[points.length - 1]).y + textMiddle + parseInt(canvas_0.style.top, 10)); // правая нулевая ось Y
-    for (let i = points.length - 2; i >= 0; i--) {
+     for (let i = points.length - 2; i >= 0; i--) {
         if (points[i].y != points[i + 1].y) {
             a.y = mmToPix(points[i]).y;
             text = points[points.length - 1].y - points[i].y;
@@ -309,39 +301,18 @@ function defineTextSize() {
                     drawLine(p, p1, ctx_3);
                     axis = "y";
                     type = "abs";
-                    size = points[i + 1].y;
-                   // console.log("size ", size);
+                    size = points[i].y;
+                    console.log("size ", size);
                 }
             }
         }
     }
 
-
-
-    // for (let i = 1; i < points.length; i++) {
-    //     if (points[i].y == points[i - 1].y) continue;
-    //     a.y = mmToPix(points[i]).y;
-    //     text = points[points.length - 1].y - points[i].y;
-    //     // выделим правый размер
-    //     if ((Math.abs(mousePos.y - a.y - parseInt(canvas_0.style.top, 10)) <= ctx_2.measureText("0").actualBoundingBoxAscent) && (text != "0")) {// поиск совпадений по y, причем наводить можно на всю ширины текста (<= ctx_2.measureText(text).width/2). Сделать защиту от наложенных текстов 
-    //         if (Math.abs((parseInt(canvas_2.width, 10) - parseInt(canvas_0.style.left, 10) / 2 - mousePos.x)) < parseInt(canvas_0.style.left, 10) / 2 - 10) {
-    //             var p = { x: parseInt(canvas_2.width, 10) - parseInt(canvas_0.style.left, 10) + 2, y: a.y + parseInt(canvas_0.style.top, 10) + ctx_2.measureText("0").actualBoundingBoxAscent };
-    //             var p1 = { x: parseInt(canvas_2.width, 10) - 2, y: a.y + parseInt(canvas_0.style.top, 10) + ctx_2.measureText("0").actualBoundingBoxAscent };
-    //             drawLine(p, p1, ctx_3);
-    //             axis = "y";
-    //             type = "abs";
-    //             size = points[i + 1].y;
-    //             console.log("size ", size);
-    //         }
-    //     }
-    // }
-
     // выделим левый размер, если курсор попал на него
     if (mousePos.x < parseInt(canvas_0.style.left, 10)) {
         for (let i = points.length - 2; i >= 0; i--) {
             a.y = mmToPix(points[i]).y - mmToPix(points[i + 1]).y;
-            if (Math.abs(mousePos.y - mmToPix(points[i]).y + a.y / 2 - parseInt(canvas_0.style.top, 10)) < ctx_2.measureText("0").actualBoundingBoxAscent) {
-                // console.log("Math.abs(mousePos.x - canvas_0.style.left/2) ", Math.abs(mousePos.x - parseInt(canvas_0.style.left, 10)/2));
+            if ((Math.abs(mousePos.y - mmToPix(points[i]).y + a.y / 2 - parseInt(canvas_0.style.top, 10)) < ctx_2.measureText("0").actualBoundingBoxAscent) && (points[i].y != points[points.length - 1].y) && (a.y != 0)) {
                 // console.log("canvas_0.style.left/2 ", parseInt(canvas_0.style.left, 10)/2);
                 if (Math.abs(mousePos.x - parseInt(canvas_0.style.left, 10) / 2) < parseInt(canvas_0.style.left, 10) / 2 - 15) {
                     var p = { x: 2, y: a.y / 2 + mmToPix(points[i + 1]).y + parseInt(canvas_0.style.top, 10) + ctx_2.measureText("0").actualBoundingBoxAscent };
@@ -379,7 +350,7 @@ canvas_2.addEventListener('click', function (e) {
                 size = prompt('', size);
                 if (size === null) size = '';
                 // меняем размеры
-                if ((size != "") && (+ size >= 0)) { // если значение было введено
+                if ((size != "") && (+ size > 0)) { // если значение было введено
                     console.log("size ", size);
                     for (let i = 1; i < points.length; i++) {
                         if (data.size <= points[i].x) {
@@ -396,7 +367,7 @@ canvas_2.addEventListener('click', function (e) {
                 size = Math.abs(data.size - data.sizePrevious);
                 newSize = prompt('', size);
                 if (newSize === null) newSize = '';
-                if ((newSize != "") && (newSize != size) && (+ newSize >= 0)) { // если значение было введено
+                if ((newSize != "") && (newSize != size) && (+ newSize > 0)) { // если значение было введено
                     delta = + newSize - Math.abs(data.size - data.sizePrevious);
                     for (let i = 1; i < points.length; i++) {
                         if (points[i].x >= data.size) {
@@ -414,16 +385,16 @@ canvas_2.addEventListener('click', function (e) {
         sortArrByY(points);
         if (data.axis == "y") {
             if (data.type == "abs") { // если это абсолютные значения
-                size = data.size - points[0].y;
+                size = Math.abs(data.size - points[points.length - 1].y);
                 size = prompt('', size);
                 if (size === null) size = '';
                 //console.log("size ", size);
                 // меняем размеры
-                if ((size != "") && (+ size >= 0)) { // если значение было введено
-                    for (let i = points.length - 1; i > 0; i--) {
+                if ((size != "") && (+ size > 0)) { // если значение было введено
+                    for (let i = points.length - 1; i >= 0; i--) {
                         if (data.size >= points[i].y) {
-                            delta = + size - data.size + points[0].y;
-                            newSize = points[i].y + delta;
+                            delta = + size - Math.abs(data.size -  points[points.length - 1].y);
+                            newSize = points[i].y - delta;
                             console.log("newSize ", newSize);
                             replacement = { id: points[i].id, x: points[i].x, y: newSize };
                             points.splice(i, 1, replacement);
@@ -435,11 +406,11 @@ canvas_2.addEventListener('click', function (e) {
                 size = Math.abs(data.sizePrevious - data.size);
                 newSize = prompt('', size);
                 if (newSize === null) newSize = '';
-                if ((newSize != "") && (newSize != size) && (+ newSize >= 0)) { // если значение было введено
+                if ((newSize != "") && (newSize != size) && (+ newSize > 0)) { // если значение было введено
                     delta = + newSize - Math.abs(data.size - data.sizePrevious);
-                    for (let i = 1; i < points.length; i++) {
-                        if (points[i].y >= data.size) {
-                            newSize = points[i].y + delta;
+                    for (let i = points.length - 1; i >= 0; i--) {
+                        if (data.size >= points[i].y) {
+                            newSize = points[i].y - delta;
                             replacement = { id: points[i].id, x: points[i].x, y: newSize };
                             points.splice(i, 1, replacement);
                         }
