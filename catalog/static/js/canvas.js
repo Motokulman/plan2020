@@ -53,6 +53,24 @@ function drawPoint(p) {
     ctx_0.closePath();
 }
 
+
+// Удаление, если вдруг передумал рисовать
+function cancelDraw() {
+    sortArrById(points);
+    for (var i = 0; i < mousePosArray.length; i++) {
+        points.pop();
+    }
+    mousePosArray = [];
+}
+$(document).keydown(function (eventObject) {
+    if (eventObject.which == 27) { // если нажата клавиша escape
+        if (mousePosArray.length != 0) { // если массив точек при рисовании не пуст, то есть мы еще рисуем
+            cancelDraw(); // удаляем последние точки
+        }
+    };
+});
+
+
 //***************************************************************
 // В случае клика по канве определяем какой элемент хочет нарисовать пользователь и действуем
 canvas_0.addEventListener('click', function (e) {
@@ -62,9 +80,8 @@ canvas_0.addEventListener('click', function (e) {
             zeroPointPadding.x = mousePos.x * scale;
             zeroPointPadding.y = mousePos.y * scale;
             empty_scheme = false;
-
         } else {
-            console.log("findMaxId(points) + 1 = ", findMaxId(points) + 1);
+            //console.log("findMaxId(points) + 1 = ", findMaxId(points) + 1);
             points.push({ id: findMaxId(points) + 1, x: mmOfMousePos.x, y: mmOfMousePos.y }); // переводим в мм и вносим в массив, приваивая индекс, соджержащийся в последней ячейке + 1
         }
         //  console.log("findMaxId(points) 0 = ", findMaxId(points));
@@ -226,6 +243,19 @@ function sortArrByY(arr) {
             return 1;
         }
         if (a.y < b.y) {
+            return -1;
+        } else {
+            return 0;
+        }
+    });
+}
+// Сортировка масиива точек по y
+function sortArrById(arr) {
+    arr.sort(function (a, b) {
+        if (a.id > b.id) {
+            return 1;
+        }
+        if (a.id < b.id) {
             return -1;
         } else {
             return 0;
