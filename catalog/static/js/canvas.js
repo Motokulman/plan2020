@@ -103,8 +103,8 @@ canvas_0.addEventListener('click', function (e) {
                         drawLine(mousePosArray[0], mousePosArray[1], ctx_0); // Нарисовали прямую
                         walls.push({ id0: findMaxId(points), id1: findMaxId(points) - 1, id2: null }); // Заносим id Точек в массив стен в мм
                         mousePosArray = []; // Обнуляем массив
-                        console.log("walls = ", walls);
-                        console.log("points = ", points);
+                        // console.log("walls = ", walls);
+                        // console.log("points = ", points);
                     }
                 } else if (selectedEdge == 3) { // если это эркер
                     if (mousePosArray.length == 0) { // если это первый клик в этом цикле рисования эркера из трех граней
@@ -114,17 +114,53 @@ canvas_0.addEventListener('click', function (e) {
                         mousePosArray[1] = mousePos;
                         drawPoint(mousePos); // Нарисовали вторую точку
                     } else if (mousePosArray.length == 2) { // если это третий клик в этом цикле рисования эркера из трех граней
-                        mousePosArray[2].x = Math.min(mousePosArray[0].x, mousePosArray[1].x) + Math.abs(mousePosArray[0].x - mousePosArray[1].x) / 3;
-                        mousePosArray[3].x = Math.min(mousePosArray[0].x, mousePosArray[1].x) + 2 * Math.abs(mousePosArray[0].x - mousePosArray[1].x) / 3;
-                        mousePosArray[2].y = Math.min(mousePosArray[0].y, mousePosArray[1].y) + Math.abs(mousePosArray[0].y - mousePosArray[1].y) / 3;
-                        mousePosArray[3].y = Math.min(mousePosArray[0].y, mousePosArray[1].y) + 2 * Math.abs(mousePosArray[0].y - mousePosArray[1].y) / 3;
-                        drawPoint(mousePosArray[2]); // Нарисовали Третью точку
-                        drawPoint(mousePosArray[3]); // Нарисовали Третью точку
-                        // drawLine(mousePosArray[0], mousePosArray[1], ctx_0); // Нарисовали прямую
-                        // walls.push({ id0: findMaxId(points), id1: findMaxId(points) - 1, id2: null }); // Заносим id Точек в массив стен в мм
-                        // mousePosArray = []; // Обнуляем массив
-                        // console.log("walls = ", walls);
-                        // console.log("points = ", points);
+                        var currentPoint = mousePos; // зафиксируем точку, для защиты от изменения в процессе вычисления
+
+                        var middlePix = [];// середина отрезка нужна для вычисления двух других точек
+                        middlePix.x = Math.abs(mousePosArray[0].x - mousePosArray[1].x) / 2 + Math.min(mousePosArray[0].x, mousePosArray[1].x);
+                        middlePix.y = Math.abs(mousePosArray[0].y - mousePosArray[1].y) / 2 + Math.min(mousePosArray[0].y, mousePosArray[1].y);
+
+                        var middleOnePix = []; // первая внутренняя точка, лежащая на первоначальном отрезке
+                        middleOnePix.x = Math.abs(mousePosArray[0].x - middlePix.x) / 2 + Math.min(mousePosArray[0].x, middlePix.x);
+                        middleOnePix.y = Math.abs(mousePosArray[0].y - middlePix.y) / 2 + Math.min(mousePosArray[0].y, middlePix.y);
+                        drawPoint(middleOnePix);
+
+                        var anotherPoint = []; // найдем первую эркерную точку
+                        if (mousePosArray[0].y == mousePosArray[1].y) { // если начальная линия строго горизонтальна
+                            anotherPoint.y = currentPoint.y;
+                            anotherPoint.x = middleOnePix.x;
+                        } else if (mousePosArray[0].x == mousePosArray[1].x) {// если начальная линия строго вертикальна
+                            anotherPoint.x = currentPoint.x;
+                            anotherPoint.y = middleOnePix.y;
+                        } else {
+                            anotherPoint.x = (currentPoint.x - middlePix.x) + middleOnePix.x;
+                            anotherPoint.y = middleOnePix.y - (anotherPoint.x - middleOnePix.x) * (mousePosArray[0].x - middlePix.x) / (mousePosArray[0].y - middlePix.y);
+                        }
+                        drawPoint(anotherPoint);
+                        mousePosArray[2] = anotherPoint;
+
+                        var middleTwoPix = []; // вторая внутренняя точка
+                        middleTwoPix.x = Math.abs(mousePosArray[1].x - middlePix.x) / 2 + Math.min(mousePosArray[1].x, middlePix.x);
+                        middleTwoPix.y = Math.abs(mousePosArray[1].y - middlePix.y) / 2 + Math.min(mousePosArray[1].y, middlePix.y);
+                        drawPoint(middleTwoPix);
+
+                        var anotherPoint = []; // найдем вторую эркерную точку
+                        if (mousePosArray[0].y == mousePosArray[1].y) { // если начальная линия строго горизонтальна
+                            anotherPoint.y = currentPoint.y;
+                            anotherPoint.x = middleTwoPix.x;
+                        } else if (mousePosArray[0].x == mousePosArray[1].x) {// если начальная линия строго вертикальна
+                            anotherPoint.x = currentPoint.x;
+                            anotherPoint.y = middleTwoPix.y;
+                        } else {
+                            anotherPoint.x = (currentPoint.x - middlePix.x) + middleTwoPix.x;
+                            anotherPoint.y = middleTwoPix.y - (anotherPoint.x - middleTwoPix.x) * (middlePix.x - mousePosArray[1].x) / (middlePix.y - mousePosArray[1].y);
+                        }
+                        drawPoint(anotherPoint);
+                        mousePosArray[3] = anotherPoint;
+
+                        drawLine(mousePosArray[0], mousePosArray[2], ctx_0);
+                        drawLine(mousePosArray[2], mousePosArray[3], ctx_0);
+                        drawLine(mousePosArray[3], mousePosArray[1], ctx_0);
                     }
                 }
             } else { // если это не прямая
