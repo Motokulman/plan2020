@@ -18,6 +18,7 @@ var walls = []; // Массив стен
 var scale = 25; // Сделать получение из настроек и сохранение в них
 var empty_scheme = true;// Правда, если еще нет ни одного элемента в схеме
 var sizeTextSettings = { topPadding: 10, bottomPadding: 5, leftPadding: 5, rightPadding: 30 }; // массив с настройками для отображения размеров на  экране
+var prePointsMM = []; // массив новых точек при рисовании элемента. Потом добавляется в основной массив точек
 
 //console.log("sizeTextSettings = ", sizeTextSettings);
 
@@ -70,39 +71,73 @@ $(document).keydown(function (eventObject) {
     };
 });
 
+// сохранение итоговых точек
+function pushPoints(prePointsMM) {
+    for (p of prePointsMM.values()) {
+        if (points.length == 0) {
+            points.push({ id: 0, x: p.x, y: p.y }); // переводим в мм и вносим в массив, приваивая индекс, соджержащийся в последней ячейке + 1
+        } else {
+            points.push({ id: findMaxId(points) + 1, x: p.x, y: p.y }); // переводим в мм и вносим в массив, приваивая индекс, соджержащийся в последней ячейке + 1
+        }
+        
+    }
+    console.log("points = ", points);
+    console.log("zeroPointPadding = ", zeroPointPadding);
+}
+
+// сохранение промежуточной точки точек
+function pushPrePoint() {
+    if ((points.length == 0) && (prePointsMM.length == 0)) { // если это первая точка в схеме, то она становится центром координат
+        prePointsMM.push({ x: 0, y: 0 });
+    } else {
+        //console.log("findMaxId(points) + 1 = ", findMaxId(points) + 1);
+        prePointsMM.push({ x: mmOfMousePos.x, y: mmOfMousePos.y }); // переводим в мм и вносим в массив, приваивая индекс, соджержащийся в последней ячейке + 1
+    }
+      console.log("prePointsMM = ", prePointsMM);
+    //stick(); // чтобы линии рисовались даже если пользователь только поставил точку и еще не двинул мышь
+    //drawAxeSize();
+}
 
 //***************************************************************
 // В случае клика по канве определяем какой элемент хочет нарисовать пользователь и действуем
 canvas_0.addEventListener('click', function (e) {
     if (selectedTool != 'none') { // если хоть что то выбрано
-        if (empty_scheme) { // если это первая точка в схеме, то она становится центром координат
-            points.push({ id: 0, x: 0, y: 0 });
+        if ((points.length == 0) && (prePointsMM.length == 0)) { // если это первая точка в схеме, то она становится центром координат
+            //points.push({ id: 0, x: 0, y: 0 });
             zeroPointPadding.x = mousePos.x * scale;
             zeroPointPadding.y = mousePos.y * scale;
-            empty_scheme = false;
+            console.log("zeroPointPadding 1 = ", zeroPointPadding);
+            stick(); // чтобы линии рисовались даже если пользователь только поставил точку и еще не двинул мышь
+            // empty_scheme = false;
         } else {
             //console.log("findMaxId(points) + 1 = ", findMaxId(points) + 1);
-            points.push({ id: findMaxId(points) + 1, x: mmOfMousePos.x, y: mmOfMousePos.y }); // переводим в мм и вносим в массив, приваивая индекс, соджержащийся в последней ячейке + 1
+            //points.push({ id: findMaxId(points) + 1, x: mmOfMousePos.x, y: mmOfMousePos.y }); // переводим в мм и вносим в массив, приваивая индекс, соджержащийся в последней ячейке + 1
         }
         //  console.log("findMaxId(points) 0 = ", findMaxId(points));
         stick(); // чтобы линии рисовались даже если пользователь только поставил точку и еще не двинул мышь
-        drawAxeSize();
+        //drawAxeSize();
     }
     //console.log("points = ", points);
     switch (selectedTool) {
         case 'wall':
             if (selectedLineType == 'straight') { // если выбран прямой тип линии
                 if (selectedEdge == 1) { // если грань одна, то есть это одна стена
-                    if (mousePosArray.length == 0) { // если это первый клик в этом цикле рисования прямой стены
-                        mousePosArray[0] = mousePos;
+                    if (prePointsMM.length == 0) { // если это первый клик в этом цикле рисования прямой стены
+                        //mousePosArray[0] = mousePos;
+                        pushPrePoint();
+                        //console.log("prePointsMM = ", prePointsMM);
                         drawPoint(mousePos);
                     } else { // если это второй клик в этом цикле рисования прямой стены
                         //console.log("Второй клик");
-                        mousePosArray[1] = mousePos;
+                        //mousePosArray[1] = mousePos;
+                        pushPrePoint();
+                        pushPoints(prePointsMM);
+                        //console.log("prePointsMM = ", prePointsMM);
+                        prePointsMM = [];
                         drawPoint(mousePos); // Нарисовали вторую точку
-                        drawLine(mousePosArray[0], mousePosArray[1], ctx_0); // Нарисовали прямую
+                        //drawLine(mousePosArray[0], mousePosArray[1], ctx_0); // Нарисовали прямую
                         walls.push({ id0: findMaxId(points), id1: findMaxId(points) - 1, id2: null }); // Заносим id Точек в массив стен в мм
-                        mousePosArray = []; // Обнуляем массив
+                        //mousePosArray = []; // Обнуляем массив
                         // console.log("walls = ", walls);
                         // console.log("points = ", points);
                     }
@@ -235,6 +270,7 @@ canvas_0.addEventListener('mousemove', function (e) {
     mmOfMousePos = pixToMm(mousePos);
     stick();
     clear(ctx_3, canvas_3);
+    drawAxeSize();
 });
 
 // Определяем координаты курсора для канвы с размерами
@@ -518,42 +554,43 @@ canvas_2.addEventListener('click', function (e) {
 
 // Вывод текста - координат осей
 function drawAxeSize() {
-    ctx_2.font = "14px Verdana";
-    clear(ctx_2, canvas_2);
-    sortArrByX(points);
-    var text = "0"; // текст, выводимый на экран
-    //  console.log("canvas_0.style.left ", parseInt(canvas_0.style.left, 10));
-    var textMiddle = ctx_2.measureText(text).width / 2; // длина текста, поделеная пополам для центровки по осям
-    ctx_2.fillText(0, mmToPix(points[0]).x - textMiddle + parseInt(canvas_0.style.left, 10), ctx_2.measureText("0").actualBoundingBoxAscent * 1.25); // верхнияя нулевая ось х
-    for (let i = 1; i < points.length; i++) {
-        if (points[i].x != points[i - 1].x) {
-            text = points[i].x - points[0].x;
-            textMiddle = ctx_2.measureText(text).width / 2;
-            ctx_2.fillText(text, mmToPix(points[i]).x - textMiddle + parseInt(canvas_0.style.left, 10), ctx_2.measureText("0").actualBoundingBoxAscent * 1.25); // верхние х - сами оси
-            var a = mmToPix(points[i]).x - mmToPix(points[i - 1]).x; // расстояние между осями в пикселях
-            text = points[i].x - points[i - 1].x;
-            textMiddle = ctx_2.measureText(text).width / 2;
-            ctx_2.fillText(text, a / 2 + mmToPix(points[i - 1]).x - textMiddle + parseInt(canvas_0.style.left, 10), canvas_2.height - ctx_2.measureText("0").actualBoundingBoxAscent * 0.6); // нижние х - расстояния между осями
+    if (points.length != 0) {
+        ctx_2.font = "14px Verdana";
+        clear(ctx_2, canvas_2);
+        sortArrByX(points);
+        var text = "0"; // текст, выводимый на экран
+        //  console.log("canvas_0.style.left ", parseInt(canvas_0.style.left, 10));
+        var textMiddle = ctx_2.measureText(text).width / 2; // длина текста, поделеная пополам для центровки по осям
+        ctx_2.fillText(0, mmToPix(points[0]).x - textMiddle + parseInt(canvas_0.style.left, 10), ctx_2.measureText("0").actualBoundingBoxAscent * 1.25); // верхнияя нулевая ось х
+        for (let i = 1; i < points.length; i++) {
+            if (points[i].x != points[i - 1].x) {
+                text = points[i].x - points[0].x;
+                textMiddle = ctx_2.measureText(text).width / 2;
+                ctx_2.fillText(text, mmToPix(points[i]).x - textMiddle + parseInt(canvas_0.style.left, 10), ctx_2.measureText("0").actualBoundingBoxAscent * 1.25); // верхние х - сами оси
+                var a = mmToPix(points[i]).x - mmToPix(points[i - 1]).x; // расстояние между осями в пикселях
+                text = points[i].x - points[i - 1].x;
+                textMiddle = ctx_2.measureText(text).width / 2;
+                ctx_2.fillText(text, a / 2 + mmToPix(points[i - 1]).x - textMiddle + parseInt(canvas_0.style.left, 10), canvas_2.height - ctx_2.measureText("0").actualBoundingBoxAscent * 0.6); // нижние х - расстояния между осями
+            }
         }
-    }
-    sortArrByY(points);
-    text = "0";
-    textMiddle = ctx_2.measureText(text).actualBoundingBoxAscent / 2; // высота текста
-    // console.log("textMiddle.x = ", textMiddle);
-    ctx_2.fillText(text, canvas_2.width - parseInt(canvas_0.style.left, 10) * 0.93, mmToPix(points[points.length - 1]).y + textMiddle + parseInt(canvas_0.style.top, 10)); // правая нулевая ось Y
-    for (let i = points.length - 2; i >= 0; i--) {
-        if (points[i].y != points[i + 1].y) {
-            text = points[points.length - 1].y - points[i].y;
-            textMiddle = ctx_2.measureText(text).actualBoundingBoxAscent / 2; // высота текста
-            ctx_2.fillText(text, canvas_2.width - parseInt(canvas_0.style.left, 10) * 0.93, mmToPix(points[i]).y + textMiddle + parseInt(canvas_0.style.top, 10)); // правые y - сами оси
-            var a = mmToPix(points[i + 1]).y - mmToPix(points[i]).y;
-            text = points[i + 1].y - points[i].y;
-            textMiddle = ctx_2.measureText(text).actualBoundingBoxAscent / 2; // высота текста
-            ctx_2.fillText(points[i + 1].y - points[i].y, 3, a / 2 + mmToPix(points[i]).y + textMiddle + parseInt(canvas_0.style.top, 10)); // левые y - расстояния между осями
+        sortArrByY(points);
+        text = "0";
+        textMiddle = ctx_2.measureText(text).actualBoundingBoxAscent / 2; // высота текста
+        // console.log("textMiddle.x = ", textMiddle);
+        ctx_2.fillText(text, canvas_2.width - parseInt(canvas_0.style.left, 10) * 0.93, mmToPix(points[points.length - 1]).y + textMiddle + parseInt(canvas_0.style.top, 10)); // правая нулевая ось Y
+        for (let i = points.length - 2; i >= 0; i--) {
+            if (points[i].y != points[i + 1].y) {
+                text = points[points.length - 1].y - points[i].y;
+                textMiddle = ctx_2.measureText(text).actualBoundingBoxAscent / 2; // высота текста
+                ctx_2.fillText(text, canvas_2.width - parseInt(canvas_0.style.left, 10) * 0.93, mmToPix(points[i]).y + textMiddle + parseInt(canvas_0.style.top, 10)); // правые y - сами оси
+                var a = mmToPix(points[i + 1]).y - mmToPix(points[i]).y;
+                text = points[i + 1].y - points[i].y;
+                textMiddle = ctx_2.measureText(text).actualBoundingBoxAscent / 2; // высота текста
+                ctx_2.fillText(points[i + 1].y - points[i].y, 3, a / 2 + mmToPix(points[i]).y + textMiddle + parseInt(canvas_0.style.top, 10)); // левые y - расстояния между осями
+            }
         }
     }
 }
-
 
 // Масштабирование колесиком мыши
 var elem = document.getElementById('stage');
