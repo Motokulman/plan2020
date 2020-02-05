@@ -11,7 +11,7 @@ var selectedEdge = "1"; // Количество граней стены
 var selectedTool = "none"; // Выбранный элемент для рисования, стена, или еще что-то. Изначально - ничего не выбрано
 var mousePosArray = []; // массив позиций мыши при рисовании. 
 var mousePos; // Позиции мыши по х и у, с учетом положения канвы на экране
-var mmOfMousePos; // Позиция в миллиметрах, соответствующая текущему положению мыши с учетом смещения и масштаба
+var mmOfMousePos = []; // Позиция в миллиметрах, соответствующая текущему положению мыши с учетом смещения и масштаба
 var points = []; // Массив точек в миллиметрах. Первая точка - точка отсчета, начало коопдинат
 var zeroPointPadding = []; // Смещение начала координат схемы относительно начала координат канвы. Попробуем в мм.
 var walls = []; // Массив стен
@@ -23,11 +23,16 @@ var prePointsMM = []; // массив новых точек при рисова�
 //console.log("sizeTextSettings = ", sizeTextSettings);
 
 // рисуем прямую линию или 
-function drawLine(p, p1, context) {
+function drawLine(p, p1, context, color, blur) {
     context.beginPath();
     context.moveTo(p.x, p.y);
     context.lineTo(p1.x, p1.y);
-    context.fillStyle = '#333333';
+    context.strokeStyle = color;
+    context.lineWidth = 3;
+ if (blur == true) {
+    context.shadowBlur = 5;
+    context.shadowColor = "blue";
+ }
     context.stroke();
 }
 
@@ -67,132 +72,115 @@ $(document).keydown(function (eventObject) {
 function pushPoints(prePointsMM) {
     for (p of prePointsMM.values()) {
         if (points.length == 0) {
-            points.push({ id: 0, x: p.x, y: p.y }); // переводим в мм и вносим в массив, приваивая индекс, соджержащийся в последней ячейке + 1
+            points.push({ id: 0, x: p.x, y: p.y });
         } else {
             points.push({ id: findMaxId(points) + 1, x: p.x, y: p.y }); // переводим в мм и вносим в массив, приваивая индекс, соджержащийся в последней ячейке + 1
         }
-        
     }
-    // console.log("points = ", points);
-    // console.log("zeroPointPadding = ", zeroPointPadding);
 }
 
-// сохранение промежуточной точки точек
-function pushPrePoint() {
+// сохранение промежуточной точки 
+function pushPrePoint(mmOfMousePos) {
     if ((points.length == 0) && (prePointsMM.length == 0)) { // если это первая точка в схеме, то она становится центром координат
         zeroPointPadding.x = mousePos.x * scale;
         zeroPointPadding.y = mousePos.y * scale;
+        mmOfMousePos = pixToMm(mousePos);
         prePointsMM.push({ x: 0, y: 0 });
     } else {
-        //console.log("findMaxId(points) + 1 = ", findMaxId(points) + 1);
-        prePointsMM.push({ x: mmOfMousePos.x, y: mmOfMousePos.y }); // переводим в мм и вносим в массив, приваивая индекс, соджержащийся в последней ячейке + 1
+        prePointsMM.push({ x: mmOfMousePos.x, y: mmOfMousePos.y });
+        console.log("mmOfMousePos = ", mmOfMousePos);
     }
-      console.log("prePointsMM = ", prePointsMM);
-    //stick(); // чтобы линии рисовались даже если пользователь только поставил точку и еще не двинул мышь
-    //drawAxeSize();
+
 }
 
 //***************************************************************
 // В случае клика по канве определяем какой элемент хочет нарисовать пользователь и действуем
 canvas_0.addEventListener('click', function (e) {
-    // if (selectedTool != 'none') { // если хоть что то выбрано
-    //     if ((points.length == 0) && (prePointsMM.length == 0)) { // если это первая точка в схеме, то она становится центром координат
-    //         //points.push({ id: 0, x: 0, y: 0 });
-    //         // zeroPointPadding.x = mousePos.x * scale;
-    //         // zeroPointPadding.y = mousePos.y * scale;
-    //         //console.log("zeroPointPadding 1 = ", zeroPointPadding);
-    //         stick(); // чтобы линии рисовались даже если пользователь только поставил точку и еще не двинул мышь
-    //         // empty_scheme = false;
-    //     } else {
-    //         //console.log("findMaxId(points) + 1 = ", findMaxId(points) + 1);
-    //         //points.push({ id: findMaxId(points) + 1, x: mmOfMousePos.x, y: mmOfMousePos.y }); // переводим в мм и вносим в массив, приваивая индекс, соджержащийся в последней ячейке + 1
-    //     }
-    //     //  console.log("findMaxId(points) 0 = ", findMaxId(points));
-    //     //stick(); // чтобы линии рисовались даже если пользователь только поставил точку и еще не двинул мышь
-    //     //drawAxeSize();
-    // }
-    //console.log("points = ", points);
     switch (selectedTool) {
         case 'wall':
             if (selectedLineType == 'straight') { // если выбран прямой тип линии
-                if (selectedEdge == 1) { // если грань одна, то есть это одна стена
-                    if (prePointsMM.length == 0) { // если это первый клик в этом цикле рисования прямой стены
-                        //mousePosArray[0] = mousePos;
-                        pushPrePoint();
-                        //console.log("prePointsMM = ", prePointsMM);
-                        drawPoint(mousePos);
-                    } else { // если это второй клик в этом цикле рисования прямой стены
-                        //console.log("Второй клик");
-                        //mousePosArray[1] = mousePos;
-                        pushPrePoint();
-                        pushPoints(prePointsMM);
-                        //console.log("prePointsMM = ", prePointsMM);
-                        prePointsMM = [];
-                        drawPoint(mousePos); // Нарисовали вторую точку
-                        //drawLine(mousePosArray[0], mousePosArray[1], ctx_0); // Нарисовали прямую
-                        walls.push({ id0: findMaxId(points), id1: findMaxId(points) - 1, id2: null }); // Заносим id Точек в массив стен в мм
-                        //mousePosArray = []; // Обнуляем массив
-                        // console.log("walls = ", walls);
-                        // console.log("points = ", points);
-                    }
-                } else if (selectedEdge == 3) { // если это эркер
-                    if (mousePosArray.length == 0) { // если это первый клик в этом цикле рисования эркера из трех граней
-                        mousePosArray[0] = mousePos;
-                        drawPoint(mousePos);
-                    } else if (mousePosArray.length == 1) { // если это второй клик в этом цикле рисования эркера из трех граней
-                        mousePosArray[1] = mousePos;
-                        drawPoint(mousePos); // Нарисовали вторую точку
-                    } else if (mousePosArray.length == 2) { // если это третий клик в этом цикле рисования эркера из трех граней
-                        var currentPoint = mousePos; // зафиксируем точку, для защиты от изменения в процессе вычисления
 
-                        var middlePix = [];// середина отрезка нужна для вычисления двух других точек
-                        middlePix.x = Math.abs(mousePosArray[0].x - mousePosArray[1].x) / 2 + Math.min(mousePosArray[0].x, mousePosArray[1].x);
-                        middlePix.y = Math.abs(mousePosArray[0].y - mousePosArray[1].y) / 2 + Math.min(mousePosArray[0].y, mousePosArray[1].y);
-
-                        var middleOnePix = []; // первая внутренняя точка, лежащая на первоначальном отрезке
-                        middleOnePix.x = Math.abs(mousePosArray[0].x - middlePix.x) / 2 + Math.min(mousePosArray[0].x, middlePix.x);
-                        middleOnePix.y = Math.abs(mousePosArray[0].y - middlePix.y) / 2 + Math.min(mousePosArray[0].y, middlePix.y);
-                        drawPoint(middleOnePix);
-
-                        var anotherPoint = []; // найдем первую эркерную точку
-                        if (mousePosArray[0].y == mousePosArray[1].y) { // если начальная линия строго горизонтальна
-                            anotherPoint.y = currentPoint.y;
-                            anotherPoint.x = middleOnePix.x;
-                        } else if (mousePosArray[0].x == mousePosArray[1].x) {// если начальная линия строго вертикальна
-                            anotherPoint.x = currentPoint.x;
-                            anotherPoint.y = middleOnePix.y;
-                        } else {
-                            anotherPoint.x = (currentPoint.x - middlePix.x) + middleOnePix.x;
-                            anotherPoint.y = middleOnePix.y - (anotherPoint.x - middleOnePix.x) * (mousePosArray[0].x - middlePix.x) / (mousePosArray[0].y - middlePix.y);
-                        }
-                        drawPoint(anotherPoint);
-                        mousePosArray[2] = anotherPoint;
-
-                        var middleTwoPix = []; // вторая внутренняя точка
-                        middleTwoPix.x = Math.abs(mousePosArray[1].x - middlePix.x) / 2 + Math.min(mousePosArray[1].x, middlePix.x);
-                        middleTwoPix.y = Math.abs(mousePosArray[1].y - middlePix.y) / 2 + Math.min(mousePosArray[1].y, middlePix.y);
-                        drawPoint(middleTwoPix);
-
-                        var anotherPoint = []; // найдем вторую эркерную точку
-                        if (mousePosArray[0].y == mousePosArray[1].y) { // если начальная линия строго горизонтальна
-                            anotherPoint.y = currentPoint.y;
-                            anotherPoint.x = middleTwoPix.x;
-                        } else if (mousePosArray[0].x == mousePosArray[1].x) {// если начальная линия строго вертикальна
-                            anotherPoint.x = currentPoint.x;
-                            anotherPoint.y = middleTwoPix.y;
-                        } else {
-                            anotherPoint.x = (currentPoint.x - middlePix.x) + middleTwoPix.x;
-                            anotherPoint.y = middleTwoPix.y - (anotherPoint.x - middleTwoPix.x) * (middlePix.x - mousePosArray[1].x) / (middlePix.y - mousePosArray[1].y);
-                        }
-                        drawPoint(anotherPoint);
-                        mousePosArray[3] = anotherPoint;
-
-                        drawLine(mousePosArray[0], mousePosArray[2], ctx_0);
-                        drawLine(mousePosArray[2], mousePosArray[3], ctx_0);
-                        drawLine(mousePosArray[3], mousePosArray[1], ctx_0);
-                    }
+                if (prePointsMM.length == 0) { // если это первый клик в этом цикле рисования прямой стены
+                    pushPrePoint(mmOfMousePos);
+                    drawPoint(mousePos);
+                } else { // если это второй клик в этом цикле рисования прямой стены
+                    pushPrePoint(mmOfMousePos);
+                    pushPoints(prePointsMM);
+                    prePointsMM = [];
+                    drawPoint(mousePos); // Нарисовали вторую точку
+                    // Заносим id Точек в массив стен в мм.
+                    // причем два id есть всегда, это основание, от которого всё строится. Даже если это отдельно стоящая замкнутая фигура (тогда первые две точки одинаковые)
+                    // если есть радиус, независимо от количества стен, это значит, что все стены равны и вписываются в окружность с указанным центром (id точки центра)
+                    // если это эркер из двух стен, то он может быть прямоугольным. Принудительно задать прямой угол - добавить элемент true
+                    // потом добавить массив shape - в нем содержатся id стен таким образом, чтобы стена могла менять свою форму в зависимости от уровня (высоты) 
+                    walls.push({ n: 1, id0: findMaxId(points), id1: findMaxId(points) - 1, });
                 }
-            } else { // если это не прямая
+
+            } else if (selectedLineType == 'polygon') { // если это многоугольник
+                if (mousePosArray.length == 0) { // если это первый клик в этом цикле рисования эркера из трех граней
+                    pushPrePoint(mmOfMousePos);
+                    mousePosArray[0] = mousePos;
+                    drawPoint(mousePos);
+                } else if (mousePosArray.length == 1) { // если это второй клик в этом цикле рисования эркера из трех граней
+                    pushPrePoint(mmOfMousePos);
+                    mousePosArray[1] = mousePos;
+                    drawPoint(mousePos); // Нарисовали вторую точку
+                } else if (mousePosArray.length == 2) { // если это третий клик в этом цикле рисования эркера из трех граней
+                    var currentPoint = mousePos; // зафиксируем точку, для защиты от изменения в процессе вычисления
+
+                    var middlePix = [];// середина отрезка нужна для вычисления двух других точек
+                    middlePix.x = Math.abs(mousePosArray[0].x - mousePosArray[1].x) / 2 + Math.min(mousePosArray[0].x, mousePosArray[1].x);
+                    middlePix.y = Math.abs(mousePosArray[0].y - mousePosArray[1].y) / 2 + Math.min(mousePosArray[0].y, mousePosArray[1].y);
+
+                    var middleOnePix = []; // первая внутренняя точка, лежащая на первоначальном отрезке
+                    middleOnePix.x = Math.abs(mousePosArray[0].x - middlePix.x) / 2 + Math.min(mousePosArray[0].x, middlePix.x);
+                    middleOnePix.y = Math.abs(mousePosArray[0].y - middlePix.y) / 2 + Math.min(mousePosArray[0].y, middlePix.y);
+                    //drawPoint(middleOnePix);
+
+                    var anotherPoint = []; // найдем первую эркерную точку
+                    if (mousePosArray[0].y == mousePosArray[1].y) { // если начальная линия строго горизонтальна
+                        anotherPoint.y = currentPoint.y;
+                        anotherPoint.x = middleOnePix.x;
+                    } else if (mousePosArray[0].x == mousePosArray[1].x) {// если начальная линия строго вертикальна
+                        anotherPoint.x = currentPoint.x;
+                        anotherPoint.y = middleOnePix.y;
+                    } else {
+                        anotherPoint.x = (currentPoint.x - middlePix.x) + middleOnePix.x;
+                        anotherPoint.y = middleOnePix.y - (anotherPoint.x - middleOnePix.x) * (mousePosArray[0].x - middlePix.x) / (mousePosArray[0].y - middlePix.y);
+                    }
+                    drawPoint(anotherPoint);
+                    mousePosArray[2] = anotherPoint;
+                    pushPrePoint(pixToMm(anotherPoint));
+
+                    var middleTwoPix = []; // вторая внутренняя точка
+                    middleTwoPix.x = Math.abs(mousePosArray[1].x - middlePix.x) / 2 + Math.min(mousePosArray[1].x, middlePix.x);
+                    middleTwoPix.y = Math.abs(mousePosArray[1].y - middlePix.y) / 2 + Math.min(mousePosArray[1].y, middlePix.y);
+                    //drawPoint(middleTwoPix);
+
+                    var anotherPoint = []; // найдем вторую эркерную точку
+                    if (mousePosArray[0].y == mousePosArray[1].y) { // если начальная линия строго горизонтальна
+                        anotherPoint.y = currentPoint.y;
+                        anotherPoint.x = middleTwoPix.x;
+                    } else if (mousePosArray[0].x == mousePosArray[1].x) {// если начальная линия строго вертикальна
+                        anotherPoint.x = currentPoint.x;
+                        anotherPoint.y = middleTwoPix.y;
+                    } else {
+                        anotherPoint.x = (currentPoint.x - middlePix.x) + middleTwoPix.x;
+                        anotherPoint.y = middleTwoPix.y - (anotherPoint.x - middleTwoPix.x) * (middlePix.x - mousePosArray[1].x) / (middlePix.y - mousePosArray[1].y);
+                    }
+                    drawPoint(anotherPoint);
+                    mousePosArray[3] = anotherPoint;
+                    pushPrePoint(pixToMm(anotherPoint));
+                    pushPoints(prePointsMM);
+                    prePointsMM = [];
+                    walls.push({ n: 3, id0: findMaxId(points) - 3, id1: findMaxId(points) - 2, id2: findMaxId(points) - 1, id3: findMaxId(points) });
+                    //         drawWalls()
+                    drawLine(mousePosArray[0], mousePosArray[2], ctx_0, '#333333');
+                    drawLine(mousePosArray[2], mousePosArray[3], ctx_0, '#333333');
+                    drawLine(mousePosArray[3], mousePosArray[1], ctx_0, '#333333');
+                    mousePosArray = [];
+                }
+            } else if (selectedLineType == 'curve') {
 
             }
             break;
@@ -262,9 +250,13 @@ function getMousePos(canvas, e) {
 canvas_0.addEventListener('mousemove', function (e) {
     mousePos = getMousePos(canvas_0, e);
     mmOfMousePos = pixToMm(mousePos);
-    stick();
-    clear(ctx_3, canvas_3);
     drawAxeSize();
+    clear(ctx_3, canvas_3);
+    if (selectedTool == 'none') {
+        defineElement();
+    } else {
+        stick();
+    }
 });
 
 // Определяем координаты курсора для канвы с размерами
@@ -280,12 +272,57 @@ function drawWalls() {
     var p = [];
     var p1 = [];
     for (wall of walls.values()) {
-        p = points.find(item => item.id == wall.id0);
-        p1 = points.find(item => item.id == wall.id1);
-        drawPoint(mmToPix(p));
-        drawPoint(mmToPix(p1));
-        drawLine(mmToPix(p), mmToPix(p1), ctx_0);
+        if (wall.n == 1) {
+            p = points.find(item => item.id == wall.id0);
+            p1 = points.find(item => item.id == wall.id1);
+            drawPoint(mmToPix(p));
+            drawPoint(mmToPix(p1));
+            drawLine(mmToPix(p), mmToPix(p1), ctx_0, '#333333');
+        } else if (wall.n == 3) { // если это трехстронний эркер
+            p = points.find(item => item.id == wall.id0);
+            p1 = points.find(item => item.id == wall.id2);
+            drawPoint(mmToPix(p));
+            drawPoint(mmToPix(p1));
+            drawLine(mmToPix(p), mmToPix(p1), ctx_0, '#333333');
+            p = points.find(item => item.id == wall.id3);
+            drawPoint(mmToPix(p));
+            drawLine(mmToPix(p1), mmToPix(p), ctx_0, '#333333');
+            p1 = points.find(item => item.id == wall.id1);
+            drawPoint(mmToPix(p1));
+            drawLine(mmToPix(p), mmToPix(p1), ctx_0, '#333333');
+        }
+    }
+}
 
+// определение наведения на элемент
+function defineElement() {
+    clear(ctx_1, canvas_1);
+    var p0 = [];
+    var p1 = [];
+    for (wall of walls.values()) {
+        if (wall.n == 1) {
+            p0 = mmToPix(points.find(item => item.id == wall.id0));
+            p1 = mmToPix(points.find(item => item.id == wall.id1));
+            if (straightAffiliation(p0, p1, mousePos) == true) {
+                drawLine(p0, p1, ctx_1, '#888888', true);
+                return walls.indexOf(wall);
+            }
+        } else if (wall.n == 3) {// если это трехсторонний эркер
+
+        }
+    }
+    
+    //console.log("clear = ", walls.indexOf(wall));
+}
+
+// определение принадлежности точки прямой
+function straightAffiliation(p0, p1, p2) {
+    var tolerance = 10;
+    if ((Math.abs(Math.abs(p0.x - p1.x) - Math.abs(p0.x - p2.x) - Math.abs(p2.x - p1.x)) <= tolerance) && (Math.abs(Math.abs(p0.y - p1.y) - Math.abs(p0.y - p2.y) - Math.abs(p2.y - p1.y)) <= tolerance)) {
+        //  console.log("defineElement = ", walls.indexOf(wall));
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -347,7 +384,7 @@ function stick() {
     clear(ctx_1, canvas_1);
     // Перебор всех точек
     for (item of points.values()) {
-        
+
         a.x = mmToPix(item).x;
         //console.log("a.x = ", a.x);
         a.y = mmToPix(item).y;
@@ -379,7 +416,7 @@ function stick() {
             mmOfMousePos.y = p.y;
             drawHVLine("h");
         }
-        
+
     }
 }
 
@@ -403,7 +440,7 @@ function defineTextSize() {
             if (Math.abs((mousePos.y - parseInt(canvas_0.style.top, 10) / 2)) <= 5) {
                 var p = { x: a.x + parseInt(canvas_0.style.left, 10) - ctx_2.measureText(text).width / 2, y: parseInt(canvas_0.style.top, 10) * 0.8 };
                 var p1 = { x: a.x + parseInt(canvas_0.style.left, 10) + ctx_2.measureText(text).width / 2, y: parseInt(canvas_0.style.top, 10) * 0.8 };
-                drawLine(p, p1, ctx_3);
+                drawLine(p, p1, ctx_3, '#333333');
                 axis = "x";
                 type = "abs";
                 size = points[i].x;
@@ -417,7 +454,7 @@ function defineTextSize() {
                 if (Math.abs((parseInt(canvas_2.height, 10) - mousePos.y - ctx_2.measureText("0").actualBoundingBoxAscent)) <= 5) {
                     var p = { x: mmToPix(points[i - 1]).x + (mmToPix(points[i]).x - mmToPix(points[i - 1]).x) / 2 - ctx_2.measureText(text).width / 2 + parseInt(canvas_0.style.left, 10), y: canvas_2.height - 2 };
                     var p1 = { x: mmToPix(points[i - 1]).x + (mmToPix(points[i]).x - mmToPix(points[i - 1]).x) / 2 + ctx_2.measureText(text).width / 2 + parseInt(canvas_0.style.left, 10), y: canvas_2.height - 2 };
-                    drawLine(p, p1, ctx_3);
+                    drawLine(p, p1, ctx_3, '#333333');
                     axis = "x";
                     type = "rel";
                     size = points[i].x;
@@ -438,7 +475,7 @@ function defineTextSize() {
                 if (Math.abs((parseInt(canvas_2.width, 10) - parseInt(canvas_0.style.left, 10) / 2 - mousePos.x)) < parseInt(canvas_0.style.left, 10) / 2 - 10) {
                     var p = { x: parseInt(canvas_2.width, 10) - parseInt(canvas_0.style.left, 10) + 2, y: a.y + parseInt(canvas_0.style.top, 10) + ctx_2.measureText("0").actualBoundingBoxAscent };
                     var p1 = { x: parseInt(canvas_2.width, 10) - 2, y: a.y + parseInt(canvas_0.style.top, 10) + ctx_2.measureText("0").actualBoundingBoxAscent };
-                    drawLine(p, p1, ctx_3);
+                    drawLine(p, p1, ctx_3, '#333333');
                     axis = "y";
                     type = "abs";
                     size = points[i].y;
@@ -457,7 +494,7 @@ function defineTextSize() {
                 if (Math.abs(mousePos.x - parseInt(canvas_0.style.left, 10) / 2) < parseInt(canvas_0.style.left, 10) / 2 - 15) {
                     var p = { x: 2, y: a.y / 2 + mmToPix(points[i + 1]).y + parseInt(canvas_0.style.top, 10) + ctx_2.measureText("0").actualBoundingBoxAscent };
                     var p1 = { x: parseInt(canvas_0.style.left, 10) - 10, y: a.y / 2 + mmToPix(points[i + 1]).y + parseInt(canvas_0.style.top, 10) + ctx_2.measureText("0").actualBoundingBoxAscent };
-                    drawLine(p, p1, ctx_3);
+                    drawLine(p, p1, ctx_3, '#333333');
                     axis = "y";
                     type = "rel";
                     size = points[i].y;
