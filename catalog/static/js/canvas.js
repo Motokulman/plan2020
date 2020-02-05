@@ -54,19 +54,11 @@ function drawPoint(p) {
     ctx_0.closePath();
 }
 
-
 // Удаление, если вдруг передумал рисовать
-function cancelDraw() {
-    sortArrById(points);
-    for (var i = 0; i < mousePosArray.length; i++) {
-        points.pop();
-    }
-    mousePosArray = [];
-}
 $(document).keydown(function (eventObject) {
     if (eventObject.which == 27) { // если нажата клавиша escape
-        if (mousePosArray.length != 0) { // если массив точек при рисовании не пуст, то есть мы еще рисуем
-            cancelDraw(); // удаляем последние точки
+        if (prePointsMM.length != 0) { // если массив точек при рисовании не пуст, то есть мы еще рисуем
+            prePointsMM = []; // удаляем последние точки
         }
     };
 });
@@ -81,13 +73,15 @@ function pushPoints(prePointsMM) {
         }
         
     }
-    console.log("points = ", points);
-    console.log("zeroPointPadding = ", zeroPointPadding);
+    // console.log("points = ", points);
+    // console.log("zeroPointPadding = ", zeroPointPadding);
 }
 
 // сохранение промежуточной точки точек
 function pushPrePoint() {
     if ((points.length == 0) && (prePointsMM.length == 0)) { // если это первая точка в схеме, то она становится центром координат
+        zeroPointPadding.x = mousePos.x * scale;
+        zeroPointPadding.y = mousePos.y * scale;
         prePointsMM.push({ x: 0, y: 0 });
     } else {
         //console.log("findMaxId(points) + 1 = ", findMaxId(points) + 1);
@@ -101,22 +95,22 @@ function pushPrePoint() {
 //***************************************************************
 // В случае клика по канве определяем какой элемент хочет нарисовать пользователь и действуем
 canvas_0.addEventListener('click', function (e) {
-    if (selectedTool != 'none') { // если хоть что то выбрано
-        if ((points.length == 0) && (prePointsMM.length == 0)) { // если это первая точка в схеме, то она становится центром координат
-            //points.push({ id: 0, x: 0, y: 0 });
-            zeroPointPadding.x = mousePos.x * scale;
-            zeroPointPadding.y = mousePos.y * scale;
-            console.log("zeroPointPadding 1 = ", zeroPointPadding);
-            stick(); // чтобы линии рисовались даже если пользователь только поставил точку и еще не двинул мышь
-            // empty_scheme = false;
-        } else {
-            //console.log("findMaxId(points) + 1 = ", findMaxId(points) + 1);
-            //points.push({ id: findMaxId(points) + 1, x: mmOfMousePos.x, y: mmOfMousePos.y }); // переводим в мм и вносим в массив, приваивая индекс, соджержащийся в последней ячейке + 1
-        }
-        //  console.log("findMaxId(points) 0 = ", findMaxId(points));
-        stick(); // чтобы линии рисовались даже если пользователь только поставил точку и еще не двинул мышь
-        //drawAxeSize();
-    }
+    // if (selectedTool != 'none') { // если хоть что то выбрано
+    //     if ((points.length == 0) && (prePointsMM.length == 0)) { // если это первая точка в схеме, то она становится центром координат
+    //         //points.push({ id: 0, x: 0, y: 0 });
+    //         // zeroPointPadding.x = mousePos.x * scale;
+    //         // zeroPointPadding.y = mousePos.y * scale;
+    //         //console.log("zeroPointPadding 1 = ", zeroPointPadding);
+    //         stick(); // чтобы линии рисовались даже если пользователь только поставил точку и еще не двинул мышь
+    //         // empty_scheme = false;
+    //     } else {
+    //         //console.log("findMaxId(points) + 1 = ", findMaxId(points) + 1);
+    //         //points.push({ id: findMaxId(points) + 1, x: mmOfMousePos.x, y: mmOfMousePos.y }); // переводим в мм и вносим в массив, приваивая индекс, соджержащийся в последней ячейке + 1
+    //     }
+    //     //  console.log("findMaxId(points) 0 = ", findMaxId(points));
+    //     //stick(); // чтобы линии рисовались даже если пользователь только поставил точку и еще не двинул мышь
+    //     //drawAxeSize();
+    // }
     //console.log("points = ", points);
     switch (selectedTool) {
         case 'wall':
@@ -349,10 +343,11 @@ function findMaxId(arr) {
 // Приклейка
 function stick() {
     var stick_pix = 10;
+    var a = [];
     clear(ctx_1, canvas_1);
     // Перебор всех точек
     for (item of points.values()) {
-        var a = [];
+        
         a.x = mmToPix(item).x;
         //console.log("a.x = ", a.x);
         a.y = mmToPix(item).y;
@@ -367,6 +362,24 @@ function stick() {
             mmOfMousePos.y = item.y;
             drawHVLine("h");
         }
+    }
+    // то же для предварительного массива точек
+    for (p of prePointsMM.values()) {
+        a.x = mmToPix(p).x;
+        //console.log("a.x = ", a.x);
+        a.y = mmToPix(p).y;
+        if (Math.abs(mousePos.x - a.x) <= stick_pix) {// поиск совпадений по х
+            //console.log("пMath.abs(mousePos.x - a.x) = ", Math.abs(mousePos.x - a.x));
+            mousePos.x = a.x;
+            mmOfMousePos.x = p.x;
+            drawHVLine("v");
+        }
+        if (Math.abs(mousePos.y - a.y) <= stick_pix) { // поиск совпадений по у
+            mousePos.y = a.y;
+            mmOfMousePos.y = p.y;
+            drawHVLine("h");
+        }
+        
     }
 }
 
