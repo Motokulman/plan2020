@@ -7,14 +7,15 @@ var ctx_1 = canvas_1.getContext('2d');
 var ctx_2 = canvas_2.getContext('2d');
 var ctx_3 = canvas_3.getContext('2d');
 var selectedLineType = "straight"; // Тип линии при рисовании - прямая или кривая
-var selectedEdge = "1"; // Количество граней стены
+var polygonSides = "3"; // Количество сторон многоугольника
 var selectedTool = "none"; // Выбранный элемент для рисования, стена, или еще что-то. Изначально - ничего не выбрано
 var mousePosArray = []; // массив позиций мыши при рисовании. 
 var mousePos; // Позиции мыши по х и у, с учетом положения канвы на экране
 var mmOfMousePos = []; // Позиция в миллиметрах, соответствующая текущему положению мыши с учетом смещения и масштаба
 var points = []; // Массив точек в миллиметрах. Первая точка - точка отсчета, начало коопдинат
 var zeroPointPadding = []; // Смещение начала координат схемы относительно начала координат канвы. Попробуем в мм.
-var walls = []; // Массив стен
+var lines = []; // Массив связей между точками. 
+var elements = []; // Фигура, содержит массив элементов и закон их взаимодействия
 var scale = 25; // Сделать получение из настроек и сохранение в них
 var empty_scheme = true;// Правда, если еще нет ни одного элемента в схеме
 var sizeTextSettings = { topPadding: 10, bottomPadding: 5, leftPadding: 5, rightPadding: 30 }; // массив с настройками для отображения размеров на  экране
@@ -29,10 +30,10 @@ function drawLine(p, p1, context, color, blur) {
     context.lineTo(p1.x, p1.y);
     context.strokeStyle = color;
     context.lineWidth = 3;
- if (blur == true) {
-    context.shadowBlur = 5;
-    context.shadowColor = "blue";
- }
+    if (blur == true) {
+        context.shadowBlur = 5;
+        context.shadowColor = "blue";
+    }
     context.stroke();
 }
 
@@ -79,8 +80,27 @@ function pushPoints(prePointsMM) {
     }
 }
 
+// сохранение факта связи двух точек
+function pushLine(id0, id1) {
+    if (lines.length == 0) {
+        lines.push({ id: 0, id0: id0, id1: id1 });
+    } else {
+        lines.push({ id: findMaxId(lines) + 1, id0: id0, id1: id1 });
+    }
+}
+
+// сохранение элемента. Элемент состоит из одной или более линий. 
+function pushElement(el) { // ids - массив id линий, из которых состоит данный элемент  ids, distance, direction
+    if (elements.length == 0) {
+        console.log("el = ", el);
+        elements.push({ id: 0, ids: el.ids, distance: el.distance, direction: el.direction });
+    } else {
+        elements.push({ id: findMaxId(elements) + 1, ids: el.ids, distance: el.distance, direction: el.direction });
+    }
+}
+
 // сохранение промежуточной точки 
-function pushPrePoint(mmOfMousePos) {
+function pushPrePointMM(mmOfMousePos) {
     if ((points.length == 0) && (prePointsMM.length == 0)) { // если это первая точка в схеме, то она становится центром координат
         zeroPointPadding.x = mousePos.x * scale;
         zeroPointPadding.y = mousePos.y * scale;
@@ -88,7 +108,7 @@ function pushPrePoint(mmOfMousePos) {
         prePointsMM.push({ x: 0, y: 0 });
     } else {
         prePointsMM.push({ x: mmOfMousePos.x, y: mmOfMousePos.y });
-        console.log("mmOfMousePos = ", mmOfMousePos);
+        //console.log("mmOfMousePos = ", mmOfMousePos);
     }
 
 }
@@ -96,35 +116,42 @@ function pushPrePoint(mmOfMousePos) {
 //***************************************************************
 // В случае клика по канве определяем какой элемент хочет нарисовать пользователь и действуем
 canvas_0.addEventListener('click', function (e) {
+    var newLinesIds = [];// массив, куда будут сохраняться id новых линий, а затем сохраняться в элементе
+    var newElement = [];// элементы сначала создаем отдельно, т.к. они все разные, прописываем свойства для каждого, и лишь потом добавляем в массив.
     switch (selectedTool) {
         case 'wall':
             if (selectedLineType == 'straight') { // если выбран прямой тип линии
 
                 if (prePointsMM.length == 0) { // если это первый клик в этом цикле рисования прямой стены
-                    pushPrePoint(mmOfMousePos);
+                    pushPrePointMM(mmOfMousePos);
                     drawPoint(mousePos);
                 } else { // если это второй клик в этом цикле рисования прямой стены
-                    pushPrePoint(mmOfMousePos);
+                    pushPrePointMM(mmOfMousePos);
                     pushPoints(prePointsMM);
                     prePointsMM = [];
                     drawPoint(mousePos); // Нарисовали вторую точку
-                    // Заносим id Точек в массив стен в мм.
-                    // причем два id есть всегда, это основание, от которого всё строится. Даже если это отдельно стоящая замкнутая фигура (тогда первые две точки одинаковые)
-                    // если есть радиус, независимо от количества стен, это значит, что все стены равны и вписываются в окружность с указанным центром (id точки центра)
-                    // если это эркер из двух стен, то он может быть прямоугольным. Принудительно задать прямой угол - добавить элемент true
-                    // потом добавить массив shape - в нем содержатся id стен таким образом, чтобы стена могла менять свою форму в зависимости от уровня (высоты) 
-                    walls.push({ n: 1, id0: findMaxId(points), id1: findMaxId(points) - 1, });
+                    pushLine(findMaxId(points) - 1, findMaxId(points)); // занесли в массив линий нашу новую линию
+                    newLinesIds[0] = findMaxId(lines);// занесли в промежуточный массив id единственной линии, которая будет храниться в данном элементе (т.к. это просто ровная стена)
+                    newElement = { ids: newLinesIds };
+                    // console.log("newElement = ", newElement);
+                    pushElement(newElement); // занесли в массив с элементами id нашей линии стены/ радиус = 0 чтобы отличить стену от радиусного элемента
                 }
 
-            } else if (selectedLineType == 'polygon') { // если это многоугольник
-                if (mousePosArray.length == 0) { // если это первый клик в этом цикле рисования эркера из трех граней
-                    pushPrePoint(mmOfMousePos);
+            } else if (selectedLineType == 'polygon') { // если это многоугольник. У многоугольника всезда есть две начальные точки, которые могут совпадать
+                if (prePointsMM.length == 0) { // если это первый или второй клик в этом цикле рисования
+                    pushPrePointMM(mmOfMousePos);
                     mousePosArray[0] = mousePos;
                     drawPoint(mousePos);
-                } else if (mousePosArray.length == 1) { // если это второй клик в этом цикле рисования эркера из трех граней
-                    pushPrePoint(mmOfMousePos);
-                    mousePosArray[1] = mousePos;
-                    drawPoint(mousePos); // Нарисовали вторую точку
+                } else if (prePointsMM.length == 1) { // заблокируем пока возможность создавать эркеры относительно наклонных прямых
+                    pushPrePointMM(mmOfMousePos);
+                    if ((prePointsMM[0].x != prePointsMM[1].x) && (prePointsMM[0].y != prePointsMM[1].y)) {
+                        prePointsMM = [];
+                        alert("Создавать наклонные эркеры пока нельзя :(");
+                        //clear(ctx_1, canvas_1);
+                    } else {
+                        mousePosArray[1] = mousePos;
+                        drawPoint(mousePos);
+                    }
                 } else if (mousePosArray.length == 2) { // если это третий клик в этом цикле рисования эркера из трех граней
                     var currentPoint = mousePos; // зафиксируем точку, для защиты от изменения в процессе вычисления
 
@@ -150,7 +177,7 @@ canvas_0.addEventListener('click', function (e) {
                     }
                     drawPoint(anotherPoint);
                     mousePosArray[2] = anotherPoint;
-                    pushPrePoint(pixToMm(anotherPoint));
+                    pushPrePointMM(pixToMm(anotherPoint));
 
                     var middleTwoPix = []; // вторая внутренняя точка
                     middleTwoPix.x = Math.abs(mousePosArray[1].x - middlePix.x) / 2 + Math.min(mousePosArray[1].x, middlePix.x);
@@ -170,24 +197,109 @@ canvas_0.addEventListener('click', function (e) {
                     }
                     drawPoint(anotherPoint);
                     mousePosArray[3] = anotherPoint;
-                    pushPrePoint(pixToMm(anotherPoint));
+                    pushPrePointMM(pixToMm(anotherPoint));
                     pushPoints(prePointsMM);
+                    pushLine(findMaxId(points) - 3, findMaxId(points) - 1); // занесли в массив линий нашу первую новую линию
+                    pushLine(findMaxId(points) - 1, findMaxId(points)); // занесли в массив линий нашу вторую новую линию
+                    pushLine(findMaxId(points), findMaxId(points) - 2); // занесли в массив линий нашу третью новую линию
                     prePointsMM = [];
-                    walls.push({ n: 3, id0: findMaxId(points) - 3, id1: findMaxId(points) - 2, id2: findMaxId(points) - 1, id3: findMaxId(points) });
-                    //         drawWalls()
+                    newLinesIds[0] = findMaxId(lines) - 2;
+                    newLinesIds[1] = findMaxId(lines) - 1;
+                    newLinesIds[2] = findMaxId(lines);
+                    newElement = { ids: newLinesIds };
+                    pushElement(newElement);
                     drawLine(mousePosArray[0], mousePosArray[2], ctx_0, '#333333');
                     drawLine(mousePosArray[2], mousePosArray[3], ctx_0, '#333333');
                     drawLine(mousePosArray[3], mousePosArray[1], ctx_0, '#333333');
                     mousePosArray = [];
                 }
+                // Рисуем кривую    
             } else if (selectedLineType == 'curve') {
-
+                if (prePointsMM.length == 0) { // если это первый или второй клик в этом цикле рисования кривой
+                    pushPrePointMM(mmOfMousePos);
+                    drawPoint(mousePos);
+                } else if (prePointsMM.length == 1) { // заблокируем пока возможность создавать окружности относительно наклонных прямых
+                    pushPrePointMM(mmOfMousePos);
+                    if ((prePointsMM[0].x != prePointsMM[1].x) && (prePointsMM[0].y != prePointsMM[1].y)) {
+                        prePointsMM = [];
+                        alert("Создавать наклонные окружности пока нельзя :(");
+                        // clear(ctx_1, canvas_1);
+                    } else {
+                        drawPoint(mousePos);
+                    }
+                } else {
+                    pushPoints(prePointsMM);
+                    pushLine(findMaxId(points) - 1, findMaxId(points)); // занесли в массив линий нашу новую линию
+                    newLinesIds[0] = findMaxId(lines);// занесли в промежуточный массив id единственной линии
+                    var radius = Math.round(Math.sqrt(Math.pow((prePointsMM[0].x - prePointsMM[1].x), 2) + Math.pow((prePointsMM[0].y - prePointsMM[1].y), 2))); // пусть пока это будет правильный полукруг
+                    var distance = radius;// определим расстояние от дальней точки окружности до базовой прямой. Этот способ позволяет хранить только это расстояние и направление. Для простоты оно равно радиусу, что нужно для правильного полукруга. Поэтому рано 0.
+                    // определим по какую сторону от прямой кликнул пользователь. Если стоим на первой точке и смотрим на вторую. + значит слева, - справа
+                    var d = (mmOfMousePos.x - prePointsMM[0].x) * (prePointsMM[1].y - prePointsMM[0].y) - (mmOfMousePos.y - prePointsMM[0].y) * (prePointsMM[1].x - prePointsMM[0].x)
+                    if (d > 0) { //+ значит слева
+                        newElement = { ids: newLinesIds, distance: distance, direction: "left" };
+                    } else {
+                        newElement = { ids: newLinesIds, distance: distance, direction: "right" };
+                    }
+                    pushElement(newElement);
+                    prePointsMM = [];
+                    //  console.log("elements = ", elements);
+                }
             }
             break;
         case 'none':
             break;
     }
 });
+
+// функция определения перпендикулярной прямой, а точнее у по х
+// function findYOnNormal(p0, p1, x) {
+//     var newPoint = [];
+//     var k = (p0.x - p1.x) / (p0.y - p1.y);
+//     var middlePix = [];// середина отрезка
+//     middlePix.x = Math.abs(p0.x - p1.x) / 2 + Math.min(p0.x, p1.x);
+//     middlePix.y = Math.abs(p0.y - p1.y) / 2 + Math.min(p0.y, p1.y);
+//     newPoint.x = x;
+//     newPoint.y = middlePix.y - k * (x - middlePix.x);
+//     return newPoint;
+// }
+
+// функция рисования окружности 
+function drawCircleElement(element) {
+    // поскольку мы пока упростили и при создании окружности она становится правильным полукругом, то центр окружности тупо середина базовой линии
+    var line = lines.find(line => line.id == element.ids[0]); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
+
+    var point0 = mmToPix(points.find(point => point.id == line.id0)); // ищем и заносим в первую точку для рисования линии id первой точки сразу переводя в пиксели
+    var point1 = mmToPix(points.find(point => point.id == line.id1)); // ищем и заносим в первую точку для рисования линии id первой точки сразу переводя в пиксели
+    drawPoint(point0);
+    drawPoint(point1);
+    var middle = [];
+    middle.x = Math.min(point0.x, point1.x) + Math.abs(point0.x - point1.x) / 2;
+    middle.y = Math.min(point0.y, point1.y) + Math.abs(point0.y - point1.y) / 2;
+    var radius = lengthLine(point0, point1) / 2;
+    if (point0.y == point1.y) {
+
+        if (((element.direction == "left") && (point0.x < point1.x))) {
+            ctx_0.arc(middle.x, middle.y, radius, 0, Math.PI, true);
+        } else if (((element.direction == "right") && (point0.x < point1.x))) {
+            ctx_0.arc(middle.x, middle.y, radius, 0, Math.PI, false);
+        } else if (((element.direction == "left") && (point0.x > point1.x))) {
+            ctx_0.arc(middle.x, middle.y, radius, Math.PI, 0, true);
+        } else if (((element.direction == "right") && (point0.x > point1.x))) {
+            ctx_0.arc(middle.x, middle.y, radius, Math.PI, 0, false);
+        }
+    } else if (point0.x == point1.x) {
+        if (((element.direction == "left") && (point0.y < point1.y))) {
+            ctx_0.arc(middle.x, middle.y, radius, Math.PI / 2, 3 * Math.PI / 2, true);
+        } else if (((element.direction == "right") && (point0.y < point1.y))) {
+            ctx_0.arc(middle.x, middle.y, radius, Math.PI / 2, 3 * Math.PI / 2, false);
+        } else if (((element.direction == "right") && (point0.y > point1.y))) {
+            ctx_0.arc(middle.x, middle.y, radius, 3 * Math.PI / 2, Math.PI / 2, false);
+        } else if (((element.direction == "left") && (point0.y > point1.y))) {
+            ctx_0.arc(middle.x, middle.y, radius, 3 * Math.PI / 2, Math.PI / 2, true);
+        }
+    }
+    ctx_0.stroke();
+}
 
 // функция очистки канвы
 function clear(context, canvas) {
@@ -213,7 +325,7 @@ function pixToMm(arr) {
 
 // Проверочные действия
 $('#test_buttons button').click(function () {
-    drawWalls();
+    // drawWalls();
 });
 
 
@@ -224,10 +336,10 @@ $('#line_type_selector button').click(function () {
     // console.log("selectedLineType = ", selectedLineType);
 });
 
-$('#edge').change(function () { // определим, сколько граней выбрал пользователь
+$('#polygon_sides').change(function () { // определим, сколько граней выбрал пользователь
     $(this).addClass('active').siblings().removeClass('active');
-    selectedEdge = this.value;
-    // alert(selectedEdge);
+    polygonSides = this.value;
+    //alert(polygonSides);
 });
 
 // Определяем, какой элемент выбрал пользователь (стена или что-то иное)
@@ -266,31 +378,29 @@ canvas_2.addEventListener('mousemove', function (e) {
     defineTextSize();
 });
 
+// определение длины линии
+function lengthLine(p0, p1) {
+    var length = Math.sqrt(Math.pow((p0.x - p1.x), 2) + Math.pow((p0.y - p1.y), 2));
+    return length;
+}
+
 // Воспроизведение из массива стен
-function drawWalls() {
+function drawElements() {  //drawWalls
     clear(ctx_0, canvas_0);
-    var p = [];
-    var p1 = [];
-    for (wall of walls.values()) {
-        if (wall.n == 1) {
-            p = points.find(item => item.id == wall.id0);
-            p1 = points.find(item => item.id == wall.id1);
-            drawPoint(mmToPix(p));
-            drawPoint(mmToPix(p1));
-            drawLine(mmToPix(p), mmToPix(p1), ctx_0, '#333333');
-        } else if (wall.n == 3) { // если это трехстронний эркер
-            p = points.find(item => item.id == wall.id0);
-            p1 = points.find(item => item.id == wall.id2);
-            drawPoint(mmToPix(p));
-            drawPoint(mmToPix(p1));
-            drawLine(mmToPix(p), mmToPix(p1), ctx_0, '#333333');
-            p = points.find(item => item.id == wall.id3);
-            drawPoint(mmToPix(p));
-            drawLine(mmToPix(p1), mmToPix(p), ctx_0, '#333333');
-            p1 = points.find(item => item.id == wall.id1);
-            drawPoint(mmToPix(p1));
-            drawLine(mmToPix(p), mmToPix(p1), ctx_0, '#333333');
+    for (element of elements.values()) { // перебираем все элементы - прямые, эркеры, кривые
+        console.log("element = ", element);
+        console.log("element.ids = ", element.ids);
+        if ((element.distance > 0) && (element.ids.length == 1)) { // если это окружность
+            drawCircleElement(element);
+        } else {
+            for (item of element.ids.values()) { // перебираем массив id линий, хранящийся в каждом элементе
+                var line = lines.find(line => line.id == item); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
+                var point0 = mmToPix(points.find(point => point.id == line.id0)); // ищем и заносим в первую точку для рисования линии id первой точки сразу переводя в пиксели
+                var point1 = mmToPix(points.find(point => point.id == line.id1)); // ищем и заносим в первую точку для рисования линии id первой точки сразу переводя в пиксели
+                drawLine(point0, point1, ctx_0, "black");
+            }
         }
+
     }
 }
 
@@ -311,7 +421,7 @@ function defineElement() {
 
         }
     }
-    
+
     //console.log("clear = ", walls.indexOf(wall));
 }
 
@@ -598,7 +708,7 @@ canvas_2.addEventListener('click', function (e) {
         }
         clear(ctx_3, canvas_3);
         drawAxeSize();
-        drawWalls();
+        //    drawWalls();
     }
 });
 
@@ -674,5 +784,5 @@ function onWheel(e) {
     }
     clear(ctx_3, canvas_3);
     drawAxeSize();
-    drawWalls();
+    drawElements();
 }
