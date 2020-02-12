@@ -20,6 +20,8 @@ var scale = 25; // Сделать получение из настроек и с
 var empty_scheme = true;// Правда, если еще нет ни одного элемента в схеме
 var sizeTextSettings = { topPadding: 10, bottomPadding: 5, leftPadding: 5, rightPadding: 30 }; // массив с настройками для отображения размеров на  экране
 var prePointsMM = []; // массив новых точек при рисовании элемента. Потом добавляется в основной массив точек
+var selectedElements = [];// массив выделенных на схеме элементов (id)
+var underMouseElement; // элемент, над которым сейчас находится мышь
 
 //console.log("sizeTextSettings = ", sizeTextSettings);
 
@@ -231,8 +233,8 @@ canvas_0.addEventListener('click', function (e) {
                     pushPoints(prePointsMM);
                     pushLine(findMaxId(points) - 1, findMaxId(points)); // занесли в массив линий нашу новую линию
                     newLinesIds[0] = findMaxId(lines);// занесли в промежуточный массив id единственной линии
-                    var radius = Math.round(Math.sqrt(Math.pow((prePointsMM[0].x - prePointsMM[1].x), 2) + Math.pow((prePointsMM[0].y - prePointsMM[1].y), 2))); // пусть пока это будет правильный полукруг
-                    var distance = radius;// определим расстояние от дальней точки окружности до базовой прямой. Этот способ позволяет хранить только это расстояние и направление. Для простоты оно равно радиусу, что нужно для правильного полукруга. Поэтому рано 0.
+                    var diameter = Math.round(Math.sqrt(Math.pow((prePointsMM[0].x - prePointsMM[1].x), 2) + Math.pow((prePointsMM[0].y - prePointsMM[1].y), 2))); // пусть пока это будет правильный полукруг
+                    var distance = diameter / 2;// определим расстояние от дальней точки окружности до базовой прямой. Этот способ позволяет хранить только это расстояние и направление. Для простоты оно равно радиусу, что нужно для правильного полукруга. Поэтому рано 0.
                     // определим по какую сторону от прямой кликнул пользователь. Если стоим на первой точке и смотрим на вторую. + значит слева, - справа
                     var d = (mmOfMousePos.x - prePointsMM[0].x) * (prePointsMM[1].y - prePointsMM[0].y) - (mmOfMousePos.y - prePointsMM[0].y) * (prePointsMM[1].x - prePointsMM[0].x)
                     if (d > 0) { //+ значит слева
@@ -246,7 +248,13 @@ canvas_0.addEventListener('click', function (e) {
                 }
             }
             break;
-        case 'none':
+        case 'none': // выделяем элементы кликами:
+            var selectedElementIndex = selectedElements.indexOf(defineElement());
+            if (selectedElementIndex >= 0) {
+                selectedElements.splice(selectedElementIndex, 1);
+            } else {
+                selectedElements.push(defineElement());
+            }
             break;
     }
 });
@@ -263,11 +271,12 @@ canvas_0.addEventListener('click', function (e) {
 //     return newPoint;
 // }
 
+
 // функция рисования окружности 
-function drawCircleElement(element) {
+function drawCircleElement(element, context, color, blur) {
+    context.beginPath();
     // поскольку мы пока упростили и при создании окружности она становится правильным полукругом, то центр окружности тупо середина базовой линии
     var line = lines.find(line => line.id == element.ids[0]); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
-
     var point0 = mmToPix(points.find(point => point.id == line.id0)); // ищем и заносим в первую точку для рисования линии id первой точки сразу переводя в пиксели
     var point1 = mmToPix(points.find(point => point.id == line.id1)); // ищем и заносим в первую точку для рисования линии id первой точки сразу переводя в пиксели
     drawPoint(point0);
@@ -279,26 +288,31 @@ function drawCircleElement(element) {
     if (point0.y == point1.y) {
 
         if (((element.direction == "left") && (point0.x < point1.x))) {
-            ctx_0.arc(middle.x, middle.y, radius, 0, Math.PI, true);
+            context.arc(middle.x, middle.y, radius, 0, Math.PI, true);
         } else if (((element.direction == "right") && (point0.x < point1.x))) {
-            ctx_0.arc(middle.x, middle.y, radius, 0, Math.PI, false);
+            context.arc(middle.x, middle.y, radius, 0, Math.PI, false);
         } else if (((element.direction == "left") && (point0.x > point1.x))) {
-            ctx_0.arc(middle.x, middle.y, radius, Math.PI, 0, true);
+            context.arc(middle.x, middle.y, radius, Math.PI, 0, true);
         } else if (((element.direction == "right") && (point0.x > point1.x))) {
-            ctx_0.arc(middle.x, middle.y, radius, Math.PI, 0, false);
+            context.arc(middle.x, middle.y, radius, Math.PI, 0, false);
         }
     } else if (point0.x == point1.x) {
         if (((element.direction == "left") && (point0.y < point1.y))) {
-            ctx_0.arc(middle.x, middle.y, radius, Math.PI / 2, 3 * Math.PI / 2, true);
+            context.arc(middle.x, middle.y, radius, Math.PI / 2, 3 * Math.PI / 2, true);
         } else if (((element.direction == "right") && (point0.y < point1.y))) {
-            ctx_0.arc(middle.x, middle.y, radius, Math.PI / 2, 3 * Math.PI / 2, false);
+            context.arc(middle.x, middle.y, radius, Math.PI / 2, 3 * Math.PI / 2, false);
         } else if (((element.direction == "right") && (point0.y > point1.y))) {
-            ctx_0.arc(middle.x, middle.y, radius, 3 * Math.PI / 2, Math.PI / 2, false);
+            context.arc(middle.x, middle.y, radius, 3 * Math.PI / 2, Math.PI / 2, false);
         } else if (((element.direction == "left") && (point0.y > point1.y))) {
-            ctx_0.arc(middle.x, middle.y, radius, 3 * Math.PI / 2, Math.PI / 2, true);
+            context.arc(middle.x, middle.y, radius, 3 * Math.PI / 2, Math.PI / 2, true);
         }
     }
-    ctx_0.stroke();
+    context.strokeStyle = color;
+    if (blur == true) {
+        context.shadowBlur = 5;
+        context.shadowColor = "blue";
+    }
+    context.stroke();
 }
 
 // функция очистки канвы
@@ -346,7 +360,7 @@ $('#polygon_sides').change(function () { // определим, сколько �
 $('#element_selector button').click(function () {
     $(this).addClass('active').siblings().removeClass('active');
     selectedTool = this.id;
-    //console.log("selectedTool = ", selectedTool);
+    console.log("selectedTool = ", selectedTool);
 });
 
 // Получаем координаты курсора в зависимости от положения канвы на экране
@@ -388,10 +402,9 @@ function lengthLine(p0, p1) {
 function drawElements() {  //drawWalls
     clear(ctx_0, canvas_0);
     for (element of elements.values()) { // перебираем все элементы - прямые, эркеры, кривые
-        console.log("element = ", element);
-        console.log("element.ids = ", element.ids);
+        // console.log("element = ", element);
         if ((element.distance > 0) && (element.ids.length == 1)) { // если это окружность
-            drawCircleElement(element);
+            drawCircleElement(element, ctx_0, "black");
         } else {
             for (item of element.ids.values()) { // перебираем массив id линий, хранящийся в каждом элементе
                 var line = lines.find(line => line.id == item); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
@@ -407,22 +420,48 @@ function drawElements() {  //drawWalls
 // определение наведения на элемент
 function defineElement() {
     clear(ctx_1, canvas_1);
-    var p0 = [];
-    var p1 = [];
-    for (wall of walls.values()) {
-        if (wall.n == 1) {
-            p0 = mmToPix(points.find(item => item.id == wall.id0));
-            p1 = mmToPix(points.find(item => item.id == wall.id1));
-            if (straightAffiliation(p0, p1, mousePos) == true) {
-                drawLine(p0, p1, ctx_1, '#888888', true);
-                return walls.indexOf(wall);
-            }
-        } else if (wall.n == 3) {// если это трехсторонний эркер
+    var p0, p1;
+    var a = -1;
+    for (element of elements.values()) { // перебираем все элементы - прямые, эркеры, кривые
+        if ((element.distance > 0) && (element.ids.length == 1)) { // если это окружность
+            // поскольку мы пока упростили и при создании окружности она становится правильным полукругом, то
 
+            var line = lines.find(line => line.id == element.ids[0]); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
+            var point0 = mmToPix(points.find(point => point.id == line.id0)); // ищем и заносим в первую точку для рисования линии id первой точки сразу переводя в пиксели
+            var point1 = mmToPix(points.find(point => point.id == line.id1)); // ищем и заносим в первую точку для рисования линии id первой точки сразу переводя в пиксели
+            // drawPoint(point0);
+            // drawPoint(point1);
+            var middle = [];
+            middle.x = Math.min(point0.x, point1.x) + Math.abs(point0.x - point1.x) / 2;
+            middle.y = Math.min(point0.y, point1.y) + Math.abs(point0.y - point1.y) / 2;
+            // console.log("element = ", element);
+            // console.log("element.distance = ", mmToPix(element.distance));
+            if (Math.abs(lengthLine(mousePos, middle) - element.distance / scale) <= 5) { // если попадаем курсором на нашу упрощенную (превращенную в правльный полукруг) окружность
+                //console.log("dyenhb= ");
+                drawCircleElement(element, ctx_1, '#888888', true);
+                a = element.id;
+            }
+            //drawCircleElement(element); то пока не работает
+        } else {
+            for (item of element.ids.values()) { // перебираем массив id линий, хранящийся в каждом элементе
+                var line = lines.find(line => line.id == item); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
+                p0 = mmToPix(points.find(point => point.id == line.id0));
+                p1 = mmToPix(points.find(point => point.id == line.id1));
+                if (straightAffiliation(p0, p1, mousePos) == true) { // если курсор лежит на прямой между этими точками, то выделяем каждую линию данного элемента
+                    for (item of element.ids.values()) { // перебираем массив id линий, хранящийся в каждом элементе
+                        var line = lines.find(line => line.id == item); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
+                        p0 = mmToPix(points.find(point => point.id == line.id0));
+                        p1 = mmToPix(points.find(point => point.id == line.id1));
+                        drawLine(p0, p1, ctx_1, '#888888', true);
+                        console.log("element.id = ", element.id);
+                        a = element.id;
+                    }
+                    //                   console.log("element.id = ", element.id);
+                    return a;
+                }
+            }
         }
     }
-
-    //console.log("clear = ", walls.indexOf(wall));
 }
 
 // определение принадлежности точки прямой
