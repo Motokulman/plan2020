@@ -62,14 +62,65 @@ function drawPoint(p) {
     ctx_0.closePath();
 }
 
-// Удаление, если вдруг передумал рисовать
-$(document).keydown(function (eventObject) {
+// Обработка нажатий клавиатуры
+$(document).keydown(function (eventObject) {// Удаление, если вдруг передумал рисовать 
     if (eventObject.which == 27) { // если нажата клавиша escape
         if (prePointsMM.length != 0) { // если массив точек при рисовании не пуст, то есть мы еще рисуем
             prePointsMM = []; // удаляем последние точки
+            selectedElements = [];// зачистим массив выделеных элеиентов
         }
-    };
+    }
+
+
+    if ((eventObject.which == 46) && (selectedElements.length > 0)) { // если нажата клавиша delete и если есть выделенные элементы
+        for (var sel = 0; sel < selectedElements.length; sel++) {
+            for (var i = 0; i < elements.length; i++) { // попробуем использовать for, так как похоже при переборе упрощенными итераторами нельзя удалять
+                if (selectedElements[sel] == elements[i].id) { // и если есть, удаляем все линии этого элемента, точки и сам элемент
+                    for (var l = 0; l < elements[i].ids.length; l++) { // перебираем массив id линий, хранящийся в каждом элементе item of element.ids.values()
+                        for (var line = 0; line < lines.length; line++) { // удалим точки
+                            if (elements[i].ids[l] == lines[line].id) {
+                                for (var p = 0; p < points.length; p++) {
+                                    if (points[p].id == lines[line].id0) {
+                                        points.splice(p, 1);
+                                    }
+                                }
+                                for (var p = 0; p < points.length; p++) {
+                                    if (points[p].id == lines[line].id1) {
+                                        points.splice(p, 1);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    for (var l = 0; l < elements[i].ids.length; l++) { // теперь удалим сами линии
+                        for (var line = 0; line < lines.length; line++) {
+                            if (lines[line].id == elements[i].ids[l]) {
+                                lines.splice(line, 1);
+                            }
+                        }
+                    }
+                    elements.splice(i, 1);
+                }
+            }
+        }
+        clear(ctx_0, canvas_0);
+        clear(ctx_2, canvas_2);
+        clear(ctx_3, canvas_3);
+        drawAxeSize();
+        drawElements();
+        selectedElements = [];
+    }
 });
+
+
+
+// $(function() {
+
+//     $('#dialog').dialog();
+
+// });
+
 
 // сохранение итоговых точек
 function pushPoints(prePointsMM) {
@@ -94,7 +145,7 @@ function pushLine(id0, id1) {
 // сохранение элемента. Элемент состоит из одной или более линий. 
 function pushElement(el) { // ids - массив id линий, из которых состоит данный элемент  ids, distance, direction
     if (elements.length == 0) {
-        console.log("el = ", el);
+        // console.log("el = ", el);
         elements.push({ id: 0, ids: el.ids, distance: el.distance, direction: el.direction });
     } else {
         elements.push({ id: findMaxId(elements) + 1, ids: el.ids, distance: el.distance, direction: el.direction });
@@ -120,6 +171,9 @@ function pushPrePointMM(mmOfMousePos) {
 canvas_0.addEventListener('click', function (e) {
     var newLinesIds = [];// массив, куда будут сохраняться id новых линий, а затем сохраняться в элементе
     var newElement = [];// элементы сначала создаем отдельно, т.к. они все разные, прописываем свойства для каждого, и лишь потом добавляем в массив.
+    if (selectedTool != "none") {
+        selectedElements = [];// зачистим массив выделеных элеиентов
+    }
     switch (selectedTool) {
         case 'wall':
             if (selectedLineType == 'straight') { // если выбран прямой тип линии
@@ -249,14 +303,18 @@ canvas_0.addEventListener('click', function (e) {
             }
             break;
         case 'none': // выделяем элементы кликами:
-            var selectedElementIndex = selectedElements.indexOf(defineElement());
-            if (selectedElementIndex >= 0) {
-                selectedElements.splice(selectedElementIndex, 1);
+            var selectedEl = selectedElements.findIndex(sel => sel == defineElement()); // ищем элемент, на который только что кликнули, в массиве выделенных элементов
+            console.log("defineElement() = ", defineElement());
+            if (selectedEl >= 0) {
+                // var a = selectedElements.findIndex(defineElement());
+                selectedElements.splice(selectedEl, 1);
             } else {
                 selectedElements.push(defineElement());
             }
+            console.log("selectedElements= ", selectedElements);
             break;
     }
+    //console.log("elements = ", elements);
 });
 
 // функция определения перпендикулярной прямой, а точнее у по х
@@ -360,7 +418,7 @@ $('#polygon_sides').change(function () { // определим, сколько �
 $('#element_selector button').click(function () {
     $(this).addClass('active').siblings().removeClass('active');
     selectedTool = this.id;
-    console.log("selectedTool = ", selectedTool);
+    selectedElements = [];// зачистим массив выделеных элеиентов
 });
 
 // Получаем координаты курсора в зависимости от положения канвы на экране
@@ -440,6 +498,7 @@ function defineElement() {
                 //console.log("dyenhb= ");
                 drawCircleElement(element, ctx_1, '#888888', true);
                 a = element.id;
+                //  console.log("element.id= ", element.id);
             }
             //drawCircleElement(element); то пока не работает
         } else {
@@ -453,15 +512,16 @@ function defineElement() {
                         p0 = mmToPix(points.find(point => point.id == line.id0));
                         p1 = mmToPix(points.find(point => point.id == line.id1));
                         drawLine(p0, p1, ctx_1, '#888888', true);
-                        console.log("element.id = ", element.id);
+                        //console.log("element.id = ", element.id);
                         a = element.id;
                     }
                     //                   console.log("element.id = ", element.id);
-                    return a;
+
                 }
             }
         }
     }
+    return a;
 }
 
 // определение принадлежности точки прямой
@@ -824,4 +884,40 @@ function onWheel(e) {
     clear(ctx_3, canvas_3);
     drawAxeSize();
     drawElements();
+}
+
+// попробуем создать модальное окно
+$(function () {
+
+    $('#dialog').dialog({
+        buttons: [{ text: "OK", click: applyWallData }, {text: "Отмена", click: function() {$(this).dialog("close")}}],
+        modal: true,
+        autoOpen: false,
+        width: 340
+    })
+
+    // function addDataToTable() {
+    //     $('#placeholder').hide();
+
+    //     $('<tr><td>' + $('#product').val() + '</td><td>' + $('#color').val() +
+    //         '</td><td>' + $('#count').val() + '</td></tr>').appendTo('#prods tbody');
+
+    //     $('#dialog').dialog("close");
+    // }
+
+});
+
+
+// обработка правого клика
+$("#stage").bind('contextmenu', function (e) {
+    // if (selectedElements.length > 0) {
+
+    // }
+    $('#dialog').dialog("open");
+    return false;// запрет стандартного окна при правом клике, нам ведь нужно наше окно
+});
+
+// добавление данных о стенах
+function applyWallData() {
+    
 }

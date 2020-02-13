@@ -1,6 +1,12 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+
+<!-- стили для модальных окон-->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/sunny/jquery-ui.css">
+
 <h3>Проект: {{ plan_title }}</h3>
 
 <div class="container-fluid">
@@ -24,14 +30,14 @@
           <option value="2">2</option>
           <option value="3" selected>3</option>
           <option value="4">4</option>
-      </select>
+        </select>
       </div>
 
       <div id="element_selector" class="btn-group">
         <button id="none" type="button" class="btn btn-light">Сброс</button>
         <button id="wall" type="button" class="btn btn-light">Стена</button>
       </div>
-<!--
+      <!--
       <div id="test_buttons" class="btn-group">
         <button id="test_render" type="button" class="btn btn-light">Проверить</button>
       </div>
@@ -40,6 +46,23 @@
   </div>
 </div>
 
+<div id="dialog" title="Стены" class="ui-widget">
+  <div><label for="wall_type">Тип стены: </label>
+    <p><input type="radio" value="bearing" id="wall_type" name="wall_type" />Несущая</p>
+    <p><input type="radio" value="partition" id="wall_type" name="wall_type" />Перегородка</p>
+    <p><input type="radio" value="not_set" checked id="wall_type" name="wall_type" />Не задано</p>
+  </div>
+  <div><label for="living">Смежная с жилым помещением:</label>
+    <p><input type="radio" value="bearing" id="living" name="living" />Да</p>
+    <p><input type="radio" value="partition" id="living" name="living" />Нет</p>
+    <p><input type="radio" value="not_set" checked id="living" name="living" />Не задано</p>
+  </div>
+  <div><label for="outdoor">Наружная: </label>
+    <p><input type="radio" value="bearing" id="outdoor" name="outdoor" />Да</p>
+    <p><input type="radio" value="partition" id="outdoor" name="outdoor" />Нет</p>
+    <p><input type="radio" value="not_set" checked id="outdoor" name="outdoor" />Не задано</p>
+  </div>
+</div>
 
 
 {% load static %}
