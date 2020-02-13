@@ -886,7 +886,7 @@ function onWheel(e) {
     drawElements();
 }
 
-// попробуем создать модальное окно
+// попробуем создать модальное окно https://professorweb.ru/my/javascript/jquery/level4/4_9.php
 $(function () {
 
     $('#dialog').dialog({
@@ -919,5 +919,5 @@ $("#stage").bind('contextmenu', function (e) {
 
 // добавление данных о стенах
 function applyWallData() {
-    
+
 }
