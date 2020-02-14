@@ -46,8 +46,6 @@ function drawLine(p, p1, context, color, blur) {
 }
 
 
-
-
 // функция рисования окружности 
 function drawCircleElement(element, context, color, blur) {
     context.beginPath();
@@ -62,7 +60,6 @@ function drawCircleElement(element, context, color, blur) {
     middle.y = Math.min(point0.y, point1.y) + Math.abs(point0.y - point1.y) / 2;
     var radius = lengthLine(point0, point1) / 2;
     if (point0.y == point1.y) {
-
         if (((element.direction == "left") && (point0.x < point1.x))) {
             context.arc(middle.x, middle.y, radius, 0, Math.PI, true);
         } else if (((element.direction == "right") && (point0.x < point1.x))) {
@@ -98,18 +95,40 @@ function drawElements() {  //drawWalls
     clear(ctx_0, canvas_0);
     var strokeStyle = 1;
     for (element of elements.values()) { // перебираем все элементы - прямые, эркеры, кривые
-        // if (element.bearType == "partition") {// если это перегородка
-        //     ctx_0.lineWidth = 1;
-        //     strokeStyle = "black"
-        // }
-        // console.log("element = ", element);
         if ((element.distance > 0) && (element.ids.length == 1)) { // если это окружность
-            drawCircleElement(element, ctx_0, "black");
+            ctx_0.lineWidth = 1; 
+            strokeStyle = "black";// если ничего не задано
+           // drawCircleElement(element, ctx_0, strokeStyle); 
+            if (element.bearType == "partition") {// если это перегородка
+                ctx_0.lineWidth = 6;
+                strokeStyle = "black"
+                drawCircleElement(element, ctx_0, strokeStyle);
+                ctx_0.lineWidth = 2;
+            } else if (element.bearType == "bearing") {// если это несущая стена
+                ctx_0.lineWidth = 12;
+                strokeStyle = "black"
+                drawCircleElement(element, ctx_0, strokeStyle);
+                if (element.outdoorType == "outdoor") {
+                    ctx_0.lineWidth = 10;
+                    strokeStyle = "orange"
+                    drawCircleElement(element, ctx_0, strokeStyle);
+                }
+            }
+            ctx_0.lineWidth = 4;
+            if (element.liveType == "living") {
+                strokeStyle = "yellow";
+            } else if (element.liveType == "uninhabited") {
+                strokeStyle = "Gainsboro";
+            }
+            drawCircleElement(element, ctx_0, strokeStyle);
         } else {
             for (item of element.ids.values()) { // перебираем массив id линий, хранящийся в каждом элементе
                 var line = lines.find(line => line.id == item); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
                 var point0 = mmToPix(points.find(point => point.id == line.id0)); // ищем и заносим в первую точку для рисования линии id первой точки сразу переводя в пиксели
                 var point1 = mmToPix(points.find(point => point.id == line.id1)); // ищем и заносим в первую точку для рисования линии id первой точки сразу переводя в пиксели
+                ctx_0.lineWidth = 1;
+                strokeStyle = "black";// если ничего не задано
+            //    drawLine(point0, point1, ctx_0, strokeStyle);
                 if (element.bearType == "partition") {// если это перегородка
                     ctx_0.lineWidth = 6;
                     strokeStyle = "black"

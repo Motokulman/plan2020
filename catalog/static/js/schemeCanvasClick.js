@@ -143,7 +143,30 @@ canvas_0.addEventListener('click', function (e) {
             } else {
                 selectedElements.push(defineElement());
             }
-            console.log("selectedElements= ", selectedElements);
+            break;
+        case 'entrance_group': // если входная группа
+            if (prePointsMM.length > 0) {
+                pushPrePointMM(mmOfMousePos);
+                drawPoint(mousePos);
+                if ((prePointsMM[0].x == mmOfMousePos.x) && (prePointsMM[0].y == mmOfMousePos.y)) { // если точки совпали, значит конец ввода группы
+                    
+                    pushPoints(prePointsMM);
+                    for (var p = prePointsMM.length - 1; p > 0; p--) {
+                        pushLine(findMaxId(points) - p, findMaxId(points) - p + 1); // занесли в массив линий нашу новую линию
+                        newLinesIds.push(findMaxId(lines));//
+                        console.log("lines = ", lines);
+                    }
+                    prePointsMM = [];
+
+                    newElement = { ids: newLinesIds, type: "Entrance group" };
+                    newLinesIds = [];
+                    pushElement(newElement);
+                    drawElements();
+                }
+            } else {
+                pushPrePointMM(mmOfMousePos);
+                drawPoint(mousePos);
+            }
             break;
     }
     //console.log("elements = ", elements);

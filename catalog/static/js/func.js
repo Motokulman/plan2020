@@ -518,9 +518,9 @@ function pushLine(id0, id1) {
 function pushElement(el) { // ids - массив id линий, из которых состоит данный элемент  ids, distance, direction
     if (elements.length == 0) {
         // console.log("el = ", el);
-        elements.push({ id: 0, ids: el.ids, distance: el.distance, direction: el.direction });
+        elements.push({ id: 0, ids: el.ids, distance: el.distance, direction: el.direction, type: el.type });
     } else {
-        elements.push({ id: findMaxId(elements) + 1, ids: el.ids, distance: el.distance, direction: el.direction });
+        elements.push({ id: findMaxId(elements) + 1, ids: el.ids, distance: el.distance, direction: el.direction, type: el.type });
     }
 }
 
@@ -545,8 +545,6 @@ $(document).keydown(function (eventObject) {// Удаление, если вдр
             selectedElements = [];// зачистим массив выделеных элеиентов
         }
     }
-
-
     if ((eventObject.which == 46) && (selectedElements.length > 0)) { // если нажата клавиша delete и если есть выделенные элементы
         for (var sel = 0; sel < selectedElements.length; sel++) {
             for (var i = 0; i < elements.length; i++) { // попробуем использовать for, так как похоже при переборе упрощенными итераторами нельзя удалять
