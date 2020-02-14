@@ -53,13 +53,13 @@
     <p><input type="radio" value="not_set" checked id="wall_type" name="wall_type" />Не задано</p>
   </div>
   <div><label for="living">Смежная с жилым помещением:</label>
-    <p><input type="radio" value="bearing" id="living" name="living" />Да</p>
-    <p><input type="radio" value="partition" id="living" name="living" />Нет</p>
+    <p><input type="radio" value="living" id="living" name="living" />Да</p>
+    <p><input type="radio" value="uninhabited" id="living" name="living" />Нет</p>
     <p><input type="radio" value="not_set" checked id="living" name="living" />Не задано</p>
   </div>
   <div><label for="outdoor">Наружная: </label>
-    <p><input type="radio" value="bearing" id="outdoor" name="outdoor" />Да</p>
-    <p><input type="radio" value="partition" id="outdoor" name="outdoor" />Нет</p>
+    <p><input type="radio" value="outdoor" id="outdoor" name="outdoor" />Да</p>
+    <p><input type="radio" value="indoor" id="outdoor" name="outdoor" />Нет</p>
     <p><input type="radio" value="not_set" checked id="outdoor" name="outdoor" />Не задано</p>
   </div>
 </div>
@@ -67,5 +67,7 @@
 
 {% load static %}
 <script type="text/javascript" src="{% static 'js/canvas.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/func.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/schemeCanvasClick.js' %}"></script>
 
 {% endblock %}
