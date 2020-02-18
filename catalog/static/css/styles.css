@@ -28,3 +28,5 @@
             margin-top: 0.0em; /* Отступ сверху */
             margin-bottom: 0.0em; /* Отступ снизу */
            }
+
+label {display:inline-block; width: 300px; font-weight: bold;}

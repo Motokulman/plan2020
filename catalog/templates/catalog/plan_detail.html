@@ -4,8 +4,11 @@
   <h3>Проект: {{ plan.title }}</h3>
   <a href="{% url 'plan_delete' plan.id %}">Удалить</a>
   <a href="{% url 'edit-scheme' plan.id %}">Редактировать</a>
+  <h4>Варианты:</h4>
+  <a href="{% url 'edit-variant' plan.id %}">Добавить вариант</a>
 
-  <!-- <div style="margin-left:20px;margin-top:20px">
 
-  </div> -->
+
+
+
 {% endblock %}

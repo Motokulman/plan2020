@@ -32,3 +32,9 @@ urlpatterns += [
 urlpatterns += [
     path('edit/', views.edit, name='edit'),
 ]
+
+# Редактирование варианта
+urlpatterns += [
+    path('plan/<int:pk>/edit_variant/', views.edit_variant, name='edit-variant'),
+
+]

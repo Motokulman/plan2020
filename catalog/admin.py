@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from catalog.models import Profile, Customization, Plan, PileGrillageFoundationWorkPrices, WallMaterialType, ClassBLight, MarkD, MarkM, RockWallMaterialStandardSize, Application, ProductBrand, TradeMark, TradeMarkSeries, DirectProducer, ProviderActivityType, TaxSystemType, Provider, ProviderOutlet, City, RockWallMaterialUnit, RockWallMaterialPricePosition
+from catalog.models import MasonryBonding, Profile, Customization, Plan, PileGrillageFoundationWorkPrices, WallMaterialType, ClassBLight, MarkD, MarkM, RockWallMaterialStandardSize, Application, ProductBrand, TradeMark, TradeMarkSeries, DirectProducer, ProviderActivityType, TaxSystemType, Provider, ProviderOutlet, City, RockWallMaterialUnit, RockWallMaterialPricePosition
 
 admin.site.register(WallMaterialType)
 admin.site.register(ClassBLight)
@@ -19,16 +19,15 @@ admin.site.register(Provider)
 admin.site.register(ProviderOutlet)
 admin.site.register(City)
 admin.site.register(Customization)
-#admin.site.register(UserSettings)
+admin.site.register(MasonryBonding)
 
 @admin.register(RockWallMaterialUnit) 
 class RockWallMaterialUnitAdmin(admin.ModelAdmin):
-    list_display = ('body_type', 'brick_type', 'standard_size', 'primary_or_additional')
-
+    list_display = ('colloquial_name', 'greater_bed_size', 'minor_bed_size', 'height')
 
 @admin.register(RockWallMaterialStandardSize) 
 class RockWallMaterialStandardSizeAdmin(admin.ModelAdmin):
-    list_display = ('size_type', 'name', 'identifier')
+    list_display = ('name', 'greater_bed_size')
 
 @admin.register(RockWallMaterialPricePosition) 
 class RockWallMaterialPricePositionAdmin(admin.ModelAdmin):

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from catalog.models import Profile, Customization, Plan, PileGrillageFoundationWorkPrices, WallMaterialType, ClassBLight, MarkD, MarkM, RockWallMaterialStandardSize, Application, ProductBrand, TradeMark, TradeMarkSeries, DirectProducer, ProviderActivityType, TaxSystemType, Provider, ProviderOutlet, City, RockWallMaterialUnit, RockWallMaterialPricePosition
+from catalog.models import MasonryBonding, Profile, Customization, Plan, PileGrillageFoundationWorkPrices, WallMaterialType, ClassBLight, MarkD, MarkM, RockWallMaterialStandardSize, Application, ProductBrand, TradeMark, TradeMarkSeries, DirectProducer, ProviderActivityType, TaxSystemType, Provider, ProviderOutlet, City, RockWallMaterialUnit, RockWallMaterialPricePosition
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.contrib.auth.decorators import permission_required
@@ -95,6 +95,22 @@ def edit_scheme(request, pk):
     }
 
     return render(request, 'catalog/edit_scheme.html', context)
+
+
+def edit_variant(request, pk):
+    """View function for add new variant of a specific plan"""
+
+    plan = get_object_or_404(Plan, pk=pk)
+    plan_title = plan.title
+    plan_id = plan.id
+    #num_instances_available=BookInstance.objects.filter(status__exact='a').count()
+
+    context = {
+        'plan_title': plan_title,
+        'plan_id': plan_id,
+    }
+
+    return render(request, 'catalog/edit_variant.html', context)
 
 
 # Создаем нового пользователя
