@@ -8,21 +8,21 @@ from django.contrib.auth.models import User
 # Добавим классу пользователя новые поля, в которых будем хранить настройки
 
 
-class Application(models.Model):
-    """Модель, представляющая область применения материала, например, стеновой, облицовочный, цоколь"""
-    identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
-                                  help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
-    name = models.CharField(
-        max_length=200, help_text='Введите применение материала, например, стеновой, облицовочный, цоколь')
+# class Application(models.Model):
+#     """Модель, представляющая область применения материала, например, стеновой, облицовочный, цоколь"""
+#     identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
+#                                   help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
+#     name = models.CharField(
+#         max_length=200, help_text='Введите применение материала, например, стеновой, облицовочный, цоколь')
 
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Область применения материала'
-        verbose_name_plural = 'Области применения материалов'
+#     class Meta:
+#         ordering = ('name',)
+#         verbose_name = 'Область применения материала'
+#         verbose_name_plural = 'Области применения материалов'
 
-    def __str__(self):
-        """String for representing the Model object."""
-        return self.name
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return self.name
 
 # class RockMaterialTech(models.Model):
 #     """Модель, представляющая технологию производства каменного стенового материала, например, газобетон, полнотелый, керамический"""
@@ -39,33 +39,33 @@ class Application(models.Model):
 #         return self.name
 
 
-class WallMaterialType(models.Model):
-    """Модель, представляющая тип стен дома. Используется для выбора материала несущей части стены """
-    identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
-                                  help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
-    name = models.CharField(
-        max_length=200, help_text='Введите тип материала стены с точки зрения пользователя: кирпич полнотелый, газобетон и т.д.')
+# class WallMaterialType(models.Model):
+#     """Модель, представляющая тип стен дома. Используется для выбора материала несущей части стены """
+#     identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
+#                                   help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
+#     name = models.CharField(
+#         max_length=200, help_text='Введите тип материала стены с точки зрения пользователя: кирпич полнотелый, газобетон и т.д.')
 
-    COMMON_TYPE = (
-        ('r', 'Каменый'),
-        ('w', 'Деревянный'),
-    )
+#     COMMON_TYPE = (
+#         ('r', 'Каменый'),
+#         ('w', 'Деревянный'),
+#     )
 
-    common_wall_type = models.CharField(
-        max_length=1,
-        choices=COMMON_TYPE,
-        default='r',
-        help_text='Выберите: деревянный или каменный',
-    )
+#     common_wall_type = models.CharField(
+#         max_length=1,
+#         choices=COMMON_TYPE,
+#         default='r',
+#         help_text='Выберите: деревянный или каменный',
+#     )
 
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Тип несущей части стены'
-        verbose_name_plural = 'Типы несущей части стены'
+#     class Meta:
+#         ordering = ('name',)
+#         verbose_name = 'Тип несущей части стены'
+#         verbose_name_plural = 'Типы несущей части стены'
 
-    def __str__(self):
-        """String for representing the Model object."""
-        return f'{self.name} ({self.identifier})'
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return f'{self.name} ({self.identifier})'
 
 
 class ProductBrand(models.Model):
@@ -83,40 +83,40 @@ class ProductBrand(models.Model):
         return self.name
 
 
-class TradeMark(models.Model):
-    """Модель, представляющая торговую марку, например, Porotherm, Kerama и т.д."""
-    brand = models.ForeignKey(
-        'ProductBrand', on_delete=models.CASCADE, null=True)
-    name = models.CharField(unique=True, max_length=200,
-                            help_text='Введите торговую марку, например, Porotherm, Kerama и т.д.')
+# class TradeMark(models.Model):
+#     """Модель, представляющая торговую марку, например, Porotherm, Kerama и т.д."""
+#     brand = models.ForeignKey(
+#         'ProductBrand', on_delete=models.CASCADE, null=True)
+#     name = models.CharField(unique=True, max_length=200,
+#                             help_text='Введите торговую марку, например, Porotherm, Kerama и т.д.')
 
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Торговая марка'
-        verbose_name_plural = 'Торговые марки'
+#     class Meta:
+#         ordering = ('name',)
+#         verbose_name = 'Торговая марка'
+#         verbose_name_plural = 'Торговые марки'
 
-    def __str__(self):
-        """String for representing the Model object."""
-        return self.name
-
-
-class TradeMarkSeries(models.Model):
-    """Модель, представляющая серию товаров какой либо торговой марки"""
-    trademark = models.ForeignKey('TradeMark', on_delete=models.CASCADE)
-    name = models.CharField(unique=True, max_length=200,
-                            help_text='Введите название серии товаров, если она есть')
-
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Товарная серия'
-        verbose_name_plural = 'Товарные серии (какой-либо марки)'
-
-    def __str__(self):
-        """String for representing the Model object."""
-        return self.name
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return self.name
 
 
-class DirectProducer(models.Model):
+# class TradeMarkSeries(models.Model):
+#     """Модель, представляющая серию товаров какой либо торговой марки"""
+#     trademark = models.ForeignKey('TradeMark', on_delete=models.CASCADE)
+#     name = models.CharField(unique=True, max_length=200,
+#                             help_text='Введите название серии товаров, если она есть')
+
+#     class Meta:
+#         ordering = ('name',)
+#         verbose_name = 'Товарная серия'
+#         verbose_name_plural = 'Товарные серии (какой-либо марки)'
+
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return self.name
+
+
+class Producer(models.Model):
     """Модель, представляющая завод - непосредственного производителя материала. Например, Кощаковский завод, Чайковский и т.д. Какой-нибудь местный завод может производить под маркой Wienerberger например"""
     name = models.CharField(unique=True, max_length=200,
                             help_text='Введите производителя материала. Например, Кощаковский завод, Чайковский и т.д.')
@@ -131,24 +131,67 @@ class DirectProducer(models.Model):
         return self.name
 
 
-class BinderSolutionType(models.Model):
-    """Модель, представляющая тип связующего раствора"""
-    identifier = models.CharField(unique = True, default = 'default_identifiter', max_length=200, help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
-    name = models.CharField(max_length=200, help_text='Введите тип связующего раствора. Например, цементный раствор, клей на цементной основе и т.д.')
+class BinderSolution(models.Model):
+    """Специальные кладочные растворы, клеи"""
+    name = models.CharField(
+        max_length=200, help_text='Название материала как в спецификации изготовителя')
 
     class Meta:
         ordering = ('name',)
-        verbose_name = 'Тип связующего раствора'
-        verbose_name_plural = 'Типы связующих растворов'
+        verbose_name = 'Специальный кладочный клей, растворы'
+        verbose_name_plural = 'Специальные кладочные клеи, растворы'
 
     def __str__(self):
         """String for representing the Model object."""
         return self.name
 
+
+class MasonryReinforcementMaterial(models.Model):
+    """Специальные сетки, арматура, специально выпускаемые для данного материала"""
+    name = models.CharField(
+        max_length=200, help_text='Специальная сетка или арматура, специально выпускаемая для армирования кладки из данного материала. Название как в спецификации изготовителя')
+
+    FORM = (
+        ('grid', 'Сетка'),
+        ('armature', 'Арматура'),
+    )
+
+    form = models.CharField(
+        max_length=8,
+        choices=FORM,
+        default='grid',
+        help_text='Сетка или арматура',
+    )
+
+    USAGE = (
+        ('fasade_arm', 'Армирование фасадной кладки'),
+        ('fasade_binding', 'В качестве гибких связей'),
+        ('masonry_arm', 'Армирование кладки'),
+    )
+
+    usage = models.CharField(
+        max_length=14,
+        choices=USAGE,
+        default='masonry_arm',
+        help_text='Область применения', так не пойдет, нужен множественный выбор
+    )
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Специальная сетка или арматура для армирования кладки'
+        verbose_name_plural = 'Специальные сетки или арматура для армирования кладки'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.name
+
+
 class WallReinforcementType(models.Model):
     """Модель, представляющая тип армирования стены из какого-л материала"""
-    identifier = models.CharField(unique = True, default = 'default_identifier', max_length=200, help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
-    name = models.CharField(max_length=200, help_text='Введите тип армирования')
+    identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
+                                  help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
+    name = models.CharField(
+        max_length=200, help_text='Введите тип армирования')
 
     class Meta:
         ordering = ('name',)
@@ -158,6 +201,7 @@ class WallReinforcementType(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return self.name
+
 
 class ProviderActivityType(models.Model):
     """Модель, представляющая доступные наименования видов деятельности: проектирование, строительный подряд, поставка/продажа материалов, юридические услуги"""
@@ -264,31 +308,31 @@ class ProviderOutlet(models.Model):
         return f'{self.name.name} ({self.city.name}). {self.local_name}'
 
 
-class RockWallMaterialStandardSize(models.Model):
-    """Модель описывает стандартный размер общепринятого стенового каменного материала"""
-    # identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
-    #                               help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
-    name = models.CharField(
-        max_length=200, help_text='Введите общепринятую классификацию размера или название')
-    greater_bed_size = models.IntegerField(blank=True, null=True, help_text='Больший размер постели')
-    minor_bed_size = models.IntegerField(blank=True, null=True, help_text='Меньший размер постели')
-    height = models.IntegerField(blank=True, null=True, help_text='Высота')
+# class RockWallMaterialStandardSize(models.Model):
+#     """Модель описывает стандартный размер общепринятого стенового каменного материала"""
+#     # identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
+#     #                               help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
+#     name = models.CharField(
+#         max_length=200, help_text='Введите общепринятую классификацию размера или название')
+#     greater_bed_size = models.IntegerField(blank=True, null=True, help_text='Больший размер постели')
+#     minor_bed_size = models.IntegerField(blank=True, null=True, help_text='Меньший размер постели')
+#     height = models.IntegerField(blank=True, null=True, help_text='Высота')
 
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Размер каменного материала'
-        verbose_name_plural = 'Размеры каменных материалов'
+#     class Meta:
+#         ordering = ('name',)
+#         verbose_name = 'Размер каменного материала'
+#         verbose_name_plural = 'Размеры каменных материалов'
 
-    def __str__(self):
-        """String for representing the Model object."""
-        return f'{self.name} ({self.max_bed_size})'
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return f'{self.name} ({self.max_bed_size})'
 
 
 class MarkM(models.Model):
     """Модель описывает марки материалов с индексом М. Например, марка М300 или М125"""
     identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
                                   help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
-    name = models.CharField(max_length=200, help_text='Введите марку М')
+    name = models.CharField(max_length=5, help_text='Введите марку М')
 
     class Meta:
         ordering = ('name',)
@@ -304,7 +348,7 @@ class MarkD(models.Model):
     """Модель описывает марки материалов с индексом D. Обычно это марка газобетона по средней плотности. Например, D1000"""
     identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
                                   help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
-    name = models.CharField(max_length=200, help_text='Введите марку D')
+    name = models.CharField(max_length=5, help_text='Введите марку D')
 
     class Meta:
         ordering = ('name',)
@@ -316,11 +360,28 @@ class MarkD(models.Model):
         return f'{self.name} ({self.identifier})'
 
 
+class MarkF(models.Model):
+    """Модель описывает марки материалов морозостойкости F. Обычно это марка газобетона по средней плотности. Например, F50"""
+    identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
+                                  help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
+    name = models.CharField(
+        max_length=5, help_text='Введите марку морозостойкости F')
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Марка морозостойкости F'
+        verbose_name_plural = 'Марки морозостойкости F'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.name} ({self.identifier})'
+
+
 class ClassBLight(models.Model):
     """Модель описывает классы материалов с индексом В. Обычно это марка бетона, газобетона. Например, В3,5 или В20"""
     identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
                                   help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
-    name = models.CharField(max_length=200, help_text='Введите класс В')
+    name = models.CharField(max_length=5, help_text='Введите класс В')
 
     class Meta:
         ordering = ('name',)
@@ -330,6 +391,24 @@ class ClassBLight(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.name} ({self.identifier})'
+
+
+class ClassАverageDensity(models.Model):
+    """Модель описывает классы материалов по средней плотности"""
+    identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
+                                  help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
+    name = models.CharField(
+        max_length=5, help_text='Введите класс средней плотности')
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Класс средней плотности'
+        verbose_name_plural = 'Классы средней плотности'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.name} ({self.identifier})'
+
 
 # class Standard(models.Model):
 #     """Модель описывает строительные госты"""
@@ -345,41 +424,85 @@ class ClassBLight(models.Model):
 #         """String for representing the Model object."""
 #         return f'{self.name} ({self.identifier})'
 
-# class StandardArea(models.Model):
-#     """Модель описывает сферы строительных гостов"""
-#     name = models.CharField(max_length=200, help_text='Введите наименование сферы ГОСТ')
 
-#     class Meta:
-#         ordering = ('name',)
-#         verbose_name = 'Сфера применения ГОСТ'
-#         verbose_name_plural = 'Сферы применения ГОСТ'
 
-#     def __str__(self):
-#         """String for representing the Model object."""
-#         return f'{self.name} ({self.identifier})'
+class NFSize(models.Model):
+    """Модель описывает стандартные размеры НФ"""
+    identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
+                                  help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
+    name = models.CharField(
+        max_length=200, help_text='Введите название размера')
+    greater_bed_size = models.IntegerField(
+        blank=True, null=True, help_text='Больший размер постели (длина), мм')
+    minor_bed_size = models.IntegerField(
+        blank=True, null=True, help_text='Меньший размер постели (ширина), мм')
+    height = models.IntegerField(
+        blank=True, null=True, help_text='Высота (толщина), мм')
 
-# class NFSize(models.Model):
-#     """Модель описывает стандартные размеры НФ"""
-#     name = models.CharField(max_length=200, help_text='Введите название размера')
-#     max_bed_size = models.IntegerField(blank=True, null=True, help_text='Максимальный размер постели')
-#     min_bed_size = models.IntegerField(blank=True, null=True, help_text='Минимальный размер постели')
-#     height = models.IntegerField(blank=True, null=True, help_text='Высота')
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Размер НФ'
+        verbose_name_plural = 'Размеры НФ'
 
-#     class Meta:
-#         ordering = ('name',)
-#         verbose_name = 'Размер НФ'
-#         verbose_name_plural = 'Размеры НФ'
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.name} ({self.greater_bed_size}, {self.minor_bed_size}, {self.height})'
 
-#     def __str__(self):
-#         """String for representing the Model object."""
-#         return f'{self.name} ({self.max_bed_size}, {self.min_bed_size}, {self.height})'
 
 class MasonryBonding(models.Model):
     """Модель хранящая способы скрепления кладки"""
-    identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
-                                  help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
-    name = models.CharField(max_length=200, help_text='Краткое название способа скрепления кладки')
-    description = models.CharField(max_length=200, help_text='Подробное описание способа скрепления кладки')
+    name = models.CharField(
+        max_length=200, help_text='Краткое название способа скрепления кладки')
+
+    MORTAR = (
+        ('cement', 'Цементный раствор'),
+        ('clue', 'Специальный клей'),
+    )
+
+    mortar = models.CharField(
+        max_length=6,
+        choices=MORTAR,
+        default='cement',
+        help_text='Тип раствора',
+    )
+    
+    REINFORCEMENT = (
+        ('metal', 'Металлическая сетка'),
+        ('plastic', 'Пластиковая сетка'),
+        ('armature', 'Металлическая арматура'),
+        ('no', 'Нет'),
+    )
+
+    reinforcement = models.CharField(
+        max_length=8,
+        choices=REINFORCEMENT,
+        default='metal',
+        help_text='Армирование',
+    )    
+
+    REINFORCING_BELT = (
+        ('yes', 'Требуется'),
+        ('no', 'Не требуется'),
+    )
+
+    reinforcing_belt = models.CharField(
+        max_length=3,
+        choices=REINFORCING_BELT,
+        default='no',
+        help_text='Армопояс',
+    )
+
+    LOAD_DISTRIBUTION = (
+        ('yes', 'Требуется'),
+        ('no', 'Не требуется'),
+    )
+
+    load_distribution = models.CharField(
+        max_length=3,
+        choices=LOAD_DISTRIBUTION,
+        default='no',
+        help_text='Усиление для распределения нагрузки',
+    )
 
     class Meta:
         ordering = ('name',)
@@ -391,54 +514,34 @@ class MasonryBonding(models.Model):
         return f'{self.name} ({self.identifier})'
 
 
-# class RockWallMaterialColloquialName(models.Model):
-#     """Обычное общепринятое название материала - кирпич красный полнотелый, блок газобетонный"""
+class RockWallMaterialSizeGrid(models.Model):
+    """Модель, содержащая названия размерных сеток"""
+    identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
+                                  help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
+    name = models.CharField(
+        max_length=200, help_text='Введите название группы материалов с одинаковой размерной сеткой')
+
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Группа материалов с одинаковой размерной сеткой'
+        verbose_name_plural = 'Группы материалов с одинаковой размерной сеткой'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.name} ({self.identifier})'
+
+# class MasonrySystem(models.Model):
+#     """Модель описывает системы кладок для материалов, где они есть"""
 #     identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
 #                                   help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
-#     name = models.CharField(
-#         max_length=200, help_text='Введите общепринятое название материала - кирпич красный полнотелый, блок газобетонный')
-
-#     PURPOSE = (
-#         ('w', 'Стеновой'),
-#         ('f', 'Фасадный'),
-#         ('d', 'Стеновой с декоративной гранью'),
-#     )
-
-#     purpose = models.CharField(
-#         max_length=1,
-#         choices=PURPOSE,
-#         default='w',
-#         help_text='Назначение: стеновой, фасадный',
-#     )
-
-#     SIZE_TYPE = (
-#         ('brick', 'Кирпич'),
-#         ('block', 'Блок'),
-#     )
-
-#     size_type = models.CharField(
-#         max_length=5,
-#         choices=SIZE_TYPE,
-#         # default='p',
-#         help_text='Типоразмер: кирпич или блок',
-#     )
-
-#     BODY_TYPE = (
-#         ('solid', 'Полнотелый'),
-#         ('hollow', 'Пустотелый'),
-#     )
-
-#     body_type = models.CharField(
-#         max_length=6,
-#         choices=BODY_TYPE,
-#         default='solid',
-#         help_text='Пустотелый или полнотелый',
-#     )
+#     size_grid = models.ForeignKey(RockWallMaterialSizeGrid, help_text='Группа материалов с одинаковой размерной сеткой', on_delete=models.SET_NULL, null=True, blank=True)
+#     name = models.CharField(max_length=200, help_text='Наименование системы кладки, например, Porotherm 44')
 
 #     class Meta:
 #         ordering = ('name',)
-#         verbose_name = 'Общепринятое название материала'
-#         verbose_name_plural = 'Общепринятое название материала'
+#         verbose_name = 'Система кладки'
+#         verbose_name_plural = 'Системы кладки'
 
 #     def __str__(self):
 #         """String for representing the Model object."""
@@ -448,19 +551,10 @@ class MasonryBonding(models.Model):
 class RockWallMaterialUnit(models.Model):
     """Модель описывает единицу стенового каменного материала, конкретное изделие конкретного производителя. Но без цены."""
 
-    COLLOQUIAL_NAME = (
-        ('keramik_hollow_brick', 'Керамический пустотелый кирпич'),
-        ('aerated_concrete_block', 'Газобетонный блок'),
-    )
-    
-    colloquial_name = models.CharField(
-        max_length=30,
-        choices=COLLOQUIAL_NAME,
-        # default='keramik_hollow_brick',
-        help_text='Общепринятое название материала',
-    )
-
-    name = models.CharField(max_length=200, help_text='Торговое название, если есть', blank=True)
+    name = models.CharField(
+        max_length=200, help_text='Торговое название, если есть', blank=True)
+    size_grid = models.ForeignKey(
+        RockWallMaterialSizeGrid, help_text='Группа материалов с одинаковой размерной сеткой', on_delete=models.SET_NULL, null=True, blank=True)
     # standard = models.ForeignKey('Standard', on_delete=models.CASCADE,
     #                                   help_text='Если данное изделие соответствует ГОСТ, выберите его', blank=True, null=True)
 
@@ -470,11 +564,15 @@ class RockWallMaterialUnit(models.Model):
     #                                    help_text='Выберите тип тела (полнотелый, пустотелый)', blank=True, null=True)
     # body_type = models.ForeignKey('RockWallMaterialBodyType', on_delete=models.CASCADE,
     #                               help_text='Выберите тип тела (полнотелый, пустотелый)', blank=True, null=True)
-    greater_bed_size = models.IntegerField(blank=True, null=True, help_text='Больший размер постели, мм')
-    minor_bed_size = models.IntegerField(blank=True, null=True, help_text='Меньший размер постели, мм')
-    height = models.IntegerField(blank=True, null=True, help_text='Высота, мм, или наименьший размер, если постель не очевидна')
-    # standart_size = models.ForeignKey('RockWallMaterialStandardSize', help_text='Выбрите размер НФ, которому соответствует изделие', on_delete=models.SET_NULL, null=True, blank=True)
-    # лишнее. проще определять потом автоматически
+    greater_bed_size = models.IntegerField(
+        blank=True, null=True, help_text='Больший размер постели (длина), мм')
+    minor_bed_size = models.IntegerField(
+        blank=True, null=True, help_text='Меньший размер постели (ширина), мм')
+    height = models.IntegerField(
+        blank=True, null=True, help_text='Высота (толщина), мм, или наименьший размер, если постель не очевидна')
+    nf_size = models.ForeignKey('NFSize', help_text='Выбрите размер НФ, которому соответствует изделие',
+                                on_delete=models.SET_NULL, null=True, blank=True)
+    # лишнее. проще определять потом автоматически. но так проще поиск пока сделать
 
     mark_m = models.ForeignKey(
         MarkM, help_text='Выберите стандартную марку М для данного материала, если есть', on_delete=models.SET_NULL, null=True, blank=True)
@@ -482,18 +580,27 @@ class RockWallMaterialUnit(models.Model):
         MarkD, help_text='Выберите стандартную марку D для данного материала, если есть', on_delete=models.SET_NULL, null=True, blank=True)
     class_b = models.ForeignKey(
         ClassBLight, help_text='Выберите стандартный класс В для данного материала, если есть', on_delete=models.SET_NULL, null=True, blank=True)
+    mark_f = models.ForeignKey(
+        MarkF, help_text='Выберите стандартную марку морозостойкости F для данного материала, если есть', on_delete=models.SET_NULL, null=True, blank=True)
+    class_average_density = models.ForeignKey(
+        ClassАverageDensity, help_text='Выберите стандартный класс средней плотности для данного материала, если есть', on_delete=models.SET_NULL, null=True, blank=True)
+    # masonry_system = models.ForeignKey(
+    #     MasonrySystem, help_text='Выберите систему кладки, если есть', on_delete=models.SET_NULL, null=True, blank=True)
+
     # wall_material_type = models.ManyToManyField(WallMaterialType, help_text='Выберите тип стены, к которому отностится материал')
     # application = models.ManyToManyField(Application, help_text='Выберите область применения материала')
-    binding_solution = models.ForeignKey(BinderSolutionType, help_text='Выберите тип специального клея для данного материала', on_delete=models.SET_NULL, null=True, blank=True)
-    bounding = models.ManyToManyField(MasonryBonding, help_text='Выберите способы скрепления кладки', blank=True)
+    binding_solution = models.ManyToManyField(
+        BinderSolution, help_text='Выберите специальный клей для данного материала', on_delete=models.SET_NULL, null=True, blank=True)
+    bounding = models.ManyToManyField(
+        MasonryBonding, help_text='Выберите способы скрепления кладки', blank=True)
     thermal_conductivity = models.IntegerField(
         help_text='Введите коэффициент теплопроводности', blank=True, null=True)
     producer = models.ForeignKey(
-        'DirectProducer', help_text='Выберите завод изготовитель', on_delete=models.SET_NULL, null=True, blank=True)
+        'Producer', help_text='Выберите завод изготовитель', on_delete=models.SET_NULL, null=True, blank=True)
     brand = models.ForeignKey(
         'ProductBrand', help_text='Выберите основной бренд (например, Wienerberger)', on_delete=models.SET_NULL, null=True, blank=True)
-    trade_mark = models.ForeignKey(
-        'TradeMark', help_text='Выберите торговую марку изделия (например, Porotherm 44)', on_delete=models.SET_NULL, null=True, blank=True)
+    # trade_mark = models.ForeignKey(
+    #     'TradeMark', help_text='Выберите торговую марку изделия (например, Porotherm 44)', on_delete=models.SET_NULL, null=True, blank=True)
 
     DOUBLE_INSTALL = (
         ('no', 'Нет'),
@@ -507,17 +614,6 @@ class RockWallMaterialUnit(models.Model):
         help_text='Допустима ли установка и на постель и на ребро',
     )
 
-    SIZE_GRID = (
-        ('nf', 'Сетка НФ'),
-        ('brand', 'Собственная бренда'),
-    )
-
-    size_grid = models.CharField(
-        max_length=5,
-        choices=SIZE_GRID,
-        help_text='Сетка размеров',
-    )
-
     WORK_SIZE = (
         ('greater', 'Только больший размер'),
         ('minor', 'Только меньший размер постели'),
@@ -527,7 +623,8 @@ class RockWallMaterialUnit(models.Model):
 
     work_size = models.CharField(
         max_length=7,
-        choices=SIZE_GRID,
+        choices=WORK_SIZE,
+        default='greater',
         help_text='Какой размер формирует толщину стены',
     )
 
@@ -580,13 +677,26 @@ class RockWallMaterialUnit(models.Model):
         help_text='Тип элемента: основной или доборный',
     )
 
+    
+    THICKNESS_CALC = (
+        ('mm', 'Только мм'),
+        ('both', 'И мм. и шт.'),
+    )
+
+    thickness_calc = models.CharField(
+        max_length=4,
+        choices=THICKNESS_CALC,
+        default='mm',
+        help_text='Толщину стены можно считать в мм. и в штуках (н.р. в кирпичах) или строго в мм. (для материалов, которые можно ложить разными сторонами)',
+    )
+
     class Meta:
         verbose_name = 'Единица стенового материала'
         verbose_name_plural = 'Единицы стеновых материалов'
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.colloquial_name}, {self.greater_bed_size}, {self.minor_bed_size}, {self.height}'
+        return f'{self.size_grid.name}, {self.greater_bed_size}, {self.minor_bed_size}, {self.height}'
 
     def get_absolute_url(self):
         """Returns the url to access a detail record for this material."""
