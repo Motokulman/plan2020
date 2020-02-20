@@ -136,7 +136,7 @@ canvas_0.addEventListener('click', function (e) {
             break;
         case 'none': // выделяем элементы кликами:
             var selectedEl = selectedElements.findIndex(sel => sel == defineElement()); // ищем элемент, на который только что кликнули, в массиве выделенных элементов
-            console.log("defineElement() = ", defineElement());
+            //console.log("defineElement() = ", defineElement());
             if (selectedEl >= 0) {
                 // var a = selectedElements.findIndex(defineElement());
                 selectedElements.splice(selectedEl, 1);

@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
 
+
 # Добавим классу пользователя новые поля, в которых будем хранить настройки
 
 
@@ -24,48 +25,61 @@ from django.contrib.auth.models import User
 #         """String for representing the Model object."""
 #         return self.name
 
-# class RockMaterialTech(models.Model):
-#     """Модель, представляющая технологию производства каменного стенового материала, например, газобетон, полнотелый, керамический"""
-#     identifier = models.CharField(unique = True, default = 'default_identifier', max_length=200, help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
-#     name = models.CharField(max_length=200, help_text='Введите технологию производства каменного стенового материала, например, газобетон, полнотелый, керамический')
+class RockWallMaterial(models.Model):
+    """Модель, представляющая тип материала, например, краснвй кирпич любой, Поротерм 44 и т.д."""
+    var_name = models.CharField(unique = True, default = 'default_identifier', max_length=200, help_text='Имя переменной для использования в коде')
+    name = models.CharField(max_length=200, help_text='Название')
 
-#     class Meta:
-#         ordering = ('name',)
-#         verbose_name = 'Технология производства материала'
-#         verbose_name_plural = 'Технологии производства материалов'
+    work_size = models.IntegerField(
+        blank=True, null=True, help_text='Рабочий (формирующий толщину стены) размер, мм')
+    minor_bed_size = models.IntegerField(
+        blank=True, null=True, help_text='Меньший размер постели (ширина), мм')
+    height = models.IntegerField(
+        blank=True, null=True, help_text='Высота (толщина), мм')
 
-#     def __str__(self):
-#         """String for representing the Model object."""
-#         return self.name
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Стеновые материалы для использования в расчетах'
+        verbose_name_plural = 'Стеновые материалы для использования в расчетах'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.name
 
 
-# class WallMaterialType(models.Model):
-#     """Модель, представляющая тип стен дома. Используется для выбора материала несущей части стены """
-#     identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
-#                                   help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
-#     name = models.CharField(
-#         max_length=200, help_text='Введите тип материала стены с точки зрения пользователя: кирпич полнотелый, газобетон и т.д.')
+class MasonyStrengthSolutions(models.Model):
+    """Модель, представляющая минимальную толщину стен для Обеспечения прочности: требуемая толщина при заданной этажности.  """
+    material = models.ForeignKey(
+        RockWallMaterial, on_delete=models.SET_NULL, null=True, blank=True)
 
-#     COMMON_TYPE = (
-#         ('r', 'Каменый'),
-#         ('w', 'Деревянный'),
-#     )
+    mark_m_from = models.ForeignKey(
+        MarkM, help_text='Марка М, от', on_delete=models.SET_NULL, null=True, blank=True)
 
-#     common_wall_type = models.CharField(
-#         max_length=1,
-#         choices=COMMON_TYPE,
-#         default='r',
-#         help_text='Выберите: деревянный или каменный',
-#     )
+    mark_m_to = models.ForeignKey(
+        MarkM, help_text='Марка М, до', on_delete=models.SET_NULL, null=True, blank=True)
 
-#     class Meta:
-#         ordering = ('name',)
-#         verbose_name = 'Тип несущей части стены'
-#         verbose_name_plural = 'Типы несущей части стены'
+    thickness_mm = models.IntegerField(blank=True, null=True, help_text='Необходимая толщина в мм')
 
-#     def __str__(self):
-#         """String for representing the Model object."""
-#         return f'{self.name} ({self.identifier})'
+    FLOORS = (
+        ('1', '1'),
+        ('2', '2'),
+    )
+
+    floors = models.CharField(
+        max_length=1,
+        choices=FLOORS,
+        default='1',
+        help_text='Выберите этажность,
+    )
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Техническое решение по прочности стены'
+        verbose_name_plural = 'Технические решения по прочности стен'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.name} ({self.identifier})'
 
 
 class ProductBrand(models.Model):
@@ -549,6 +563,34 @@ class PorothermSystem(models.Model):
 class RockWallMaterialUnit(models.Model):
     """Модель описывает единицу стенового каменного материала, конкретное изделие конкретного производителя. Но без цены."""
 
+    NAME = (
+        ('brick', 'Кирпич'),
+        ('rock', 'Камень'),
+        ('block', 'Блок'),
+    )
+
+    name = models.CharField(
+        max_length=5,
+        choices=NAME,
+        default='brick',
+        help_text='Вид изделия',
+    )
+
+    MATERIAL = (
+        ('clay', 'глиняный'),
+        ('silicate', 'силикатный'),
+        ('clinker', 'клинкерный'),
+        ('gas_concrete', 'газобетонный'),
+        ('ceramsite_concrete', 'керамзитобетонный'),
+    )
+
+    material = models.CharField(
+        max_length=18,
+        choices=MATERIAL,
+        default='clay',
+        help_text='Материал изделия',
+    )
+
     # name = models.CharField(
     #     max_length=200, help_text='Торговое название, если есть', blank=True)
     # size_grid = models.ForeignKey(
@@ -563,16 +605,104 @@ class RockWallMaterialUnit(models.Model):
     # body_type = models.ForeignKey('RockWallMaterialBodyType', on_delete=models.CASCADE,
     #                               help_text='Выберите тип тела (полнотелый, пустотелый)', blank=True, null=True)
     greater_bed_size = models.IntegerField(
-        blank=True, null=True, help_text='Больший размер постели (длина), мм')
+        blank=True, null=True, help_text='Больший размер постели (длина), мм. (размер А)')
     minor_bed_size = models.IntegerField(
-        blank=True, null=True, help_text='Меньший размер постели (ширина), мм')
+        blank=True, null=True, help_text='Меньший размер постели (ширина), мм. (размер В)')
     height = models.IntegerField(
-        blank=True, null=True, help_text='Высота (толщина), мм, или наименьший размер, если постель не очевидна')
-    nf_size = models.ForeignKey('NFSize', help_text='Выбрите размер НФ, которому соответствует изделие',
-                                on_delete=models.SET_NULL, null=True, blank=True)
+        blank=True, null=True, help_text='Высота (толщина), мм. (размер С), или наименьший размер, если постель не очевидна')
+
+    MIN_PICS = (
+        ('1', '1'),
+        ('1.5', '1,5'),
+        ('2', '2'),
+        ('2.5', '2,5'),
+        ('3', '3'),
+        ('no', 'Не применимо'),
+    )
+    
+    min_pix_1_floor = models.CharField(
+        max_length=3,
+        choices=MIN_PICS,
+        default='no',
+        help_text='Минимальная тощина в кирпичах для 1 этажного дома',
+    )    
+
+    min_pix_2_floor = models.CharField(
+        max_length=3,
+        choices=MIN_PICS,
+        default='no',
+        help_text='Минимальная тощина в кирпичах для 2-х этажного дома',
+    )
+    
+    min_pix_3_floor = models.CharField(
+        max_length=3,
+        choices=MIN_PICS,
+        default='no',
+        help_text='Минимальная тощина в кирпичах для 3-х этажного дома',
+    )
+
+    WORK_SIZE = (
+        ('a', 'А'),
+        ('b', 'В'),
+        ('c', 'С'),
+        ('no', 'Нет'),
+    )
+
+    NUM_FLOORS = (
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+        ('0', 'Нет'),
+    )
+
+    work_size_1 = models.CharField(
+        max_length=2,
+        choices=WORK_SIZE,
+        default='no',
+        help_text='Выберите первый рабочий размер, если есть',
+    )
+
+    num_floors_on_work_size_1 = models.CharField(
+        max_length=1,
+        choices=NUM_FLOORS,
+        default='0',
+        help_text='Сколько этажей можно постороить на этом размере',
+    )
+
+    work_size_2 = models.CharField(
+        max_length=2,
+        choices=WORK_SIZE,
+        default='no',
+        help_text='Выберите второй рабочий размер, если есть',
+    )
+
+    num_floors_on_work_size_2 = models.CharField(
+        max_length=1,
+        choices=NUM_FLOORS,
+        default='0',
+        help_text='Сколько этажей можно постороить на этом размере',
+    )
+
+    work_size_3 = models.CharField(
+        max_length=2,
+        choices=WORK_SIZE,
+        default='no',
+        help_text='Выберите третий рабочий размер, если есть',
+    )
+
+    num_floors_on_work_size_3 = models.CharField(
+        max_length=1,
+        choices=NUM_FLOORS,
+        default='0',
+        help_text='Сколько этажей можно постороить на этом размере',
+    )
+
+
+    # nf_size = models.ForeignKey('NFSize', help_text='Выбрите размер НФ, которому соответствует изделие',
+    #                             on_delete=models.SET_NULL, null=True, blank=True)
     # лишнее. проще определять потом автоматически. но так проще поиск пока сделать
-    quantity_per_pallet = models.IntegerField(
-        blank=True, null=True, help_text='Количество на поддоне')
+    # quantity_per_pallet = models.IntegerField(
+    #     blank=True, null=True, help_text='Количество на поддоне') это пусть каждый продавец пишет
 
     mark_m = models.ForeignKey(
         MarkM, help_text='Выберите стандартную марку М для данного материала, если есть', on_delete=models.SET_NULL, null=True, blank=True)
@@ -595,59 +725,20 @@ class RockWallMaterialUnit(models.Model):
         MasonryBonding, help_text='Выберите способы скрепления кладки', blank=True)
     thermal_conductivity = models.IntegerField(
         help_text='Введите коэффициент теплопроводности', blank=True, null=True)
-    producer = models.ForeignKey(
-        'Producer', help_text='Выберите завод изготовитель', on_delete=models.SET_NULL, null=True, blank=True)
+    # producer = models.ForeignKey(
+    #     'Producer', help_text='Выберите завод изготовитель', on_delete=models.SET_NULL, null=True, blank=True)
     brand = models.ForeignKey(
-        'ProductBrand', help_text='Выберите бренд, например, Porotherm', on_delete=models.SET_NULL, null=True, blank=True)
-    porotherm_system = models.ManyToManyField(
-        PorothermSystem, help_text='Выберите конкретную систему для Porotherm', blank=True)
+        'Brand', help_text='Выберите бренд, являющийся владельцем торговой марки, например, Wienerberger', on_delete=models.SET_NULL, null=True, blank=True)
+    trade_name = models.ManyToManyField(
+        TradeName, help_text='Выберите конкретное торговое наименование, например,  Porotherm', blank=True)
+    trade_index = models.ManyToManyField(
+        TradeName, help_text='Выберите индекс, например,  44 для поротерма', blank=True)
     # trade_mark = models.ForeignKey(
     #     'TradeMark', help_text='Выберите торговую марку изделия (например, Porotherm 44)', on_delete=models.SET_NULL, null=True, blank=True)
-
-    NAME = (
-        ('brick', 'Кирпич'),
-        ('rock', 'Камень'),
-        ('block', 'Блок'),
-    )
-
-    name = models.CharField(
-        max_length=5,
-        choices=NAME,
-        default='brick',
-        help_text='Вид изделия',
-    )
-
-    MATERIAL = (
-        ('clay', 'глиняный'),
-        ('silicate', 'силикатный'),
-        ('gas_concrete', 'газобетонный'),
-        ('ceramsite_concrete', 'керамзитобетонный'),
-    )
-
-    material = models.CharField(
-        max_length=18,
-        choices=MATERIAL,
-        default='clay',
-        help_text='Материал изделия',
-    )
 
     YN = (
         ('no', 'Нет'),
         ('yes', 'Да'),
-    )
-
-    double_install = models.CharField(
-        max_length=3,
-        choices=YN,
-        default='no',
-        help_text='Допустима ли установка и на постель и на ребро',
-    )
-
-    clinker  = models.CharField(
-        max_length=3,
-        choices=YN,
-        default='no',
-        help_text='Клинкерный кирпич',
     )
 
     tongue_and_groove  = models.CharField(
@@ -664,20 +755,6 @@ class RockWallMaterialUnit(models.Model):
         help_text='Шлифованный',
     )
 
-    WORK_SIZE = (
-        ('greater', 'Только больший размер'),
-        ('minor', 'Только меньший размер постели'),
-        ('both', 'Оба размера постели'),
-        ('any', 'Любой'),
-    )
-
-    work_size = models.CharField(
-        max_length=7,
-        choices=WORK_SIZE,
-        default='greater',
-        help_text='Какой размер формирует толщину стены',
-    )
-
     PURPOSE = (
         ('wall', 'Рядовой '),
         ('fasade', 'Лицевой'),
@@ -691,17 +768,18 @@ class RockWallMaterialUnit(models.Model):
         help_text='Назначение: рядовой, лицевой',
     )
 
-    # SIZE_TYPE = (
-    #     ('brick', 'Кирпич'),
-    #     ('block', 'Блок'),
-    # )
+    PARTITION_OR_BEARING = (
+        ('partition', 'Перегородочный'),
+        ('bearing', 'Несущий'),
+        ('any', 'Любой'),
+    )
 
-    # size_type = models.CharField(
-    #     max_length=5,
-    #     choices=SIZE_TYPE,
-    #     default='brick',
-    #     help_text='Типоразмер: кирпич или блок',
-    # )
+    partition_or_bearing = models.CharField(
+        max_length=5,
+        choices=PARTITION_OR_BEARING,
+        default='bearing',
+        help_text='Для несущих стен, для перегородок или для всего',
+    )
 
     BODY_TYPE = (
         ('solid', 'Полнотелый'),
@@ -722,6 +800,7 @@ class RockWallMaterialUnit(models.Model):
         help_text='Несквозные пустоты (для полнотелых кирпичей)',
     )
 
+# точные данные хранить только для основных элементов. Доьорные обрабатываются в коде, а здесь они только для цен
     PRIMARY_OR_ADDITIONAL = (
         ('primary', 'Основной'),
         ('additional', 'Доборный'),
@@ -732,20 +811,20 @@ class RockWallMaterialUnit(models.Model):
         choices=PRIMARY_OR_ADDITIONAL,
         default='primary',
         help_text='Тип элемента: основной или доборный',
-    )
+    ) 
 
     
-    THICKNESS_CALC = (
-        ('mm', 'Только мм'),
-        ('both', 'И мм. и шт.'),
-    )
+    # THICKNESS_CALC = (
+    #     ('mm', 'Только мм'),
+    #     ('both', 'И мм. и шт.'),
+    # )
 
-    thickness_calc = models.CharField(
-        max_length=4,
-        choices=THICKNESS_CALC,
-        default='mm',
-        help_text='Толщину стены можно считать в мм. и в штуках (н.р. в кирпичах) или строго в мм. (для материалов, которые можно ложить разными сторонами)',
-    )
+    # thickness_calc = models.CharField(
+    #     max_length=4,
+    #     choices=THICKNESS_CALC,
+    #     default='mm',
+    #     help_text='Толщину стены можно считать в мм. и в штуках (н.р. в кирпичах) или строго в мм. (для материалов, которые можно ложить разными сторонами)',
+    # )
 
     class Meta:
         verbose_name = 'Единица стенового материала'
