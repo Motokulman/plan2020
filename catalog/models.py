@@ -146,40 +146,39 @@ class BinderSolution(models.Model):
         return self.name
 
 
-class MasonryReinforcementMaterial(models.Model):
-    """Специальные сетки, арматура, специально выпускаемые для данного материала"""
+class GridUsage(models.Model):
+    """Перечень применения строительных сеток"""
+    identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
+                                  help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
+
     name = models.CharField(
-        max_length=200, help_text='Специальная сетка или арматура, специально выпускаемая для армирования кладки из данного материала. Название как в спецификации изготовителя')
-
-    FORM = (
-        ('grid', 'Сетка'),
-        ('armature', 'Арматура'),
-    )
-
-    form = models.CharField(
-        max_length=8,
-        choices=FORM,
-        default='grid',
-        help_text='Сетка или арматура',
-    )
-
-    USAGE = (
-        ('fasade_arm', 'Армирование фасадной кладки'),
-        ('fasade_binding', 'В качестве гибких связей'),
-        ('masonry_arm', 'Армирование кладки'),
-    )
-
-    usage = models.CharField(
-        max_length=14,
-        choices=USAGE,
-        default='masonry_arm',
-        help_text='Область применения', так не пойдет, нужен множественный выбор
-    )
+        max_length=200, help_text='Название применения')
 
     class Meta:
         ordering = ('name',)
-        verbose_name = 'Специальная сетка или арматура для армирования кладки'
-        verbose_name_plural = 'Специальные сетки или арматура для армирования кладки'
+        verbose_name = 'Перечень применения строительных сеток'
+        verbose_name_plural = 'Перечень применения строительных сеток'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.name
+
+
+class Grid(models.Model):
+    """Модель описывает сетки"""
+    name = models.CharField(
+        max_length=200, help_text='Название сетки как в спецификации изготовителя')
+
+    usage = models.ManyToManyField(
+        GridUsage, help_text='Выберите применение данной сетки', related_name='secondary_activity')
+    
+    brand = models.ForeignKey(
+        'ProductBrand', help_text='Выберите бренд (например, Wienerberger), если есть', on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Сетка'
+        verbose_name_plural = 'Сетки'
 
     def __str__(self):
         """String for representing the Model object."""
@@ -511,50 +510,49 @@ class MasonryBonding(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.name} ({self.identifier})'
+        return f'{self.name} ({self.mortar})'
 
 
-class RockWallMaterialSizeGrid(models.Model):
-    """Модель, содержащая названия размерных сеток"""
-    identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
-                                  help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
-    name = models.CharField(
-        max_length=200, help_text='Введите название группы материалов с одинаковой размерной сеткой')
-
-
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Группа материалов с одинаковой размерной сеткой'
-        verbose_name_plural = 'Группы материалов с одинаковой размерной сеткой'
-
-    def __str__(self):
-        """String for representing the Model object."""
-        return f'{self.name} ({self.identifier})'
-
-# class MasonrySystem(models.Model):
-#     """Модель описывает системы кладок для материалов, где они есть"""
+# class RockWallMaterialSizeGrid(models.Model):
+#     """Модель, содержащая названия размерных сеток"""
 #     identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
 #                                   help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
-#     size_grid = models.ForeignKey(RockWallMaterialSizeGrid, help_text='Группа материалов с одинаковой размерной сеткой', on_delete=models.SET_NULL, null=True, blank=True)
-#     name = models.CharField(max_length=200, help_text='Наименование системы кладки, например, Porotherm 44')
+#     name = models.CharField(
+#         max_length=200, help_text='Введите название группы материалов с одинаковой размерной сеткой')
+
 
 #     class Meta:
 #         ordering = ('name',)
-#         verbose_name = 'Система кладки'
-#         verbose_name_plural = 'Системы кладки'
+#         verbose_name = 'Группа материалов с одинаковой размерной сеткой'
+#         verbose_name_plural = 'Группы материалов с одинаковой размерной сеткой'
 
 #     def __str__(self):
 #         """String for representing the Model object."""
 #         return f'{self.name} ({self.identifier})'
 
+class PorothermSystem(models.Model):
+    """Модель описывает системы кладок Porotherm"""
+    identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
+                                  help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
+    name = models.CharField(max_length=200, help_text='Наименование системы кладки, например, Porotherm 44, Porotherm 38')
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Система кладки Porotherm'
+        verbose_name_plural = 'Системы кладки Porotherm'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.name} ({self.identifier})'
+
 
 class RockWallMaterialUnit(models.Model):
     """Модель описывает единицу стенового каменного материала, конкретное изделие конкретного производителя. Но без цены."""
 
-    name = models.CharField(
-        max_length=200, help_text='Торговое название, если есть', blank=True)
-    size_grid = models.ForeignKey(
-        RockWallMaterialSizeGrid, help_text='Группа материалов с одинаковой размерной сеткой', on_delete=models.SET_NULL, null=True, blank=True)
+    # name = models.CharField(
+    #     max_length=200, help_text='Торговое название, если есть', blank=True)
+    # size_grid = models.ForeignKey(
+    #     RockWallMaterialSizeGrid, help_text='Группа материалов с одинаковой размерной сеткой', on_delete=models.SET_NULL, null=True, blank=True)
     # standard = models.ForeignKey('Standard', on_delete=models.CASCADE,
     #                                   help_text='Если данное изделие соответствует ГОСТ, выберите его', blank=True, null=True)
 
@@ -573,6 +571,8 @@ class RockWallMaterialUnit(models.Model):
     nf_size = models.ForeignKey('NFSize', help_text='Выбрите размер НФ, которому соответствует изделие',
                                 on_delete=models.SET_NULL, null=True, blank=True)
     # лишнее. проще определять потом автоматически. но так проще поиск пока сделать
+    quantity_per_pallet = models.IntegerField(
+        blank=True, null=True, help_text='Количество на поддоне')
 
     mark_m = models.ForeignKey(
         MarkM, help_text='Выберите стандартную марку М для данного материала, если есть', on_delete=models.SET_NULL, null=True, blank=True)
@@ -590,7 +590,7 @@ class RockWallMaterialUnit(models.Model):
     # wall_material_type = models.ManyToManyField(WallMaterialType, help_text='Выберите тип стены, к которому отностится материал')
     # application = models.ManyToManyField(Application, help_text='Выберите область применения материала')
     binding_solution = models.ManyToManyField(
-        BinderSolution, help_text='Выберите специальный клей для данного материала', on_delete=models.SET_NULL, null=True, blank=True)
+        BinderSolution, help_text='Выберите специальный клей для данного материала', blank=True)
     bounding = models.ManyToManyField(
         MasonryBonding, help_text='Выберите способы скрепления кладки', blank=True)
     thermal_conductivity = models.IntegerField(
@@ -598,20 +598,70 @@ class RockWallMaterialUnit(models.Model):
     producer = models.ForeignKey(
         'Producer', help_text='Выберите завод изготовитель', on_delete=models.SET_NULL, null=True, blank=True)
     brand = models.ForeignKey(
-        'ProductBrand', help_text='Выберите основной бренд (например, Wienerberger)', on_delete=models.SET_NULL, null=True, blank=True)
+        'ProductBrand', help_text='Выберите бренд, например, Porotherm', on_delete=models.SET_NULL, null=True, blank=True)
+    porotherm_system = models.ManyToManyField(
+        PorothermSystem, help_text='Выберите конкретную систему для Porotherm', blank=True)
     # trade_mark = models.ForeignKey(
     #     'TradeMark', help_text='Выберите торговую марку изделия (например, Porotherm 44)', on_delete=models.SET_NULL, null=True, blank=True)
 
-    DOUBLE_INSTALL = (
+    NAME = (
+        ('brick', 'Кирпич'),
+        ('rock', 'Камень'),
+        ('block', 'Блок'),
+    )
+
+    name = models.CharField(
+        max_length=5,
+        choices=NAME,
+        default='brick',
+        help_text='Вид изделия',
+    )
+
+    MATERIAL = (
+        ('clay', 'глиняный'),
+        ('silicate', 'силикатный'),
+        ('gas_concrete', 'газобетонный'),
+        ('ceramsite_concrete', 'керамзитобетонный'),
+    )
+
+    material = models.CharField(
+        max_length=18,
+        choices=MATERIAL,
+        default='clay',
+        help_text='Материал изделия',
+    )
+
+    YN = (
         ('no', 'Нет'),
         ('yes', 'Да'),
     )
 
     double_install = models.CharField(
         max_length=3,
-        choices=DOUBLE_INSTALL,
+        choices=YN,
         default='no',
         help_text='Допустима ли установка и на постель и на ребро',
+    )
+
+    clinker  = models.CharField(
+        max_length=3,
+        choices=YN,
+        default='no',
+        help_text='Клинкерный кирпич',
+    )
+
+    tongue_and_groove  = models.CharField(
+        max_length=3,
+        choices=YN,
+        default='no',
+        help_text='Пазогребневая система',
+    )    
+    
+    polish  = models.CharField(
+        max_length=3,
+        choices=YN,
+        default='no',
+        help_text='Шлифованный',
     )
 
     WORK_SIZE = (
@@ -629,29 +679,29 @@ class RockWallMaterialUnit(models.Model):
     )
 
     PURPOSE = (
-        ('wall', 'Стеновой'),
-        ('fasade', 'Фасадный'),
-        ('decor_edge', 'Стеновой с декоративной гранью'),
+        ('wall', 'Рядовой '),
+        ('fasade', 'Лицевой'),
+        ('decor_edge', 'Рядовой с декоративной гранью'),
     )
 
     purpose = models.CharField(
         max_length=10,
         choices=PURPOSE,
         default='wall',
-        help_text='Назначение: стеновой, фасадный',
+        help_text='Назначение: рядовой, лицевой',
     )
 
-    SIZE_TYPE = (
-        ('brick', 'Кирпич'),
-        ('block', 'Блок'),
-    )
+    # SIZE_TYPE = (
+    #     ('brick', 'Кирпич'),
+    #     ('block', 'Блок'),
+    # )
 
-    size_type = models.CharField(
-        max_length=5,
-        choices=SIZE_TYPE,
-        default='brick',
-        help_text='Типоразмер: кирпич или блок',
-    )
+    # size_type = models.CharField(
+    #     max_length=5,
+    #     choices=SIZE_TYPE,
+    #     default='brick',
+    #     help_text='Типоразмер: кирпич или блок',
+    # )
 
     BODY_TYPE = (
         ('solid', 'Полнотелый'),
@@ -663,6 +713,13 @@ class RockWallMaterialUnit(models.Model):
         choices=BODY_TYPE,
         default='solid',
         help_text='Пустотелый или полнотелый',
+    )
+        
+    blind_hollow = models.CharField(
+        max_length=3,
+        choices=YN,
+        default='no',
+        help_text='Несквозные пустоты (для полнотелых кирпичей)',
     )
 
     PRIMARY_OR_ADDITIONAL = (
@@ -696,7 +753,7 @@ class RockWallMaterialUnit(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.size_grid.name}, {self.greater_bed_size}, {self.minor_bed_size}, {self.height}'
+        return f'{self.name}, {self.material}, {self.greater_bed_size}, {self.minor_bed_size}, {self.height}'
 
     def get_absolute_url(self):
         """Returns the url to access a detail record for this material."""
