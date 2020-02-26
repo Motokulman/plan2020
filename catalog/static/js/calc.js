@@ -49,3 +49,44 @@ function calc() {
     console.log("bearing.uninhabited = ", bearing.uninhabited);
     console.log("fasade = ", fasade);
 }
+
+// Попытка обновить ДОМ без перезагрузки  https://coderoad.ru/45906858/Обновление-DOM-без-перезагрузки-страницы-в-Django
+$("#sender").click(function () {
+    var input = $('#user-input').val();
+
+    $.ajax({
+        url: 'get_response',
+        data: {
+          'inputValue': input
+        },
+        dataType: 'json',
+        success: function (data) {
+            var grillages = JSON.parse(data);
+          document.getElementById('p-text').innerHTML = grillages;
+        }
+      });
+    });
+
+// get existed grillages of this plan from DB
+// function getGrillages() {
+//     var data = {};
+//     data.plan = plan_id;
+//     var url = '/catalog/get_grillages/';
+//     $.ajax({
+//       url: url,
+//       type: 'GET',
+//       data: data,
+//       cache: true,
+//       async: false,
+//       success: function (data) {
+//         grillages = JSON.parse(data);
+//         console.log("OK Getting grillages");
+//         console.log("grillages = ", grillages);
+//         document.dispatchEvent(getGrillagesEvent);//raise event when the reqiest recieved and we can draw existed elements 
+//         drawGrillages();
+//       },
+//       error: function () {
+//         console.log("Getting grillages error");
+//       }
+//     });
+//   }

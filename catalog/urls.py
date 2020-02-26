@@ -36,5 +36,10 @@ urlpatterns += [
 # Редактирование варианта
 urlpatterns += [
     path('plan/<int:pk>/edit_variant/', views.edit_variant, name='edit-variant'),
+]
+
+# Попытка обновить ДОМ без перезагрузки
+urlpatterns += [
+    path('plan/<int:pk>/edit_scheme/get_response', views.answer_me, name='get_response'),
 
 ]

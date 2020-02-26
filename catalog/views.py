@@ -123,7 +123,7 @@ def edit_variant(request, pk):
     plan = get_object_or_404(Plan, pk=pk)
     plan_title = plan.title
     plan_id = plan.id
-    #num_instances_available=BookInstance.objects.filter(status__exact='a').count()
+    # num_instances_available=BookInstance.objects.filter(status__exact='a').count()
 
     context = {
         'plan_title': plan_title,
@@ -165,3 +165,13 @@ def edit(request):
         user_form = UserEditForm(instance=request.user)
         profile_form = ProfileEditForm(instance=request.user.profile)
     return render(request,'account/edit.html', {'user_form': user_form,'profile_form': profile_form})
+
+# Попытка обновить ДОМ без перезагрузки
+def answer_me(request):
+    field = request.GET.get('inputValue')
+    answer = 'You typed: ' + field
+
+    data = {
+        'respond': answer
+            }
+    return JsonResponse(data)
