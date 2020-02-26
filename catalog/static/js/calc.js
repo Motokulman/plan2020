@@ -1,4 +1,5 @@
 // Определяем, какой элемент выбрал пользователь (стена или что-то иное)
+var dataX;
 $('#test_buttons button').click(function () {
     calc();
 });
@@ -51,21 +52,7 @@ function calc() {
 }
 
 // Попытка обновить ДОМ без перезагрузки  https://coderoad.ru/45906858/Обновление-DOM-без-перезагрузки-страницы-в-Django
-$("#sender").click(function () {
-    var input = $('#user-input').val();
 
-    $.ajax({
-        url: 'get_response',
-        data: {
-          'inputValue': input
-        },
-        dataType: 'json',
-        success: function (data) {
-            var grillages = JSON.parse(data);
-          document.getElementById('p-text').innerHTML = grillages;
-        }
-      });
-    });
 
 // get existed grillages of this plan from DB
 // function getGrillages() {

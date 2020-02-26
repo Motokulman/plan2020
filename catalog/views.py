@@ -167,9 +167,10 @@ def edit(request):
     return render(request,'account/edit.html', {'user_form': user_form,'profile_form': profile_form})
 
 # Попытка обновить ДОМ без перезагрузки
-def answer_me(request):
+def answer_me(request, pk):
     field = request.GET.get('inputValue')
-    answer = 'You typed: ' + field
+    # field = pk
+    answer = 'You typed: ' + str(field)
 
     data = {
         'respond': answer

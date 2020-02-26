@@ -42,9 +42,35 @@
       <!-- <div id="test_buttons" class="btn-group">
         <button id="sender" type="button" class="btn btn-light">Расчет</button>
       </div> -->
+      <!-- <a href="{% url 'get_response'  plan_id  %}">Расчет</a>  -->
+
+
       <input type="text" id="user-input" autofocus=""><br>
       <button type="button" id="sender">Send data</button><br>
       <p id="p-text">foo bar</p>
+
+      <script>
+
+        $("#sender").click(function () {
+          var input = $('#user-input').val();
+          
+
+          $.ajax({
+            url: "{% url 'get_response'  plan_id  %}",
+            data: {
+              'inputValue': input
+            },
+            dataType: 'json',
+            success: function (data) {
+              dataX = data["respond"];
+              console.log("dataX = ", dataX);
+            }
+          });
+        });
+
+      </script>
+
+
     </div>
   </div>
 </div>
