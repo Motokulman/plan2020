@@ -85,45 +85,45 @@ from django.contrib.auth.models import User
 class Brand(models.Model):
     """Модель, представляющая бренд товара, материала, например, Wienerberger. То есть, если Porotherm 44 - это trademark самого материала, то Wienerberger - это бренд завода"""
     name = models.CharField(unique=True, max_length=200,
-                            help_text='Введите бренд, например, Wienerberger')
+                            help_text='Введите основной бренд, например, Wienerberger')
 
     class Meta:
         ordering = ('name',)
-        verbose_name = 'Бренд'
-        verbose_name_plural = 'Бренды'
+        verbose_name = 'Основоной бренд'
+        verbose_name_plural = 'Основоные бренды'
 
     def __str__(self):
         """String for representing the Model object."""
         return self.name
 
 
-class TradeName(models.Model):
-    """Модель, представляющая торговую марку, например, Porotherm, Kerama и т.д."""
+class SubBrand_1(models.Model):
+    """Модель, представляющая торговую марку, например, Porotherm,  и т.д."""
     brand = models.ForeignKey(
         'Brand', on_delete=models.CASCADE, null=True)
     name = models.CharField(unique=True, max_length=200,
-                            help_text='Введите торговую марку внутри бренда, например, Porotherm, Kerama и т.д.')
+                            help_text='Введите торговую марку внутри бренда, например, Porotherm и т.д.')
 
     class Meta:
         ordering = ('name',)
-        verbose_name = 'Торговая марка внутри бренда'
-        verbose_name_plural = 'Торговые марки внутри бренда'
+        verbose_name = 'Подбренд 1)'
+        verbose_name_plural = 'Подбренды 1)'
 
     def __str__(self):
         """String for representing the Model object."""
         return self.name
 
 
-class TradeIndex(models.Model):
+class SubBrand_2(models.Model):
     """Модель, представляющая индекс серии товаров внутри торговой марки что внутри бренда"""
-    tradename = models.ForeignKey('TradeName', on_delete=models.CASCADE)
+    sub_brand_1 = models.ForeignKey('SubBrand_1', on_delete=models.CASCADE)
     name = models.CharField(unique=True, max_length=200,
                             help_text='Введите индекс серии товаров внутри торговой марки что внутри бренда, если она есть')
 
     class Meta:
         ordering = ('name',)
-        verbose_name = 'Индекс серии товаров'
-        verbose_name_plural = 'Индексы серии товаров'
+        verbose_name = 'Подбренд 2)'
+        verbose_name_plural = 'Подбренды 2)'
 
     def __str__(self):
         """String for representing the Model object."""
@@ -146,10 +146,11 @@ class Algorithm(models.Model):
         return self.name
 
 
-class Producer(models.Model):
+class Factory(models.Model):
     """Модель, представляющая завод - непосредственного производителя материала. Например, Кощаковский завод, Чайковский и т.д. Какой-нибудь местный завод может производить под маркой Wienerberger например"""
+    # применяется для быстрой идентификации производителя товара в юзеринтерфейсе, не более того
     name = models.CharField(unique=True, max_length=200,
-                            help_text='Введите производителя материала. Например, Кощаковский, Чайковский и т.д.')
+                            help_text='Введите просторе название производителя материала. Например, Кощаковский, Чайковский и т.д.') # точное наименование есть смысл хранить в юрлицах
     city = models.ForeignKey(
         'City', help_text='Выберите город', on_delete=models.SET_NULL, null=True, blank=True)
     brand = models.ForeignKey(
@@ -236,21 +237,21 @@ class Producer(models.Model):
 #         return self.name
 
 
-# class ProviderActivityType(models.Model):
-#     """Модель, представляющая доступные наименования видов деятельности: проектирование, строительный подряд, поставка/продажа материалов, юридические услуги"""
-#     identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
-#                                   help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
-#     name = models.CharField(
-#         max_length=200, help_text='Введите наименование вида деятельности')
+class Activity(models.Model):
+    """Модель, представляющая доступные наименования видов деятельности: проектирование, строительный подряд, поставка/продажа материалов, юридические услуги"""
+    identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
+                                  help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
+    name = models.CharField(
+        max_length=200, help_text='Введите наименование вида деятельности')
 
-#     class Meta:
-#         ordering = ('name',)
-#         verbose_name = 'Доступный вид деятельности'
-#         verbose_name_plural = 'Доступные виды деятельности'
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Вид деятельности'
+        verbose_name_plural = 'Виды деятельности'
 
-#     def __str__(self):
-#         """String for representing the Model object."""
-#         return self.name
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.name
 
 
 # class TaxSystemType(models.Model):
@@ -270,38 +271,39 @@ class Producer(models.Model):
 #         return self.name
 
 
-# class Provider(models.Model):
-#     """Модель, представляющая бренд, название поставщика: подрядчика, архитектора, продавца. У каждого бренда м.б. магазин, причем как один магазинчик, так и сеть по всей РФ и миру"""
-#     name = models.CharField(unique=True, max_length=200,
-#                             help_text='Введите бренд продавца')
-#     primary_activity = models.ForeignKey('ProviderActivityType', on_delete=models.SET_NULL,
-#                                          null=True, help_text='Выберите основной вид деятельности', related_name='primary_activity')
-#     secondary_activity = models.ManyToManyField(
-#         ProviderActivityType, help_text='Выберите дополнительные виды деятельности', related_name='secondary_activity')
-#     tax_system = models.ManyToManyField(
-#         TaxSystemType, help_text='Выберите применяемые Вами системы налообложения (можно несколько)')
+class Provider(models.Model):
+    """Модель, представляющая бренд, название поставщика: подрядчика, архитектора, продавца. У каждого бренда м.б. магазин, причем как один магазинчик, так и сеть по всей РФ и миру"""
+    # каждый поставщик может иметь разные юрлица
+    name = models.CharField(unique=True, max_length=200,
+                            help_text='Введите название постащика, м.б. зарегистрированное или нет')
+    primary_activity = models.ForeignKey('Activity', on_delete=models.SET_NULL,
+                                         null=True, help_text='Выберите основной вид деятельности', related_name='primary_activity')
+    secondary_activity = models.ManyToManyField(
+        Activity, help_text='Выберите дополнительные виды деятельности', related_name='secondary_activity')
+    # tax_system = models.ManyToManyField(
+    #     TaxSystemType, help_text='Выберите применяемые Вами системы налообложения (можно несколько)')
 
-#     # Форма собственности
-#     OWNERSHIP_FORM = (
-#         ('p', 'Частное лицо'),
-#         ('c', 'Компания'),
-#     )
+    # Форма собственности
+    # OWNERSHIP_FORM = (
+    #     ('p', 'Частное лицо'),
+    #     ('c', 'Компания'),
+    # )
 
-#     ownership_form = models.CharField(
-#         max_length=1,
-#         choices=OWNERSHIP_FORM,
-#         default='p',
-#         help_text='Выберите форму собственности',
-#     )
+    # ownership_form = models.CharField(
+    #     max_length=1,
+    #     choices=OWNERSHIP_FORM,
+    #     default='p',
+    #     help_text='Выберите форму собственности',
+    # )
 
-#     class Meta:
-#         ordering = ('name',)
-#         verbose_name = 'Поставщик услуг/материалов'
-#         verbose_name_plural = 'Поставщики услуг/материалов'
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Поставщик услуг/материалов'
+        verbose_name_plural = 'Поставщики услуг/материалов'
 
-#     def __str__(self):
-#         """String for representing the Model object."""
-#         return self.name
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.name
 
 
 class City(models.Model):
@@ -353,26 +355,26 @@ class Region(models.Model):
         return self.name
 
 
-# class ProviderOutlet(models.Model):
-#     """Модель, представляющая конкретный магазин или офис поставщика услуг/материалов. Он может быть один (ИП Иванов) или один из сети "Леруа" """
-#     name = models.ForeignKey('Provider', on_delete=models.CASCADE,
-#                              help_text='Выберите поставщика, которому принадлежит этот офис,торговая точка')
-#     local_name = models.CharField(
-#         max_length=200, blank=True, help_text='Введите уточняющее название офиса или торговой точки. Например, Офис на Московской ')
-#     city = models.ForeignKey('City', on_delete=models.CASCADE)
-#     information = models.TextField(
-#         max_length=200, help_text='Контакты, адрес и т.д. продавца')
-#     owner = models.ForeignKey(
-#         User, on_delete=models.SET_NULL, null=True, blank=True)
+class Outlet(models.Model):
+    """Модель, представляющая конкретный магазин или офис поставщика услуг/материалов. Он может быть один (ИП Иванов) или один из сети "Леруа" """
+    provider = models.ForeignKey('Provider', on_delete=models.CASCADE,
+                             help_text='Выберите поставщика, которому принадлежит этот офис,торговая точка')
+    # local_name = models.CharField(
+    #     max_length=200, blank=True, help_text='Введите уточняющее название офиса или торговой точки. Например, Офис на Московской ')
+    city = models.ForeignKey('City', on_delete=models.CASCADE)
+    # information = models.TextField(
+    #     max_length=200, help_text='Контакты, адрес и т.д. продавца')
+    # owner = models.ForeignKey(
+    #     User, on_delete=models.SET_NULL, null=True, blank=True)
 
-#     class Meta:
-#         ordering = ('name',)
-#         verbose_name = 'Торговая точка/офис'
-#         verbose_name_plural = 'Торговые точки/офисы'
+    class Meta:
+        ordering = ('provider',)
+        verbose_name = 'Торговая точка/офис'
+        verbose_name_plural = 'Торговые точки/офисы'
 
-#     def __str__(self):
-#         """String for representing the Model object."""
-#         return f'{self.name.name} ({self.city.name}). {self.local_name}'
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.provider.name} ({self.city.name})'
 
 
 # class RockWallMaterialStandardSize(models.Model):
@@ -747,14 +749,14 @@ class RockWallMaterialUnit(models.Model):
     #     MasonryBonding, help_text='Выберите способы скрепления кладки', blank=True)
     thermal_conductivity = models.IntegerField(
         help_text='Введите коэффициент теплопроводности', blank=True, null=True)
-    producer = models.ForeignKey(
-        'Producer', help_text='Выберите завод изготовитель', on_delete=models.SET_NULL, null=True, blank=True)
+    factory = models.ForeignKey(
+        Factory, help_text='Выберите завод изготовитель', on_delete=models.SET_NULL, null=True, blank=True)
     brand = models.ForeignKey(
-        'Brand', help_text='Выберите бренд, являющийся владельцем торговой марки, например, Wienerberger', on_delete=models.SET_NULL, null=True, blank=True)
-    trade_name = models.ForeignKey(
-        TradeName, help_text='Выберите наименование внутри бренда (если есть), например,  Porotherm', on_delete=models.SET_NULL, null=True, blank=True)
-    trade_index = models.ForeignKey(
-        TradeIndex, help_text='Выберите индекс внутри наименования (если есть), например, 44 для поротерма', on_delete=models.SET_NULL, null=True, blank=True)
+        'Brand', help_text='Выберите главный бренд, например, Wienerberger', on_delete=models.SET_NULL, null=True, blank=True)
+    sub_brand_1 = models.ForeignKey(
+        SubBrand_1, help_text='Выберите наименование внутри бренда (Подбренд 1, если есть), например,  Porotherm', on_delete=models.SET_NULL, null=True, blank=True)
+    sub_brand_2 = models.ForeignKey(
+        SubBrand_2, help_text='Выберите индекс внутри наименования (Подбренд 2, если есть), например, 44 для поротерма', on_delete=models.SET_NULL, null=True, blank=True)
     algorithm = models.ForeignKey(
         'Algorithm', help_text='Выберите алгоритм для расчета', on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -854,7 +856,7 @@ class RockWallMaterialUnit(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.producer}, {self.brand}, {self.name}, {self.material}, {self.greater_bed_size}, {self.minor_bed_size}, {self.height}'
+        return f'{self.factory}, {self.name}, {self.material}, {self.greater_bed_size}, {self.minor_bed_size}, {self.height}'
 
     def get_absolute_url(self):
         """Returns the url to access a detail record for this material."""

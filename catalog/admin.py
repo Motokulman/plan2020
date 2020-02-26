@@ -2,10 +2,10 @@ from django.contrib import admin
 
 # Register your models here.
 from catalog.models import Brand
-from catalog.models import TradeName
-from catalog.models import TradeIndex
+from catalog.models import SubBrand_1
+from catalog.models import SubBrand_2
 from catalog.models import Algorithm
-from catalog.models import Producer
+from catalog.models import Factory
 from catalog.models import City
 from catalog.models import MarkM
 from catalog.models import MarkD
@@ -20,12 +20,15 @@ from catalog.models import RockWallMaterialPricePosition
 from catalog.models import PileGrillageFoundationWorkPrices
 from catalog.models import Country
 from catalog.models import Region
+from catalog.models import Provider
+from catalog.models import Activity
+from catalog.models import Outlet
 
 admin.site.register(Brand)
-admin.site.register(TradeName)
-admin.site.register(TradeIndex)
+admin.site.register(SubBrand_1)
+admin.site.register(SubBrand_2)
 admin.site.register(Algorithm)
-admin.site.register(Producer)
+admin.site.register(Factory)
 admin.site.register(MarkD)
 admin.site.register(MarkF)
 admin.site.register(MarkM)
@@ -40,6 +43,9 @@ admin.site.register(PileGrillageFoundationWorkPrices)
 admin.site.register(City)
 admin.site.register(Country)
 admin.site.register(Region)
+admin.site.register(Provider)
+admin.site.register(Activity)
+admin.site.register(Outlet)
 
 # admin.site.register(ProviderOutlet)
 # admin.site.register(City)

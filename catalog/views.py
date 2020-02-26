@@ -1,8 +1,8 @@
 from catalog.models import Brand
-from catalog.models import TradeName
-from catalog.models import TradeIndex
+from catalog.models import SubBrand_1
+from catalog.models import SubBrand_2
 from catalog.models import Algorithm
-from catalog.models import Producer
+from catalog.models import Factory
 from catalog.models import City
 from catalog.models import Country
 from catalog.models import Region
@@ -17,6 +17,9 @@ from catalog.models import Plan
 from catalog.models import Profile
 from catalog.models import RockWallMaterialPricePosition
 from catalog.models import PileGrillageFoundationWorkPrices
+from catalog.models import Provider
+from catalog.models import Activity
+from catalog.models import Outlet
 
 
 from django.shortcuts import render
