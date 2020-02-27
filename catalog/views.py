@@ -104,6 +104,13 @@ class PlanDelete(DeleteView):
     model = Plan
     success_url = reverse_lazy('plans')
 
+# Нащи вычисления:
+def calc(request):
+    profile = Profile.objects.filter(user__username=request.user)
+    city = profile[0].city
+    test = City.objects.filter(name=city)
+    return test
+
 
 def edit_scheme(request, pk):
     """View function for editing scheme of a specific plan"""
@@ -112,9 +119,12 @@ def edit_scheme(request, pk):
     plan_title = plan.title
     plan_id = plan.id
 
+    test = calc(request)
+
     context = {
         'plan_title': plan_title,
         'plan_id': plan_id,
+        'test': test[0].heating_period_duration,
     }
 
     return render(request, 'catalog/edit_scheme.html', context)
@@ -167,7 +177,7 @@ def edit(request):
     else:
         user_form = UserEditForm(instance=request.user)
         profile_form = ProfileEditForm(instance=request.user.profile)
-    return render(request,'account/edit.html', {'user_form': user_form,'profile_form': profile_form})
+    return render(request,'register/edit.html', {'user_form': user_form,'profile_form': profile_form})
 
 # Попытка обновить ДОМ без перезагрузки
 def answer_me(request, pk):
