@@ -37,7 +37,7 @@ admin.site.register(ClassАverageDensity)
 admin.site.register(NFSize)
 admin.site.register(RockWallMaterialUnit)
 admin.site.register(Plan)
-admin.site.register(Profile)
+#admin.site.register(Profile)
 admin.site.register(RockWallMaterialPricePosition)
 admin.site.register(PileGrillageFoundationWorkPrices)
 admin.site.register(City)
@@ -71,7 +71,7 @@ admin.site.register(Outlet)
 # class PileGrillageFoundationWorkPricesAdmin(admin.ModelAdmin):
 #     list_display = ('const_expenditure', 'transportation_procurement_cost', 'owner')
 
-# @admin.register(Profile)
-# class ProfileAdmin(admin.ModelAdmin):
-#     list_display = ['user', 'scheme_scale']
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'city']
 

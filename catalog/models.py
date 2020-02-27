@@ -312,7 +312,9 @@ class City(models.Model):
                             help_text='Введите город')
     region = models.ForeignKey('Region', on_delete=models.CASCADE,
                             help_text='Регион', null=True, blank=True)
-
+    heating_period_temperature = models.IntegerField(help_text='Средняя температура отопительного периода, град. C', null=True, blank=True)  # СНиП 23-01-99 "Строительная климатология и геофизика". См. Таблица 1, столбец 12, https://www.teplo-info.com/snip/otopitelniy_period
+    heating_period_duration = models.IntegerField(help_text='Продолжительность отопительного периода, сут', null=True, blank=True)  # СНиП 23-01-99 "Строительная климатология и геофизика". См. Таблица 1, столбец 11, https://www.teplo-info.com/snip/otopitelniy_period
+ 
     class Meta:
         ordering = ('name',)
         verbose_name = 'Город'
@@ -955,8 +957,8 @@ class Plan(models.Model):
 
     # paddingX = models.IntegerField(null=True, blank=True)
     # paddingY = models.IntegerField(null=True, blank=True)
-    scheme_scale = models.FloatField(
-        null=True, blank=True, verbose_name='Масштаб схемы')
+    # scheme_scale = models.FloatField(
+        # null=True, blank=True, verbose_name='Масштаб схемы')
 
     class Meta:
         verbose_name = 'Проект'
@@ -976,12 +978,12 @@ class Plan(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE)
-    scheme_scale = models.IntegerField(
-        blank=True, null=True, default=25, verbose_name='Начальный масштаб схемы')
+    city = models.ForeignKey(
+        City, help_text='Выберите город', on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Профиль пользователя'
         verbose_name_plural = 'Профили пользователей'
 
     def __str__(self):
-        return 'Profile for user {}'.format(self.user.username)
+        return 'Профиль пользователя {}'.format(self.user.username)
