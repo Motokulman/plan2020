@@ -363,7 +363,7 @@ class Outlet(models.Model):
                              help_text='Выберите поставщика, которому принадлежит этот офис,торговая точка')
     # local_name = models.CharField(
     #     max_length=200, blank=True, help_text='Введите уточняющее название офиса или торговой точки. Например, Офис на Московской ')
-    city = models.ForeignKey('City', on_delete=models.CASCADE)
+    # city = models.ForeignKey('City', on_delete=models.CASCADE)
     # information = models.TextField(
     #     max_length=200, help_text='Контакты, адрес и т.д. продавца')
     # owner = models.ForeignKey(
@@ -980,6 +980,22 @@ class Profile(models.Model):
                                 on_delete=models.CASCADE)
     city = models.ForeignKey(
         City, help_text='Выберите город', on_delete=models.SET_NULL, null=True, blank=True)
+
+    outlet = models.ManyToManyField('Outlet', 
+                             help_text='Если пользователь - подрядчик, выберите торговую(ые) точку(и)')
+
+    TYPE = (
+        ('customer', 'Заказчик'),
+        ('contractor', 'Подрядчик'),
+    )
+
+    primary_or_additional = models.CharField(
+        max_length=10,
+        choices=TYPE,
+        default='customer',
+        help_text='Тип пользователя',
+    ) 
+
 
     class Meta:
         verbose_name = 'Профиль пользователя'
