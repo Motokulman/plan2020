@@ -4,6 +4,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
+from django.contrib.auth.models import Permission, Group
 
 
 # Добавим классу пользователя новые поля, в которых будем хранить настройки
@@ -280,21 +281,6 @@ class Provider(models.Model):
                                          null=True, help_text='Выберите основной вид деятельности', related_name='primary_activity')
     secondary_activity = models.ManyToManyField(
         Activity, help_text='Выберите дополнительные виды деятельности', related_name='secondary_activity')
-    # tax_system = models.ManyToManyField(
-    #     TaxSystemType, help_text='Выберите применяемые Вами системы налообложения (можно несколько)')
-
-    # Форма собственности
-    # OWNERSHIP_FORM = (
-    #     ('p', 'Частное лицо'),
-    #     ('c', 'Компания'),
-    # )
-
-    # ownership_form = models.CharField(
-    #     max_length=1,
-    #     choices=OWNERSHIP_FORM,
-    #     default='p',
-    #     help_text='Выберите форму собственности',
-    # )
 
     class Meta:
         ordering = ('name',)
@@ -313,7 +299,7 @@ class City(models.Model):
     region = models.ForeignKey('Region', on_delete=models.CASCADE,
                             help_text='Регион', null=True, blank=True)
     heating_period_duration = models.IntegerField(help_text='Продолжительность отопительного периода, сут. СНиП 23-01-99 "Строительная климатология и геофизика". См. Таблица 1, столбец 11', null=True, blank=True)  # СНиП 23-01-99 "Строительная климатология и геофизика". См. Таблица 1, столбец 11, https://www.teplo-info.com/snip/otopitelniy_period
-    heating_period_temperature = models.FloatField(help_text='Средняя температура отопительного периода, град. C. столбец 12', null=True, blank=True)  # СНиП 23-01-99 "Строительная климатология и геофизика". См. Таблица 1, столбец 12, https://www.teplo-info.com/snip/otopitelniy_period
+    heating_period_temperature = models.FloatField(help_text='РАЗДЕЛИТЕЛЬ - ТОЧКА. Средняя температура отопительного периода, град. C. столбец 12', null=True, blank=True)  # СНиП 23-01-99 "Строительная климатология и геофизика". См. Таблица 1, столбец 12, https://www.teplo-info.com/snip/otopitelniy_period
  
     class Meta:
         ordering = ('name',)
@@ -357,26 +343,21 @@ class Region(models.Model):
         return self.name
 
 
-class Outlet(models.Model):
-    """Модель, представляющая конкретный магазин или офис поставщика услуг/материалов. Он может быть один (ИП Иванов) или один из сети "Леруа" """
-    provider = models.ForeignKey('Provider', on_delete=models.CASCADE,
-                             help_text='Выберите поставщика, которому принадлежит этот офис,торговая точка')
-    # local_name = models.CharField(
-    #     max_length=200, blank=True, help_text='Введите уточняющее название офиса или торговой точки. Например, Офис на Московской ')
-    # city = models.ForeignKey('City', on_delete=models.CASCADE)
-    # information = models.TextField(
-    #     max_length=200, help_text='Контакты, адрес и т.д. продавца')
-    # owner = models.ForeignKey(
-    #     User, on_delete=models.SET_NULL, null=True, blank=True)
+class DecorativeBrickFace(models.Model):
+    """Модель, представляющая названия декоративных граней рядовых кирпичей """
+    name = models.CharField(max_length=200,
+                            help_text='Название рисунка') 
+    brand = models.ManyToManyField('Brand',
+                             help_text='Бренд,который делает такой рисунок на своих кирпичах. М.б.несколько', blank=True)
 
     class Meta:
-        ordering = ('provider',)
-        verbose_name = 'Торговая точка/офис'
-        verbose_name_plural = 'Торговые точки/офисы'
+        ordering = ('name',)
+        verbose_name = 'Названея декоративной грани рядового кирпича'
+        verbose_name_plural = 'Названия декоративных граней рядовых кирпичей'
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.provider.name} ({self.city.name})'
+        return f'{self.name}, {self.brand}'
 
 
 # class RockWallMaterialStandardSize(models.Model):
@@ -481,19 +462,48 @@ class ClassАverageDensity(models.Model):
         return f'{self.name} ({self.identifier})'
 
 
-# class Standard(models.Model):
-#     """Модель описывает строительные госты"""
-#     name = models.CharField(max_length=200, help_text='Введите наименование ГОСТ')
-#     standard_area = models.ManyToManyField(StandardArea, help_text="Выберите сферы применения данного ГОСТ")
+class Insulation(models.Model):
+    """Модель описывает утеплители"""
+    brand = models.ForeignKey(
+        'Brand', help_text='Выберите главный бренд, например, Ursa', on_delete=models.SET_NULL, null=True, blank=True)
 
-#     class Meta:
-#         ordering = ('name',)
-#         verbose_name = 'ГОСТ'
-#         verbose_name_plural = 'ГОСТ'
+    thermal_conductivity = models.FloatField(
+        help_text='Введите коэффициент теплопроводности', blank=True, null=True)
 
-#     def __str__(self):
-#         """String for representing the Model object."""
-#         return f'{self.name} ({self.identifier})'
+    MATTYPE = (
+        ('xps', 'XPS'),
+        ('rock_wool', 'Минеральная вата'),
+    )
+
+    mat_type = models.CharField(
+        max_length=9,
+        choices=MATTYPE,
+        default='xps',
+        help_text='Тип утеплителя',
+    ) 
+
+    THICK = (
+        ('20', '20 мм'),
+        ('30', '30 мм'),
+        ('50', '50 мм'),
+        ('100', '100 мм'),
+    )
+
+    thick = models.CharField(
+        max_length=3,
+        choices=THICK,
+        default='20',
+        help_text='Толщина',
+    ) 
+
+    class Meta:
+        ordering = ('brand',)
+        verbose_name = 'Утеплитель'
+        verbose_name_plural = 'Утеплители'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.brand} ({self.thick})'
 
 
 
@@ -749,7 +759,7 @@ class RockWallMaterialUnit(models.Model):
     #     BinderSolution, help_text='Выберите специальный клей для данного материала', blank=True)
     # bounding = models.ManyToManyField(
     #     MasonryBonding, help_text='Выберите способы скрепления кладки', blank=True)
-    thermal_conductivity = models.IntegerField(
+    thermal_conductivity = models.FloatField(
         help_text='Введите коэффициент теплопроводности', blank=True, null=True)
     factory = models.ForeignKey(
         Factory, help_text='Выберите завод изготовитель', on_delete=models.SET_NULL, null=True, blank=True)
@@ -792,7 +802,10 @@ class RockWallMaterialUnit(models.Model):
         choices=PURPOSE,
         default='wall',
         help_text='Назначение: рядовой, лицевой',
-    )
+    )  
+
+    face = models.ForeignKey(
+        'DecorativeBrickFace', help_text='Выберите название рисунка декоратьивной грани', on_delete=models.SET_NULL, null=True, blank=True)
 
     PARTITION_OR_BEARING = (
         ('partition', 'Перегородочный'),
@@ -865,7 +878,7 @@ class RockWallMaterialUnit(models.Model):
         return reverse('rock-wall-material-detail', args=[str(self.id)])
 
 
-class RockWallMaterialPricePosition(models.Model):
+class RockWallMaterialPrice(models.Model):
     """Модель, представляющая запись с ценой. Содержит единицу общепринятого товара, но принадлежащую какому-то продавцу"""
     price = models.FloatField()
     name = models.ForeignKey('RockWallMaterialUnit', on_delete=models.CASCADE)
@@ -874,8 +887,24 @@ class RockWallMaterialPricePosition(models.Model):
 
     class Meta:
         ordering = ('name',)
-        verbose_name = 'Ценовая позиция'
-        verbose_name_plural = 'Ценовые позиции'
+        verbose_name = 'Цены каменные стеновые материалы'
+        verbose_name_plural = 'Цены каменные стеновые материалы'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.name}, {self.price}, {self.owner}'
+
+class InsulationPrice(models.Model):
+    """Модель, представляющая запись с ценой. Содержит единицу общепринятого товара, но принадлежащую какому-то продавцу"""
+    price = models.FloatField()
+    name = models.ForeignKey('Insulation', on_delete=models.CASCADE)
+    owner = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Цены утеплители'
+        verbose_name_plural = 'Цены утеплители'
 
     def __str__(self):
         """String for representing the Model object."""
@@ -976,26 +1005,16 @@ class Plan(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL,
+    # user = models.OneToOneField(settings.AUTH_USER_MODEL,
+    #                             on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE)
+    
     city = models.ForeignKey(
         City, help_text='Выберите город', on_delete=models.SET_NULL, null=True, blank=True)
 
-    outlet = models.ManyToManyField('Outlet', 
-                             help_text='Если пользователь - подрядчик, выберите торговую(ые) точку(и)')
-
-    TYPE = (
-        ('customer', 'Заказчик'),
-        ('contractor', 'Подрядчик'),
-    )
-
-    primary_or_additional = models.CharField(
-        max_length=10,
-        choices=TYPE,
-        default='customer',
-        help_text='Тип пользователя',
-    ) 
-
+    provider = models.ManyToManyField('Provider',
+                             help_text='Выберите поставщика, которому принадлежит этот офис,торговая точка', blank=True)
 
     class Meta:
         verbose_name = 'Профиль пользователя'
