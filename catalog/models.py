@@ -871,7 +871,7 @@ class RockWallMaterialUnit(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.factory}, {self.name}, {self.material}, {self.greater_bed_size}, {self.minor_bed_size}, {self.height}'
+        return f'{self.id}, {self.factory}, {self.name}, {self.material}, {self.greater_bed_size}, {self.minor_bed_size}, {self.height}'
 
     def get_absolute_url(self):
         """Returns the url to access a detail record for this material."""

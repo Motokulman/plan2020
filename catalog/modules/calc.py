@@ -28,4 +28,10 @@ def calc_variants(request):
     calc(request) #вызвали чтоб найти город, в котором живет текущий пользователь
     group = Group.objects.get(permissions__codename='add_rockwallmaterialprice')
     users = User.objects.filter(groups = group).filter(profile__city__name=city.name) # получили всех пользователей,являющихся поставщиками из города, в котором живет текущий пользователь
-    return users
+    # Получим массив всех стеновых материалов, которые есть у местных поставщиков и сразу сделаем этот массив с уникальными элементами
+    wall_rock_materials = RockWallMaterialPrice.objects.filter(owner__in=users).distinct('name_id')
+    # 
+    # для каждого получимколичество материалов
+    # опять пробежимся по массиву материалов каждого поставщика, теперь с вычислением стоимости
+    # отсортируем полученный массив по стоимости и выдадим его как результат
+    return wall_rock_materials
