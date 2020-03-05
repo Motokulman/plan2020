@@ -22,6 +22,9 @@ var sizeTextSettings = { topPadding: 10, bottomPadding: 5, leftPadding: 5, right
 var prePointsMM = []; // массив новых точек при рисовании элемента. Потом добавляется в основной массив точек
 var selectedElements = [];// массив выделенных на схеме элементов (id)
 
+
+
+
 // рисуем точку
 function drawPoint(p) {
     ctx_0.beginPath();

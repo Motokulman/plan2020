@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission, Group
+from django.contrib.postgres.fields import JSONField
 
 
 # Добавим классу пользователя новые поля, в которых будем хранить настройки
@@ -132,7 +133,7 @@ class SubBrand_2(models.Model):
 
 class Algorithm(models.Model):
     """Модель, представляющая алгоритм расчета стены"""
-    var_name = models.CharField(unique=True, default='default_identifier', max_length=200,
+    identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
                                   help_text='Имя переменной, идентификатор для исопльзования в коде')
     name = models.CharField(unique=True, max_length=200,
                             help_text='Название для понимания')
@@ -144,7 +145,7 @@ class Algorithm(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return self.name
+        return f'{self.name}, {self.identifier}'
 
 
 class Factory(models.Model):
@@ -164,7 +165,7 @@ class Factory(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return self.name
+        f'{self.name}, {self.city}, {self.brand}'
 
 
 # class BinderSolution(models.Model):
@@ -770,7 +771,7 @@ class RockWallMaterialUnit(models.Model):
     sub_brand_2 = models.ForeignKey(
         SubBrand_2, help_text='Выберите индекс внутри наименования (Подбренд 2, если есть), например, 44 для поротерма', on_delete=models.SET_NULL, null=True, blank=True)
     algorithm = models.ForeignKey(
-        'Algorithm', help_text='Выберите алгоритм для расчета', on_delete=models.SET_NULL, null=True, blank=True)
+        Algorithm, help_text='Выберите алгоритм для расчета', on_delete=models.SET_NULL, null=True, blank=True)
 
     YN = (
         ('no', 'Нет'),
@@ -871,7 +872,7 @@ class RockWallMaterialUnit(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.id}, {self.factory}, {self.name}, {self.material}, {self.greater_bed_size}, {self.minor_bed_size}, {self.height}'
+        return f'{self.id}, {self.algorithm.identifier}, {self.factory.name}, {self.name}, {self.material}, {self.greater_bed_size}, {self.minor_bed_size}, {self.height}, {self.purpose}'
 
     def get_absolute_url(self):
         """Returns the url to access a detail record for this material."""
@@ -978,6 +979,7 @@ class Plan(models.Model):
     """Модель, представляющая Информацию о проекте"""
     title = models.CharField(max_length=200)
     # Автор проекта. Если копировать один и тот же проект автор не меняется!
+    scheme = JSONField(null=True, blank=True)
     author = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Автор')
     # Кастомизация проекта. Если нет, то нет. Если есть, то высчитываем цену.

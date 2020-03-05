@@ -1,3 +1,5 @@
+var csrf_token = $('#canvas_form [name="csrfmiddlewaretoken"]').val();
+
 // Определение наведения на размер
 function defineTextSize() {
     var axis = "";
@@ -601,6 +603,56 @@ function drawHVLine(type) {
     ctx_1.stroke();
 }
 
+// Сохранение схемы
+$("#save").click(function () {
+    var data = {};
+    var d = {};
+    d.elements = elements;
+    d.lines = lines;
+    d.points = points;
+    d = JSON.stringify(d);
+    data.d = d;
+    data["csrfmiddlewaretoken"] = csrf_token;
+    console.log("data до JSON = ", data)
+    console.log("data после JSON, но до пересылки = ", data)
+    $.ajax({
+        url: 'get_response',
+        type: 'POST',
+        data: data,
+        cache: false,
+        async: false,
+        success: function (data) {
+            console.log("Схема сохранена = ", data);
+        },
+        error: function () {
+          console.log("Ошибка сохранения схемы");
+        }
+    });
+});
+
+// Воспроизведение сземы
+$("#restore").click(function () {
+    var data = {};
+    // data.plan = plan_id;
+    var url = 'get_plan';
+    $.ajax({
+      url: url,
+      type: 'GET',
+      data: data,
+      cache: true,
+      //async: false,
+      success: function (data) {
+        console.log(" Scheme data = ", data);
+        apertures = JSON.parse(data);
+        // console.log("OK Getting stored apertures");
+        console.log("apertures = ", JSON.parse(apertures[0].fields.scheme));
+      },
+      error: function () {
+        console.log("Getting stored scheme error");
+        console.log(" Scheme data = ", data);
+      }
+    });
+});
 
 
 // функция определения перпендикулярной прямой, а точнее у по х

@@ -1,6 +1,7 @@
 from catalog.models import *
 from catalog.modules import calc
-from catalog.modules import porotherm44
+# from catalog.modules import porotherm44
+
 
 
 
@@ -19,6 +20,8 @@ from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from catalog.forms import UserRegistrationForm, UserEditForm, ProfileEditForm
+import pickle
+
 
 
 def index(request):
@@ -159,12 +162,46 @@ def edit(request):
     return render(request,'register/edit.html', {'user_form': user_form,'profile_form': profile_form})
 
 # Попытка обновить ДОМ без перезагрузки
-def answer_me(request, pk):
-    field = request.GET.get('inputValue')
-    # field = pk
-    answer = 'You typed: ' + str(field)
+# def answer_me(request, pk):
+#     # field = request.GET.get('inputValue')
+#     # field = pk
+#     field = request.GET
+#     field = {1: field, 2: "Bob", 3: "Bill"}
+#     # field = request
+#     # field = field.get("el")
+#     # answer = 'You typed: ' + str(field)
+#     field = serializers.serialize('json', field)
+#     # d = serializers.serialize('json', field)
 
-    data = {
-        'respond': answer
-            }
-    return JsonResponse(data)
+#     return JsonResponse(field, safe=False) #
+
+def set_scheme(request, pk):
+    """Сохранение, изменение схемы"""
+    return_dict = dict()
+    data = request.POST
+    # pickled = pickle.dumps(data)
+    e = get_object_or_404(Plan, pk=pk)
+    e.scheme = data.get("d")
+    e.save()
+
+    return JsonResponse(return_dict)
+
+def get_plan(request, pk):
+    """Получение схемы плана"""
+    # data = request.GET
+    # plan = Plan.objects.get(id=pk)
+    # plan = Plan.objects.filter(id=pk)
+    # plan.scheme = pickle.loads(plan.scheme)
+    d = Plan.objects.filter(id=pk)
+    d = serializers.serialize('json', d)
+
+    return JsonResponse(d, safe=False)
+
+# def get_plan(request):
+#     """View function for getting all information of the specific plan"""
+
+#     data = request.GET
+#     v = Plan.objects.filter(pk=data.get("plan"))
+#     d = serializers.serialize('json', v)
+
+#     return JsonResponse(d, safe=False)
