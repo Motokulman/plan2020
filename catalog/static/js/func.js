@@ -269,7 +269,7 @@ canvas_2.addEventListener('click', function (e) {
                         if (data.size <= points[i].x) {
                             delta = + size - data.size + points[0].x;
                             newSize = points[i].x + delta;
-                            console.log("newSize ", newSize);
+                            //console.log("newSize ", newSize);
                             replacement = { id: points[i].id, x: newSize, y: points[i].y };
                             points.splice(i, 1, replacement);
                         }
@@ -308,7 +308,7 @@ canvas_2.addEventListener('click', function (e) {
                         if (data.size >= points[i].y) {
                             delta = + size - Math.abs(data.size - points[points.length - 1].y);
                             newSize = points[i].y - delta;
-                            console.log("newSize ", newSize);
+                            // console.log("newSize ", newSize);
                             replacement = { id: points[i].id, x: points[i].x, y: newSize };
                             points.splice(i, 1, replacement);
                         }
@@ -334,7 +334,8 @@ canvas_2.addEventListener('click', function (e) {
         }
         clear(ctx_3, canvas_3);
         drawAxeSize();
-        //    drawWalls();
+        drawElements();
+        schemeChange = true;
     }
 });
 
@@ -411,6 +412,7 @@ function onWheel(e) {
     clear(ctx_3, canvas_3);
     drawAxeSize();
     drawElements();
+    schemeChange = true;
 }
 
 // функция очистки канвы
@@ -519,10 +521,10 @@ function pushLine(id0, id1) {
 // сохранение элемента. Элемент состоит из одной или более линий. 
 function pushElement(el) { // ids - массив id линий, из которых состоит данный элемент  ids, distance, direction
     if (elements.length == 0) {
-        // console.log("el = ", el);
-        elements.push({ id: 0, ids: el.ids, distance: el.distance, direction: el.direction, type: el.type });
+        // console.log("el = ", el);bearType: 'not_set', liveType: 'not_set', outdoorType: 'not_set', 
+        elements.push({ id: 0, ids: el.ids, distance: el.distance, direction: el.direction, type: el.type, bearType: el.bearType, liveType: el.liveType, outdoorType: el.bearType });
     } else {
-        elements.push({ id: findMaxId(elements) + 1, ids: el.ids, distance: el.distance, direction: el.direction, type: el.type });
+        elements.push({ id: findMaxId(elements) + 1, ids: el.ids, distance: el.distance, direction: el.direction, type: el.type, bearType: el.bearType, liveType: el.liveType, outdoorType: el.bearType });
     }
 }
 
@@ -585,6 +587,7 @@ $(document).keydown(function (eventObject) {// Удаление, если вдр
         drawAxeSize();
         drawElements();
         selectedElements = [];
+        schemeChange = true;
     }
 });
 
@@ -605,11 +608,15 @@ function drawHVLine(type) {
 
 // Сохранение схемы
 $("#save").click(function () {
+    //console.log("zeroPointPadding = ", zeroPointPadding)
     var data = {};
     var d = {};
+    console.log("elements= ", elements)
     d.elements = elements;
     d.lines = lines;
     d.points = points;
+    d.scale = scale;
+    d.zeroPointPadding = zeroPointPadding;
     d = JSON.stringify(d);
     data.d = d;
     data["csrfmiddlewaretoken"] = csrf_token;
@@ -622,37 +629,69 @@ $("#save").click(function () {
         cache: false,
         async: false,
         success: function (data) {
+            schemeChange = false;
             console.log("Схема сохранена = ", data);
         },
         error: function () {
-          console.log("Ошибка сохранения схемы");
+            console.log("Ошибка сохранения схемы");
         }
     });
 });
 
-// Воспроизведение сземы
-$("#restore").click(function () {
+// Воспроизведение схемы
+function getScheme() {
     var data = {};
-    // data.plan = plan_id;
     var url = 'get_plan';
     $.ajax({
-      url: url,
-      type: 'GET',
-      data: data,
-      cache: true,
-      //async: false,
-      success: function (data) {
-        console.log(" Scheme data = ", data);
-        apertures = JSON.parse(data);
-        // console.log("OK Getting stored apertures");
-        console.log("apertures = ", JSON.parse(apertures[0].fields.scheme));
-      },
-      error: function () {
-        console.log("Getting stored scheme error");
-        console.log(" Scheme data = ", data);
-      }
+        url: url,
+        type: 'GET',
+        data: data,
+        cache: true,
+        //async: false,
+        success: function (data) {
+            d = JSON.parse(data);
+            d = JSON.parse(d[0].fields.scheme);
+            if (d != null) {
+                elements = d.elements;
+                lines = d.lines;
+                points = d.points;
+                scale = d.scale;
+                zeroPointPadding = d.zeroPointPadding;
+                drawAxeSize();
+                drawElements();
+                console.log(" Scheme data d = ", d);
+            }
+        },
+        error: function () {
+            console.log("Getting stored scheme error");
+            console.log(" Scheme data = ", data);
+        }
     });
+}
+
+
+$("#restore").click(function () {
+    getScheme();
 });
+
+$(document).ready(function () {
+    getScheme(); // воспроизводим схему из базы при открытии проекта
+});
+
+// предлагаем сохраниться перед закрытием
+window.onbeforeunload = function (e) {
+    if (schemeChange) {
+        // Ловим событие для Interner Explorer 
+        var e = e || window.event;
+        var myMessage = "Вы действительно хотите покинуть страницу, не сохранив данные?";
+        // Для Internet Explorer и Firefox 
+        if (e) {
+            e.returnValue = myMessage;
+        }
+        // Для Safari и Chrome 
+        return myMessage;
+    }
+};
 
 
 // функция определения перпендикулярной прямой, а точнее у по х

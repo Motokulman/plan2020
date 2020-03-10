@@ -2,6 +2,10 @@ from catalog.models import *
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission, Group
 from catalog.modules import solid_ceramic_brick
+from django.core import serializers
+from django.shortcuts import get_object_or_404
+import json
+import math
 
 # Нащи вычисления:
 
@@ -31,9 +35,93 @@ def calc(request):
     return gsop, R_req
 
 
-def calc_variants(request):
+def calc_variants(request, pk):
     calc(request)  # вызвали чтоб найти город, в котором живет текущий пользователь
     f = ''
+    point0 = dict()
+    point1 = dict()
+    square = {
+        "living_partition": 0,
+        "uninhabited_partition": 0,
+        "outdoor_living_bearing": 0,
+        "indoor_living_bearing": 0,
+        "outdoor_uninhabited_bearing": 0,
+        "indoor_uninhabited_bearing": 0
+    }
+    errMsg = list()
+
+    # получим объемы
+    plan = get_object_or_404(Plan, pk=pk)  # получили объект проекта
+    scheme = json.loads(plan.scheme)
+    elements = scheme['elements']
+    lines = scheme['lines']
+    points = scheme['points']
+    # element = scheme['elements']
+    # print("'scheme'  в  'plan'")
+    # plan = serializers.serialize('json', plan)
+
+    # получим площадь различных стен
+
+    for element in elements:
+        # print("'element'  в  'scheme.elements'")
+        # если это окружность
+        if element['distance'] > 0 and len(element['ids']) == 1:
+            length = element.distance * 3.14  # поскольку пока distance равна радиусу
+        else:  # бежим по массиву id линий, это м.б. одна линия или несколько, если это эркер
+            for line_id in element['ids']:
+                for line in lines:
+                    if line['id'] == line_id:
+                        for point in points:
+                            if point['id'] == line['id0']:
+                                point0['x'] = point['x']
+                                point0['y'] = point['y']
+                            if point['id'] == line['id1']:
+                                point1['x'] = point['x']
+                                point1['y'] = point['y']
+            length = math.sqrt(
+                (point0['x'] - point1['x']) ** 2 + (point0['y'] - point1['y']) ** 2)
+        # переводим в полщадь в метрах квадратных
+        s = round(length/1000 * 3, 2)
+
+        err = list()
+        if element['type'] == "wall":
+            if element['bearType'] == "partition":
+                if element['liveType'] == "living":
+                    square['living_partition'] = square['living_partition'] + s
+                elif element['liveType'] == "uninhabited":
+                    square['uninhabited_partition'] = square['uninhabited_partition'] + s
+                else:
+                    err.append(
+                        "Не задано: перегородка смежная с жилым помещением или нет")
+                    err.append(element['id'])
+            elif element['bearType'] == "bearing":
+                if element['liveType'] == "living":
+                    if element['outdoorType'] == "outdoor":
+                        square['outdoor_living_bearing'] = square['outdoor_living_bearing'] + s
+                    elif element['outdoorType'] == "indoor":
+                        square['indoor_living_bearing'] = square['indoor_living_bearing'] + s
+                    else:
+                        err.append(
+                            "Не задано: несущая стена, смежная с жилым помещением, внутренняя или ограждающая?")
+                        err.append(element['id'])
+                elif element['liveType'] == "uninhabited":
+                    if element['outdoorType'] == "outdoor":
+                        square['outdoor_uninhabited_bearing'] = square['outdoor_uninhabited_bearing'] + s
+                    elif element['outdoorType'] == "indoor":
+                        square['indoor_uninhabited_bearing'] = square['indoor_uninhabited_bearing'] + s
+                    else:
+                        err.append(
+                            "Не задано: несущая стена, смежная с нежилым помещением, внутренняя или ограждающая?")
+                        err.append(element['id'])
+            else:
+                err.append("Не задано: перегородка или несущая стена?")
+                err.append(element['id'])
+            errMsg.append(err)
+
+        # ((element.distance > 0) && (element.ids.length == 1))
+
+    # опять пробежимся по массиву материалов каждого поставщика, теперь с вычислением стоимости
+
     group = Group.objects.get(
         permissions__codename='add_rockwallmaterialprice')
     # получили всех пользователей,являющихся поставщиками из города, в котором живет текущий пользователь
@@ -42,11 +130,20 @@ def calc_variants(request):
     # Получим массив всех стеновых материалов, которые есть у местных поставщиков и сразу сделаем этот массив с уникальными элементами. исключая лицевой кирпич
     wall_rock_materials = RockWallMaterialPrice.objects.filter(
         owner__in=users).exclude(name__purpose='fasade').distinct('name_id')
-    # для каждого получим количество материалов
+    # определим уникальные алгоритмы
+    algs = list()
     for material in wall_rock_materials:
-        if material.name.algorithm.identifier == 'solid_ceramic_brick':
-            f = solid_ceramic_brick.algorithm(material)
+        if material.name.algorithm.identifier not in algs:
+            algs.append(material.name.algorithm.identifier)
+    algorithms = Algorithm.objects.filter(identifier__in=algs)
 
-    # опять пробежимся по массиву материалов каждого поставщика, теперь с вычислением стоимости
+    # пробежимся по списку алгоритмов и посчитаем объемы для каждого из них
+
+    # пробежимся по массиву материалов, и посчитаем каждый 
+    # for material in wall_rock_materials:
+    #     if material.name.algorithm.identifier == 'solid_ceramic_brick':
+    #         f = solid_ceramic_brick.algorithm(material)
+
+
     # отсортируем полученный массив по стоимости и выдадим его как результат
-    return f
+    return algorithms

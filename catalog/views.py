@@ -101,7 +101,11 @@ def edit_scheme(request, pk):
     plan_id = plan.id
 
     # a, b = calc.calc(request)
-    test = calc.calc_variants(request)
+    plan_scheme = plan.scheme
+    if plan_scheme != None:
+        test = calc.calc_variants(request, pk)
+    else:
+        test = "Нет данных"
 
     context = {
         'plan_title': plan_title,
@@ -161,25 +165,10 @@ def edit(request):
         profile_form = ProfileEditForm(instance=request.user.profile)
     return render(request,'register/edit.html', {'user_form': user_form,'profile_form': profile_form})
 
-# Попытка обновить ДОМ без перезагрузки
-# def answer_me(request, pk):
-#     # field = request.GET.get('inputValue')
-#     # field = pk
-#     field = request.GET
-#     field = {1: field, 2: "Bob", 3: "Bill"}
-#     # field = request
-#     # field = field.get("el")
-#     # answer = 'You typed: ' + str(field)
-#     field = serializers.serialize('json', field)
-#     # d = serializers.serialize('json', field)
-
-#     return JsonResponse(field, safe=False) #
-
 def set_scheme(request, pk):
     """Сохранение, изменение схемы"""
     return_dict = dict()
     data = request.POST
-    # pickled = pickle.dumps(data)
     e = get_object_or_404(Plan, pk=pk)
     e.scheme = data.get("d")
     e.save()
@@ -187,21 +176,18 @@ def set_scheme(request, pk):
     return JsonResponse(return_dict)
 
 def get_plan(request, pk):
-    """Получение схемы плана"""
-    # data = request.GET
-    # plan = Plan.objects.get(id=pk)
-    # plan = Plan.objects.filter(id=pk)
-    # plan.scheme = pickle.loads(plan.scheme)
+    """Получение схемы """
     d = Plan.objects.filter(id=pk)
     d = serializers.serialize('json', d)
 
     return JsonResponse(d, safe=False)
 
-# def get_plan(request):
-#     """View function for getting all information of the specific plan"""
+# def calc(request, pk):
+#     """Рассчитываем все исходя из схемы"""
+#     plan = Plan.objects.filter(id=pk)
 
-#     data = request.GET
-#     v = Plan.objects.filter(pk=data.get("plan"))
-#     d = serializers.serialize('json', v)
+#     plan_title = plan.title
+#     plan_id = plan.id
+
 
 #     return JsonResponse(d, safe=False)

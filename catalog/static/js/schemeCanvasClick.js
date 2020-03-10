@@ -1,8 +1,11 @@
 //***************************************************************
 // В случае клика по канве определяем какой элемент хочет нарисовать пользователь и действуем
 canvas_0.addEventListener('click', function (e) {
+    schemeChange = true;
+    var distance = 0; // если кривая, то см. ниже, если прямая то = 0
     var newLinesIds = [];// массив, куда будут сохраняться id новых линий, а затем сохраняться в элементе
     var newElement = [];// элементы сначала создаем отдельно, т.к. они все разные, прописываем свойства для каждого, и лишь потом добавляем в массив.
+
     if (selectedTool != "none") {
         selectedElements = [];// зачистим массив выделеных элеиентов
     }
@@ -20,9 +23,10 @@ canvas_0.addEventListener('click', function (e) {
                     drawPoint(mousePos); // Нарисовали вторую точку
                     pushLine(findMaxId(points) - 1, findMaxId(points)); // занесли в массив линий нашу новую линию
                     newLinesIds[0] = findMaxId(lines);// занесли в промежуточный массив id единственной линии, которая будет храниться в данном элементе (т.к. это просто ровная стена)
-                    newElement = { ids: newLinesIds };
+                    newElement = { ids: newLinesIds, distance: distance, type: 'wall', bearType: '', liveType: '', outdoorType: '', };
                     // console.log("newElement = ", newElement);
                     pushElement(newElement); // занесли в массив с элементами id нашей линии стены/ радиус = 0 чтобы отличить стену от радиусного элемента
+                    // console.log("elements сразу после добавления = ", elements);
                 }
 
             } else if (selectedLineType == 'polygon') { // если это многоугольник. У многоугольника всезда есть две начальные точки, которые могут совпадать
@@ -94,7 +98,7 @@ canvas_0.addEventListener('click', function (e) {
                     newLinesIds[0] = findMaxId(lines) - 2;
                     newLinesIds[1] = findMaxId(lines) - 1;
                     newLinesIds[2] = findMaxId(lines);
-                    newElement = { ids: newLinesIds };
+                    newElement = { ids: newLinesIds, distance: distance, type: 'wall', bearType: '', liveType: '', outdoorType: '' };
                     pushElement(newElement);
                     drawLine(mousePosArray[0], mousePosArray[2], ctx_0, '#333333');
                     drawLine(mousePosArray[2], mousePosArray[3], ctx_0, '#333333');
@@ -120,13 +124,13 @@ canvas_0.addEventListener('click', function (e) {
                     pushLine(findMaxId(points) - 1, findMaxId(points)); // занесли в массив линий нашу новую линию
                     newLinesIds[0] = findMaxId(lines);// занесли в промежуточный массив id единственной линии
                     var diameter = Math.round(Math.sqrt(Math.pow((prePointsMM[0].x - prePointsMM[1].x), 2) + Math.pow((prePointsMM[0].y - prePointsMM[1].y), 2))); // пусть пока это будет правильный полукруг
-                    var distance = diameter / 2;// определим расстояние от дальней точки окружности до базовой прямой. Этот способ позволяет хранить только это расстояние и направление. Для простоты оно равно радиусу, что нужно для правильного полукруга. Поэтому рано 0.
+                    distance = diameter / 2;// определим расстояние от дальней точки окружности до базовой прямой. Этот способ позволяет хранить только это расстояние и направление. Для простоты оно равно радиусу, что нужно для правильного полукруга. Поэтому рано 0.
                     // определим по какую сторону от прямой кликнул пользователь. Если стоим на первой точке и смотрим на вторую. + значит слева, - справа
                     var d = (mmOfMousePos.x - prePointsMM[0].x) * (prePointsMM[1].y - prePointsMM[0].y) - (mmOfMousePos.y - prePointsMM[0].y) * (prePointsMM[1].x - prePointsMM[0].x)
                     if (d > 0) { //+ значит слева
-                        newElement = { ids: newLinesIds, distance: distance, direction: "left" };
+                        newElement = { ids: newLinesIds, distance: distance, direction: "left", type: 'wall', bearType: '', liveType: '', outdoorType: '' };
                     } else {
-                        newElement = { ids: newLinesIds, distance: distance, direction: "right" };
+                        newElement = { ids: newLinesIds, distance: distance, direction: "right", type: 'wall', bearType: '', liveType: '', outdoorType: '' };
                     }
                     pushElement(newElement);
                     prePointsMM = [];
@@ -169,5 +173,5 @@ canvas_0.addEventListener('click', function (e) {
             }
             break;
     }
-    //console.log("elements = ", elements);
+    // console.log("elements = ", elements);
 });
