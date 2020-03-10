@@ -693,7 +693,14 @@ window.onbeforeunload = function (e) {
     }
 };
 
+// создание фильтров
+// function createFilters(algorithms) {
 
+// }
+
+// <p>
+//     <input type="checkbox" checked name="html5" />HTML5
+// </p>
 // функция определения перпендикулярной прямой, а точнее у по х
 // function findYOnNormal(p0, p1, x) {
 //     var newPoint = [];

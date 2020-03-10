@@ -9,14 +9,20 @@ import math
 
 # Нащи вычисления:
 
-
-def calc(request):
-    global city
-    indoor_temperature = 20  # температура по умолчанию внутри помещения
-    # получаем профиль текущего пользователя
+def get_city(request):
     profile = Profile.objects.get(user__username=request.user)
     city_name = profile.city  # кзнаем из профиля город пользователя
     city = City.objects.get(name=city_name)  # получаем объект города
+    return city
+
+def calc(request):
+    
+    indoor_temperature = 20  # температура по умолчанию внутри помещения
+    # получаем профиль текущего пользователя
+    # profile = Profile.objects.get(user__username=request.user)
+    # city_name = profile.city  # кзнаем из профиля город пользователя
+    # city = City.objects.get(name=city_name)  # получаем объект города
+    city = get_city()
     # определяем ГСОП https://www.teplo-info.com/snip/otopitelniy_period
     gsop = int((indoor_temperature - city.heating_period_temperature)
                * city.heating_period_duration)
@@ -146,4 +152,21 @@ def calc_variants(request, pk):
 
 
     # отсортируем полученный массив по стоимости и выдадим его как результат
+    return algorithms
+
+def get_materials(city): # получение списка материалов, доступных в городе пользователя
+    group = Group.objects.get(permissions__codename='add_rockwallmaterialprice')
+    # получили всех пользователей,являющихся поставщиками из города, в котором живет текущий пользователь
+    users = User.objects.filter(groups=group).filter(profile__city__name=city.name)
+    # Получим массив всех стеновых материалов, которые есть у местных поставщиков и сразу сделаем этот массив с уникальными элементами. исключая лицевой кирпич
+    wall_rock_materials = RockWallMaterialPrice.objects.filter(owner__in=users).exclude(name__purpose='fasade').distinct('name_id')
+    return wall_rock_materials
+
+def get_algorithms(wall_rock_materials):
+    # определим уникальные алгоритмы
+    algs = list()
+    for material in wall_rock_materials:
+        if material.name.algorithm.identifier not in algs:
+            algs.append(material.name.algorithm.identifier)
+    algorithms = Algorithm.objects.filter(identifier__in=algs)
     return algorithms

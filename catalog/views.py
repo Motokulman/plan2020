@@ -103,14 +103,16 @@ def edit_scheme(request, pk):
     # a, b = calc.calc(request)
     plan_scheme = plan.scheme
     if plan_scheme != None:
-        test = calc.calc_variants(request, pk)
+        # test = calc.calc_variants(request, pk)
+        # city = get_city()
+        algorithms = calc.get_algorithms(calc.get_materials(calc.get_city(request))) # получили уникальные алгоритмы
     else:
-        test = "Нет данных"
+        algorithms = "Нет данных"
 
     context = {
         'plan_title': plan_title,
         'plan_id': plan_id,
-        'test': test,
+        'test': algorithms,
     }
 
     return render(request, 'catalog/edit_scheme.html', context)
