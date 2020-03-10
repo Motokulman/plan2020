@@ -48,7 +48,7 @@
         <button id="save" type="button" class="btn btn-light">Сохранить</button>
         <button id="restore" type="button" class="btn btn-light">Получить</button>
       </div>
-      
+
       <form id="canvas_form" class="canvas-field" action="" name="{{ plan_id}}" method="POST">
         {% csrf_token %}
       </form>
@@ -82,6 +82,11 @@
 
     </div>
   </div>
+
+  <div class="filters" name="{{ test }}">
+    <h3>Фильтры</h3>
+  </div>
+
 </div>
 
 <div id="dialog" title="Стены" class="ui-widget">

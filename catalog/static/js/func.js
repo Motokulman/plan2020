@@ -649,6 +649,7 @@ function getScheme() {
         cache: true,
         //async: false,
         success: function (data) {
+            console.log(" d = ", data);
             d = JSON.parse(data);
             d = JSON.parse(d[0].fields.scheme);
             if (d != null) {
@@ -672,6 +673,7 @@ function getScheme() {
 
 $("#restore").click(function () {
     getScheme();
+    createFilters();
 });
 
 $(document).ready(function () {
@@ -694,13 +696,21 @@ window.onbeforeunload = function (e) {
 };
 
 // создание фильтров
-// function createFilters(algorithms) {
+function createFilters() {
+    algorithms = $('.filters').attr("name");
+    
+    algorithms = JSON.parse(algorithms);
+    for(let algorithm of algorithms) {       
+        console.log("algorithm = ", algorithm); 
+        https://stackoverflow.com/questions/2055459/dynamically-create-checkbox-with-jquery-from-text-input
+        // var newItem = $('<p> <input type="checkbox" checked name=' + algorithm.name + ' /' + algorithm.name +'</p>');
+        // $('#.filters').append(newItem);
+    }
+}
 
-// }
-
-// <p>
-//     <input type="checkbox" checked name="html5" />HTML5
-// </p>
+/* <p>
+    <input type="checkbox" checked name="html5" />HTML5
+</p> */
 // функция определения перпендикулярной прямой, а точнее у по х
 // function findYOnNormal(p0, p1, x) {
 //     var newPoint = [];

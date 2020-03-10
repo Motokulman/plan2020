@@ -106,6 +106,7 @@ def edit_scheme(request, pk):
         # test = calc.calc_variants(request, pk)
         # city = get_city()
         algorithms = calc.get_algorithms(calc.get_materials(calc.get_city(request))) # получили уникальные алгоритмы
+        algorithms = serializers.serialize('json', algorithms)
     else:
         algorithms = "Нет данных"
 
