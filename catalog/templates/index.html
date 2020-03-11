@@ -1,13 +1,47 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Калейдоплан</h1>
-  <p>Электронные проекты домов</p>
-  <h3>Сейчас в системе:</h3>
-  <ul>
-    <li><strong>Проектов:</strong> {{ num_plans }}</li>
-    <li><strong>Подрядчиков (бригад):</strong> {{ num_contractors }}</li>
-    <li><strong>Поставщков материалов:</strong> {{ num_sellers }}</li>
-    <li><strong>Архитекторов:</strong> {{ num_architects }}</li>
-  </ul>
+<h1>Калейдоплан</h1>
+<p>Электронные проекты домов</p>
+<h3>Сейчас в системе:</h3>
+<ul>
+  <li><strong>Проектов:</strong> {{ num_plans }}</li>
+  <li><strong>Подрядчиков (бригад):</strong> {{ num_contractors }}</li>
+  <li><strong>Поставщков материалов:</strong> {{ num_sellers }}</li>
+  <li><strong>Архитекторов:</strong> {{ num_architects }}</li>
+</ul>
+<h3>Фильтры:</h3>
+<p><input type="checkbox" checked name="cheapest" />Показывать самые дешевые варианты</p>
+<h5>Несущие стены, смежные с жилыми помещениями</h5>
+<p>
+  <label for="living_bearing_material_type">Тип материала:</label>
+  <input type="checkbox" checked name="living_bearing_material_type" />
+  <select id="living_bearing_material_type" name="living_bearing_material_type">
+    <option value="">Нажмите кнопку поиска внизу</option>
+  </select>
+</p>
+<p>
+  <label for="living_bearing_material_unit">Материал:</label>
+  <input type="checkbox" checked name="living_bearing_material_unit" />
+  <select id="living_bearing_material_unit" name="living_bearing_material_unit">
+    <option value="">Нажмите кнопку поиска внизу</option>
+  </select>
+</p>
+
+<h5>Несущие стены в нежилых помещениях</h5>
+<p>
+  <p><input type="checkbox" checked name="uninhabited_bearing_same_material" />Как и в жилых</p>
+  <label for="uninhabited_bearing_material_type">Тип материала:</label>
+  <input type="checkbox" checked name="uninhabited_bearing_material_type" />
+  <select id="uninhabited_bearing_material_type" name="uninhabited_bearing_material_type">
+    <option value="">Нажмите кнопку поиска внизу</option>
+  </select>
+</p>
+<p>
+  <label for="living_bearing_material_unit">Материал:</label>
+  <input type="checkbox" checked name="living_bearing_material_unit" />
+  <select id="living_bearing_material_unit" name="living_bearing_material_unit">
+    <option value="">Нажмите кнопку поиска внизу</option>
+  </select>
+</p>
 {% endblock %}

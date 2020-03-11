@@ -177,6 +177,9 @@ def get_cost(request, pk, selected_algs):
         if algorithm.identifier == 'solid_ceramic_brick':
             res = solid_ceramic_brick(params, volumes)
 
+    
+    
+    
     result.append(res) 
 
     return result
