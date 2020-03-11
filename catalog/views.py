@@ -185,12 +185,13 @@ def get_plan(request, pk):
 
     return JsonResponse(d, safe=False)
 
-# def calc(request, pk):
-#     """Рассчитываем все исходя из схемы"""
-#     plan = Plan.objects.filter(id=pk)
+def get_cost(request, pk):
+    """Рассчитываем все исходя из схемы. В будущем реализовать механизм сессий, чтоб каждый раз не искать проект в базе"""
+    d = Plan.objects.filter(id=pk)
+    d = serializers.serialize('json', d)
 
-#     plan_title = plan.title
-#     plan_id = plan.id
+    # plan_title = plan.title
+    # plan_id = plan.id
 
 
-#     return JsonResponse(d, safe=False)
+    return JsonResponse(d, safe=False)

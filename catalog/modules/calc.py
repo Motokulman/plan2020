@@ -15,14 +15,9 @@ def get_city(request):
     city = City.objects.get(name=city_name)  # получаем объект города
     return city
 
-def calc(request):
-    
+def get_local_params(request, city):
     indoor_temperature = 20  # температура по умолчанию внутри помещения
-    # получаем профиль текущего пользователя
-    # profile = Profile.objects.get(user__username=request.user)
-    # city_name = profile.city  # кзнаем из профиля город пользователя
-    # city = City.objects.get(name=city_name)  # получаем объект города
-    city = get_city()
+    # city = get_city(request)
     # определяем ГСОП https://www.teplo-info.com/snip/otopitelniy_period
     gsop = int((indoor_temperature - city.heating_period_temperature)
                * city.heating_period_duration)
@@ -41,9 +36,8 @@ def calc(request):
     return gsop, R_req
 
 
-def calc_variants(request, pk):
-    calc(request)  # вызвали чтоб найти город, в котором живет текущий пользователь
-    f = ''
+def get_volumes(request, pk, city):
+    # calc(request)  # вызвали чтоб найти город, в котором живет текущий пользователь
     point0 = dict()
     point1 = dict()
     square = {
@@ -128,20 +122,20 @@ def calc_variants(request, pk):
 
     # опять пробежимся по массиву материалов каждого поставщика, теперь с вычислением стоимости
 
-    group = Group.objects.get(
-        permissions__codename='add_rockwallmaterialprice')
-    # получили всех пользователей,являющихся поставщиками из города, в котором живет текущий пользователь
-    users = User.objects.filter(groups=group).filter(
-        profile__city__name=city.name)
-    # Получим массив всех стеновых материалов, которые есть у местных поставщиков и сразу сделаем этот массив с уникальными элементами. исключая лицевой кирпич
-    wall_rock_materials = RockWallMaterialPrice.objects.filter(
-        owner__in=users).exclude(name__purpose='fasade').distinct('name_id')
-    # определим уникальные алгоритмы
-    algs = list()
-    for material in wall_rock_materials:
-        if material.name.algorithm.identifier not in algs:
-            algs.append(material.name.algorithm.identifier)
-    algorithms = Algorithm.objects.filter(identifier__in=algs)
+    # group = Group.objects.get(
+    #     permissions__codename='add_rockwallmaterialprice')
+    # # получили всех пользователей,являющихся поставщиками из города, в котором живет текущий пользователь
+    # users = User.objects.filter(groups=group).filter(
+    #     profile__city__name=city.name)
+    # # Получим массив всех стеновых материалов, которые есть у местных поставщиков и сразу сделаем этот массив с уникальными элементами. исключая лицевой кирпич
+    # wall_rock_materials = RockWallMaterialPrice.objects.filter(
+    #     owner__in=users).exclude(name__purpose='fasade').distinct('name_id')
+    # # определим уникальные алгоритмы
+    # algs = list()
+    # for material in wall_rock_materials:
+    #     if material.name.algorithm.identifier not in algs:
+    #         algs.append(material.name.algorithm.identifier)
+    # algorithms = Algorithm.objects.filter(identifier__in=algs)
 
     # пробежимся по списку алгоритмов и посчитаем объемы для каждого из них
 
@@ -152,7 +146,7 @@ def calc_variants(request, pk):
 
 
     # отсортируем полученный массив по стоимости и выдадим его как результат
-    return algorithms
+    return square
 
 def get_materials(city): # получение списка материалов, доступных в городе пользователя
     group = Group.objects.get(permissions__codename='add_rockwallmaterialprice')
@@ -170,3 +164,19 @@ def get_algorithms(wall_rock_materials):
             algs.append(material.name.algorithm.identifier)
     algorithms = Algorithm.objects.filter(identifier__in=algs)
     return algorithms
+
+def get_cost(request, pk, selected_algs):
+    result = list()
+    city = get_city(request) # получим город пользователя
+    params = get_local_params(request, city) # получим нормативные показатели для региона пользователя
+    volumes = get_volumes(request, pk, city) # получим объемы стен
+    wall_rock_materials = get_materials(city) # получим доступные в городде пользователя материалы
+
+    # бежим по массиву алгоритмов и расчитывам для каждого из них количество материалов
+    for algorithm in selected_algs:
+        if algorithm.identifier == 'solid_ceramic_brick':
+            res = solid_ceramic_brick(params, volumes)
+
+    result.append(res) 
+
+    return result
