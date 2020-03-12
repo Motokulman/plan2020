@@ -3,8 +3,6 @@ from catalog.modules import calc
 # from catalog.modules import porotherm44
 
 
-
-
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
@@ -20,15 +18,14 @@ from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from catalog.forms import UserRegistrationForm, UserEditForm, ProfileEditForm
-import pickle
-
+import json
 
 
 def index(request):
     """View function for home page of site."""
 
     # # Generate counts of some of the main objects
-    # num_books = Book.objects.all().count()
+    num_plans = Plan.objects.all().count()
     # num_instances = BookInstance.objects.all().count()
 
     # # Available books (status = 'a')
@@ -38,7 +35,7 @@ def index(request):
     # num_authors = Author.objects.count()
 
     context = {
-        # 'num_books': num_books,
+        'num_plans': num_plans,
         # 'num_instances': num_instances,
         # 'num_instances_available': num_instances_available,
         # 'num_authors': num_authors,
@@ -91,8 +88,6 @@ class PlanDelete(DeleteView):
     success_url = reverse_lazy('plans')
 
 
-
-
 def edit_scheme(request, pk):
     """View function for editing scheme of a specific plan"""
 
@@ -105,7 +100,8 @@ def edit_scheme(request, pk):
     if plan_scheme != None:
         # test = calc.calc_variants(request, pk)
         # city = get_city()
-        algorithms = calc.get_algorithms(calc.get_materials(calc.get_city(request))) # получили уникальные алгоритмы
+        algorithms = calc.get_algorithms(calc.get_materials(
+            calc.get_city(request)))  # получили уникальные алгоритмы
         algorithms = serializers.serialize('json', algorithms)
     else:
         algorithms = "Нет данных"
@@ -158,15 +154,17 @@ def register(request):
 @login_required
 def edit(request):
     if request.method == 'POST':
-        user_form = UserEditForm(instance=request.user,data=request.POST)
-        profile_form = ProfileEditForm(instance=request.user.profile, data=request.POST, files=request.FILES)
+        user_form = UserEditForm(instance=request.user, data=request.POST)
+        profile_form = ProfileEditForm(
+            instance=request.user.profile, data=request.POST, files=request.FILES)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
     else:
         user_form = UserEditForm(instance=request.user)
         profile_form = ProfileEditForm(instance=request.user.profile)
-    return render(request,'register/edit.html', {'user_form': user_form,'profile_form': profile_form})
+    return render(request, 'register/edit.html', {'user_form': user_form, 'profile_form': profile_form})
+
 
 def set_scheme(request, pk):
     """Сохранение, изменение схемы"""
@@ -175,8 +173,10 @@ def set_scheme(request, pk):
     e = get_object_or_404(Plan, pk=pk)
     e.scheme = data.get("d")
     e.save()
+    # если проект имеет статус завершенного, сразу вычисляем его стоимость для всех городов и всех поставщиков
 
     return JsonResponse(return_dict)
+
 
 def get_plan(request, pk):
     """Получение схемы """
@@ -185,12 +185,100 @@ def get_plan(request, pk):
 
     return JsonResponse(d, safe=False)
 
-# def calc(request, pk):
-#     """Рассчитываем все исходя из схемы"""
-#     plan = Plan.objects.filter(id=pk)
 
-#     plan_title = plan.title
-#     plan_id = plan.id
+def get_cost(request, pk):
+    """Рассчитываем все исходя из схемы. В будущем реализовать механизм сессий, чтоб каждый раз не искать проект в базе"""
+    d = Plan.objects.filter(id=pk)
+    d = serializers.serialize('json', d)
+
+    # plan_title = plan.title
+    # plan_id = plan.id
+
+    return JsonResponse(d, safe=False)
 
 
-#     return JsonResponse(d, safe=False)
+# проверка проекта
+def check_plan(request, pk):
+    plan = get_object_or_404(Plan, pk=pk)  # получили объект проекта
+    scheme = json.loads(plan.scheme)
+    elements = scheme['elements']
+
+    # проверим, вся ли информация, необходимая для расчетов, задана
+    errMsg = dict()
+    for element in elements:
+        if element['type'] == "wall":
+            if element['bearType'] != "partition" and element['bearType'] != "bearing":
+                errMsg[len(errMsg)] = {
+                    'element': element['id'],
+                    'message': "Не задано: это перегородка или несущая стена?",
+                }
+
+            if element['liveType'] != "living" and element['liveType'] != "uninhabited":
+                errMsg[len(errMsg)] = {
+                    'element': element['id'],
+                    'message': "Не задано: стена смежная с жилым помещением или нет",
+                }
+
+            if element['bearType'] == "bearing":
+                if element['outdoorType'] != "outdoor" and element['outdoorType'] != "indoor":
+                    errMsg[len(errMsg)] = {
+                        'element': element['id'],
+                        'message': "Не задано: несущая стена, смежная с нежилым помещением, внутренняя или ограждающая?",
+                    }
+
+    # если ошибок нет, сохраняем в проекте, что он проверен
+    if len(errMsg) == 0:
+        errMsg[len(errMsg)] = {
+            'element': 0,
+            'message': "Ошибок нет",
+        }
+        plan.checked = True
+        plan.save()
+
+    return JsonResponse(errMsg)
+
+
+# выкладка проекта
+def post_plan(request, pk):
+    # plan = get_object_or_404(Plan, pk=pk)  # получили объект проекта
+    # if (plan.checked == True): # продолжаем только если проект прошел проверку
+    #     scheme = json.loads(plan.scheme)
+    #     elements = scheme['elements']
+    #     lines = scheme['lines']
+    #     points = scheme['points']
+
+
+
+    #     # проверим, вся ли информация, необходимая для расчетов, задана
+    #     errMsg = dict()
+    #     for element in elements:
+    #         if element['type'] == "wall":
+    #             if element['bearType'] != "partition" and element['bearType'] != "bearing":
+    #                 errMsg[len(errMsg)] = {
+    #                     'element': element['id'],
+    #                     'message': "Не задано: это перегородка или несущая стена?",
+    #                 }
+
+    #             if element['liveType'] != "living" and element['liveType'] != "uninhabited":
+    #                 errMsg[len(errMsg)] = {
+    #                     'element': element['id'],
+    #                     'message': "Не задано: стена смежная с жилым помещением или нет",
+    #                 }
+
+    #             if element['bearType'] == "bearing":
+    #                 if element['outdoorType'] != "outdoor" and element['outdoorType'] != "indoor":
+    #                     errMsg[len(errMsg)] = {
+    #                         'element': element['id'],
+    #                         'message': "Не задано: несущая стена, смежная с нежилым помещением, внутренняя или ограждающая?",
+    #                     }
+
+    #     # если ошибок нет, сохраняем в проекте, что он проверен
+    #     if len(errMsg) == 0:
+    #         errMsg[len(errMsg)] = {
+    #             'element': 0,
+    #             'message': "Ошибок нет",
+    #         }
+    #         plan.checked = True
+    #         plan.save()
+
+    return JsonResponse(errMsg)

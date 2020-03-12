@@ -50,3 +50,22 @@ urlpatterns += [
     path('plan/<int:pk>/edit_scheme/get_plan',
          views.get_plan, name='get_plan'),
 ]
+
+# получение расчета вариантов стоимости проекта
+urlpatterns += [
+    path('plan/<int:pk>/edit_scheme/get_cost',
+         views.get_cost, name='get_cost'),
+]
+
+
+# прверка проекта
+urlpatterns += [
+    path('plan/<int:pk>/edit_scheme/check_plan',
+         views.check_plan, name='check_plan'),
+]
+
+# выкладка проекта
+urlpatterns += [
+    path('plan/<int:pk>/edit_scheme/post_plan',
+         views.post_plan, name='post_plan'),
+]

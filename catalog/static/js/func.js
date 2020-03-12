@@ -608,10 +608,48 @@ function drawHVLine(type) {
 
 // Сохранение схемы
 $("#save").click(function () {
-    //console.log("zeroPointPadding = ", zeroPointPadding)
+    if (schemeChange) { // если схема менялась
+        saveScheme();
+        checked = false;
+    }
+});
+
+// Воспроизведение схемы
+function getScheme() {
+    var data = {};
+    var url = 'get_plan';
+    $.ajax({
+        url: url,
+        type: 'GET',
+        data: data,
+        cache: true,
+        //async: false,
+        success: function (data) {
+            // console.log(" d = ", data);
+            p = JSON.parse(data);
+            d = JSON.parse(p[0].fields.scheme);
+            if (d != null) {
+                elements = d.elements;
+                lines = d.lines;
+                points = d.points;
+                scale = d.scale;
+                zeroPointPadding = d.zeroPointPadding;
+                checked = p.checked;
+                drawAxeSize();
+                drawElements();
+                // console.log(" Scheme data d = ", d);
+            }
+        },
+        error: function () {
+            console.log("Getting stored scheme error. Scheme data = ", data);
+        }
+    });
+}
+
+function saveScheme() {
     var data = {};
     var d = {};
-    console.log("elements= ", elements)
+    // console.log("elements= ", elements)
     d.elements = elements;
     d.lines = lines;
     d.points = points;
@@ -619,6 +657,7 @@ $("#save").click(function () {
     d.zeroPointPadding = zeroPointPadding;
     d = JSON.stringify(d);
     data.d = d;
+    data.checked = false;
     data["csrfmiddlewaretoken"] = csrf_token;
     console.log("data до JSON = ", data)
     console.log("data после JSON, но до пересылки = ", data)
@@ -636,45 +675,59 @@ $("#save").click(function () {
             console.log("Ошибка сохранения схемы");
         }
     });
-});
-
-// Воспроизведение схемы
-function getScheme() {
-    var data = {};
-    var url = 'get_plan';
-    $.ajax({
-        url: url,
-        type: 'GET',
-        data: data,
-        cache: true,
-        //async: false,
-        success: function (data) {
-            console.log(" d = ", data);
-            d = JSON.parse(data);
-            d = JSON.parse(d[0].fields.scheme);
-            if (d != null) {
-                elements = d.elements;
-                lines = d.lines;
-                points = d.points;
-                scale = d.scale;
-                zeroPointPadding = d.zeroPointPadding;
-                drawAxeSize();
-                drawElements();
-                console.log(" Scheme data d = ", d);
-            }
-        },
-        error: function () {
-            console.log("Getting stored scheme error");
-            console.log(" Scheme data = ", data);
-        }
-    });
 }
-
 
 $("#restore").click(function () {
     getScheme();
     createFilters();
 });
+
+// проверка проекта на возможность выкладки в систему
+$("#check").click(function () {
+    if (schemeChange) { // если схема менялась, то 
+        alert("Проект был изменен. Сначала сохраните изменения")
+    } else if (!checked) {
+        console.log("checked = ", checked);
+        checkPlan();
+    }
+});
+
+// выкладка проекта в систему
+$("#post").click(function () {
+    postPlan();
+});
+
+function postPlan() {
+    var data = {};
+    $.ajax({
+        url: 'post_plan',
+        type: 'GET',
+        data: data,
+        success: function (data) {
+            console.log("Выкладка проекта завершена. Подробности:", data);
+        },
+        error: function () {
+            console.log("Ошибка при выкладке проекта. data = ", data);
+        }
+    });
+}
+
+function checkPlan() {
+    var data = {};
+    $.ajax({
+        url: 'check_plan',
+        type: 'GET',
+        data: data,
+        // cache: false,
+        // async: false,
+        success: function (data) {
+            console.log("Проверка завершилась. Посмотреть ошибки:", data);
+        },
+        error: function () {
+            console.log("Ошибка проверки проекта. data = ", data);
+        }
+    });
+}
 
 $(document).ready(function () {
     getScheme(); // воспроизводим схему из базы при открытии проекта
@@ -695,18 +748,47 @@ window.onbeforeunload = function (e) {
     }
 };
 
-// создание фильтров
+// создание фильтров по алгоритмам
 function createFilters() {
-    algorithms = $('.filters').attr("name");
-    
+    algorithms = $('#filters').attr("name");
     algorithms = JSON.parse(algorithms);
-    for(let algorithm of algorithms) {       
-        console.log("algorithm = ", algorithm); 
-        https://stackoverflow.com/questions/2055459/dynamically-create-checkbox-with-jquery-from-text-input
-        // var newItem = $('<p> <input type="checkbox" checked name=' + algorithm.name + ' /' + algorithm.name +'</p>');
-        // $('#.filters').append(newItem);
+    for (let algorithm of algorithms) {
+        var input_id = algorithm.fields.identifier;
+        var name = algorithm.fields.name;
+        var container = $('#filters');
+        $('<input />', { type: 'checkbox', id: input_id, class: 'alg_filter', checked: "checked", value: name }).appendTo(container);
+        $('<label />', { 'for': input_id, text: name }).appendTo(container);
     }
 }
+
+// отрабатываем нажатие кнопки расчета вариантов
+$("#calculate").click(function () {
+
+    // получаем все выбранные фильтры
+    var arrayOfChecked = [];
+    $('.alg_filter[type="checkbox"]:checked').each(function () {
+        arrayOfChecked.push(this.id)
+        //console.log('arrayOfChecked = ', arrayOfChecked);    
+    });
+
+    // отправляем на сервер массив с выбранными фильтрами, в ответ получаем список посчитаных вариантов
+    $.ajax({
+        url: 'get_cost',
+        type: 'GET',
+        data: arrayOfChecked,
+        cache: true,
+        //async: false,
+        success: function (data) {
+            console.log(" d = ", data);
+        },
+        error: function () {
+            console.log("Getting cost error. Scheme data = ", data);
+        }
+    });
+
+});
+
+
 
 /* <p>
     <input type="checkbox" checked name="html5" />HTML5

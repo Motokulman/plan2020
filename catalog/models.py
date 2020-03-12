@@ -982,6 +982,7 @@ class Plan(models.Model):
     scheme = JSONField(null=True, blank=True)
     author = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Автор')
+    checked = models.BooleanField(default=False) # проверен проект или нет. Проверенные доступны к выкладыванию в системе. Расчет происходит при выкладывании
     # Кастомизация проекта. Если нет, то нет. Если есть, то высчитываем цену.
     # customization = models.ForeignKey(
     #     Customization, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Кастомизация')
@@ -1024,3 +1025,18 @@ class Profile(models.Model):
 
     def __str__(self):
         return 'Профиль пользователя {}'.format(self.user.username)
+
+class PlanCityCost(models.Model):
+    """Модель используется для хранения минимальных цен на строительство проектов для быстрого поиска"""
+    plan = models.ForeignKey(Plan, on_delete=models.CASCADE, null=True)
+    city = models.ForeignKey(City, on_delete=models.CASCADE, null=True)
+    material = models.ForeignKey(RockWallMaterialUnit, on_delete=models.CASCADE, null=True)   
+    cost = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['material', 'cost'] 
+        verbose_name = 'Минимальная цена строительства'
+        verbose_name_plural = 'Минимальные цены строительства'
+
+    def __str__(self):
+        return self.title
