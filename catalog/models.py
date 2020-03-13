@@ -1,5 +1,11 @@
 from django.db import models
 from django.conf import settings
+from suppliers.models import Provider
+from suppliers.models import Manufacturer
+from geography.models import City
+from brands.models import Brand
+from names.models import *
+# from materials.models import *
 # Used to generate URLs by reversing the URL patterns
 from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
@@ -84,52 +90,52 @@ from django.contrib.postgres.fields import JSONField
 #         return f'{self.name} ({self.identifier})'
 
 
-class Brand(models.Model):
-    """Модель, представляющая бренд товара, материала, например, Wienerberger. То есть, если Porotherm 44 - это trademark самого материала, то Wienerberger - это бренд завода"""
-    name = models.CharField(unique=True, max_length=200,
-                            help_text='Введите основной бренд, например, Wienerberger')
+# class Brand(models.Model):
+#     """Модель, представляющая бренд товара, материала, например, Wienerberger. То есть, если Porotherm 44 - это trademark самого материала, то Wienerberger - это бренд завода"""
+#     name = models.CharField(unique=True, max_length=200,
+#                             help_text='Введите основной бренд, например, Wienerberger')
 
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Основоной бренд'
-        verbose_name_plural = 'Основоные бренды'
+#     class Meta:
+#         ordering = ('name',)
+#         verbose_name = 'Основоной бренд'
+#         verbose_name_plural = 'Основоные бренды'
 
-    def __str__(self):
-        """String for representing the Model object."""
-        return self.name
-
-
-class SubBrand_1(models.Model):
-    """Модель, представляющая торговую марку, например, Porotherm,  и т.д."""
-    brand = models.ForeignKey(
-        'Brand', on_delete=models.CASCADE, null=True)
-    name = models.CharField(unique=True, max_length=200,
-                            help_text='Введите торговую марку внутри бренда, например, Porotherm и т.д.')
-
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Подбренд 1)'
-        verbose_name_plural = 'Подбренды 1)'
-
-    def __str__(self):
-        """String for representing the Model object."""
-        return self.name
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return self.name
 
 
-class SubBrand_2(models.Model):
-    """Модель, представляющая индекс серии товаров внутри торговой марки что внутри бренда"""
-    sub_brand_1 = models.ForeignKey('SubBrand_1', on_delete=models.CASCADE)
-    name = models.CharField(unique=True, max_length=200,
-                            help_text='Введите индекс серии товаров внутри торговой марки что внутри бренда, если она есть')
+# class SubBrand_1(models.Model):
+#     """Модель, представляющая торговую марку, например, Porotherm,  и т.д."""
+#     brand = models.ForeignKey(
+#         'Brand', on_delete=models.CASCADE, null=True)
+#     name = models.CharField(unique=True, max_length=200,
+#                             help_text='Введите торговую марку внутри бренда, например, Porotherm и т.д.')
 
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Подбренд 2)'
-        verbose_name_plural = 'Подбренды 2)'
+#     class Meta:
+#         ordering = ('name',)
+#         verbose_name = 'Подбренд 1)'
+#         verbose_name_plural = 'Подбренды 1)'
 
-    def __str__(self):
-        """String for representing the Model object."""
-        return self.name
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return self.name
+
+
+# class SubBrand_2(models.Model):
+#     """Модель, представляющая индекс серии товаров внутри торговой марки что внутри бренда"""
+#     sub_brand_1 = models.ForeignKey('SubBrand_1', on_delete=models.CASCADE)
+#     name = models.CharField(unique=True, max_length=200,
+#                             help_text='Введите индекс серии товаров внутри торговой марки что внутри бренда, если она есть')
+
+#     class Meta:
+#         ordering = ('name',)
+#         verbose_name = 'Подбренд 2)'
+#         verbose_name_plural = 'Подбренды 2)'
+
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return self.name
 
 class Algorithm(models.Model):
     """Модель, представляющая алгоритм расчета стены"""
@@ -148,24 +154,24 @@ class Algorithm(models.Model):
         return f'{self.name}, {self.identifier}'
 
 
-class Factory(models.Model):
-    """Модель, представляющая завод - непосредственного производителя материала. Например, Кощаковский завод, Чайковский и т.д. Какой-нибудь местный завод может производить под маркой Wienerberger например"""
-    # применяется для быстрой идентификации производителя товара в юзеринтерфейсе, не более того
-    name = models.CharField(unique=True, max_length=200,
-                            help_text='Введите просторе название производителя материала. Например, Кощаковский, Чайковский и т.д.') # точное наименование есть смысл хранить в юрлицах
-    city = models.ForeignKey(
-        'City', help_text='Выберите город', on_delete=models.SET_NULL, null=True, blank=True)
-    brand = models.ForeignKey(
-        'Brand', help_text='Выберите бренд (например, Wienerberger), если есть', on_delete=models.SET_NULL, null=True, blank=True)
+# class Factory(models.Model):
+#     """Модель, представляющая завод - непосредственного производителя материала. Например, Кощаковский завод, Чайковский и т.д. Какой-нибудь местный завод может производить под маркой Wienerberger например"""
+#     # применяется для быстрой идентификации производителя товара в юзеринтерфейсе, не более того
+#     name = models.CharField(unique=True, max_length=200,
+#                             help_text='Введите просторе название производителя материала. Например, Кощаковский, Чайковский и т.д.') # точное наименование есть смысл хранить в юрлицах
+#     city = models.ForeignKey(
+#         'City', help_text='Выберите город', on_delete=models.SET_NULL, null=True, blank=True)
+#     brand = models.ForeignKey(
+#         'Brand', help_text='Выберите бренд (например, Wienerberger), если есть', on_delete=models.SET_NULL, null=True, blank=True)
 
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Производитель материала'
-        verbose_name_plural = 'Производители материалов (конкретные заводы)'
+#     class Meta:
+#         ordering = ('name',)
+#         verbose_name = 'Производитель материала'
+#         verbose_name_plural = 'Производители материалов (конкретные заводы)'
 
-    def __str__(self):
-        """String for representing the Model object."""
-        f'{self.name}, {self.city}, {self.brand}'
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         f'{self.name}, {self.city}, {self.brand}'
 
 
 # class BinderSolution(models.Model):
@@ -239,21 +245,21 @@ class Factory(models.Model):
 #         return self.name
 
 
-class Activity(models.Model):
-    """Модель, представляющая доступные наименования видов деятельности: проектирование, строительный подряд, поставка/продажа материалов, юридические услуги"""
-    identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
-                                  help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
-    name = models.CharField(
-        max_length=200, help_text='Введите наименование вида деятельности')
+# class Activity(models.Model):
+#     """Модель, представляющая доступные наименования видов деятельности: проектирование, строительный подряд, поставка/продажа материалов, юридические услуги"""
+#     identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
+#                                   help_text='Уникальный неизменяемый идентификатор (только латинские символы)')
+#     name = models.CharField(
+#         max_length=200, help_text='Введите наименование вида деятельности')
 
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Вид деятельности'
-        verbose_name_plural = 'Виды деятельности'
+#     class Meta:
+#         ordering = ('name',)
+#         verbose_name = 'Вид деятельности'
+#         verbose_name_plural = 'Виды деятельности'
 
-    def __str__(self):
-        """String for representing the Model object."""
-        return self.name
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return self.name
 
 
 # class TaxSystemType(models.Model):
@@ -273,92 +279,92 @@ class Activity(models.Model):
 #         return self.name
 
 
-class Provider(models.Model):
-    """Модель, представляющая бренд, название поставщика: подрядчика, архитектора, продавца. У каждого бренда м.б. магазин, причем как один магазинчик, так и сеть по всей РФ и миру"""
-    # каждый поставщик может иметь разные юрлица
-    name = models.CharField(unique=True, max_length=200,
-                            help_text='Введите название постащика, м.б. зарегистрированное или нет')
-    primary_activity = models.ForeignKey('Activity', on_delete=models.SET_NULL,
-                                         null=True, help_text='Выберите основной вид деятельности', related_name='primary_activity')
-    secondary_activity = models.ManyToManyField(
-        Activity, help_text='Выберите дополнительные виды деятельности', related_name='secondary_activity')
+# class Provider(models.Model):
+#     """Модель, представляющая бренд, название поставщика: подрядчика, архитектора, продавца. У каждого бренда м.б. магазин, причем как один магазинчик, так и сеть по всей РФ и миру"""
+#     # каждый поставщик может иметь разные юрлица
+#     name = models.CharField(unique=True, max_length=200,
+#                             help_text='Введите название постащика, м.б. зарегистрированное или нет')
+#     primary_activity = models.ForeignKey('Activity', on_delete=models.SET_NULL,
+#                                          null=True, help_text='Выберите основной вид деятельности', related_name='primary_activity')
+#     secondary_activity = models.ManyToManyField(
+#         Activity, help_text='Выберите дополнительные виды деятельности', related_name='secondary_activity')
 
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Поставщик услуг/материалов'
-        verbose_name_plural = 'Поставщики услуг/материалов'
+#     class Meta:
+#         ordering = ('name',)
+#         verbose_name = 'Поставщик услуг/материалов'
+#         verbose_name_plural = 'Поставщики услуг/материалов'
 
-    def __str__(self):
-        """String for representing the Model object."""
-        return self.name
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return self.name
 
 
-class City(models.Model):
-    """Модель, представляющая список городов"""
-    name = models.CharField(max_length=200,
-                            help_text='Введите город')
-    region = models.ForeignKey('Region', on_delete=models.CASCADE,
-                            help_text='Регион', null=True, blank=True)
-    heating_period_duration = models.IntegerField(help_text='Продолжительность отопительного периода, сут. СНиП 23-01-99 "Строительная климатология и геофизика". См. Таблица 1, столбец 11', null=True, blank=True)  # СНиП 23-01-99 "Строительная климатология и геофизика". См. Таблица 1, столбец 11, https://www.teplo-info.com/snip/otopitelniy_period
-    heating_period_temperature = models.FloatField(help_text='РАЗДЕЛИТЕЛЬ - ТОЧКА. Средняя температура отопительного периода, град. C. столбец 12', null=True, blank=True)  # СНиП 23-01-99 "Строительная климатология и геофизика". См. Таблица 1, столбец 12, https://www.teplo-info.com/snip/otopitelniy_period
+# class City(models.Model):
+#     """Модель, представляющая список городов"""
+#     name = models.CharField(max_length=200,
+#                             help_text='Введите город')
+#     region = models.ForeignKey('Region', on_delete=models.CASCADE,
+#                             help_text='Регион', null=True, blank=True)
+#     heating_period_duration = models.IntegerField(help_text='Продолжительность отопительного периода, сут. СНиП 23-01-99 "Строительная климатология и геофизика". См. Таблица 1, столбец 11', null=True, blank=True)  # СНиП 23-01-99 "Строительная климатология и геофизика". См. Таблица 1, столбец 11, https://www.teplo-info.com/snip/otopitelniy_period
+#     heating_period_temperature = models.FloatField(help_text='РАЗДЕЛИТЕЛЬ - ТОЧКА. Средняя температура отопительного периода, град. C. столбец 12', null=True, blank=True)  # СНиП 23-01-99 "Строительная климатология и геофизика". См. Таблица 1, столбец 12, https://www.teplo-info.com/snip/otopitelniy_period
  
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Город'
-        verbose_name_plural = 'Города'
+#     class Meta:
+#         ordering = ('name',)
+#         verbose_name = 'Город'
+#         verbose_name_plural = 'Города'
 
-    def __str__(self):
-        """String for representing the Model object."""
-        return self.name
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return self.name
 
-class Country(models.Model):
-    """Модель, представляющая список стран"""
-    name = models.CharField(unique=True, max_length=200,
-                            help_text='Введите страну', null=True, blank=True)
+# class Country(models.Model):
+#     """Модель, представляющая список стран"""
+#     name = models.CharField(unique=True, max_length=200,
+#                             help_text='Введите страну', null=True, blank=True)
 
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Страна'
-        verbose_name_plural = 'Страны'
+#     class Meta:
+#         ordering = ('name',)
+#         verbose_name = 'Страна'
+#         verbose_name_plural = 'Страны'
 
-    def __str__(self):
-        """String for representing the Model object."""
-        return self.name
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return self.name
 
-class Region(models.Model):
-    """Модель, представляющая список регионов стран"""
-    name = models.CharField(unique=True, max_length=200,
-                            help_text='Введите регион')    
-    code = models.IntegerField(unique=True,
-                            help_text='Цифровой код региона', null=True, blank=True)
-    country = models.ForeignKey('Country', on_delete=models.CASCADE,
-                            help_text='Страна', null=True, blank=True)
+# class Region(models.Model):
+#     """Модель, представляющая список регионов стран"""
+#     name = models.CharField(unique=True, max_length=200,
+#                             help_text='Введите регион')    
+#     code = models.IntegerField(unique=True,
+#                             help_text='Цифровой код региона', null=True, blank=True)
+#     country = models.ForeignKey('Country', on_delete=models.CASCADE,
+#                             help_text='Страна', null=True, blank=True)
 
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Регион'
-        verbose_name_plural = 'Регионы'
+#     class Meta:
+#         ordering = ('name',)
+#         verbose_name = 'Регион'
+#         verbose_name_plural = 'Регионы'
 
-    def __str__(self):
-        """String for representing the Model object."""
-        return self.name
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return self.name
 
 
-class DecorativeBrickFace(models.Model):
-    """Модель, представляющая названия декоративных граней рядовых кирпичей """
-    name = models.CharField(max_length=200,
-                            help_text='Название рисунка') 
-    brand = models.ManyToManyField('Brand',
-                             help_text='Бренд,который делает такой рисунок на своих кирпичах. М.б.несколько', blank=True)
+# class DecorativeBrickFace(models.Model):
+#     """Модель, представляющая названия декоративных граней рядовых кирпичей """
+#     name = models.CharField(max_length=200,
+#                             help_text='Название рисунка') 
+#     brand = models.ManyToManyField('Brand',
+#                              help_text='Бренд,который делает такой рисунок на своих кирпичах. М.б.несколько', blank=True)
 
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Названея декоративной грани рядового кирпича'
-        verbose_name_plural = 'Названия декоративных граней рядовых кирпичей'
+#     class Meta:
+#         ordering = ('name',)
+#         verbose_name = 'Названея декоративной грани рядового кирпича'
+#         verbose_name_plural = 'Названия декоративных граней рядовых кирпичей'
 
-    def __str__(self):
-        """String for representing the Model object."""
-        return f'{self.name}, {self.brand}'
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return f'{self.name}, {self.brand}'
 
 
 # class RockWallMaterialStandardSize(models.Model):
@@ -630,8 +636,8 @@ class RockWallMaterialUnit(models.Model):
 
     # name = models.CharField(
     #     max_length=200, help_text='Торговое название, если есть', blank=True)
-    purpose = models.ManyToManyField(
-        Purpose, help_text='Назначение материала', on_delete=models.SET_NULL, null=True, blank=True)
+    # size_grid = models.ForeignKey(
+    #     RockWallMaterialSizeGrid, help_text='Группа материалов с одинаковой размерной сеткой', on_delete=models.SET_NULL, null=True, blank=True)
     # standard = models.ForeignKey('Standard', on_delete=models.CASCADE,
     #                                   help_text='Если данное изделие соответствует ГОСТ, выберите его', blank=True, null=True)
 
@@ -648,91 +654,91 @@ class RockWallMaterialUnit(models.Model):
     height = models.IntegerField(
         blank=True, null=True, help_text='Высота (толщина), мм. (размер С), или наименьший размер, если постель не очевидна')
 
-    MIN_PICS = (
-        ('1', '1'),
-        ('1.5', '1,5'),
-        ('2', '2'),
-        ('2.5', '2,5'),
-        ('3', '3'),
-        ('no', 'Не применимо'),
-    )
+    # MIN_PICS = (
+    #     ('1', '1'),
+    #     ('1.5', '1,5'),
+    #     ('2', '2'),
+    #     ('2.5', '2,5'),
+    #     ('3', '3'),
+    #     ('no', 'Не применимо'),
+    # )
     
-    min_pix_1_floor = models.CharField(
-        max_length=3,
-        choices=MIN_PICS,
-        default='no',
-        help_text='Минимальная тощина в кирпичах для 1 этажного дома',
-    )    
+    # min_pix_1_floor = models.CharField(
+    #     max_length=3,
+    #     choices=MIN_PICS,
+    #     default='no',
+    #     help_text='Минимальная тощина в кирпичах для 1 этажного дома',
+    # )    
 
-    min_pix_2_floor = models.CharField(
-        max_length=3,
-        choices=MIN_PICS,
-        default='no',
-        help_text='Минимальная тощина в кирпичах для 2-х этажного дома',
-    )
+    # min_pix_2_floor = models.CharField(
+    #     max_length=3,
+    #     choices=MIN_PICS,
+    #     default='no',
+    #     help_text='Минимальная тощина в кирпичах для 2-х этажного дома',
+    # )
     
-    min_pix_3_floor = models.CharField(
-        max_length=3,
-        choices=MIN_PICS,
-        default='no',
-        help_text='Минимальная тощина в кирпичах для 3-х этажного дома',
-    )
+    # min_pix_3_floor = models.CharField(
+    #     max_length=3,
+    #     choices=MIN_PICS,
+    #     default='no',
+    #     help_text='Минимальная тощина в кирпичах для 3-х этажного дома',
+    # )
 
-    WORK_SIZE = (
-        ('a', 'А'),
-        ('b', 'В'),
-        ('c', 'С'),
-        ('no', 'Нет'),
-    )
+    # WORK_SIZE = (
+    #     ('a', 'А'),
+    #     ('b', 'В'),
+    #     ('c', 'С'),
+    #     ('no', 'Нет'),
+    # )
 
-    NUM_FLOORS = (
-        ('1', '1'),
-        ('2', '2'),
-        ('3', '3'),
-        ('0', 'Нет'),
-    )
+    # NUM_FLOORS = (
+    #     ('1', '1'),
+    #     ('2', '2'),
+    #     ('3', '3'),
+    #     ('0', 'Нет'),
+    # )
 
-    work_size_1 = models.CharField(
-        max_length=2,
-        choices=WORK_SIZE,
-        default='no',
-        help_text='Выберите первый рабочий размер, если есть',
-    )
+    # work_size_1 = models.CharField(
+    #     max_length=2,
+    #     choices=WORK_SIZE,
+    #     default='no',
+    #     help_text='Выберите первый рабочий размер, если есть',
+    # )
 
-    num_floors_on_work_size_1 = models.CharField(
-        max_length=1,
-        choices=NUM_FLOORS,
-        default='0',
-        help_text='Сколько этажей можно постороить на этом размере',
-    )
+    # num_floors_on_work_size_1 = models.CharField(
+    #     max_length=1,
+    #     choices=NUM_FLOORS,
+    #     default='0',
+    #     help_text='Сколько этажей можно постороить на этом размере',
+    # )
 
-    work_size_2 = models.CharField(
-        max_length=2,
-        choices=WORK_SIZE,
-        default='no',
-        help_text='Выберите второй рабочий размер, если есть',
-    )
+    # work_size_2 = models.CharField(
+    #     max_length=2,
+    #     choices=WORK_SIZE,
+    #     default='no',
+    #     help_text='Выберите второй рабочий размер, если есть',
+    # )
 
-    num_floors_on_work_size_2 = models.CharField(
-        max_length=1,
-        choices=NUM_FLOORS,
-        default='0',
-        help_text='Сколько этажей можно постороить на этом размере',
-    )
+    # num_floors_on_work_size_2 = models.CharField(
+    #     max_length=1,
+    #     choices=NUM_FLOORS,
+    #     default='0',
+    #     help_text='Сколько этажей можно постороить на этом размере',
+    # )
 
-    work_size_3 = models.CharField(
-        max_length=2,
-        choices=WORK_SIZE,
-        default='no',
-        help_text='Выберите третий рабочий размер, если есть',
-    )
+    # work_size_3 = models.CharField(
+    #     max_length=2,
+    #     choices=WORK_SIZE,
+    #     default='no',
+    #     help_text='Выберите третий рабочий размер, если есть',
+    # )
 
-    num_floors_on_work_size_3 = models.CharField(
-        max_length=1,
-        choices=NUM_FLOORS,
-        default='0',
-        help_text='Сколько этажей можно постороить на этом размере',
-    )
+    # num_floors_on_work_size_3 = models.CharField(
+    #     max_length=1,
+    #     choices=NUM_FLOORS,
+    #     default='0',
+    #     help_text='Сколько этажей можно постороить на этом размере',
+    # )
 
 
     # nf_size = models.ForeignKey('NFSize', help_text='Выбрите размер НФ, которому соответствует изделие',
@@ -762,8 +768,8 @@ class RockWallMaterialUnit(models.Model):
     #     MasonryBonding, help_text='Выберите способы скрепления кладки', blank=True)
     thermal_conductivity = models.FloatField(
         help_text='Введите коэффициент теплопроводности', blank=True, null=True)
-    factory = models.ForeignKey(
-        Factory, help_text='Выберите завод изготовитель', on_delete=models.SET_NULL, null=True, blank=True)
+    manufacturer = models.ForeignKey(
+        Manufacturer, help_text='Выберите завод изготовитель', on_delete=models.SET_NULL, null=True, blank=True)
     brand = models.ForeignKey(
         'Brand', help_text='Выберите главный бренд, например, Wienerberger', on_delete=models.SET_NULL, null=True, blank=True)
     sub_brand_1 = models.ForeignKey(
@@ -872,7 +878,7 @@ class RockWallMaterialUnit(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.id}, {self.algorithm.identifier}, {self.factory.name}, {self.name}, {self.material}, {self.greater_bed_size}, {self.minor_bed_size}, {self.height}, {self.purpose}'
+        return f'{self.id}, {self.algorithm.identifier}, {self.manufacturer.name}, {self.name}, {self.material}, {self.greater_bed_size}, {self.minor_bed_size}, {self.height}, {self.purpose}'
 
     def get_absolute_url(self):
         """Returns the url to access a detail record for this material."""
@@ -1016,8 +1022,8 @@ class Profile(models.Model):
     city = models.ForeignKey(
         City, help_text='Выберите город', on_delete=models.SET_NULL, null=True, blank=True)
 
-    provider = models.ManyToManyField('Provider',
-                             help_text='Выберите поставщика, которому принадлежит этот офис,торговая точка', blank=True)
+    # provider = models.ManyToManyField('Provider',
+    #                          help_text='Выберите поставщика, которому принадлежит этот офис,торговая точка', blank=True)
 
     class Meta:
         verbose_name = 'Профиль пользователя'
@@ -1040,19 +1046,3 @@ class PlanCityCost(models.Model):
 
     def __str__(self):
         return self.title
-
-class Purpose(models.Model):
-    """Перечень всех возможных применений материалов в доме"""
-    name = models.CharField(unique=True, max_length=200,
-                            help_text='Название для понимания')    
-    identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
-                                  help_text='Имя переменной, идентификатор для исопльзования в коде')
-
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Назначение материала'
-        verbose_name_plural = 'Назначения материалов'
-
-    def __str__(self):
-        """String for representing the Model object."""
-        return f'{self.name}, {self.identifier}'
