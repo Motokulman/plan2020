@@ -23,7 +23,7 @@ canvas_0.addEventListener('click', function (e) {
                     drawPoint(mousePos); // Нарисовали вторую точку
                     pushLine(findMaxId(points) - 1, findMaxId(points)); // занесли в массив линий нашу новую линию
                     newLinesIds[0] = findMaxId(lines);// занесли в промежуточный массив id единственной линии, которая будет храниться в данном элементе (т.к. это просто ровная стена)
-                    newElement = { ids: newLinesIds, distance: distance, type: 'wall', bearType: '', liveType: '', outdoorType: '', };
+                    newElement = { ids: newLinesIds, distance: distance, type: 'wall', wallType: '' };
                     // console.log("newElement = ", newElement);
                     pushElement(newElement); // занесли в массив с элементами id нашей линии стены/ радиус = 0 чтобы отличить стену от радиусного элемента
                     // console.log("elements сразу после добавления = ", elements);
@@ -98,7 +98,7 @@ canvas_0.addEventListener('click', function (e) {
                     newLinesIds[0] = findMaxId(lines) - 2;
                     newLinesIds[1] = findMaxId(lines) - 1;
                     newLinesIds[2] = findMaxId(lines);
-                    newElement = { ids: newLinesIds, distance: distance, type: 'wall', bearType: '', liveType: '', outdoorType: '' };
+                    newElement = { ids: newLinesIds, distance: distance, type: 'wall', wallType: '' };
                     pushElement(newElement);
                     drawLine(mousePosArray[0], mousePosArray[2], ctx_0, '#333333');
                     drawLine(mousePosArray[2], mousePosArray[3], ctx_0, '#333333');
@@ -128,9 +128,9 @@ canvas_0.addEventListener('click', function (e) {
                     // определим по какую сторону от прямой кликнул пользователь. Если стоим на первой точке и смотрим на вторую. + значит слева, - справа
                     var d = (mmOfMousePos.x - prePointsMM[0].x) * (prePointsMM[1].y - prePointsMM[0].y) - (mmOfMousePos.y - prePointsMM[0].y) * (prePointsMM[1].x - prePointsMM[0].x)
                     if (d > 0) { //+ значит слева
-                        newElement = { ids: newLinesIds, distance: distance, direction: "left", type: 'wall', bearType: '', liveType: '', outdoorType: '' };
+                        newElement = { ids: newLinesIds, distance: distance, direction: "left", type: 'wall', wallType: '' };
                     } else {
-                        newElement = { ids: newLinesIds, distance: distance, direction: "right", type: 'wall', bearType: '', liveType: '', outdoorType: '' };
+                        newElement = { ids: newLinesIds, distance: distance, direction: "right", type: 'wall', wallType: '' };
                     }
                     pushElement(newElement);
                     prePointsMM = [];

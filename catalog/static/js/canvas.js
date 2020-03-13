@@ -93,7 +93,9 @@ function drawCircleElement(element, context, color, blur) {
     context.stroke();
 }
 
-
+let hello = "привет мир. пока мир";
+let key = "мир";
+let firstPos = hello.indexOf(key);
 
 // Воспроизведение из массива стен
 function drawElements() {  //drawWalls
@@ -104,16 +106,16 @@ function drawElements() {  //drawWalls
             ctx_0.lineWidth = 1; 
             strokeStyle = "black";// если ничего не задано
            // drawCircleElement(element, ctx_0, strokeStyle); 
-            if (element.bearType == "partition") {// если это перегородка
+            if (element.wallType.indexOf("partition") >= 0) {// если это перегородка
                 ctx_0.lineWidth = 6;
                 strokeStyle = "black"
                 drawCircleElement(element, ctx_0, strokeStyle);
                 ctx_0.lineWidth = 2;
-            } else if (element.bearType == "bearing") {// если это несущая стена
+            } else if (element.wallType.indexOf("bearing") >= 0) {// если это несущая стена 
                 ctx_0.lineWidth = 12;
                 strokeStyle = "black"
                 drawCircleElement(element, ctx_0, strokeStyle);
-                if (element.outdoorType == "outdoor") {
+                if (element.wallType.indexOf("outdoor") >= 0) { 
                     ctx_0.lineWidth = 10;
                     strokeStyle = "orange"
                     drawCircleElement(element, ctx_0, strokeStyle);
@@ -134,25 +136,25 @@ function drawElements() {  //drawWalls
                 ctx_0.lineWidth = 1;
                 strokeStyle = "black";// если ничего не задано
             //    drawLine(point0, point1, ctx_0, strokeStyle);
-                if (element.bearType == "partition") {// если это перегородка
+                if (element.wallType.indexOf("partition") >= 0) {// если это перегородка
                     ctx_0.lineWidth = 6;
                     strokeStyle = "black"
                     drawLine(point0, point1, ctx_0, strokeStyle);
                     ctx_0.lineWidth = 2;
-                } else if (element.bearType == "bearing") {// если это несущая стена
+                } else if (element.wallType.indexOf("bearing") >= 0) {// если это несущая стена
                     ctx_0.lineWidth = 12;
                     strokeStyle = "black"
                     drawLine(point0, point1, ctx_0, strokeStyle);
-                    if (element.outdoorType == "outdoor") {
+                    if (element.wallType.indexOf("outdoor") >= 0) {
                         ctx_0.lineWidth = 10;
                         strokeStyle = "orange"
                         drawLine(point0, point1, ctx_0, strokeStyle);
                     }
                 }
                 ctx_0.lineWidth = 4;
-                if (element.liveType == "living") {
+                if (element.wallType.indexOf("living") >= 0) {
                     strokeStyle = "yellow";
-                } else if (element.liveType == "uninhabited") {
+                } else if (element.wallType.indexOf("uninhabited") >= 0) {
                     strokeStyle = "Gainsboro";
                 }
                 drawLine(point0, point1, ctx_0, strokeStyle);
@@ -192,9 +194,11 @@ function applyWallData() {
         for (el of elements.values()) {
             if (el.id == sel) {
                 // console.log("sel = ", sel);
-                el.bearType = bearType;
-                el.liveType = liveType;
-                el.outdoorType = outdoorType;
+                var a = bearType + "_" + liveType;
+                if (bearType == "bearing") {
+                    a = a + "_" + outdoorType;
+                }
+                el.wallType = a;
             }
         }
     }

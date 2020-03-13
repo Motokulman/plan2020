@@ -207,24 +207,31 @@ def check_plan(request, pk):
     errMsg = dict()
     for element in elements:
         if element['type'] == "wall":
-            if element['bearType'] != "partition" and element['bearType'] != "bearing":
+            if element['wallType'] == '':
                 errMsg[len(errMsg)] = {
                     'element': element['id'],
-                    'message': "Не задано: это перегородка или несущая стена?",
-                }
+                    'message': "Нет информации о типе стены",
+                }               
 
-            if element['liveType'] != "living" and element['liveType'] != "uninhabited":
-                errMsg[len(errMsg)] = {
-                    'element': element['id'],
-                    'message': "Не задано: стена смежная с жилым помещением или нет",
-                }
 
-            if element['bearType'] == "bearing":
-                if element['outdoorType'] != "outdoor" and element['outdoorType'] != "indoor":
-                    errMsg[len(errMsg)] = {
-                        'element': element['id'],
-                        'message': "Не задано: несущая стена, смежная с нежилым помещением, внутренняя или ограждающая?",
-                    }
+            # if element['bearType'] != "partition" and element['bearType'] != "bearing":
+            #     errMsg[len(errMsg)] = {
+            #         'element': element['id'],
+            #         'message': "Не задано: это перегородка или несущая стена?",
+            #     }
+
+            # if element['liveType'] != "living" and element['liveType'] != "uninhabited":
+            #     errMsg[len(errMsg)] = {
+            #         'element': element['id'],
+            #         'message': "Не задано: стена смежная с жилым помещением или нет",
+            #     }
+
+            # if element['bearType'] == "bearing":
+            #     if element['outdoorType'] != "outdoor" and element['outdoorType'] != "indoor":
+            #         errMsg[len(errMsg)] = {
+            #             'element': element['id'],
+            #             'message': "Не задано: несущая стена, смежная с нежилым помещением, внутренняя или ограждающая?",
+            #         }
 
     # если ошибок нет, сохраняем в проекте, что он проверен
     if len(errMsg) == 0:

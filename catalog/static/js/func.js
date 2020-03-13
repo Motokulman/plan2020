@@ -522,9 +522,9 @@ function pushLine(id0, id1) {
 function pushElement(el) { // ids - массив id линий, из которых состоит данный элемент  ids, distance, direction
     if (elements.length == 0) {
         // console.log("el = ", el);bearType: 'not_set', liveType: 'not_set', outdoorType: 'not_set', 
-        elements.push({ id: 0, ids: el.ids, distance: el.distance, direction: el.direction, type: el.type, bearType: el.bearType, liveType: el.liveType, outdoorType: el.bearType });
+        elements.push({ id: 0, ids: el.ids, distance: el.distance, direction: el.direction, type: el.type, wallType: el.wallType });
     } else {
-        elements.push({ id: findMaxId(elements) + 1, ids: el.ids, distance: el.distance, direction: el.direction, type: el.type, bearType: el.bearType, liveType: el.liveType, outdoorType: el.bearType });
+        elements.push({ id: findMaxId(elements) + 1, ids: el.ids, distance: el.distance, direction: el.direction, type: el.type, wallType: el.wallType });
     }
 }
 
@@ -625,7 +625,7 @@ function getScheme() {
         cache: true,
         //async: false,
         success: function (data) {
-            // console.log(" d = ", data);
+            console.log(" d = ", data);
             p = JSON.parse(data);
             d = JSON.parse(p[0].fields.scheme);
             if (d != null) {
@@ -750,15 +750,15 @@ window.onbeforeunload = function (e) {
 
 // создание фильтров по алгоритмам
 function createFilters() {
-    algorithms = $('#filters').attr("name");
-    algorithms = JSON.parse(algorithms);
-    for (let algorithm of algorithms) {
-        var input_id = algorithm.fields.identifier;
-        var name = algorithm.fields.name;
-        var container = $('#filters');
-        $('<input />', { type: 'checkbox', id: input_id, class: 'alg_filter', checked: "checked", value: name }).appendTo(container);
-        $('<label />', { 'for': input_id, text: name }).appendTo(container);
-    }
+    // algorithms = $('#filters').attr("name");
+    // algorithms = JSON.parse(algorithms);
+    // for (let algorithm of algorithms) {
+    //     var input_id = algorithm.fields.identifier;
+    //     var name = algorithm.fields.name;
+    //     var container = $('#filters');
+    //     $('<input />', { type: 'checkbox', id: input_id, class: 'alg_filter', checked: "checked", value: name }).appendTo(container);
+    //     $('<label />', { 'for': input_id, text: name }).appendTo(container);
+    // }
 }
 
 // отрабатываем нажатие кнопки расчета вариантов
