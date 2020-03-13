@@ -1,4 +1,0 @@
-from catalog.models import *
-
-
-

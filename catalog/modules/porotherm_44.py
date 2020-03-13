@@ -1,8 +1,9 @@
+# from catalog.models import *
+
 import math
 
-
-def solid_ceramic_brick(scheme, walls):
-    # walls - строка, где перечислены типы стен, какие нужно посчитать по этому алгоритму
+def porotherm_44(scheme, walls):
+    # walls - строка, где перечислены типы стен, какие нужно посчитать.
     #     ф = {
     # bearing_living_outdoor
     # bearing_living_indoor
@@ -13,18 +14,17 @@ def solid_ceramic_brick(scheme, walls):
     # }
     # расчитываем количество кирпича. Предполагаем, что размеры на схеме - это внутренние размеры, и чтобы их сохранить увеличиваем габариты дома на толщину стены
     # сначала - несущие стены. сразу подгонка под размер. Получая исходные линии, изменяем их внутри функции с целью подгонки под размер материала. Или не заморачиваться?
-    
     elements = scheme['elements']
     lines = scheme['lines']
     points = scheme['points']
     point0 = dict()
     point1 = dict()
-    thick_bear = 380  # принимаем толщину несущей стены
-    thick_part = 120  # принимаем толщину перегородки
-    square_bear = 0
-    square_part = 0
+    thick = 440  # принимаем толщину
+    width = 250
+    height = 219
+    square = 0
 
-    # посчитаем кол-во кирпичей
+    # посчитаем кол-во блоков
     for element in elements:  # идем по массиву элементов, находим среди них стены и проверяем их тип
         if element['type'] == "wall":  # если это стена
             # если этот тип стены нужно рассчитать из этого материала
@@ -45,34 +45,28 @@ def solid_ceramic_brick(scheme, walls):
                                         point1['y'] = point['y']
                     length = math.sqrt(
                         (point0['x'] - point1['x']) ** 2 + (point0['y'] - point1['y']) ** 2)
-                # определив длину элемента, смотрим, что же это за стена
-                if "bearing" in element['wallType']:  # если это несущая стена
-                    # прибавляем толщину стены, чтобы сдеать поправку на сохранение внутренних размеров
-                    length = length + thick_bear
-                    # пока тестовый расчет, поэтому просто переводим в полщадь в метрах квадратных, типа высота три метра
-                    square_bear = square_bear + round(length/1000 * 3, 2)
-                # если это перегородка,
-                elif "partition" in element['wallType']:
-                    # прибавляем толщину стены, чтобы сдеать поправку на сохранение внутренних размеров
-                    length = length + thick_part
-                    # пока тестовый расчет, поэтому просто переводим в полщадь в метрах квадратных, типа высота три метра
-                    square_part = square_part + round(length/1000 * 3, 2)
-    
-    vol = square_bear*thick_bear/1000 + square_part*thick_part/1000 # посчитаем объем кирпичной кладки в м куб.
-    bricks = vol/0.002535 # посчитаем кол-во кирпичей с учетом раствора
-    mortar_vol = bricks * 0.00072  # посчитаем объем раствора, куб. м. Толщина слоя раствора - 12мм
-    mortar_weight = mortar_vol * 2.5 # посчитаем массу расвора, тонн
+                length = length + width # прибавляем толщину стены, чтобы сдеать поправку на сохранение внутренних размеров
+                square = square + length/1000 * 3 # пока тестовый расчет, поэтому просто переводим в полщадь в метрах квадратных, типа высота три метра
+
+    # посчитаем объем кирпичной кладки в м куб.
+    # vol = square_bear*thick_bear/1000 + square_part*thick_part/1000
+    # посчитаем кол-во кирпичей с учетом раствора
+    blocks = square/width/height # посчитаем кол-во блоков. В ДАЛЬНЕЙШЕМ ДОБАВИТЬ УВЕЛИЧЕНИЕ КОЛ-ВА БЛОКОВ ИЗ ЗА ПИЛЕЖКИ ПО ВЫСОТЕ ИЛИ УВЕЛИЧЕНИЯ ВЫСОТЫ ЭТАЖА
+    mortar_vol = blocks * (thick * width)/83333333  # посчитаем объем раствора, куб. м. Толщина раствора -12мм
+    mortar_weight = mortar_vol * 2.5 # посчитаем массу расвора, тонн        
+    clue_weight = mortar_weight/2 # по данным производителя выход теплого раствора из 1 кг сухой массы в два раза больше чем обычного раствора
     sand_weight = mortar_weight * 0.25 # посчитаем массу песка, тонн
     cement_weight = mortar_weight * 750 # посчитаем массу цемента, кг
 
     # посчитаем тепловое сопротивление кладки
-    R = thick_bear/0.00081  # лямбда кирпича взята 0.81
+    R = thick/0.000144  # лямбда блока взята 0.144 https://www.wienerberger.ru/catalog/wall/keramicheskiye-bloki/porotherm-44.html
 
     result = {
-        'bricks': round(bricks, 0),
-        'R': round(R, 2),
-        'sand': round(sand_weight, 0),
-        'cement': round(cement_weight, 0)
+        'blocks': blocks,
+        'R': R,
+        'clue': clue_weight,
+        'sand': sand_weight,
+        'cement': cement_weight,
     }
 
     return result

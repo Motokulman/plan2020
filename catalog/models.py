@@ -630,8 +630,8 @@ class RockWallMaterialUnit(models.Model):
 
     # name = models.CharField(
     #     max_length=200, help_text='Торговое название, если есть', blank=True)
-    # size_grid = models.ForeignKey(
-    #     RockWallMaterialSizeGrid, help_text='Группа материалов с одинаковой размерной сеткой', on_delete=models.SET_NULL, null=True, blank=True)
+    purpose = models.ManyToManyField(
+        Purpose, help_text='Назначение материала', on_delete=models.SET_NULL, null=True, blank=True)
     # standard = models.ForeignKey('Standard', on_delete=models.CASCADE,
     #                                   help_text='Если данное изделие соответствует ГОСТ, выберите его', blank=True, null=True)
 
@@ -1040,3 +1040,19 @@ class PlanCityCost(models.Model):
 
     def __str__(self):
         return self.title
+
+class Purpose(models.Model):
+    """Перечень всех возможных применений материалов в доме"""
+    name = models.CharField(unique=True, max_length=200,
+                            help_text='Название для понимания')    
+    identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
+                                  help_text='Имя переменной, идентификатор для исопльзования в коде')
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Назначение материала'
+        verbose_name_plural = 'Назначения материалов'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.name}, {self.identifier}'
