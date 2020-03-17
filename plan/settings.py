@@ -37,12 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'catalog',
+    'catalog.apps.CatalogConfig',
     'materials.apps.MaterialsConfig',
     'suppliers.apps.SuppliersConfig',
     'geography.apps.GeographyConfig',
     'brands.apps.BrandsConfig',
     'names.apps.NamesConfig',
+    'standards.apps.StandardsConfig',
+    'materialprices.apps.MaterialpricesConfig',
+    'workprices.apps.WorkpricesConfig',
     'django.contrib.postgres',
 
     

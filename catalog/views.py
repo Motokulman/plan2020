@@ -45,28 +45,10 @@ def index(request):
     return render(request, 'index.html', context=context)
 
 
-class WallMaterialPricesListView(LoginRequiredMixin, generic.ListView):
-    """Generic class-based view listing books on loan to current user."""
-    model = RockWallMaterialPrice
-    template_name = 'catalog/wall_materials_prices.html'
-    paginate_by = 100
-
-    def get_queryset(self):
-        return RockWallMaterialPrice.objects.filter(owner=self.request.user)
 
 
-class PileGrillageFoundationWorkPricesDetailView(generic.DetailView):
-    model = PileGrillageFoundationWorkPrices
 
 
-def works_content_list(request):
-    """View function for списка работ/услуг, оказываемых данных подрядчиком."""
-
-    context = {
-
-    }
-
-    return render(request, 'works_content_list.html', context=context)
 
 
 class PlanListView(generic.ListView):

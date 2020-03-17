@@ -8,23 +8,17 @@ from catalog.models import *
 # admin.site.register(SubBrand_2)
 admin.site.register(Algorithm)
 # admin.site.register(Factory)
-admin.site.register(MarkD)
-admin.site.register(MarkF)
-admin.site.register(MarkM)
-admin.site.register(ClassB)
-admin.site.register(ClassАverageDensity)
-admin.site.register(NFSize)
-admin.site.register(RockWallMaterialUnit)
+
 admin.site.register(Plan)
-admin.site.register(Insulation)
-admin.site.register(RockWallMaterialPrice)
-admin.site.register(PileGrillageFoundationWorkPrices)
+
+
+# admin.site.register(PileGrillageFoundationWorkPrices)
 # admin.site.register(City)
 # admin.site.register(Country)
 # admin.site.register(Region)
 # admin.site.register(Provider)
 # admin.site.register(Activity)
-admin.site.register(InsulationPrice)
+
 
 # admin.site.register(ProviderOutlet)
 # admin.site.register(City)

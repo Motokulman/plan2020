@@ -1,5 +1,5 @@
 from django.db import models
-from geography.models import City
+from geography.models import *
 from brands.models import *
 
 class Manufacturer(models.Model):
@@ -10,9 +10,9 @@ class Manufacturer(models.Model):
     name = models.CharField(unique=True, max_length=200,
                             help_text='Полное название производителя материала. Например, Кощаковский, Чайковский и т.д.') # точное наименование есть смысл хранить в юрлицах
     city = models.ForeignKey(
-        'City', help_text='Выберите город', on_delete=models.SET_NULL, null=True, blank=True)
+        City, help_text='Выберите город', on_delete=models.SET_NULL, null=True, blank=True)
     brand = models.ForeignKey(
-        'Brand', help_text='Выберите бренд (например, Wienerberger), если есть', on_delete=models.SET_NULL, null=True, blank=True)
+        Brand, help_text='Выберите бренд (например, Wienerberger), если есть', on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         ordering = ('name',)
