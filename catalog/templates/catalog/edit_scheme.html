@@ -34,10 +34,23 @@
         </select>
       </div>
 
-      <div id="element_selector" class="btn-group">
-        <button id="none" type="button" class="btn btn-light">Сброс</button>
-        <button id="wall" type="button" class="btn btn-light">Стена</button>
-        <button id="entrance_group" type="button" class="btn btn-light">Входная группа</button>
+      <div id="floor_selector">
+        <div class="btn-group">
+          <button id="floor_1" type="button" class="btn btn-light">1 эт</button>
+          <button id="floor_2" type="button" class="btn btn-light">2 эт</button>
+        </div>
+      </div>
+
+      <div id="element_selector">
+        <div class="btn-group">
+          <button id="none" type="button" class="btn btn-light">Сброс</button>
+        </div>
+        <div class="btn-group">
+          <button id="wall" type="button" class="btn btn-light">Стена</button>
+          <button id="entrance_group" type="button" class="btn btn-light">Входная группа</button>
+          <button id="floor_garage" type="button" class="btn btn-light">Пол гаражного типа</button>
+          <button id="stairwell" type="button" class="btn btn-light">Лестничный пролёт</button>
+        </div>
       </div>
 
       <!-- <div id="test_buttons" class="btn-group">
@@ -92,7 +105,37 @@
   <br>
   <br>
 </div>
-<div class="container">
+
+
+<div id="dialog" title="Стены" class="ui-widget">
+  <div><label for="wall_type">Тип стены: </label>
+    <p><input type="radio" value="bearing" id="wall_type" name="wall_type" />Несущая</p>
+    <p><input type="radio" value="partition" id="wall_type" name="wall_type" />Перегородка</p>
+    <!-- <p><input type="radio" value="not_set" checked id="wall_type" name="wall_type" />Не задано</p> -->
+  </div>
+  <div><label for="living">Смежная с жилым помещением:</label>
+    <p><input type="radio" value="living" id="living" name="living" />Да</p>
+    <p><input type="radio" value="uninhabited" id="living" name="living" />Нет</p>
+    <!-- <p><input type="radio" value="not_set" checked id="living" name="living" />Не задано</p> -->
+  </div>
+  <div><label for="outdoor">Наружная: </label>
+    <p><input type="radio" value="outdoor" id="outdoor" name="outdoor" />Да</p>
+    <p><input type="radio" value="indoor" id="outdoor" name="outdoor" />Нет</p>
+    <!-- <p><input type="radio" value="not_set" checked id="outdoor" name="outdoor" />Не задано</p> -->
+  </div>
+</div>
+
+
+{% load static %}
+<script type="text/javascript" src="{% static 'js/canvas.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/func.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/schemeCanvasClick.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/calc.js' %}"></script>
+
+{% endblock %}
+
+
+<!-- <div class="container">
   <div class="row">
     <div class="col-sm-12">
       <h3>Фильтры</h3>
@@ -133,31 +176,4 @@
       <button type="button" id="calculate">Показать самый дешевый вариант</button>
     </div>
   </div>
-</div>
-
-<div id="dialog" title="Стены" class="ui-widget">
-  <div><label for="wall_type">Тип стены: </label>
-    <p><input type="radio" value="bearing" id="wall_type" name="wall_type" />Несущая</p>
-    <p><input type="radio" value="partition" id="wall_type" name="wall_type" />Перегородка</p>
-    <!-- <p><input type="radio" value="not_set" checked id="wall_type" name="wall_type" />Не задано</p> -->
-  </div>
-  <div><label for="living">Смежная с жилым помещением:</label>
-    <p><input type="radio" value="living" id="living" name="living" />Да</p>
-    <p><input type="radio" value="uninhabited" id="living" name="living" />Нет</p>
-    <!-- <p><input type="radio" value="not_set" checked id="living" name="living" />Не задано</p> -->
-  </div>
-  <div><label for="outdoor">Наружная: </label>
-    <p><input type="radio" value="outdoor" id="outdoor" name="outdoor" />Да</p>
-    <p><input type="radio" value="indoor" id="outdoor" name="outdoor" />Нет</p>
-    <!-- <p><input type="radio" value="not_set" checked id="outdoor" name="outdoor" />Не задано</p> -->
-  </div>
-</div>
-
-
-{% load static %}
-<script type="text/javascript" src="{% static 'js/canvas.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/func.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/schemeCanvasClick.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/calc.js' %}"></script>
-
-{% endblock %}
+</div> -->

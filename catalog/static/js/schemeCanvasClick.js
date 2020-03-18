@@ -148,20 +148,18 @@ canvas_0.addEventListener('click', function (e) {
                 selectedElements.push(defineElement());
             }
             break;
-        case 'entrance_group': // если входная группа
+        case 'entrance_group': // если входная группа. Ее вообще задавать точкой и направлением
             if (prePointsMM.length > 0) {
                 pushPrePointMM(mmOfMousePos);
                 drawPoint(mousePos);
                 if ((prePointsMM[0].x == mmOfMousePos.x) && (prePointsMM[0].y == mmOfMousePos.y)) { // если точки совпали, значит конец ввода группы
-                    
                     pushPoints(prePointsMM);
                     for (var p = prePointsMM.length - 1; p > 0; p--) {
                         pushLine(findMaxId(points) - p, findMaxId(points) - p + 1); // занесли в массив линий нашу новую линию
                         newLinesIds.push(findMaxId(lines));//
-                        console.log("lines = ", lines);
+                        // console.log("lines = ", lines);
                     }
                     prePointsMM = [];
-
                     newElement = { ids: newLinesIds, type: "Entrance group" };
                     newLinesIds = [];
                     pushElement(newElement);
@@ -172,6 +170,51 @@ canvas_0.addEventListener('click', function (e) {
                 drawPoint(mousePos);
             }
             break;
+        case 'floor_garage': // пол гаража.  Сделать кликом вутри просто. Автоматом определить окружающие элементы.
+            if (prePointsMM.length > 0) {
+                pushPrePointMM(mmOfMousePos);
+                drawPoint(mousePos);
+                if ((prePointsMM[0].x == mmOfMousePos.x) && (prePointsMM[0].y == mmOfMousePos.y)) { // если точки совпали, значит конец ввода
+                    pushPoints(prePointsMM);
+                    for (var p = prePointsMM.length - 1; p > 0; p--) {
+                        pushLine(findMaxId(points) - p, findMaxId(points) - p + 1); // занесли в массив линий нашу новую линию
+                        newLinesIds.push(findMaxId(lines));//
+                //        console.log("lines = ", lines);
+                    }
+                    prePointsMM = [];
+                    newElement = { ids: newLinesIds, type: "floor_garage" };
+                    newLinesIds = [];
+                    pushElement(newElement);
+                    drawElements();
+                }
+            } else {
+                pushPrePointMM(mmOfMousePos);
+                drawPoint(mousePos);
+            }
+            break;
+        case 'stairwell': // лестничный пролет. Можно по последовательности ввода определять направление движения. При обработке автоматически определять элементы, его окаймляющих, и соответственно обрабатывать. Например, окружность
+            if (prePointsMM.length > 0) {
+                pushPrePointMM(mmOfMousePos);
+                drawPoint(mousePos);
+                if ((prePointsMM[0].x == mmOfMousePos.x) && (prePointsMM[0].y == mmOfMousePos.y)) { // если точки совпали, значит конец ввода
+                    pushPoints(prePointsMM);
+                    for (var p = prePointsMM.length - 1; p > 0; p--) {
+                        pushLine(findMaxId(points) - p, findMaxId(points) - p + 1); // занесли в массив линий нашу новую линию
+                        newLinesIds.push(findMaxId(lines));//
+                        // console.log("lines = ", lines);
+                    }
+                    prePointsMM = [];
+                    newElement = { ids: newLinesIds, type: "stairwell" };
+                    newLinesIds = [];
+                    pushElement(newElement);
+                    drawElements();
+                }
+            } else {
+                pushPrePointMM(mmOfMousePos);
+                drawPoint(mousePos);
+            }
+            break;
+
     }
     // console.log("elements = ", elements);
 });
