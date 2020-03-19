@@ -21,15 +21,16 @@ canvas_0.addEventListener('click', function (e) {
                     pushPoints(prePointsMM);
                     prePointsMM = [];
                     drawPoint(mousePos); // Нарисовали вторую точку
-                    pushLine(findMaxId(points) - 1, findMaxId(points)); // занесли в массив линий нашу новую линию
+                    pushLine(findMaxId(points) - 1, findMaxId(points), 0, ''); // занесли в массив линий нашу новую линию
                     newLinesIds[0] = findMaxId(lines);// занесли в промежуточный массив id единственной линии, которая будет храниться в данном элементе (т.к. это просто ровная стена)
-                    newElement = { ids: newLinesIds, distance: distance, type: 'wall', wallType: '' };
-                    // console.log("newElement = ", newElement);
+                    newElement = { ids: newLinesIds, type: 'wall', subType: '' };
+                    // //console.log("newElement = ", newElement);
                     pushElement(newElement); // занесли в массив с элементами id нашей линии стены/ радиус = 0 чтобы отличить стену от радиусного элемента
-                    // console.log("elements сразу после добавления = ", elements);
+                    // //console.log("elements сразу после добавления = ", elements);
+                    drawLine(lines[lines.length - 1], ctx_0, drawSettingsDefault);
                 }
 
-            } else if (selectedLineType == 'polygon') { // если это многоугольник. У многоугольника всезда есть две начальные точки, которые могут совпадать
+            } else if (selectedLineType == 'polygon') { // если это многоугольник. У многоугольника всегда есть две начальные точки, которые могут совпадать если это один из углов многоугольника
                 if (prePointsMM.length == 0) { // если это первый или второй клик в этом цикле рисования
                     pushPrePointMM(mmOfMousePos);
                     mousePosArray[0] = mousePos;
@@ -91,18 +92,16 @@ canvas_0.addEventListener('click', function (e) {
                     mousePosArray[3] = anotherPoint;
                     pushPrePointMM(pixToMm(anotherPoint));
                     pushPoints(prePointsMM);
-                    pushLine(findMaxId(points) - 3, findMaxId(points) - 1); // занесли в массив линий нашу первую новую линию
-                    pushLine(findMaxId(points) - 1, findMaxId(points)); // занесли в массив линий нашу вторую новую линию
-                    pushLine(findMaxId(points), findMaxId(points) - 2); // занесли в массив линий нашу третью новую линию
+                    pushLine(findMaxId(points) - 3, findMaxId(points) - 1, 0, ''); // занесли в массив линий нашу первую новую линию
+                    pushLine(findMaxId(points) - 1, findMaxId(points), 0, ''); // занесли в массив линий нашу вторую новую линию
+                    pushLine(findMaxId(points), findMaxId(points) - 2, 0, ''); // занесли в массив линий нашу третью новую линию
                     prePointsMM = [];
                     newLinesIds[0] = findMaxId(lines) - 2;
                     newLinesIds[1] = findMaxId(lines) - 1;
                     newLinesIds[2] = findMaxId(lines);
-                    newElement = { ids: newLinesIds, distance: distance, type: 'wall', wallType: '' };
+                    newElement = { ids: newLinesIds, distance: distance, type: 'wall', subType: '' };
                     pushElement(newElement);
-                    drawLine(mousePosArray[0], mousePosArray[2], ctx_0, '#333333');
-                    drawLine(mousePosArray[2], mousePosArray[3], ctx_0, '#333333');
-                    drawLine(mousePosArray[3], mousePosArray[1], ctx_0, '#333333');
+                    drawElement(elements[elements.length - 1]);
                     mousePosArray = [];
                 }
                 // Рисуем кривую    
@@ -119,28 +118,33 @@ canvas_0.addEventListener('click', function (e) {
                     } else {
                         drawPoint(mousePos);
                     }
-                } else {
+                } else {// третий клик задает направление выгиба окружности
                     pushPoints(prePointsMM);
-                    pushLine(findMaxId(points) - 1, findMaxId(points)); // занесли в массив линий нашу новую линию
-                    newLinesIds[0] = findMaxId(lines);// занесли в промежуточный массив id единственной линии
                     var diameter = Math.round(Math.sqrt(Math.pow((prePointsMM[0].x - prePointsMM[1].x), 2) + Math.pow((prePointsMM[0].y - prePointsMM[1].y), 2))); // пусть пока это будет правильный полукруг
                     distance = diameter / 2;// определим расстояние от дальней точки окружности до базовой прямой. Этот способ позволяет хранить только это расстояние и направление. Для простоты оно равно радиусу, что нужно для правильного полукруга. Поэтому рано 0.
                     // определим по какую сторону от прямой кликнул пользователь. Если стоим на первой точке и смотрим на вторую. + значит слева, - справа
                     var d = (mmOfMousePos.x - prePointsMM[0].x) * (prePointsMM[1].y - prePointsMM[0].y) - (mmOfMousePos.y - prePointsMM[0].y) * (prePointsMM[1].x - prePointsMM[0].x)
                     if (d > 0) { //+ значит слева
-                        newElement = { ids: newLinesIds, distance: distance, direction: "left", type: 'wall', wallType: '' };
+                        // newElement = { ids: newLinesIds, distance: distance, direction: "left", type: 'wall', wallType: '' };
+                        pushLine(findMaxId(points) - 1, findMaxId(points), distance, "left"); // занесли в массив линий нашу новую линию
                     } else {
-                        newElement = { ids: newLinesIds, distance: distance, direction: "right", type: 'wall', wallType: '' };
+                        // newElement = { ids: newLinesIds, distance: distance, direction: "right", type: 'wall', wallType: '' };
+                        pushLine(findMaxId(points) - 1, findMaxId(points), distance, "right");
                     }
+                    // newLinesIds[0] = findMaxId(lines);// занесли в промежуточный массив id единственной линии
+                    // pushLine(findMaxId(points) - 1, findMaxId(points), 0, ''); // занесли в массив линий нашу новую линию
+                    newLinesIds[0] = findMaxId(lines);// занесли в промежуточный массив id единственной линии
+                    newElement = { ids: newLinesIds, type: 'wall', subType: '' }; // заносим линию в элемент
                     pushElement(newElement);
                     prePointsMM = [];
-                    //  console.log("elements = ", elements);
+                    //  //console.log("elements = ", elements);
+                    drawLine(lines[lines.length - 1], ctx_0, drawSettingsDefault);
                 }
             }
             break;
         case 'none': // выделяем элементы кликами:
             var selectedEl = selectedElements.findIndex(sel => sel == defineElement()); // ищем элемент, на который только что кликнули, в массиве выделенных элементов
-            //console.log("defineElement() = ", defineElement());
+            ////console.log("defineElement() = ", defineElement());
             if (selectedEl >= 0) {
                 // var a = selectedElements.findIndex(defineElement());
                 selectedElements.splice(selectedEl, 1);
@@ -150,71 +154,73 @@ canvas_0.addEventListener('click', function (e) {
             break;
         case 'entrance_group': // если входная группа. Ее вообще задавать точкой и направлением
             if (prePointsMM.length > 0) {
-                pushPrePointMM(mmOfMousePos);
-                drawPoint(mousePos);
-                if ((prePointsMM[0].x == mmOfMousePos.x) && (prePointsMM[0].y == mmOfMousePos.y)) { // если точки совпали, значит конец ввода группы
-                    pushPoints(prePointsMM);
-                    for (var p = prePointsMM.length - 1; p > 0; p--) {
-                        pushLine(findMaxId(points) - p, findMaxId(points) - p + 1); // занесли в массив линий нашу новую линию
-                        newLinesIds.push(findMaxId(lines));//
-                        // console.log("lines = ", lines);
-                    }
-                    prePointsMM = [];
-                    newElement = { ids: newLinesIds, type: "Entrance group" };
-                    newLinesIds = [];
-                    pushElement(newElement);
-                    drawElements();
-                }
-            } else {
-                pushPrePointMM(mmOfMousePos);
-                drawPoint(mousePos);
+                // pushPrePointMM(mmOfMousePos);
+                // drawPoint(mousePos);
+                // if ((prePointsMM[0].x == mmOfMousePos.x) && (prePointsMM[0].y == mmOfMousePos.y)) { // если точки совпали, значит конец ввода группы
+                //     pushPoints(prePointsMM);
+                //     for (var p = prePointsMM.length - 1; p > 0; p--) {
+                //         pushLine(findMaxId(points) - p, findMaxId(points) - p + 1); // занесли в массив линий нашу новую линию
+                //         newLinesIds.push(findMaxId(lines));//
+                //         // //console.log("lines = ", lines);
+                //     }
+                //     prePointsMM = [];
+                //     newElement = { ids: newLinesIds, type: "Entrance group" };
+                //     newLinesIds = [];
+                //     pushElement(newElement);
+                //     drawElements();
+                // }
+            } else { // если это самая первая точка
+                // pushPrePointMM(mmOfMousePos);
+                // drawPoint(mousePos);
             }
             break;
-        case 'floor_garage': // пол гаража.  Сделать кликом вутри просто. Автоматом определить окружающие элементы.
-            if (prePointsMM.length > 0) {
-                pushPrePointMM(mmOfMousePos);
-                drawPoint(mousePos);
-                if ((prePointsMM[0].x == mmOfMousePos.x) && (prePointsMM[0].y == mmOfMousePos.y)) { // если точки совпали, значит конец ввода
-                    pushPoints(prePointsMM);
-                    for (var p = prePointsMM.length - 1; p > 0; p--) {
-                        pushLine(findMaxId(points) - p, findMaxId(points) - p + 1); // занесли в массив линий нашу новую линию
-                        newLinesIds.push(findMaxId(lines));//
-                //        console.log("lines = ", lines);
-                    }
-                    prePointsMM = [];
-                    newElement = { ids: newLinesIds, type: "floor_garage" };
-                    newLinesIds = [];
-                    pushElement(newElement);
-                    drawElements();
-                }
-            } else {
-                pushPrePointMM(mmOfMousePos);
-                drawPoint(mousePos);
-            }
+        case 'plate_garage': // пол гаража. Должен хранить ограничивающие его несущие стены. Потом определять автоматом, а пока сделать явный выбор стен.
+            // pushPrePointMM(mmOfMousePos);
+            // pushPoints(prePointsMM); // сохранили точку - метку того, что это помещение - гараж
+            // plate_garage.push(findMaxId(points)); // занескли id метки-точки в массив гаражных полов
+            // $('#none').trigger('click'); // делаем нажатой кнопку сброс
+            ////console.log("plate_garage = ", plate_garage);
             break;
         case 'stairwell': // лестничный пролет. Можно по последовательности ввода определять направление движения. При обработке автоматически определять элементы, его окаймляющих, и соответственно обрабатывать. Например, окружность
             if (prePointsMM.length > 0) {
+                newLines = [];
+                // var stairwellElement = [];
                 pushPrePointMM(mmOfMousePos);
                 drawPoint(mousePos);
-                if ((prePointsMM[0].x == mmOfMousePos.x) && (prePointsMM[0].y == mmOfMousePos.y)) { // если точки совпали, значит конец ввода
-                    pushPoints(prePointsMM);
-                    for (var p = prePointsMM.length - 1; p > 0; p--) {
-                        pushLine(findMaxId(points) - p, findMaxId(points) - p + 1); // занесли в массив линий нашу новую линию
-                        newLinesIds.push(findMaxId(lines));//
-                        // console.log("lines = ", lines);
+                // проверяем, не попалась ли нам окружность на этот раз. Тупо проверяем не попали ли на элемент целиком и тупо копируем его, линия, окружность - не важно
+                var dist = 0;
+                var dir = '';
+                for (element of elements.values()) { // бежим по всем имеющимся элементам
+                    var line = lines.find(line => line.id == element.ids[0]); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
+                    var point0 = mmToPix(points.find(point => point.id == line.id0));
+                    var point1 = mmToPix(points.find(point => point.id == line.id1)); // нашли все точки имеющейся окружности и проверяем, не совпадают ли они с нашими
+                    if (((prePointsMM[prePointsMM.length - 1].x == point0.x) && (prePointsMM[prePointsMM.length - 1].y == point0.y) && (prePointsMM[prePointsMM.length - 2].x == point1.x) && (prePointsMM[prePointsMM.length - 2].y == point1.y)) || ((prePointsMM[prePointsMM.length - 1].x == point1.x) && (prePointsMM[prePointsMM.length - 1].y == point1.y) && (prePointsMM[prePointsMM.length - 2].x == point0.x) && (prePointsMM[prePointsMM.length - 2].y == point0.y))) {
+                        dist = line.distance;
+                        dir = line.direction;
                     }
-                    prePointsMM = [];
-                    newElement = { ids: newLinesIds, type: "stairwell" };
-                    newLinesIds = [];
+                } остановился тут
+                // pushLine(findMaxId(points) - 1, findMaxId(points), dist, dir); // занесли в массив линий нашу новую линию
+                var newLine = { p0_id: findMaxId(points) +   distance: dist, direction: dir};
+                newLines.push(newLine);
+                newLinesIds.push(findMaxId(lines) + newLines.length); // занесли в промежуточный массив id линий
+
+                if ((prePointsMM[0].x == mmOfMousePos.x) && (prePointsMM[0].y == mmOfMousePos.y)) { // если точки совпали, значит конец ввода
+                    for (line of newLines.values()) {
+                        pushLine(findMaxId(points) - 1, findMaxId(points), dist, dir); // занесли в массив линий нашу новую линию
+                    }
+                    var newElement = { ids: newLinesIds, type: 'stairwell', subType: '' };
                     pushElement(newElement);
-                    drawElements();
+                    newLinesIds = [];
+                    prePointsMM = [];
+                    drawShape(elements[elements.length - 1], ctx_0, drawSettingsDefault);
+                    $('#none').trigger('click'); // делаем нажатой кнопку сброс
                 }
-            } else {
+            } else { // если это самая первая точка
                 pushPrePointMM(mmOfMousePos);
                 drawPoint(mousePos);
             }
             break;
 
     }
-    // console.log("elements = ", elements);
+    console.log("elements = ", elements);
 });

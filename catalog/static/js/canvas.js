@@ -23,8 +23,52 @@ var prePointsMM = []; // массив новых точек при рисова�
 var selectedElements = [];// массив выделенных на схеме элементов (id)
 var schemeChange = false;
 var checked = false; // прверен проект или нет
+var plate_garage = []; // массив перекрытий гаражного типа, который включает в себя координаты точки в мм внутри поемещения. Сделать проверку, чтоб не было двух таких меток внутри одного помещения и сделать удаление
+var level; //уровень - первого или второго этажа
+var drawSettings = [];
 
+var drawSettingsDefault = {
+    strokeStyle: 'black',
+    lineWidth: 1,
+    fillStyle: "blue",
+    blur: false
+}
 
+function getLineContext(line, context) {// функуия для получения контекста в зависимоти от формы линии. Если так не сделать, в разных функциях приедтся кодить для кривой
+    //console.log('points.find(point => point.id == line.id0) = ', points.find(point => point.id == line.id0));
+    var point0 = mmToPix(points.find(point => point.id == line.id0));
+    var point1 = mmToPix(points.find(point => point.id == line.id1)); 
+    if (line.distance > 0) {// если это окружность
+        var middle = [];
+        middle.x = Math.min(point0.x, point1.x) + Math.abs(point0.x - point1.x) / 2;
+        middle.y = Math.min(point0.y, point1.y) + Math.abs(point0.y - point1.y) / 2;
+        var radius = lengthLine(point0, point1) / 2;
+        if (point0.y == point1.y) {
+            if (((line.direction == "left") && (point0.x < point1.x))) {
+                context.arc(middle.x, middle.y, radius, 0, Math.PI, true);
+            } else if (((line.direction == "right") && (point0.x < point1.x))) {
+                context.arc(middle.x, middle.y, radius, 0, Math.PI, false);
+            } else if (((line.direction == "left") && (point0.x > point1.x))) {
+                context.arc(middle.x, middle.y, radius, Math.PI, 0, true);
+            } else if (((line.direction == "right") && (point0.x > point1.x))) {
+                context.arc(middle.x, middle.y, radius, Math.PI, 0, false);
+            }
+        } else if (point0.x == point1.x) {
+            if (((line.direction == "left") && (point0.y < point1.y))) {
+                context.arc(middle.x, middle.y, radius, Math.PI / 2, 3 * Math.PI / 2, true);
+            } else if (((line.direction == "right") && (point0.y < point1.y))) {
+                context.arc(middle.x, middle.y, radius, Math.PI / 2, 3 * Math.PI / 2, false);
+            } else if (((line.direction == "right") && (point0.y > point1.y))) {
+                context.arc(middle.x, middle.y, radius, 3 * Math.PI / 2, Math.PI / 2, false);
+            } else if (((line.direction == "left") && (point0.y > point1.y))) {
+                context.arc(middle.x, middle.y, radius, 3 * Math.PI / 2, Math.PI / 2, true);
+            }
+        }
+    } else { // если это не окружность, значит это просто прямая
+        context.moveTo(point0.x, point0.y);
+        context.lineTo(point1.x, point1.y);
+    }
+}
 
 
 // рисуем точку
@@ -36,134 +80,124 @@ function drawPoint(p) {
     ctx_0.closePath();
 }
 
-// рисуем прямую линию или 
-function drawLine(p, p1, context, color, blur) {
-    context.beginPath();
-    context.moveTo(p.x, p.y);
-    context.lineTo(p1.x, p1.y);
-    context.strokeStyle = color;
-    //context.lineWidth = 3;
-    if (blur == true) {
+function drawShape(element, context, drawSettings) {
+    context.strokeStyle = drawSettings.strokeStyle;
+    context.lineWidth = drawSettings.lineWidth;
+    context.fillStyle = drawSettings.fillStyle;
+    if (drawSettings.blur == true) {
         context.shadowBlur = 5;
         context.shadowColor = "blue";
     }
+    context.beginPath();
+    for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в элементе
+        var line = lines.find(line => line.id == line_id);
+        getLineContext(line, context);
+    }
+    context.closePath();
+    context.stroke();
+}
+
+// рисуем линию, в зависимости от содержимого прямую или кривую
+function drawLine(line, context, drawSettings) {
+    //console.log("drawLine!");
+    // context.strokeStyle = drawSettingsDefault.strokeStyle;
+    // context.lineWidth = drawSettingsDefault.lineWidth;
+    context.strokeStyle = drawSettings.strokeStyle;
+    context.lineWidth = drawSettings.lineWidth;
+    if (drawSettings.blur == true) {
+        context.shadowBlur = 5;
+        context.shadowColor = "blue";
+    }
+    context.beginPath();
+    getLineContext(line, context);
     context.stroke();
 }
 
 
 // функция рисования окружности 
-function drawCircleElement(element, context, color, blur) {
-    context.beginPath();
-    // поскольку мы пока упростили и при создании окружности она становится правильным полукругом, то центр окружности тупо середина базовой линии
-    var line = lines.find(line => line.id == element.ids[0]); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
-    var point0 = mmToPix(points.find(point => point.id == line.id0)); // ищем и заносим в первую точку для рисования линии id первой точки сразу переводя в пиксели
-    var point1 = mmToPix(points.find(point => point.id == line.id1)); // ищем и заносим в первую точку для рисования линии id первой точки сразу переводя в пиксели
-    drawPoint(point0);
-    drawPoint(point1);
-    var middle = [];
-    middle.x = Math.min(point0.x, point1.x) + Math.abs(point0.x - point1.x) / 2;
-    middle.y = Math.min(point0.y, point1.y) + Math.abs(point0.y - point1.y) / 2;
-    var radius = lengthLine(point0, point1) / 2;
-    if (point0.y == point1.y) {
-        if (((element.direction == "left") && (point0.x < point1.x))) {
-            context.arc(middle.x, middle.y, radius, 0, Math.PI, true);
-        } else if (((element.direction == "right") && (point0.x < point1.x))) {
-            context.arc(middle.x, middle.y, radius, 0, Math.PI, false);
-        } else if (((element.direction == "left") && (point0.x > point1.x))) {
-            context.arc(middle.x, middle.y, radius, Math.PI, 0, true);
-        } else if (((element.direction == "right") && (point0.x > point1.x))) {
-            context.arc(middle.x, middle.y, radius, Math.PI, 0, false);
-        }
-    } else if (point0.x == point1.x) {
-        if (((element.direction == "left") && (point0.y < point1.y))) {
-            context.arc(middle.x, middle.y, radius, Math.PI / 2, 3 * Math.PI / 2, true);
-        } else if (((element.direction == "right") && (point0.y < point1.y))) {
-            context.arc(middle.x, middle.y, radius, Math.PI / 2, 3 * Math.PI / 2, false);
-        } else if (((element.direction == "right") && (point0.y > point1.y))) {
-            context.arc(middle.x, middle.y, radius, 3 * Math.PI / 2, Math.PI / 2, false);
-        } else if (((element.direction == "left") && (point0.y > point1.y))) {
-            context.arc(middle.x, middle.y, radius, 3 * Math.PI / 2, Math.PI / 2, true);
-        }
-    }
-    context.strokeStyle = color;
-    if (blur == true) {
-        context.shadowBlur = 5;
-        context.shadowColor = "blue";
-    }
-    context.stroke();
-}
+// function drawCircleElement(element, context, color, blur) {
+//     context.beginPath();
+//     // поскольку мы пока упростили и при создании окружности она становится правильным полукругом, то центр окружности тупо середина базовой линии
+//     var line = lines.find(line => line.id == element.ids[0]); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
+//     var point0 = mmToPix(points.find(point => point.id == line.id0)); // ищем и заносим в первую точку для рисования линии id первой точки сразу переводя в пиксели
+//     var point1 = mmToPix(points.find(point => point.id == line.id1)); // ищем и заносим в первую точку для рисования линии id первой точки сразу переводя в пиксели
+//     drawPoint(point0);
+//     drawPoint(point1);
+//     var middle = [];
+//     middle.x = Math.min(point0.x, point1.x) + Math.abs(point0.x - point1.x) / 2;
+//     middle.y = Math.min(point0.y, point1.y) + Math.abs(point0.y - point1.y) / 2;
+//     var radius = lengthLine(point0, point1) / 2;
+//     if (point0.y == point1.y) {
+//         if (((element.direction == "left") && (point0.x < point1.x))) {
+//             context.arc(middle.x, middle.y, radius, 0, Math.PI, true);
+//         } else if (((element.direction == "right") && (point0.x < point1.x))) {
+//             context.arc(middle.x, middle.y, radius, 0, Math.PI, false);
+//         } else if (((element.direction == "left") && (point0.x > point1.x))) {
+//             context.arc(middle.x, middle.y, radius, Math.PI, 0, true);
+//         } else if (((element.direction == "right") && (point0.x > point1.x))) {
+//             context.arc(middle.x, middle.y, radius, Math.PI, 0, false);
+//         }
+//     } else if (point0.x == point1.x) {
+//         if (((element.direction == "left") && (point0.y < point1.y))) {
+//             context.arc(middle.x, middle.y, radius, Math.PI / 2, 3 * Math.PI / 2, true);
+//         } else if (((element.direction == "right") && (point0.y < point1.y))) {
+//             context.arc(middle.x, middle.y, radius, Math.PI / 2, 3 * Math.PI / 2, false);
+//         } else if (((element.direction == "right") && (point0.y > point1.y))) {
+//             context.arc(middle.x, middle.y, radius, 3 * Math.PI / 2, Math.PI / 2, false);
+//         } else if (((element.direction == "left") && (point0.y > point1.y))) {
+//             context.arc(middle.x, middle.y, radius, 3 * Math.PI / 2, Math.PI / 2, true);
+//         }
+//     }
+//     context.strokeStyle = color;
+//     if (blur == true) {
+//         context.shadowBlur = 5;
+//         context.shadowColor = "blue";
+//     }
+//     context.stroke();
+// }
 
 // let hello = "привет мир. пока мир";
 // let key = "мир";
 // let firstPos = hello.indexOf(key);
+function drawElement(element) {
+    drawSettings = drawSettingsDefault;
+    if (element.type == 'wall') { // если это стена
+        drawSettings = { // задаем умолчания, если тип стены еще не задан
+            lineWidth: 1
+        }
+        if (element.subType.indexOf("partition") >= 0) {// если это перегородка
+            drawSettings = {
+                lineWidth: 6
+            }
+        } else if (element.subType.indexOf("bearing") >= 0) {// если это несущая стена 
+            drawSettings = {
+                lineWidth: 12
+            }
+            if (element.subType.indexOf("outdoor") >= 0) {
+                drawSettings = {
+                    lineWidth: 12,
+                    strokeStyle: "orange"
+                }
+            }
+        }
+        for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+            var line = lines.find(line => line.id == line_id);
+            //console.log('line! = ', line);
+            drawLine(line, ctx_0, drawSettings);
+        }
+    } else if (element.type == 'stairwell') { // если это лестничный пролет
+        drawShape(element, ctx_0, drawSettingsDefault);
+    }
+}
+
+
 
 // Воспроизведение из массива стен
 function drawElements() {  //drawWalls
     clear(ctx_0, canvas_0);
-    var strokeStyle = 1;
-    for (element of elements.values()) {// перебираем все элементы - прямые, эркеры, кривые
-        if (element.type == 'wall') { // если это просто стена
-            if ((element.distance > 0) && (element.ids.length == 1)) { // если это окружность
-                ctx_0.lineWidth = 1;
-                strokeStyle = "black";// если ничего не задано
-                // drawCircleElement(element, ctx_0, strokeStyle); 
-                if (element.wallType.indexOf("partition") >= 0) {// если это перегородка
-                    ctx_0.lineWidth = 6;
-                    strokeStyle = "black"
-                    drawCircleElement(element, ctx_0, strokeStyle);
-                    ctx_0.lineWidth = 2;
-                } else if (element.wallType.indexOf("bearing") >= 0) {// если это несущая стена 
-                    ctx_0.lineWidth = 12;
-                    strokeStyle = "black"
-                    drawCircleElement(element, ctx_0, strokeStyle);
-                    if (element.wallType.indexOf("outdoor") >= 0) {
-                        ctx_0.lineWidth = 10;
-                        strokeStyle = "orange"
-                        drawCircleElement(element, ctx_0, strokeStyle);
-                    }
-                }
-                ctx_0.lineWidth = 4;
-                if (element.liveType == "living") {
-                    strokeStyle = "yellow";
-                } else if (element.liveType == "uninhabited") {
-                    strokeStyle = "Gainsboro";
-                }
-                drawCircleElement(element, ctx_0, strokeStyle);
-            } else {
-                for (item of element.ids.values()) { // перебираем массив id линий, хранящийся в каждом элементе
-                    var line = lines.find(line => line.id == item); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
-                    var point0 = mmToPix(points.find(point => point.id == line.id0)); // ищем и заносим в первую точку для рисования линии id первой точки сразу переводя в пиксели
-                    var point1 = mmToPix(points.find(point => point.id == line.id1)); // ищем и заносим в первую точку для рисования линии id первой точки сразу переводя в пиксели
-                    ctx_0.lineWidth = 1;
-                    strokeStyle = "black";// если ничего не задано
-                    //    drawLine(point0, point1, ctx_0, strokeStyle);
-                    if (element.wallType.indexOf("partition") >= 0) {// если это перегородка
-                        ctx_0.lineWidth = 6;
-                        strokeStyle = "black"
-                        drawLine(point0, point1, ctx_0, strokeStyle);
-                        ctx_0.lineWidth = 2;
-                    } else if (element.wallType.indexOf("bearing") >= 0) {// если это несущая стена
-                        ctx_0.lineWidth = 12;
-                        strokeStyle = "black"
-                        drawLine(point0, point1, ctx_0, strokeStyle);
-                        if (element.wallType.indexOf("outdoor") >= 0) {
-                            ctx_0.lineWidth = 10;
-                            strokeStyle = "orange"
-                            drawLine(point0, point1, ctx_0, strokeStyle);
-                        }
-                    }
-                    ctx_0.lineWidth = 4;
-                    if (element.wallType.indexOf("living") >= 0) {
-                        strokeStyle = "yellow";
-                    } else if (element.wallType.indexOf("uninhabited") >= 0) {
-                        strokeStyle = "Gainsboro";
-                    }
-                    drawLine(point0, point1, ctx_0, strokeStyle);
-                }
-            }
-        } else if (element.type == 'floor_garage') { // если пол гаражного типа
-
-        }
+    // var strokeStyle = 1;
+    for (element of elements.values()) {// перебираем все элементы 
+        drawElement(element);
     }
 }
 
@@ -196,7 +230,7 @@ function applyWallData() {
     for (sel of selectedElements.values()) {
         for (el of elements.values()) {
             if (el.id == sel) {
-                // console.log("sel = ", sel);
+                // //console.log("sel = ", sel);
                 var a = bearType + "_" + liveType;
                 if (bearType == "bearing") {
                     a = a + "_" + outdoorType;
@@ -209,5 +243,5 @@ function applyWallData() {
     selectedElements = [];
     schemeChange = true;
     drawElements();
-    // console.log("elements = ", elements);
+    // //console.log("elements = ", elements);
 }
