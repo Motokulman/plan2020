@@ -253,28 +253,67 @@ function drawElement(element) {
     console.log('drawElement element! = ', element);
     drawSettings = drawSettingsDefault;
     if (element.type == 'wall') { // если это стена
-        drawSettings = { // задаем умолчания, если тип стены еще не задан
-            lineWidth: 1
-        }
+
         if (element.subType.indexOf("partition") >= 0) {// если это перегородка
             drawSettings = {
-                lineWidth: 6
+                lineWidth: 6,
+                strokeStyle: "black"
+            }
+            for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+                var line = lines.find(line => line.id == line_id);
+                drawLine(line, ctx_0, drawSettings);
             }
         } else if (element.subType.indexOf("bearing") >= 0) {// если это несущая стена 
             drawSettings = {
-                lineWidth: 12
+                lineWidth: 12,
+                strokeStyle: "black"
+            }
+            for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+                var line = lines.find(line => line.id == line_id);
+                drawLine(line, ctx_0, drawSettings);
             }
             if (element.subType.indexOf("outdoor") >= 0) {
                 drawSettings = {
-                    lineWidth: 12,
-                    strokeStyle: "orange"
+                    lineWidth: 10,
+                    strokeStyle: "yellow"
+                }
+            } else if (element.subType.indexOf("indoor") >= 0) {
+                drawSettings = {
+                    lineWidth: 10,
+                    strokeStyle: "blue"
                 }
             }
+            for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+                var line = lines.find(line => line.id == line_id);
+                drawLine(line, ctx_0, drawSettings);
+            }
+        } else {
+            drawSettings = { // задаем умолчания, если тип стены еще не задан
+                lineWidth: 1
+            }
+            for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+                var line = lines.find(line => line.id == line_id);
+                drawLine(line, ctx_0, drawSettings);
+            }
         }
-        for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
-            var line = lines.find(line => line.id == line_id);
-            // console.log('drawElement line_id = ', line_id);
-            drawLine(line, ctx_0, drawSettings);
+        if (element.subType.indexOf("living") >= 0) {// если это смженая сжилым
+            drawSettings = {
+                lineWidth: 4,
+                strokeStyle: "green"
+            }
+            for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+                var line = lines.find(line => line.id == line_id);
+                drawLine(line, ctx_0, drawSettings);
+            }
+        } else if (element.subType.indexOf("uninhabited") >= 0) {// если это смженая с нежилым
+            drawSettings = {
+                lineWidth: 4,
+                strokeStyle: "gray"
+            }
+            for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+                var line = lines.find(line => line.id == line_id);
+                drawLine(line, ctx_0, drawSettings);
+            }
         }
     } else if (element.type == 'aperture') { // если это лестничный пролет
         drawShape(element, ctx_0, drawSettingsDefault);
@@ -326,7 +365,7 @@ function applyWallData() {
                 if (bearType == "bearing") {
                     a = a + "_" + outdoorType;
                 }
-                el.wallType = a;
+                el.subType = a;
             }
         }
     }
@@ -334,5 +373,5 @@ function applyWallData() {
     selectedElements = [];
     schemeChange = true;
     drawElements();
-    // //console.log("elements = ", elements);
+    // console.log("elements = ", elements);
 }

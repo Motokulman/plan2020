@@ -27,7 +27,7 @@ canvas_0.addEventListener('click', function (e) {
                     pushLine(findMaxId(points) - 1, findMaxId(points), 0, ''); // занесли в массив линий нашу новую линию
                     console.log("lines = ", lines);
                     newLinesIds[0] = findMaxId(lines);// занесли в промежуточный массив id единственной линии, которая будет храниться в данном элементе (т.к. это просто ровная стена)
-                    newElement = { ids: newLinesIds, type: 'wall', subType: '' };
+                    newElement = { ids: newLinesIds, type: 'wall', subType: '', level: level };
                     console.log("newElement = ", newElement);
                     pushElement(newElement); // занесли в массив с элементами id нашей линии стены/ радиус = 0 чтобы отличить стену от радиусного элемента
                     console.log("elements сразу после добавления = ", elements);
@@ -105,7 +105,7 @@ canvas_0.addEventListener('click', function (e) {
                     newLinesIds[0] = findMaxId(lines) - 2;
                     newLinesIds[1] = findMaxId(lines) - 1;
                     newLinesIds[2] = findMaxId(lines);
-                    newElement = { ids: newLinesIds, distance: distance, type: 'wall', subType: '' };
+                    newElement = { ids: newLinesIds, distance: distance, type: 'wall', subType: '', level: level };
                     pushElement(newElement);
                     drawElement(elements[elements.length - 1]);
                     mousePosArray = [];
@@ -141,7 +141,7 @@ canvas_0.addEventListener('click', function (e) {
                     // newLinesIds[0] = findMaxId(lines);// занесли в промежуточный массив id единственной линии
                     // pushLine(findMaxId(points) - 1, findMaxId(points), 0, ''); // занесли в массив линий нашу новую линию
                     newLinesIds[0] = findMaxId(lines);// занесли в промежуточный массив id единственной линии
-                    newElement = { ids: newLinesIds, type: 'wall', subType: '' }; // заносим линию в элемент
+                    newElement = { ids: newLinesIds, type: 'wall', subType: '', level: level }; // заносим линию в элемент
                     pushElement(newElement);
                     prePointsMM = [];
                     //  //console.log("elements = ", elements);
@@ -191,13 +191,8 @@ canvas_0.addEventListener('click', function (e) {
             break;
         case 'stairwell': // лестничный пролет. Можно по последовательности ввода определять направление движения. При обработке автоматически определять элементы, его окаймляющих, и соответственно обрабатывать. Например, окружность
             newLinesIds = [];
-                        // console.log("stairwell!");
-            // prePointsMM = []; // обнылим все на всякий случай
-            // newLinesIds = [];
             if (prePointsMM.length > 0) {
-                // var stairwellElement = [];
                 pushPrePointMM(mmOfMousePos);
-                // console.log("prePointsMM.length = ", prePointsMM.length);
                 drawPoint(mousePos);
                 // проверяем, не попалась ли нам окружность на этот раз. Тупо проверяем не попали ли на элемент целиком и тупо копируем его, линия, окружность - не важно
                 var dist = 0;
@@ -205,17 +200,9 @@ canvas_0.addEventListener('click', function (e) {
                 var newLine = [];
                 if (elements.length > 0) {
                     for (element of elements.values()) { // бежим по всем имеющимся элементам
-                        
                         var line = lines.find(line => line.id == element.ids[0]); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
                         var point0 = points.find(point => point.id == line.id0);
                         var point1 = points.find(point => point.id == line.id1); // нашли все точки имеющейся окружности и проверяем, не совпадают ли они с нашими
-                        console.log("бежим по всем имеющимся элементам ");
-                        console.log("point0 = ", point0);
-                        console.log("point1 = ", point1);
-                        console.log("prePointsMM[prePointsMM.length - 1].x = ", prePointsMM[prePointsMM.length - 1].x);
-                        console.log("prePointsMM[prePointsMM.length - 1].y = ", prePointsMM[prePointsMM.length - 1].y);
-                        console.log("prePointsMM[prePointsMM.length - 2].x = ", prePointsMM[prePointsMM.length - 2].x);
-                        console.log("prePointsMM[prePointsMM.length - 2].y = ", prePointsMM[prePointsMM.length - 2].y);
                         if ((prePointsMM[prePointsMM.length - 1].x == point1.x) && (prePointsMM[prePointsMM.length - 1].y == point1.y) && (prePointsMM[prePointsMM.length - 2].x == point0.x) && (prePointsMM[prePointsMM.length - 2].y == point0.y)) {
                             dist = line.distance;
                             dir = line.direction;
@@ -234,23 +221,15 @@ canvas_0.addEventListener('click', function (e) {
                 } else {
                     newLine = { p0_id: prePointsMM.length - 2, p1_id: prePointsMM.length - 1, distance: dist, direction: dir };
                 }
-
-                // pushLine(findMaxId(points) - 1, findMaxId(points), dist, dir); // занесли в массив линий нашу новую линию
-
                 newLines.push(newLine);
-                // newLinesIds.push(findMaxId(lines) + newLines.length); // занесли в промежуточный массив id линий
-
                 if ((prePointsMM[0].x == mmOfMousePos.x) && (prePointsMM[0].y == mmOfMousePos.y)) { // если точки совпали, значит конец ввода
                     pushPoints(prePointsMM);
                     for (line of newLines.values()) {
                         pushLine(line.p0_id, line.p1_id, line.distance, line.direction); // занесли в массив линий нашу новую линию
                         newLinesIds.push(findMaxId(lines));
-                        console.log("lines = ", lines);
                     }
-                    var newElement = { ids: newLinesIds, type: 'aperture', subType: 'stairwell' };
+                    newElement = { ids: newLinesIds, type: 'aperture', subType: 'stairwell', level: level };
                     pushElement(newElement);
-                    console.log("elements = ", elements);
-                    console.log("points = ", points);
                     newLinesIds = [];
                     prePointsMM = [];
                     newLinesIds = [];
@@ -265,10 +244,9 @@ canvas_0.addEventListener('click', function (e) {
                 newLines = [];
                 pushPrePointMM(mmOfMousePos);
                 drawPoint(mousePos);
-
             }
             break;
 
     }
-    // console.log("elements = ", elements);
+     console.log("elements = ", elements);
 });

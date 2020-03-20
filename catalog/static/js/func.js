@@ -572,7 +572,7 @@ function pushLine(id0, id1, distance, direction) {
 function pushElement(el) { // ids - массив id линий, из которых состоит данный элемент  ids, distance, direction
     if (elements.length == 0) {
         // //console.log("el = ", el);bearType: 'not_set', liveType: 'not_set', outdoorType: 'not_set', 
-        elements.push({ id: 0, ids: el.ids, type: el.type, subType: el.subType });
+        elements.push({ id: 0, ids: el.ids, type: el.type, subType: el.subType, level: level });
     } else {
         elements.push({ id: findMaxId(elements) + 1, ids: el.ids, type: el.type, subType: el.subType });
     }
