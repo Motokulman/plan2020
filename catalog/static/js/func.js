@@ -107,29 +107,31 @@ function defineElement() {
     var p0, p1;
     var a = -1; // id элемента, над которым сейчас курсор
     for (element of elements.values()) { // перебираем все элементы - прямые, эркеры, кривые, лестничные пролеты
-        for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
-            var line = lines.find(line => line.id == line_id);
-            p0 = mmToPix(points.find(point => point.id == line.id0));
-            p1 = mmToPix(points.find(point => point.id == line.id1));
-            if (line.distance > 0) {// если это окружность
-                var middle = [];
-                middle.x = Math.min(p0.x, p1.x) + Math.abs(p0.x - p1.x) / 2;
-                middle.y = Math.min(p0.y, p1.y) + Math.abs(p0.y - p1.y) / 2;
-                if (Math.abs(lengthLine(mousePos, middle) - line.distance / scale) <= 5) { // если попадаем курсором на нашу упрощенную (превращенную в правльный полукруг) окружность
-                    // drawCircleElement(element, ctx_1, '#888888', true);
-                    a = element.id;
-                    //  //console.log("element.id= ", element.id);
-                }
-            } else { // если же это не окружность
-                if (straightAffiliation(p0, p1, mousePos) == true) { // если курсор лежит на прямой между этими точками, 
-                    a = element.id;
-                }
+        if ((((element.type == "wall") || (element.type == "roof")) && (element.level == level)) || (element.type != "wall")) { // если стены, тос их видим только если они на нашем уровне
+            for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+                var line = lines.find(line => line.id == line_id);
+                p0 = mmToPix(points.find(point => point.id == line.id0));
+                p1 = mmToPix(points.find(point => point.id == line.id1));
+                if (line.distance > 0) {// если это окружность
+                    var middle = [];
+                    middle.x = Math.min(p0.x, p1.x) + Math.abs(p0.x - p1.x) / 2;
+                    middle.y = Math.min(p0.y, p1.y) + Math.abs(p0.y - p1.y) / 2;
+                    if (Math.abs(lengthLine(mousePos, middle) - line.distance / scale) <= 5) { // если попадаем курсором на нашу упрощенную (превращенную в правльный полукруг) окружность
+                        // drawCircleElement(element, ctx_1, '#888888', true);
+                        a = element.id;
+                        //  //console.log("element.id= ", element.id);
+                    }
+                } else { // если же это не окружность
+                    if (straightAffiliation(p0, p1, mousePos) == true) { // если курсор лежит на прямой между этими точками, 
+                        a = element.id;
+                    }
 
+                }
             }
         }
     }
     if (a >= 0) {
-        // console.log("element.id= ", a);
+         console.log("element.id= ", a);
     }
     return a;
 }
@@ -247,6 +249,9 @@ function stick() {
     var stick_pix = 10;
     var a = [];
     clear(ctx_1, canvas_1);
+    ctx_1.setLineDash([10, 5]);
+    ctx_1.strokeStyle = "gray";
+    ctx_1.lineWidth = 1.0;
     // Перебор всех точек
     for (item of points.values()) {
 
@@ -511,6 +516,7 @@ $('#element_selector button').click(function () {
 $('#level_selector button').click(function () {
     $(this).addClass('active').siblings().removeClass('active');
     level = this.id;
+    drawElements();
 });
 
 // Получаем координаты курсора в зависимости от положения канвы на экране
@@ -572,9 +578,9 @@ function pushLine(id0, id1, distance, direction) {
 function pushElement(el) { // ids - массив id линий, из которых состоит данный элемент  ids, distance, direction
     if (elements.length == 0) {
         // //console.log("el = ", el);bearType: 'not_set', liveType: 'not_set', outdoorType: 'not_set', 
-        elements.push({ id: 0, ids: el.ids, type: el.type, subType: el.subType, level: level });
+        elements.push({ id: 0, ids: el.ids, type: el.type, subType: el.subType, level: el.level, height: el.height, angle: el.angle, highSide: el.highSide  });
     } else {
-        elements.push({ id: findMaxId(elements) + 1, ids: el.ids, type: el.type, subType: el.subType });
+        elements.push({ id: findMaxId(elements) + 1, ids: el.ids, type: el.type, subType: el.subType, level: el.level, height: el.height, angle: el.angle, highSide: el.highSide  });
     }
 }
 
@@ -646,11 +652,11 @@ $(document).keydown(function (eventObject) {// Удаление, если вдр
 function drawHVLine(type) {
     ctx_1.beginPath();
     if (type == "h") {
-        ctx_1.moveTo(0, mousePos.y);
-        ctx_1.lineTo(canvas_1.width, mousePos.y);
+        ctx_1.moveTo(0, mousePos.y + 0.5);
+        ctx_1.lineTo(canvas_1.width, mousePos.y + 0.5);
     } else if (type == "v") {
-        ctx_1.moveTo(mousePos.x, 0);
-        ctx_1.lineTo(mousePos.x, canvas_1.height);
+        ctx_1.moveTo(mousePos.x + 0.5, 0);
+        ctx_1.lineTo(mousePos.x + 0.5, canvas_1.height);
     }
     ctx_1.fillStyle = '#333333';
     ctx_1.stroke();

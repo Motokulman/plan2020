@@ -44,12 +44,13 @@
       <div id="element_selector">
         <div class="btn-group">
           <button id="none" type="button" class="btn btn-light">Сброс</button>
-        <!-- </div>
+          <!-- </div>
         <div class="btn-group"> -->
           <button id="wall" type="button" class="btn btn-light">Стена</button>
           <button id="entrance_group" type="button" class="btn btn-light">Входная группа</button>
           <button id="stairwell" type="button" class="btn btn-light">Лестничный пролёт</button>
           <button id="plate_garage" type="button" class="btn btn-light">Пол гаража</button>
+          <button id="roof" type="button" class="btn btn-light">Кровля</button>
         </div>
       </div>
 
@@ -106,8 +107,8 @@
   <br>
 </div>
 
-
-<div id="dialog" title="Стены" class="ui-widget">
+<!-- Диалоговое окно для стен-->
+<div id="wall_dialog" title="Стены" class="ui-widget">
   <div><label for="wall_type">Тип стены: </label>
     <p><input type="radio" value="bearing" id="wall_type" name="wall_type" />Несущая</p>
     <p><input type="radio" value="partition" id="wall_type" name="wall_type" />Перегородка</p>
@@ -122,6 +123,20 @@
     <p><input type="radio" value="outdoor" id="outdoor" name="outdoor" />Да</p>
     <p><input type="radio" value="indoor" id="outdoor" name="outdoor" />Нет</p>
     <!-- <p><input type="radio" value="not_set" checked id="outdoor" name="outdoor" />Не задано</p> -->
+  </div>
+</div>
+
+<!-- Диалоговое окно для кровли-->
+<div id="roof_dialog" title="Кровля" class="ui-widget">
+  <div><label for="high_side">Верхняя часть: </label>
+    <p><input type="radio" value="point" id="high_side" checked name="high_side" />Точка</p>
+    <p><input type="radio" value="line" id="high_side" name="high_side" />Линия</p>
+  </div>
+  <div><label for="angle">Наклон (0 - горизонтально):</label>
+    <p><input type="number" id="angle" name="angle" min="3" max="80" value="20"></p>
+  </div>
+  <div><label for="height">Высота конька от ближайшего пола: </label>
+      <p><input type="number" id="height" name="height" min="1000" max="8000" value="3000"></p>
   </div>
 </div>
 

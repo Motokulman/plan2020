@@ -206,15 +206,17 @@ canvas_0.addEventListener('click', function (e) {
                         if ((prePointsMM[prePointsMM.length - 1].x == point1.x) && (prePointsMM[prePointsMM.length - 1].y == point1.y) && (prePointsMM[prePointsMM.length - 2].x == point0.x) && (prePointsMM[prePointsMM.length - 2].y == point0.y)) {
                             dist = line.distance;
                             dir = line.direction;
-                             console.log("окружность при вводе прямая ");
+                            // console.log("окружность при вводе прямая ");
+                            break;
                         } else if ((prePointsMM[prePointsMM.length - 1].x == point0.x) && (prePointsMM[prePointsMM.length - 1].y == point0.y) && (prePointsMM[prePointsMM.length - 2].x == point1.x) && (prePointsMM[prePointsMM.length - 2].y == point1.y)) {
-                            console.log("окружность при вводе обратная ");
+                            // console.log("окружность при вводе обратная ");
                             dist = line.distance;
                             if (line.direction == "right") {
                                 dir = "left";
                             } else {
                                 dir = "right";
                             }
+                            break;
                         }
                     }
                     newLine = { p0_id: findMaxId(points) + prePointsMM.length - 1, p1_id: findMaxId(points) + prePointsMM.length, distance: dist, direction: dir };
@@ -228,7 +230,7 @@ canvas_0.addEventListener('click', function (e) {
                         pushLine(line.p0_id, line.p1_id, line.distance, line.direction); // занесли в массив линий нашу новую линию
                         newLinesIds.push(findMaxId(lines));
                     }
-                    newElement = { ids: newLinesIds, type: 'aperture', subType: 'stairwell', level: level };
+                    newElement = { ids: newLinesIds, type: 'aperture', subType: 'stairwell' }; // , level: level 
                     pushElement(newElement);
                     newLinesIds = [];
                     prePointsMM = [];
@@ -246,7 +248,67 @@ canvas_0.addEventListener('click', function (e) {
                 drawPoint(mousePos);
             }
             break;
-
+        case 'roof': // кровля
+            // сначала задаем линию
+            if (prePointsMM.length == 0) { // если это первый клик в этом цикле рисования прямой стены
+                pushPrePointMM(mmOfMousePos);
+                drawPoint(mousePos);
+            } else if (prePointsMM.length == 1) { // второй клик - получаем линию
+                pushPrePointMM(mmOfMousePos);
+                drawPoint(mousePos);
+                // проверяем, не попалась ли нам окружность на этот раз. Тупо проверяем не попали ли на элемент целиком и тупо копируем его, линия, окружность - не важно
+                var dist = 0;
+                var dir = '';
+                var newLine = [];
+                if (elements.length > 0) {
+                    for (element of elements.values()) { // бежим по всем имеющимся элементам
+                        var line = lines.find(line => line.id == element.ids[0]); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
+                        var point0 = points.find(point => point.id == line.id0);
+                        var point1 = points.find(point => point.id == line.id1); // нашли все точки имеющейся окружности и проверяем, не совпадают ли они с нашими
+                        if ((prePointsMM[prePointsMM.length - 1].x == point1.x) && (prePointsMM[prePointsMM.length - 1].y == point1.y) && (prePointsMM[prePointsMM.length - 2].x == point0.x) && (prePointsMM[prePointsMM.length - 2].y == point0.y)) {
+                            dist = line.distance;
+                            dir = line.direction;
+                            // console.log("окружность при вводе прямая ");
+                            break;
+                        } else if ((prePointsMM[prePointsMM.length - 1].x == point0.x) && (prePointsMM[prePointsMM.length - 1].y == point0.y) && (prePointsMM[prePointsMM.length - 2].x == point1.x) && (prePointsMM[prePointsMM.length - 2].y == point1.y)) {
+                            // console.log("окружность при вводе обратная ");
+                            dist = line.distance;
+                            if (line.direction == "right") {
+                                dir = "left";
+                            } else {
+                                dir = "right";
+                            }
+                            break;
+                        }
+                    }
+                    newLine = { p0_id: findMaxId(points) + prePointsMM.length - 1, p1_id: findMaxId(points) + prePointsMM.length, distance: dist, direction: dir };
+                } else {
+                    newLine = { p0_id: prePointsMM.length - 2, p1_id: prePointsMM.length - 1, distance: dist, direction: dir };
+                }
+                newLines.push(newLine);
+            } else if (prePointsMM.length == 2) { // последний, третий клик
+                pushPrePointMM(mmOfMousePos);
+                drawPoint(mousePos);
+                newLine = { p0_id: findMaxId(points) + prePointsMM.length - 1, p1_id: findMaxId(points) + prePointsMM.length, distance: 0, direction: '' }; // незнаю, есть ли смысл хранить в элементе точку
+                newLines.push(newLine);
+                pushPoints(prePointsMM);
+                for (line of newLines.values()) {
+                    pushLine(line.p0_id, line.p1_id, line.distance, line.direction); // занесли в массив линий нашу новую линию
+                    newLinesIds.push(findMaxId(lines));
+                }
+                newElement = { ids: newLinesIds, type: 'roof', subType: '', level: level, height: 0, angle: 0, highSide:'' }; // 
+                pushElement(newElement);
+                newLinesIds = [];
+                prePointsMM = [];
+                newLinesIds = [];
+                newLines = [];
+                drawSettings = {
+                    fillStyle: 'gray',
+                    globalAlpha: 0.5
+                }
+                drawShape(elements[elements.length - 1], ctx_0, drawSettings);
+            }
+            break;
     }
-     console.log("elements = ", elements);
+    console.log("elements = ", elements);
 });

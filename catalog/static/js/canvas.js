@@ -29,8 +29,9 @@ var drawSettings = [];
 
 var drawSettingsDefault = {
     strokeStyle: 'black',
-    lineWidth: 1,
-    fillStyle: "blue",
+    lineWidth: 2,
+    fillStyle: "#00ffff",
+    globalAlpha: 0.5,
     blur: false
 }
 
@@ -81,18 +82,19 @@ function getLineContext(line, context) {// функуия для получен�
 function drawPoint(p) {
     ctx_0.beginPath();
     ctx_0.arc(p.x, p.y, 5, 0, 2 * Math.PI);
-    ctx_0.fillStyle = '#333333';
+    ctx_0.fillStyle = 'black';
     ctx_0.fill();
     ctx_0.closePath();
 }
 
 function drawShape(element, context, drawSettings) {
-    console.log("drawShape element = ", element);
+    // console.log("drawShape element = ", element);
     var ctx = context;
     var line = [];
     context.strokeStyle = drawSettings.strokeStyle;
     context.lineWidth = drawSettings.lineWidth;
     context.fillStyle = drawSettings.fillStyle;
+    context.globalAlpha = drawSettings.globalAlpha;
     if (drawSettings.blur == true) {
         context.shadowBlur = 5;
         context.shadowColor = "blue";
@@ -186,13 +188,13 @@ function drawLine(line, context, drawSettings) {
             }
         } else if (point0.x == point1.x) {
             if (((line.direction == "left") && (point0.y < point1.y))) {
-                context.arc(middle.x, middle.y, radius, Math.PI / 2, 3 * Math.PI / 2, true);
+                context.arc(middle.x + 0.5, middle.y + 0.5, radius, Math.PI / 2, 3 * Math.PI / 2, true);
             } else if (((line.direction == "right") && (point0.y < point1.y))) {
-                context.arc(middle.x, middle.y, radius, Math.PI / 2, 3 * Math.PI / 2, false);
+                context.arc(middle.x + 0.5, middle.y + 0.5, radius, Math.PI / 2, 3 * Math.PI / 2, false);
             } else if (((line.direction == "right") && (point0.y > point1.y))) {
-                context.arc(middle.x, middle.y, radius, 3 * Math.PI / 2, Math.PI / 2, false);
+                context.arc(middle.x + 0.5, middle.y + 0.5, radius, 3 * Math.PI / 2, Math.PI / 2, false);
             } else if (((line.direction == "left") && (point0.y > point1.y))) {
-                context.arc(middle.x, middle.y, radius, 3 * Math.PI / 2, Math.PI / 2, true);
+                context.arc(middle.x + 0.5, middle.y + 0.5, radius, 3 * Math.PI / 2, Math.PI / 2, true);
             }
         }
     } else { // если это не окружность, значит это просто прямая
@@ -250,73 +252,107 @@ function drawLine(line, context, drawSettings) {
 // let key = "мир";
 // let firstPos = hello.indexOf(key);
 function drawElement(element) {
-    console.log('drawElement element! = ', element);
+    // console.log('drawElement element! = ', element);
     drawSettings = drawSettingsDefault;
     if (element.type == 'wall') { // если это стена
 
         if (element.subType.indexOf("partition") >= 0) {// если это перегородка
-            drawSettings = {
-                lineWidth: 6,
-                strokeStyle: "black"
+            if (element.level == level) {
+                drawSettings = {
+                    lineWidth: 6,
+                    strokeStyle: "black"
+                }
+            } else { //if (level != "floor_1")
+                drawSettings = {
+                    lineWidth: 6,
+                    strokeStyle: "gray"
+                }
             }
+
             for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
                 var line = lines.find(line => line.id == line_id);
                 drawLine(line, ctx_0, drawSettings);
             }
         } else if (element.subType.indexOf("bearing") >= 0) {// если это несущая стена 
-            drawSettings = {
-                lineWidth: 12,
-                strokeStyle: "black"
+            if (element.level == level) {
+                drawSettings = {
+                    lineWidth: 12,
+                    strokeStyle: "black"
+                }
+            } else { // if (level != "floor_1")
+                drawSettings = {
+                    lineWidth: 12,
+                    strokeStyle: "gray"
+                }
             }
+
             for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
                 var line = lines.find(line => line.id == line_id);
                 drawLine(line, ctx_0, drawSettings);
             }
-            if (element.subType.indexOf("outdoor") >= 0) {
-                drawSettings = {
-                    lineWidth: 10,
-                    strokeStyle: "yellow"
+            if (element.level == level) {
+                if (element.subType.indexOf("outdoor") >= 0) {
+                    drawSettings = {
+                        lineWidth: 10,
+                        strokeStyle: "yellow"
+                    }
+                } else if (element.subType.indexOf("indoor") >= 0) {
+                    drawSettings = {
+                        lineWidth: 10,
+                        strokeStyle: "blue"
+                    }
                 }
-            } else if (element.subType.indexOf("indoor") >= 0) {
-                drawSettings = {
-                    lineWidth: 10,
-                    strokeStyle: "blue"
+                for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+                    var line = lines.find(line => line.id == line_id);
+                    drawLine(line, ctx_0, drawSettings);
                 }
             }
-            for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
-                var line = lines.find(line => line.id == line_id);
-                drawLine(line, ctx_0, drawSettings);
-            }
+
         } else {
-            drawSettings = { // задаем умолчания, если тип стены еще не задан
-                lineWidth: 1
-            }
+            drawSettings = drawSettingsDefault; // задаем умолчания, если тип стены еще не задан
             for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
                 var line = lines.find(line => line.id == line_id);
                 drawLine(line, ctx_0, drawSettings);
             }
         }
-        if (element.subType.indexOf("living") >= 0) {// если это смженая сжилым
-            drawSettings = {
-                lineWidth: 4,
-                strokeStyle: "green"
-            }
-            for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
-                var line = lines.find(line => line.id == line_id);
-                drawLine(line, ctx_0, drawSettings);
-            }
-        } else if (element.subType.indexOf("uninhabited") >= 0) {// если это смженая с нежилым
-            drawSettings = {
-                lineWidth: 4,
-                strokeStyle: "gray"
-            }
-            for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
-                var line = lines.find(line => line.id == line_id);
-                drawLine(line, ctx_0, drawSettings);
+        if (element.level == level) {
+            if (element.subType.indexOf("living") >= 0) {// если это смженая сжилым
+                drawSettings = {
+                    lineWidth: 4,
+                    strokeStyle: "green"
+                }
+                for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+                    var line = lines.find(line => line.id == line_id);
+                    drawLine(line, ctx_0, drawSettings);
+                }
+            } else if (element.subType.indexOf("uninhabited") >= 0) {// если это смженая с нежилым
+                drawSettings = {
+                    lineWidth: 4,
+                    strokeStyle: "gray"
+                }
+                for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+                    var line = lines.find(line => line.id == line_id);
+                    drawLine(line, ctx_0, drawSettings);
+                }
             }
         }
+
     } else if (element.type == 'aperture') { // если это лестничный пролет
         drawShape(element, ctx_0, drawSettingsDefault);
+    } else if ((element.type == 'roof') && (element.level == level)) {
+        if ((element.highSide != '') && (element.angle != 0) && (element.height != 0)) {
+            drawSettings = {
+                fillStyle: 'red',
+                globalAlpha: 0.5
+            }
+        } else {
+            drawSettings = {
+                fillStyle: 'gray',
+                globalAlpha: 0.5
+            }
+        }
+
+        drawShape(element, ctx_0, drawSettings);
     }
 }
 
@@ -325,18 +361,33 @@ function drawElement(element) {
 // Воспроизведение из массива стен
 function drawElements() {  //drawWalls
     clear(ctx_0, canvas_0);
-    // var strokeStyle = 1;
-    for (element of elements.values()) {// перебираем все элементы 
-        drawElement(element);
+    if (elements.length > 0) {
+
+        for (element of elements.values()) {// перебираем все элементы 
+            if (((element.type == "wall") && (level == "floor_1") && (element.level == "floor_1")) || ((element.type == "wall") && (level == "floor_2")) || (element.type != "wall")) {
+                drawElement(element);
+            }
+        }
     }
+
 }
 
 
 
-// попробуем создать модальное окно https://professorweb.ru/my/javascript/jquery/level4/4_9.php
+// попробуем создать модальное окно для стен https://professorweb.ru/my/javascript/jquery/level4/4_9.php
 $(function () {
-    $('#dialog').dialog({
+    $('#wall_dialog').dialog({
         buttons: [{ text: "OK", click: applyWallData }, { text: "Отмена", click: function () { $(this).dialog("close") } }],
+        modal: true,
+        autoOpen: false,
+        width: 340
+    })
+});
+
+// создаем модальное окно для кровли
+$(function () {
+    $('#roof_dialog').dialog({
+        buttons: [{ text: "OK", click: applyRoofData }, { text: "Отмена", click: function () { $(this).dialog("close") } }],
         modal: true,
         autoOpen: false,
         width: 340
@@ -346,8 +397,39 @@ $(function () {
 
 // обработка правого клика
 $("#stage").bind('contextmenu', function (e) {
+    // $('#wall_dialog').dialog("open");
     if (selectedElements.length > 0) {
-        $('#dialog').dialog("open");
+        var num = 0;
+        var type = '';
+        // проверяем, выбранные элементы одного ли типа, и если да, определяем этот тип и вызываем соответствующее диалоговое окно
+        for (sel of selectedElements.values()) {
+            for (el of elements.values()) {
+                if (el.id == sel) {
+                    if (type == '') {
+                        type = el.type;
+                        num++;
+                    } else {
+                        if (el.type == type) {
+                            num++;
+                        }
+                    }
+                }
+            }
+        }
+        if (selectedElements.length == num) {
+
+            switch (type) {
+                case 'wall':
+                    console.log("num = ", num);
+                    console.log("type = ", type);
+                    $('#wall_dialog').dialog("open");
+                    break;
+                case 'roof':
+                    $('#roof_dialog').dialog("open");
+                    break;
+            }
+        }
+
     }
     return false;// запрет стандартного окна при правом клике, нам ведь нужно наше окно
 });
@@ -369,7 +451,32 @@ function applyWallData() {
             }
         }
     }
-    $('#dialog').dialog("close");
+    $('#wall_dialog').dialog("close");
+    selectedElements = [];
+    schemeChange = true;
+    drawElements();
+    // console.log("elements = ", elements);
+}
+// добавление данных о стенах
+function applyRoofData() {
+    var highSide = $('input[name=high_side]:checked').val();
+    var angle = $('input[name=angle]').val();
+    var height = $('input[name=height]').val();
+    for (sel of selectedElements.values()) {
+        for (el of elements.values()) {
+            if (el.id == sel) {
+                // //console.log("sel = ", sel);
+                // var a = bearType + "_" + liveType;
+                // if (bearType == "bearing") {
+                //     a = a + "_" + outdoorType;
+                // }
+                el.highSide = highSide;
+                el.angle = angle;
+                el.height = height;
+            }
+        }
+    }
+    $('#roof_dialog').dialog("close");
     selectedElements = [];
     schemeChange = true;
     drawElements();
