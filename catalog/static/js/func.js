@@ -577,10 +577,10 @@ function pushLine(id0, id1, distance, direction) {
 // сохранение элемента. Элемент состоит из одной или более линий. 
 function pushElement(el) { // ids - массив id линий, из которых состоит данный элемент  ids, distance, direction
     if (elements.length == 0) {
-        // //console.log("el = ", el);bearType: 'not_set', liveType: 'not_set', outdoorType: 'not_set', 
-        elements.push({ id: 0, ids: el.ids, type: el.type, subType: el.subType, level: el.level, height: el.height, angle: el.angle, highSide: el.highSide  });
+        // //console.log("el = ", el);bearType: 'not_set', liveType: 'not_set', outdoorType: 'not_set', roof_slope
+        elements.push({ id: 0, ids: el.ids, type: el.type, subType: el.subType, level: el.level, roofSlope: el.roofSlope, ridgeHeight: el.ridgeHeight, mauerlatHeight: el.mauerlatHeight, angle: el.angle, highSide: el.highSide  });
     } else {
-        elements.push({ id: findMaxId(elements) + 1, ids: el.ids, type: el.type, subType: el.subType, level: el.level, height: el.height, angle: el.angle, highSide: el.highSide  });
+        elements.push({ id: findMaxId(elements) + 1, ids: el.ids, type: el.type, subType: el.subType, level: el.level, roofSlope: el.roofSlope, ridgeHeight: el.ridgeHeight, mauerlatHeight: el.mauerlatHeight, angle: el.angle, highSide: el.highSide  });
     }
 }
 

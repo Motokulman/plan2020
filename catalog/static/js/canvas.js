@@ -16,6 +16,7 @@ var points = []; // Массив точек в миллиметрах. Перв�
 var zeroPointPadding = { 'x': 0, 'y': 0 }; // Смещение начала координат схемы относительно начала координат канвы. Попробуем в мм.
 var lines = []; // Массив связей между точками. 
 var elements = []; // Фигура, содержит массив элементов и закон их взаимодействия
+var opening = []; // Содержит проемы в стенах
 var scale = 25; // Сделать получение из настроек и сохранение в них
 var empty_scheme = true;// Правда, если еще нет ни одного элемента в схеме
 var sizeTextSettings = { topPadding: 10, bottomPadding: 5, leftPadding: 5, rightPadding: 30 }; // массив с настройками для отображения размеров на  экране
@@ -31,6 +32,14 @@ var drawSettingsDefault = {
     strokeStyle: 'black',
     lineWidth: 2,
     fillStyle: "#00ffff",
+    globalAlpha: 0.5,
+    blur: false
+}
+
+var drawSettingsGarage = {
+    strokeStyle: 'black',
+    lineWidth: 2,
+    fillStyle: "lime",
     globalAlpha: 0.5,
     blur: false
 }
@@ -337,10 +346,13 @@ function drawElement(element) {
             }
         }
 
-    } else if (element.type == 'aperture') { // если это лестничный пролет
+    } else if (element.type == 'aperture') { // если это лестничный пролет drawSettingsGarage
         drawShape(element, ctx_0, drawSettingsDefault);
+    } else if ((element.type == 'floor') && (element.subType == 'garage')) { // если это пол гаража 
+        drawShape(element, ctx_0, drawSettingsGarage);
+        // console.log("drawSettingsGarage == ", drawSettingsGarage)
     } else if ((element.type == 'roof') && (element.level == level)) {
-        if ((element.highSide != '') && (element.angle != 0) && (element.height != 0)) {
+        if ((element.highSide != '') && (element.angle != 0) && (element.height != 0)) { // если еще не заданы настройки крыши, даем эо понять цветом
             drawSettings = {
                 fillStyle: 'red',
                 globalAlpha: 0.5
@@ -420,8 +432,7 @@ $("#stage").bind('contextmenu', function (e) {
 
             switch (type) {
                 case 'wall':
-                    console.log("num = ", num);
-                    console.log("type = ", type);
+                    // console.log("num = ", num);
                     $('#wall_dialog').dialog("open");
                     break;
                 case 'roof':
@@ -457,22 +468,21 @@ function applyWallData() {
     drawElements();
     // console.log("elements = ", elements);
 }
-// добавление данных о стенах
+// добавление данных о кровле
 function applyRoofData() {
     var highSide = $('input[name=high_side]:checked').val();
+    var roofSlope = $('input[name=roof_slope]:checked').val();
     var angle = $('input[name=angle]').val();
-    var height = $('input[name=height]').val();
+    var mauerlatHeight = $('input[name=mauerlat_height]').val();
+    var ridgeHeight = $('input[name=ridge_height]').val();
     for (sel of selectedElements.values()) {
         for (el of elements.values()) {
             if (el.id == sel) {
-                // //console.log("sel = ", sel);
-                // var a = bearType + "_" + liveType;
-                // if (bearType == "bearing") {
-                //     a = a + "_" + outdoorType;
-                // }
                 el.highSide = highSide;
+                el.roofSlope = roofSlope;
                 el.angle = angle;
-                el.height = height;
+                el.mauerlatHeight = mauerlatHeight;
+                el.ridgeHeight = ridgeHeight;
             }
         }
     }
@@ -480,5 +490,5 @@ function applyRoofData() {
     selectedElements = [];
     schemeChange = true;
     drawElements();
-    // console.log("elements = ", elements);
+     console.log("elements = ", elements);
 }

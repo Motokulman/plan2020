@@ -183,11 +183,63 @@ canvas_0.addEventListener('click', function (e) {
             }
             break;
         case 'plate_garage': // пол гаража. Должен хранить ограничивающие его несущие стены. Потом определять автоматом, а пока сделать явный выбор стен.
-            // pushPrePointMM(mmOfMousePos);
-            // pushPoints(prePointsMM); // сохранили точку - метку того, что это помещение - гараж
-            // plate_garage.push(findMaxId(points)); // занескли id метки-точки в массив гаражных полов
-            // $('#none').trigger('click'); // делаем нажатой кнопку сброс
-            ////console.log("plate_garage = ", plate_garage);
+            newLinesIds = [];
+            if (prePointsMM.length > 0) {
+                pushPrePointMM(mmOfMousePos);
+                drawPoint(mousePos);
+                // проверяем, не попалась ли нам окружность на этот раз. Тупо проверяем не попали ли на элемент целиком и тупо копируем его, линия, окружность - не важно
+                var dist = 0;
+                var dir = '';
+                var newLine = [];
+                if (elements.length > 0) {
+                    for (element of elements.values()) { // бежим по всем имеющимся элементам
+                        var line = lines.find(line => line.id == element.ids[0]); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
+                        var point0 = points.find(point => point.id == line.id0);
+                        var point1 = points.find(point => point.id == line.id1); // нашли все точки имеющейся окружности и проверяем, не совпадают ли они с нашими
+                        if ((prePointsMM[prePointsMM.length - 1].x == point1.x) && (prePointsMM[prePointsMM.length - 1].y == point1.y) && (prePointsMM[prePointsMM.length - 2].x == point0.x) && (prePointsMM[prePointsMM.length - 2].y == point0.y)) {
+                            dist = line.distance;
+                            dir = line.direction;
+                            // console.log("окружность при вводе прямая ");
+                            break;
+                        } else if ((prePointsMM[prePointsMM.length - 1].x == point0.x) && (prePointsMM[prePointsMM.length - 1].y == point0.y) && (prePointsMM[prePointsMM.length - 2].x == point1.x) && (prePointsMM[prePointsMM.length - 2].y == point1.y)) {
+                            // console.log("окружность при вводе обратная ");
+                            dist = line.distance;
+                            if (line.direction == "right") {
+                                dir = "left";
+                            } else {
+                                dir = "right";
+                            }
+                            break;
+                        }
+                    }
+                    newLine = { p0_id: findMaxId(points) + prePointsMM.length - 1, p1_id: findMaxId(points) + prePointsMM.length, distance: dist, direction: dir };
+                } else {
+                    newLine = { p0_id: prePointsMM.length - 2, p1_id: prePointsMM.length - 1, distance: dist, direction: dir };
+                }
+                newLines.push(newLine);
+                if ((prePointsMM[0].x == mmOfMousePos.x) && (prePointsMM[0].y == mmOfMousePos.y)) { // если точки совпали, значит конец ввода
+                    pushPoints(prePointsMM);
+                    for (line of newLines.values()) {
+                        pushLine(line.p0_id, line.p1_id, line.distance, line.direction); // занесли в массив линий нашу новую линию
+                        newLinesIds.push(findMaxId(lines));
+                    }
+                    newElement = { ids: newLinesIds, type: 'floor', subType: 'garage' }; // , level: level 
+                    pushElement(newElement);
+                    newLinesIds = [];
+                    prePointsMM = [];
+                    newLinesIds = [];
+                    newLines = [];
+                    drawShape(elements[elements.length - 1], ctx_0, drawSettingsGarage);
+                    $('#none').trigger('click'); // делаем нажатой кнопку сброс
+                }
+            } else { // если это самая первая точка
+                newLines = [];
+                prePointsMM = [];
+                newLinesIds = [];
+                newLines = [];
+                pushPrePointMM(mmOfMousePos);
+                drawPoint(mousePos);
+            }
             break;
         case 'stairwell': // лестничный пролет. Можно по последовательности ввода определять направление движения. При обработке автоматически определять элементы, его окаймляющих, и соответственно обрабатывать. Например, окружность
             newLinesIds = [];
@@ -296,7 +348,7 @@ canvas_0.addEventListener('click', function (e) {
                     pushLine(line.p0_id, line.p1_id, line.distance, line.direction); // занесли в массив линий нашу новую линию
                     newLinesIds.push(findMaxId(lines));
                 }
-                newElement = { ids: newLinesIds, type: 'roof', subType: '', level: level, height: 0, angle: 0, highSide:'' }; // 
+                newElement = { ids: newLinesIds, type: 'roof', subType: '', level: level, height: 0, angle: 0, highSide: '' }; // 
                 pushElement(newElement);
                 newLinesIds = [];
                 prePointsMM = [];
@@ -307,6 +359,21 @@ canvas_0.addEventListener('click', function (e) {
                     globalAlpha: 0.5
                 }
                 drawShape(elements[elements.length - 1], ctx_0, drawSettings);
+            }
+            break;
+        case 'window': // выделяем элементы кликами:
+            var el = defineElement();
+            if ((el >= 0) && (el.type == "wall")) { // если мы навели на cтену
+                var newOpening
+
+            }
+            var selectedEl = selectedElements.findIndex(sel => sel == defineElement()); // ищем элемент, на который только что кликнули, в массиве выделенных элементов
+            ////console.log("defineElement() = ", defineElement());
+            if (selectedEl >= 0) {
+                // var a = selectedElements.findIndex(defineElement());
+                selectedElements.splice(selectedEl, 1);
+            } else {
+                selectedElements.push(defineElement());
             }
             break;
     }

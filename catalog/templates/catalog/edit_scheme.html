@@ -38,21 +38,26 @@
         <div class="btn-group">
           <button id="floor_1" type="button" class="btn btn-light">1 эт</button>
           <button id="floor_2" type="button" class="btn btn-light">2 эт</button>
+          <button id="floor_3" type="button" class="btn btn-light">3 эт</button>
         </div>
       </div>
 
       <div id="element_selector">
         <div class="btn-group">
-          <button id="none" type="button" class="btn btn-light">Сброс</button>
-          <!-- </div>
-        <div class="btn-group"> -->
-          <button id="wall" type="button" class="btn btn-light">Стена</button>
-          <button id="entrance_group" type="button" class="btn btn-light">Входная группа</button>
-          <button id="stairwell" type="button" class="btn btn-light">Лестничный пролёт</button>
-          <button id="plate_garage" type="button" class="btn btn-light">Пол гаража</button>
-          <button id="roof" type="button" class="btn btn-light">Кровля</button>
+          <p>
+            <button id="none" type="button" class="btn btn-light">Сброс</button>
+            <button id="wall" type="button" class="btn btn-light">Стена</button>
+            <button id="entrance_group" type="button" class="btn btn-light">Входная группа</button>
+            <button id="stairwell" type="button" class="btn btn-light">Лестничный пролёт</button>
+            <button id="plate_garage" type="button" class="btn btn-light">Пол гаража</button>
+            <button id="roof" type="button" class="btn btn-light">Кровля</button>
+            <button id="roof" type="button" class="btn btn-light">Балкон сделать</button>
+            <button id="window" type="button" class="btn btn-light">Оконный</button>
+            <button id="door" type="button" class="btn btn-light">Проходной</button>
+          </p>
         </div>
       </div>
+
 
       <!-- <div id="test_buttons" class="btn-group">
         <button id="sender" type="button" class="btn btn-light">Расчет</button>
@@ -132,11 +137,19 @@
     <p><input type="radio" value="point" id="high_side" checked name="high_side" />Точка</p>
     <p><input type="radio" value="line" id="high_side" name="high_side" />Линия</p>
   </div>
-  <div><label for="angle">Наклон (0 - горизонтально):</label>
+  <label for="roof_slope">Определять наклон кровли:</label>
+  <p><input type="radio" value="two_heights" id="roof_slope" checked name="roof_slope" />По высоте мауэрлата и конька
+  </p>
+  <p><input type="radio" value="mauerlat" id="roof_slope" name="roof_slope" />По высоте мауэрлата и углу</p>
+  <p><input type="radio" value="ridge" id="roof_slope" name="roof_slope" />По высоте конька и углу</p>
+  <div><label for="angle">Угол (0 - горизонтально):</label>
     <p><input type="number" id="angle" name="angle" min="3" max="80" value="20"></p>
   </div>
-  <div><label for="height">Высота конька от ближайшего пола: </label>
-      <p><input type="number" id="height" name="height" min="1000" max="8000" value="3000"></p>
+  <div><label for="ridge_height">Высота конька (от ближайшего пола): </label>
+    <p><input type="number" id="ridge_height" name="ridge_height" min="1000" max="8000" value="3000"></p>
+  </div>
+  <div><label for="mauerlat_height">Высота мауэрлата (от ближайшего пола): </label>
+    <p><input type="number" id="mauerlat_height" name="mauerlat_height" min="0" max="2000" value="0"></p>
   </div>
 </div>
 
