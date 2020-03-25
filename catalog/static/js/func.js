@@ -104,6 +104,7 @@ function defineTextSize() {
 function defineElement() {
     // console.log("defineElement ");
     clear(ctx_1, canvas_1);
+    var rate = -1;
     var p0, p1;
     var a = -1; // id элемента, над которым сейчас курсор
     for (element of elements.values()) { // перебираем все элементы - прямые, эркеры, кривые, лестничные пролеты
@@ -112,6 +113,8 @@ function defineElement() {
                 var line = lines.find(line => line.id == line_id);
                 p0 = mmToPix(points.find(point => point.id == line.id0));
                 p1 = mmToPix(points.find(point => point.id == line.id1));
+                var d = lengthLine(p0, p1);
+                var D = lengthLine(p0, mousePos);
                 if (line.distance > 0) {// если это окружность
                     var middle = [];
                     middle.x = Math.min(p0.x, p1.x) + Math.abs(p0.x - p1.x) / 2;
@@ -119,21 +122,39 @@ function defineElement() {
                     if (Math.abs(lengthLine(mousePos, middle) - line.distance / scale) <= 5) { // если попадаем курсором на нашу упрощенную (превращенную в правльный полукруг) окружность
                         // drawCircleElement(element, ctx_1, '#888888', true);
                         a = element.id;
-                        //  //console.log("element.id= ", element.id);
+                        // определим длину дуги от начальной точки до точки клика, для сохранения расположения окон 
+                        var sin = D / d;
+                        if (sin > 1) {
+                            sin = 1;
+                        }
+                        var alpha = Math.asin(sin);
+                        if (Math.abs(alpha - Math.PI / 4) <= Math.PI / 20) { // если курсор рядом с серединой, приклеиваем к середине
+                            alpha = Math.PI / 4;
+                        }
+                        rate = 2 * alpha / Math.PI;
+                        // console.log("alpha = ", alpha);
                     }
                 } else { // если же это не окружность
                     if (straightAffiliation(p0, p1, mousePos) == true) { // если курсор лежит на прямой между этими точками, 
                         a = element.id;
+                        rate = D / d;
                     }
 
                 }
             }
         }
     }
-    if (a >= 0) {
-         console.log("element.id= ", a);
+    if (rate > 1) {
+        rate = 1;
     }
-    return a;
+    var result = {
+        id: a,
+        rate: rate
+    }
+    if (a >= 0) {
+        console.log("result = ", result);
+    }
+    return result;
 }
 
 
@@ -535,7 +556,7 @@ canvas_0.addEventListener('mousemove', function (e) {
     drawAxeSize();
     clear(ctx_3, canvas_3);
     if (selectedTool == 'none') {
-        defineElement();
+        // defineElement();
     } else {
         stick();
     }
@@ -578,9 +599,9 @@ function pushLine(id0, id1, distance, direction) {
 function pushElement(el) { // ids - массив id линий, из которых состоит данный элемент  ids, distance, direction
     if (elements.length == 0) {
         // //console.log("el = ", el);bearType: 'not_set', liveType: 'not_set', outdoorType: 'not_set', roof_slope
-        elements.push({ id: 0, ids: el.ids, type: el.type, subType: el.subType, level: el.level, roofSlope: el.roofSlope, ridgeHeight: el.ridgeHeight, mauerlatHeight: el.mauerlatHeight, angle: el.angle, highSide: el.highSide  });
+        elements.push({ id: 0, ids: el.ids, type: el.type, subType: el.subType, level: el.level, roofSlope: el.roofSlope, ridgeHeight: el.ridgeHeight, mauerlatHeight: el.mauerlatHeight, angle: el.angle, highSide: el.highSide });
     } else {
-        elements.push({ id: findMaxId(elements) + 1, ids: el.ids, type: el.type, subType: el.subType, level: el.level, roofSlope: el.roofSlope, ridgeHeight: el.ridgeHeight, mauerlatHeight: el.mauerlatHeight, angle: el.angle, highSide: el.highSide  });
+        elements.push({ id: findMaxId(elements) + 1, ids: el.ids, type: el.type, subType: el.subType, level: el.level, roofSlope: el.roofSlope, ridgeHeight: el.ridgeHeight, mauerlatHeight: el.mauerlatHeight, angle: el.angle, highSide: el.highSide });
     }
 }
 

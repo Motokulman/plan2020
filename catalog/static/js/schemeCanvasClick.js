@@ -150,13 +150,13 @@ canvas_0.addEventListener('click', function (e) {
             }
             break;
         case 'none': // выделяем элементы кликами:
-            var selectedEl = selectedElements.findIndex(sel => sel == defineElement()); // ищем элемент, на который только что кликнули, в массиве выделенных элементов
+            var selectedEl = selectedElements.findIndex(sel => sel == defineElement().id); // ищем элемент, на который только что кликнули, в массиве выделенных элементов
             ////console.log("defineElement() = ", defineElement());
             if (selectedEl >= 0) {
                 // var a = selectedElements.findIndex(defineElement());
                 selectedElements.splice(selectedEl, 1);
             } else {
-                selectedElements.push(defineElement());
+                selectedElements.push(defineElement().id);
             }
             break;
         case 'entrance_group': // если входная группа. Ее вообще задавать точкой и направлением
@@ -361,21 +361,18 @@ canvas_0.addEventListener('click', function (e) {
                 drawShape(elements[elements.length - 1], ctx_0, drawSettings);
             }
             break;
-        case 'window': // выделяем элементы кликами:
+        case 'window':
             var el = defineElement();
-            if ((el >= 0) && (el.type == "wall")) { // если мы навели на cтену
-                var newOpening
-
-            }
-            var selectedEl = selectedElements.findIndex(sel => sel == defineElement()); // ищем элемент, на который только что кликнули, в массиве выделенных элементов
-            ////console.log("defineElement() = ", defineElement());
-            if (selectedEl >= 0) {
-                // var a = selectedElements.findIndex(defineElement());
-                selectedElements.splice(selectedEl, 1);
-            } else {
-                selectedElements.push(defineElement());
+            var elem = elements.find(element => element.id == el.id);
+            if ((typeof elem != "undefined") && (elem.type == "wall")) {
+                var line = lines.find(line => line.id == elem.id);
+                var point0 = points.find(point => point.id == line.id0);
+                var l = lengthLine(point0, mmOfMousePos);
+                var newWindow = { ids: elem.id, distance: l };
+                windows.push(newWindow);
+                // console.log("windows = ", windows);
             }
             break;
     }
-    console.log("elements = ", elements);
+    // console.log("elements = ", elements);
 });
