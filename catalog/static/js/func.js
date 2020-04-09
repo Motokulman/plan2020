@@ -107,6 +107,7 @@ function defineElement() {
     var rate = -1;
     var p0, p1;
     var a = -1; // id элемента, над которым сейчас курсор
+    var b = -1; // id Линии, над которым сейчас курсор
     for (element of elements.values()) { // перебираем все элементы - прямые, эркеры, кривые, лестничные пролеты
         if ((((element.type == "wall") || (element.type == "roof")) && (element.level == level)) || (element.type != "wall")) { // если стены, тос их видим только если они на нашем уровне
             for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
@@ -121,7 +122,9 @@ function defineElement() {
                     middle.y = Math.min(p0.y, p1.y) + Math.abs(p0.y - p1.y) / 2;
                     if (Math.abs(lengthLine(mousePos, middle) - line.distance / scale) <= 5) { // если попадаем курсором на нашу упрощенную (превращенную в правльный полукруг) окружность
                         // drawCircleElement(element, ctx_1, '#888888', true);
-                        a = element.id;
+                         a = element.id;
+                         b = line.id;
+                        // a = element;
                         // определим длину дуги от начальной точки до точки клика, для сохранения расположения окон 
                         var sin = D / d;
                         if (sin > 1) {
@@ -136,7 +139,10 @@ function defineElement() {
                     }
                 } else { // если же это не окружность
                     if (straightAffiliation(p0, p1, mousePos) == true) { // если курсор лежит на прямой между этими точками, 
+                        // a = element.id;
+                        // a = element;
                         a = element.id;
+                        b = line.id;
                         rate = D / d;
                     }
 
@@ -148,13 +154,14 @@ function defineElement() {
         rate = 1;
     }
     var result = {
-        id: a,
-        rate: rate
+        element_id: a,
+        line_id: b
     }
-    if (a >= 0) {
-        console.log("result = ", result);
-    }
+    // if (a >= 0) {
+    //     console.log("result = ", result);
+    // }
     return result;
+    // return a;
 }
 
 
@@ -869,6 +876,17 @@ $("#calculate").click(function () {
 });
 
 
+// функция определения середины отрезка
+function lineMiddle(p0, p1) {
+    var middlePix = [];
+    middlePix.x = Math.abs(p0.x - p1.x) / 2 + Math.min(p0.x, p1.x);
+    middlePix.y = Math.abs(p0.y - p1.y) / 2 + Math.min(p0.y, p1.y);
+    var middlePoint = {
+        x: middlePix.x,
+        y: middlePix.y
+    };
+    return middlePoint;
+}
 
 /* <p>
     <input type="checkbox" checked name="html5" />HTML5

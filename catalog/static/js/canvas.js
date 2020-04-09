@@ -16,7 +16,9 @@ var points = []; // Массив точек в миллиметрах. Перв�
 var zeroPointPadding = { 'x': 0, 'y': 0 }; // Смещение начала координат схемы относительно начала координат канвы. Попробуем в мм.
 var lines = []; // Массив связей между точками. 
 var elements = []; // Фигура, содержит массив элементов и закон их взаимодействия
-var windows = []; // Содержит проемы в стенах
+var windows = []; // Содержит окна в стенах
+var doorWindows = []; // Выход на балкон: окно(а) с дверью
+var openings = []; // Проходные проемы, либо с дверью, либо без
 var scale = 25; // Сделать получение из настроек и сохранение в них
 var empty_scheme = true;// Правда, если еще нет ни одного элемента в схеме
 var sizeTextSettings = { topPadding: 10, bottomPadding: 5, leftPadding: 5, rightPadding: 30 }; // массив с настройками для отображения размеров на  экране
@@ -32,7 +34,7 @@ var drawSettingsDefault = {
     strokeStyle: 'black',
     lineWidth: 2,
     fillStyle: "#00ffff",
-    globalAlpha: 0.5,
+    globalAlpha: 1,
     blur: false
 }
 
@@ -42,6 +44,57 @@ var drawSettingsGarage = {
     fillStyle: "lime",
     globalAlpha: 0.5,
     blur: false
+}
+
+var drawSettingsOutdoorSpace = {
+    strokeStyle: 'black',
+    lineWidth: 2,
+    fillStyle: "blue",
+    globalAlpha: 0.5,
+    blur: false
+}
+
+var drawSettingsSteps = {
+    strokeStyle: 'black',
+    lineWidth: 2,
+    fillStyle: "pink",
+    globalAlpha: 0.5,
+    blur: false
+}
+
+var drawSettingsWindow = {
+    strokeStyle: 'black',
+    lineWidth: 2,
+    fillStyle: "#00ccff",
+    globalAlpha: 1,
+    blur: false
+}
+
+var drawSettingsOpening = {
+    strokeStyle: 'black',
+    lineWidth: 2,
+    fillStyleDoor: "#8b4513",
+    fillStyleEmpty: "white",
+    globalAlpha: 1,
+    blur: false
+}
+
+var windowDefault = {
+    width: 1500,
+    height: 1500
+}
+
+var openingDefault = {
+    width: 1500,
+    height: 1500,
+    empty: false
+}
+
+var doorWindowDefault = {
+    firstWindowWidth: 1500, // первое окно считается от первой точки линии p0
+    secondWindowWidth: 1500, // второе окно через дверь от первого окна
+    windowHeight: 1500, // высота окон обоих одинаковая
+    doorHeight: 2000
 }
 
 function getLineContext(line, context) {// функуия для получения контекста в зависимоти от формы линии. Если так не сделать, в разных функциях приедтся кодить для кривой
@@ -98,7 +151,7 @@ function drawPoint(p) {
 
 function drawShape(element, context, drawSettings) {
     // console.log("drawShape element = ", element);
-    var ctx = context;
+    // var ctx = context;
     var line = [];
     context.strokeStyle = drawSettings.strokeStyle;
     context.lineWidth = drawSettings.lineWidth;
@@ -206,12 +259,170 @@ function drawLine(line, context, drawSettings) {
                 context.arc(middle.x + 0.5, middle.y + 0.5, radius, 3 * Math.PI / 2, Math.PI / 2, true);
             }
         }
-    } else { // если это не окружность, значит это просто прямая
+    } else if (lengthLine(point0, point1) == 0) { // если это не окружность, значит это просто прямая. Если ее длина == 0, то это колонна
+        context.strokeRect(point0.x - 3, point0.y - 3, 6, 6);
+    } else { // иначе это просто прямая
         context.moveTo(point0.x, point0.y);
         context.lineTo(point1.x, point1.y);
     }
     // console.log("context = ", context);
     context.stroke();
+
+    // отрисуем окна на этой линии
+    for (item of windows.values()) {
+        // console.log("item = ", item);
+        if (item.line_id == line.id) {
+            var x, y;
+            var L = lengthLine(point0, point1);
+            var rate = item.distance / scale;
+            rate = rate / L;
+            x = Math.abs((point0.x - point1.x)) * rate;
+            y = Math.abs((point0.y - point1.y)) * rate;
+            if (point0.x <= point1.x) {
+                x = x + point0.x;
+            } else {
+                x = point0.x - x;
+            }
+            if (point0.y <= point1.y) {
+                y = y + point0.y;
+            } else {
+                y = point0.y - y;
+            }
+            drawWindow(x, y, ctx_0, drawSettingsWindow);
+        }
+    }
+    // отрисуем doow windows на этой линии
+    for (item of doorWindows.values()) {
+        // console.log("item = ", item);
+        if (item.line_id == line.id) {
+            var x, y;
+            var L = lengthLine(point0, point1);
+            var rate = item.distance / scale;
+            rate = rate / L;
+            x = Math.abs((point0.x - point1.x)) * rate;
+            y = Math.abs((point0.y - point1.y)) * rate;
+            if (point0.x <= point1.x) {
+                x = x + point0.x;
+            } else {
+                x = point0.x - x;
+            }
+            if (point0.y <= point1.y) {
+                y = y + point0.y;
+            } else {
+                y = point0.y - y;
+            }
+            drawDoorWindow(x, y, ctx_0, drawSettingsWindow);
+        }
+    }
+
+    // отрисуем openings на этой линии
+    for (item of openings.values()) {
+        // console.log("item = ", item);
+        if (item.line_id == line.id) {
+            var x, y;
+            var L = lengthLine(point0, point1);
+            var rate = item.distance / scale;
+            rate = rate / L;
+            x = Math.abs((point0.x - point1.x)) * rate;
+            y = Math.abs((point0.y - point1.y)) * rate;
+            if (point0.x <= point1.x) {
+                x = x + point0.x;
+            } else {
+                x = point0.x - x;
+            }
+            if (point0.y <= point1.y) {
+                y = y + point0.y;
+            } else {
+                y = point0.y - y;
+            }
+            drawOpening(x, y, ctx_0, drawSettingsOpening);
+        }
+    }
+}
+
+
+function drawWindow(x, y, context, drawSettings) {
+    // console.log("drawShape element = ", element);
+    context.strokeStyle = drawSettings.strokeStyle;
+    context.lineWidth = drawSettings.lineWidth;
+    context.fillStyle = drawSettings.fillStyle;
+    context.globalAlpha = drawSettings.globalAlpha;
+    if (drawSettings.blur == true) {
+        context.shadowBlur = 5;
+        context.shadowColor = "blue";
+    }
+
+    context.beginPath();
+    context.moveTo(x - 10, y - 10);
+    context.lineTo(x + 10, y - 10);
+    context.lineTo(x + 10, y + 10);
+    context.lineTo(x - 10, y + 10);
+    context.closePath();
+    context.stroke();
+    context.fill();
+}
+
+function drawOpening(x, y, context, drawSettings) {
+    context.strokeStyle = drawSettings.strokeStyle;
+    context.lineWidth = drawSettings.lineWidth;
+    context.globalAlpha = drawSettings.globalAlpha;
+    if (drawSettings.empty == true) {
+        context.fillStyle = drawSettings.fillStyleEmpty;
+    } else {
+        context.fillStyle = drawSettings.fillStyleDoor;
+    }
+    if (drawSettings.blur == true) {
+        context.shadowBlur = 5;
+        context.shadowColor = "blue";
+    }
+
+    context.beginPath();
+    context.moveTo(x - 5, y - 10);
+    context.lineTo(x + 5, y - 10);
+    context.lineTo(x + 5, y + 10);
+    context.lineTo(x - 5, y + 10);
+    context.closePath();
+    context.stroke();
+    context.fill();
+}
+
+function drawDoorWindow(x, y, context, drawSettings) {
+    // console.log("drawShape element = ", element);
+    context.strokeStyle = drawSettings.strokeStyle;
+    context.lineWidth = drawSettings.lineWidth;
+    context.fillStyle = drawSettings.fillStyle;
+    context.globalAlpha = drawSettings.globalAlpha;
+    if (drawSettings.blur == true) {
+        context.shadowBlur = 5;
+        context.shadowColor = "blue";
+    }
+    context.beginPath();
+    context.moveTo(x - 16, y - 10);
+    context.lineTo(x - 5, y - 10);
+    context.lineTo(x - 5, y + 2);
+    context.lineTo(x - 16, y + 2);
+    context.closePath();
+    context.stroke();
+    context.fill();
+
+    context.beginPath();
+    context.moveTo(x - 5, y - 10);
+    context.lineTo(x + 5, y - 10);
+    context.lineTo(x + 5, y + 10);
+    context.lineTo(x - 5, y + 10);
+    context.closePath();
+    context.stroke();
+    context.fill();
+
+    context.beginPath();
+    context.moveTo(x + 6, y - 10);
+    context.lineTo(x + 16, y - 10);
+    context.lineTo(x + 16, y + 2);
+    context.lineTo(x + 6, y + 2);
+    context.closePath();
+    context.stroke();
+    context.fill();
+
 }
 
 
@@ -341,10 +552,12 @@ function drawElement(element) {
                 }
                 for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
                     var line = lines.find(line => line.id == line_id);
-                    drawLine(line, ctx_0, drawSettings);
+                    drawLine(line, ctx_0, drawSettings); // нарисовали линию стены
                 }
             }
         }
+
+
 
     } else if (element.type == 'aperture') { // если это лестничный пролет drawSettingsGarage
         drawShape(element, ctx_0, drawSettingsDefault);
@@ -363,8 +576,11 @@ function drawElement(element) {
                 globalAlpha: 0.5
             }
         }
-
         drawShape(element, ctx_0, drawSettings);
+    } else if ((element.type == 'outdoor_space') && (element.level == level)) {
+        drawShape(element, ctx_0, drawSettingsOutdoorSpace);
+    } else if ((element.type == 'steps') && (element.level == level)) {
+        drawShape(element, ctx_0, drawSettingsSteps);
     }
 }
 
@@ -376,7 +592,7 @@ function drawElements() {  //drawWalls
     if (elements.length > 0) {
 
         for (element of elements.values()) {// перебираем все элементы 
-            if (((element.type == "wall") && (level == "floor_1") && (element.level == "floor_1")) || ((element.type == "wall") && (level == "floor_2")) || (element.type != "wall")) {
+            if (((element.type == "wall") && (level == "floor_1") && (element.level == "floor_1")) || ((element.type == "wall") && (level == "floor_2")) || ((element.type == "wall") && (level == "floor_3")) || (element.type != "wall")) {
                 drawElement(element);
             }
         }
@@ -490,5 +706,5 @@ function applyRoofData() {
     selectedElements = [];
     schemeChange = true;
     drawElements();
-     console.log("elements = ", elements);
+    console.log("elements = ", elements);
 }
