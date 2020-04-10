@@ -6,6 +6,7 @@ var ctx_0 = canvas_0.getContext('2d');
 var ctx_1 = canvas_1.getContext('2d');
 var ctx_2 = canvas_2.getContext('2d');
 var ctx_3 = canvas_3.getContext('2d');
+
 var selectedLineType = "straight"; // Тип линии при рисовании - прямая или кривая
 var polygonSides = "3"; // Количество сторон многоугольника
 var selectedTool = "none"; // Выбранный элемент для рисования, стена, или еще что-то. Изначально - ничего не выбрано

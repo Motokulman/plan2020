@@ -123,9 +123,9 @@ function defineElement() {
                     middle.y = Math.min(p0.y, p1.y) + Math.abs(p0.y - p1.y) / 2;
                     if (Math.abs(lengthLine(mousePos, middle) - line.distance / scale) <= 5) { // если попадаем курсором на нашу упрощенную (превращенную в правльный полукруг) окружность
                         // drawCircleElement(element, ctx_1, '#888888', true);
-                         a = element.id;
-                         b = line.id;
-                         elementType = element.type;
+                        a = element.id;
+                        b = line.id;
+                        elementType = element.type;
                         // a = element;
                         // определим длину дуги от начальной точки до точки клика, для сохранения расположения окон 
                         var sin = D / d;
@@ -158,11 +158,11 @@ function defineElement() {
     }
     var result = {
         element_id: a,
-        line_id: b, 
+        line_id: b,
         element_type: elementType
     }
     // if (a >= 0) {
-        // console.log("result = ", result);
+    // console.log("result = ", result);
     // }
     return result;
     // return a;
@@ -616,9 +616,9 @@ function pushLine(id0, id1, distance, direction) {
 function pushElement(el) { // ids - массив id линий, из которых состоит данный элемент  ids, distance, direction
     if (elements.length == 0) {
         // //console.log("el = ", el);bearType: 'not_set', liveType: 'not_set', outdoorType: 'not_set', roof_slope roofSlope: el.roofSlope, ridgeHeight: el.ridgeHeight, mauerlatHeight: el.mauerlatHeight, angle: el.angle, highSide: el.highSide
-        elements.push({ id: 0, ids: el.ids, type: el.type, subType: el.subType, level: el.level  });
+        elements.push({ id: 0, ids: el.ids, type: el.type, subType: el.subType, level: el.level });
     } else {
-        elements.push({ id: findMaxId(elements) + 1, ids: el.ids, type: el.type, subType: el.subType, level: el.level});
+        elements.push({ id: findMaxId(elements) + 1, ids: el.ids, type: el.type, subType: el.subType, level: el.level });
     }
 }
 
@@ -702,10 +702,10 @@ function drawHVLine(type) {
 
 // Сохранение схемы
 $("#save").click(function () {
-    if (schemeChange) { // если схема менялась
-        saveScheme();
-        checked = false;
-    }
+    // if (schemeChange) { // если схема менялась
+    //     saveScheme();
+    //     checked = false;
+    // }
 });
 
 // Воспроизведение схемы
@@ -739,6 +739,12 @@ function getScheme() {
         }
     });
 }
+
+// 3d схемы
+$("#3d").click(function () {
+    get3D();
+});
+
 
 function saveScheme() {
     var data = {};
