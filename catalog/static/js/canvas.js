@@ -24,11 +24,21 @@ var empty_scheme = true;// Правда, если еще нет ни одног�
 var sizeTextSettings = { topPadding: 10, bottomPadding: 5, leftPadding: 5, rightPadding: 30 }; // массив с настройками для отображения размеров на  экране
 var prePointsMM = []; // массив новых точек при рисовании элемента. Потом добавляется в основной массив точек
 var selectedElements = [];// массив выделенных на схеме элементов (id)
+var selectedLines = [];// массив выделенных на схеме линий (id)
 var schemeChange = false;
 var checked = false; // прверен проект или нет
 var plate_garage = []; // массив перекрытий гаражного типа, который включает в себя координаты точки в мм внутри поемещения. Сделать проверку, чтоб не было двух таких меток внутри одного помещения и сделать удаление
-var level; //уровень - первого или второго этажа
 var drawSettings = [];
+var level; // текущий уровень
+
+var levels = new Map([['floor_1', { // настройки уровней
+    height: 3000
+}], ['floor_2', {
+    height: 3000
+}], ['floor_3', {
+    height: 3000
+}]]);
+
 
 var drawSettingsDefault = {
     strokeStyle: 'black',
@@ -76,6 +86,14 @@ var drawSettingsOpening = {
     fillStyleDoor: "#8b4513",
     fillStyleEmpty: "white",
     globalAlpha: 1,
+    blur: false
+}
+
+var drawSettingsRoof = {
+    strokeStyle: 'black',
+    lineWidth: 2,
+    fillStyle: "#663333",
+    globalAlpha: 0.5,
     blur: false
 }
 
@@ -150,29 +168,32 @@ function drawPoint(p) {
 }
 
 function drawShape(element, context, drawSettings) {
-    // console.log("drawShape element = ", element);
+    //   console.log("drawSettings = ", drawSettings);
     // var ctx = context;
     var line = [];
     context.strokeStyle = drawSettings.strokeStyle;
     context.lineWidth = drawSettings.lineWidth;
     context.fillStyle = drawSettings.fillStyle;
     context.globalAlpha = drawSettings.globalAlpha;
-    if (drawSettings.blur == true) {
-        context.shadowBlur = 5;
-        context.shadowColor = "blue";
+    // console.log("drawSettings.blur = ", drawSettings.blur);
+    if (selectedElements.find(sel => sel == element.id) >= 0) { // если данный элемент в массиве выделенных
+        context.shadowBlur = 30;
+        context.shadowColor = "black";
+    } else {
+        context.shadowBlur = 0;
     }
     context.beginPath();
     // найдем первую точку
     line = lines.find(line => line.id == element.ids[0]);
     context.moveTo(mmToPix(points.find(point => point.id == line.id0)).x, mmToPix(points.find(point => point.id == line.id0)).y);
-    console.log("delement.ids.values() = ", element.ids.values());
+    // console.log("delement.ids.values() = ", element.ids.values());
     for (line_id of element.ids.values()) {
-        console.log("line_id= ", line_id);
+        // console.log("line_id= ", line_id);
         line = lines.find(line => line.id == line_id);
         var point0 = mmToPix(points.find(point => point.id == line.id0));
         var point1 = mmToPix(points.find(point => point.id == line.id1));
         if (line.distance > 0) {// если это окружность
-            console.log("окружность ");
+            // console.log("окружность ");
             var middle = [];
             middle.x = Math.min(point0.x, point1.x) + Math.abs(point0.x - point1.x) / 2;
             middle.y = Math.min(point0.y, point1.y) + Math.abs(point0.y - point1.y) / 2;
@@ -201,8 +222,8 @@ function drawShape(element, context, drawSettings) {
         } else { // если это не окружность, значит это просто прямая
             // context.moveTo(point0.x, point0.y);
             context.lineTo(point1.x, point1.y);
-            console.log("element= ", element);
-            console.log("lineTo= ", point1);
+            // console.log("element= ", element);
+            // console.log("lineTo= ", point1);
         }
     }
 
@@ -213,20 +234,29 @@ function drawShape(element, context, drawSettings) {
     // context.strokeStyle = "blue";
     // context.closePath();
     context.fill();
-    // context.stroke();
+    context.stroke();
+    for (line_id of element.ids.values()) {
+        line = lines.find(line => line.id == line_id);
+        drawLine(line, context, drawSettings);
+    }
 }
 
 // рисуем линию, в зависимости от содержимого прямую или кривую
 function drawLine(line, context, drawSettings) {
-    //console.log("drawLine!");
+
+    console.log("line = ", line);
     // context.strokeStyle = drawSettingsDefault.strokeStyle;
     // context.lineWidth = drawSettingsDefault.lineWidth;
-    context.strokeStyle = drawSettings.strokeStyle;
+
     context.lineWidth = drawSettings.lineWidth;
-    if (drawSettings.blur == true) {
-        context.shadowBlur = 5;
-        context.shadowColor = "blue";
+    console.log("selectedLines = ", selectedLines);
+    console.log("selectedLines.findIndex(sel => sel == line.id) = ", selectedLines.findIndex(sel => sel == line.id));
+    if (selectedLines.findIndex(sel => sel == line.id) >= 0) { // если данный элемент в массиве выделенных typeof line != "undefined")
+        context.strokeStyle = 'lime';
+    } else {
+        context.strokeStyle = drawSettings.strokeStyle;
     }
+    console.log("context.strokeStyle = ", context.strokeStyle);
     context.beginPath();
     // найдем первую точку
     // line = lines.find(line => line.id == element.ids[0]);
@@ -475,7 +505,11 @@ function drawElement(element) {
     // console.log('drawElement element! = ', element);
     drawSettings = drawSettingsDefault;
     if (element.type == 'wall') { // если это стена
-
+        if (selectedElements.findIndex(sel => sel == element.id)) { // если данный элемент в массиве выделенных
+            drawSettings.blur = true;
+        } else {
+            drawSettings.blur = false;
+        }
         if (element.subType.indexOf("partition") >= 0) {// если это перегородка
             if (element.level == level) {
                 drawSettings = {
@@ -563,6 +597,8 @@ function drawElement(element) {
         drawShape(element, ctx_0, drawSettingsDefault);
     } else if ((element.type == 'floor') && (element.subType == 'garage')) { // если это пол гаража 
         drawShape(element, ctx_0, drawSettingsGarage);
+    } else if (element.type == 'roof') { // если это пол кровля
+        drawShape(element, ctx_0, drawSettingsRoof);
         // console.log("drawSettingsGarage == ", drawSettingsGarage)
     } else if ((element.type == 'roof') && (element.level == level)) {
         if ((element.highSide != '') && (element.angle != 0) && (element.height != 0)) { // если еще не заданы настройки крыши, даем эо понять цветом
@@ -590,7 +626,6 @@ function drawElement(element) {
 function drawElements() {  //drawWalls
     clear(ctx_0, canvas_0);
     if (elements.length > 0) {
-
         for (element of elements.values()) {// перебираем все элементы 
             if (((element.type == "wall") && (level == "floor_1") && (element.level == "floor_1")) || ((element.type == "wall") && (level == "floor_2")) || ((element.type == "wall") && (level == "floor_3")) || (element.type != "wall")) {
                 drawElement(element);
@@ -645,7 +680,7 @@ $("#stage").bind('contextmenu', function (e) {
             }
         }
         if (selectedElements.length == num) {
-
+            // console.log('type  = ', type);
             switch (type) {
                 case 'wall':
                     // console.log("num = ", num);
@@ -706,5 +741,5 @@ function applyRoofData() {
     selectedElements = [];
     schemeChange = true;
     drawElements();
-    console.log("elements = ", elements);
+    // console.log("elements = ", elements);
 }

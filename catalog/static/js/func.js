@@ -105,11 +105,12 @@ function defineElement() {
     // console.log("defineElement ");
     clear(ctx_1, canvas_1);
     var rate = -1;
+    var elementType = '';
     var p0, p1;
     var a = -1; // id элемента, над которым сейчас курсор
     var b = -1; // id Линии, над которым сейчас курсор
-    for (element of elements.values()) { // перебираем все элементы - прямые, эркеры, кривые, лестничные пролеты
-        if ((((element.type == "wall") || (element.type == "roof")) && (element.level == level)) || (element.type != "wall")) { // если стены, тос их видим только если они на нашем уровне
+    for (element of elements.values()) { // перебираем все элементы - прямые, эркеры, кривые, лестничные пролеты. Видим только те элементы, тип которых выбран
+        if (((((element.type == "wall") || (element.type == "roof")) && (element.level == level)) || (element.type != "wall")) && (element.type == selectedTool)) { // если стены, тос их видим только если они на нашем уровне
             for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
                 var line = lines.find(line => line.id == line_id);
                 p0 = mmToPix(points.find(point => point.id == line.id0));
@@ -124,6 +125,7 @@ function defineElement() {
                         // drawCircleElement(element, ctx_1, '#888888', true);
                          a = element.id;
                          b = line.id;
+                         elementType = element.type;
                         // a = element;
                         // определим длину дуги от начальной точки до точки клика, для сохранения расположения окон 
                         var sin = D / d;
@@ -143,6 +145,7 @@ function defineElement() {
                         // a = element;
                         a = element.id;
                         b = line.id;
+                        elementType = element.type;
                         rate = D / d;
                     }
 
@@ -155,10 +158,11 @@ function defineElement() {
     }
     var result = {
         element_id: a,
-        line_id: b
+        line_id: b, 
+        element_type: elementType
     }
     // if (a >= 0) {
-    //     console.log("result = ", result);
+        // console.log("result = ", result);
     // }
     return result;
     // return a;
@@ -547,6 +551,12 @@ $('#level_selector button').click(function () {
     drawElements();
 });
 
+// Определяем, какое действие выбрал пользователь
+$('#action_selector button').click(function () {
+    $(this).addClass('active').siblings().removeClass('active');
+    action = this.id;
+});
+
 // Получаем координаты курсора в зависимости от положения канвы на экране
 function getMousePos(canvas, e) {
     var rect = canvas.getBoundingClientRect();
@@ -562,7 +572,7 @@ canvas_0.addEventListener('mousemove', function (e) {
     mmOfMousePos = pixToMm(mousePos);
     drawAxeSize();
     clear(ctx_3, canvas_3);
-    if (selectedTool == 'none') {
+    if (action == 'none') {
         // defineElement();
     } else {
         stick();
@@ -605,10 +615,10 @@ function pushLine(id0, id1, distance, direction) {
 // сохранение элемента. Элемент состоит из одной или более линий. 
 function pushElement(el) { // ids - массив id линий, из которых состоит данный элемент  ids, distance, direction
     if (elements.length == 0) {
-        // //console.log("el = ", el);bearType: 'not_set', liveType: 'not_set', outdoorType: 'not_set', roof_slope
-        elements.push({ id: 0, ids: el.ids, type: el.type, subType: el.subType, level: el.level, roofSlope: el.roofSlope, ridgeHeight: el.ridgeHeight, mauerlatHeight: el.mauerlatHeight, angle: el.angle, highSide: el.highSide });
+        // //console.log("el = ", el);bearType: 'not_set', liveType: 'not_set', outdoorType: 'not_set', roof_slope roofSlope: el.roofSlope, ridgeHeight: el.ridgeHeight, mauerlatHeight: el.mauerlatHeight, angle: el.angle, highSide: el.highSide
+        elements.push({ id: 0, ids: el.ids, type: el.type, subType: el.subType, level: el.level  });
     } else {
-        elements.push({ id: findMaxId(elements) + 1, ids: el.ids, type: el.type, subType: el.subType, level: el.level, roofSlope: el.roofSlope, ridgeHeight: el.ridgeHeight, mauerlatHeight: el.mauerlatHeight, angle: el.angle, highSide: el.highSide });
+        elements.push({ id: findMaxId(elements) + 1, ids: el.ids, type: el.type, subType: el.subType, level: el.level});
     }
 }
 
@@ -816,7 +826,9 @@ function checkPlan() {
 $(document).ready(function () {
     getScheme(); // воспроизводим схему из базы при открытии проекта
     $('#straight').trigger('click'); // делаем нажатой кнопку прямая
+    $('#wall').trigger('click'); // делаем нажатой кнопку стена
     $('#none').trigger('click'); // делаем нажатой кнопку сброс
+    // console.log("$('#none')", $('#none'));
     $('#floor_1').trigger('click'); // делаем нажатой кнопку уровень первого этажа
 });
 

@@ -7,6 +7,8 @@
 <script src="//ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/sunny/jquery-ui.css">
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+
 <h3>Проект: {{ plan_title }}</h3>
 <h4>Тест: {{ test }}</h4>
 
@@ -42,10 +44,16 @@
         </div>
       </div>
 
+      <div id="action_selector">
+        <div class="btn-group">
+          <button id="none" type="button" class="btn btn-light">Выбирать</button>
+          <button id="draw" type="button" class="btn btn-light">Рисовать</button>
+        </div>
+      </div>
+
       <div id="element_selector">
         <div class="btn-group">
           <p>
-            <button id="none" type="button" class="btn btn-light">Сброс</button>
             <button id="wall" type="button" class="btn btn-light">Стена</button>
             <button id="entrance_group" type="button" class="btn btn-light">Входная группа</button>
             <button id="stairwell" type="button" class="btn btn-light">Лестничный пролёт</button>
@@ -106,7 +114,9 @@
     </div>
   </div>
 
-
+<div>
+  <canvas id="canvas" style="border: 1px solid;" width="800" height="700"></canvas>
+</div>
 
 </div>
 <div class="container">
