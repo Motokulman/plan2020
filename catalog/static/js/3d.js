@@ -3,14 +3,17 @@ function make3d() {
     var canvas = document.querySelector('#canvas');
     var renderer = new THREE.WebGLRenderer({ canvas });
     renderer.setPixelRatio(window.devicePixelRatio);
-    var fov = 75;
+    var fov = 120;
     var aspect = canvas.clientWidth / canvas.clientHeight;  // значение для canvas по умолчанию
     var mousePos3d = [{ x: 100, y: 100 }];
 
     var near = 0.1;
-    var far = 5000;
+    var far = 50000;
     var camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.z = 5000;
+    // camera.position.z = 5000;
+    var controls = new OrbitControls(camera, renderer.domElement);
+    camera.position.set(0, -100, 5000);
+    controls.update();
     var scene = new THREE.Scene();
     scene.background = new THREE.Color(0xAAAAAA);
 
@@ -23,71 +26,63 @@ function make3d() {
         scene.add(light);
     }
 
-    // function getWall3D(line) {
-    //     var geometry = new THREE.Geometry();
-    //     var wind = [];
-    //     var pre_roof_points = [];
-    //     var point0 = points.find(point => point.id == line.id0);
-    //     var point1 = points.find(point => point.id == line.id1);
-    //     for (element of elements.values()) { // бежим по всем имеющимся элементам
-    //         if (element.type == "roof") { // нас интересуют только крыша
-    //             for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
-    //                 var roof_line = lines.find(line => line.id == line_id); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
-    //                 var roof_point0 = points.find(point => point.id == line.id0);
-    //                 var roof_point1 = points.find(point => point.id == line.id1);
-    //                 if (straightAffiliation(point0, point1, roof_point0)) {
-    //                     pre_roof_points.push(roof_point0);
-    //                 }
-    //                 if (straightAffiliation(point0, point1, roof_point1)) {
-    //                     pre_roof_points.push(roof_point1);
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     // теперь когда у нас есть массив кровельных точек на данной прямой, нужно удалить повторяющиеся:
-    //     var roof_points = new Set(pre_roof_points);
 
-    //     // поищем окна на этой линии 
-    //     var l = lengthLine(point0, point1);
-    //     for (window of windows.values()) {
-    //         if (window.line_id == line.id) {
-    //             var a = coordsFromDist(point0, point1, window.distance - window.width / 2);
-    //             var bottom_0 = { x: a.x, y: a.y, z: window.bottom };
-    //             var top_0 = { x: a.x, y: a.y, z: window.bottom + window.heigth };
-    //             a = coordsFromDist(point0, point1, window.distance + window.width / 2);
-    //             var bottom_1 = { x: a.x, y: a.y, z: window.bottom };
-    //             var top_1 = { x: a.x, y: a.y, z: window.bottom + window.heigth };
-    //             wind.push({ bottom_0: bottom_0, top_0: top_0, bottom_1: bottom_1, top_1: top_1 });
-    //         }
-    //     }
-    // }
-    // разбиваем на треугольники
-    // var first_point = roof_points[0];
-    // var wind_point_order = 0;
-    // for (i = 0; i < roof_points.size; i++) {
-    //     if (point0.x != point1.x) { // если изменения координат происходят по оси x
-    //         if (roof_points[i].)
+    for (element of elements.values()) {
+        if (element.type == "wall") {
+        for (line_id of element.ids.values()) {
+            var line = lines.find(line => line.id == line_id);
+            var vert3D = getVertices(line);
+            var vert2D = get2DFrom3DVertices(vert3D);
 
-    //     }
+            var geometry = new THREE.Geometry();
+            for (v of vert3D.values()) {
+                var a = new THREE.Vector3(v.x, v.y, v.z);
+                geometry.vertices.push(a);
+            }
+            console.log("vert2D = ", vert2D);
+            var triangles = Delaunay.triangulate(vert2D);
+            console.log("triangles = ", triangles);
+            for (i = 0; i < triangles.length; i = i + 3) {
+                var a = new THREE.Face3(triangles[i], triangles[i + 1], triangles[i + 2]);
+                geometry.faces.push(a);
+            }
+            // console.log("geometry = ", geometry);
+            // удалим из геометрии стены все имеющиеся ниши под окна, двери и т.д.
+            for (j = geometry.faces.length - 1; j >= 0; j--) {
+                var flag_a = false;
+                var flag_b = false;
+                var flag_c = false;
+                for (i = 0; i < vert2D.length; i++) {
+                    if (vert3D[i].type == "transparent") {
+                        if (geometry.faces[j].a == i) flag_a = true;
+                        if (geometry.faces[j].b == i) flag_b = true;
+                        if (geometry.faces[j].c == i) flag_c = true;
+                    }
+                }
+                if ((flag_a) && (flag_b) && (flag_c)) geometry.faces.splice(j, 1);
+            }
+            // geometry.computeFaceNormals();
+            // geometry.computeFlatVertexNormals();
+            geometry.computeVertexNormals();
+            console.log("geometry = ", geometry);
+            var material = new THREE.MeshPhongMaterial({ color: 0x44aa88, side: THREE.DoubleSide }); // side: THREE.DoubleSide, // отрисовка обратной стороны. Замедляет, и не всегда нужна
+            var cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+            renderer.render(scene, camera);
 
-    // }
-    var line = lines.find(line => line.id == 0);
-    var vert3D = getVertices(line);
-    var vert2D = get2DFrom3DVertices(vert3D);
+            var wireframe = new THREE.WireframeGeometry(geometry);
+            var line = new THREE.LineSegments(wireframe);
+            line.material.depthTest = false;
+            line.material.opacity = 0.25;
+            line.material.transparent = true;
+            scene.add(line);
 
-    var geometry = new THREE.Geometry();
-    for (v of vert3D.values()) {
-        var a = new THREE.Vector3(v.x, v.y, v.z);
-        geometry.vertices.push(a);
+        }
     }
-    console.log("vert2D = ", vert2D);
-    var triangles = Delaunay.triangulate(vert2D);
-    console.log("triangles = ", triangles);
-    for (i = 0; i < triangles.length; i = i + 3) {
-        var a = new THREE.Face3(triangles[i], triangles[i + 1], triangles[i + 2]);
-        geometry.faces.push(a);
     }
-    console.log("geometry = ", geometry);
+
+    // console.log("geometry delete transparent= ", geometry);
+
     // geometry.vertices.push(
     //     new THREE.Vector3(-1, -1, 1),  // 0
     //     new THREE.Vector3(1, -1, 1),  // 1
@@ -120,9 +115,7 @@ function make3d() {
     // );
 
     // geometry.computeFaceNormals();
-    geometry.computeVertexNormals();
 
-    var material = new THREE.MeshPhongMaterial({ color: 0x44aa88, side: THREE.DoubleSide }); // side: THREE.DoubleSide, // отрисовка обратной стороны. Замедляет, и не всегда нужна
 
     // настройка материала:
     // const hue = 0.33;
@@ -132,7 +125,7 @@ function make3d() {
     // console.log('material = ', material);
 
     // 
-    var cube = new THREE.Mesh(geometry, material);
+
     // cube.position.x = 10;
     // cube.position.y = 10;
     // cube.position.z = 50;
@@ -140,26 +133,29 @@ function make3d() {
     // настройка 
 
     function get3D() {
-        scene.add(cube);
-        renderer.render(scene, camera);
 
-        var wireframe = new THREE.WireframeGeometry(geometry);
 
-        var line = new THREE.LineSegments(wireframe);
-        line.material.depthTest = false;
-        line.material.opacity = 0.25;
-        line.material.transparent = true;
 
-        scene.add(line);
     }
 
+    // requestAnimationFrame(render);
     function render() {
         // time *= 0.001;  // конвертировать время в секунды
         // console.log('mousePos3d = ', mousePos3d);
-        cube.rotation.y = - mousePos3d.x / 100;
-        cube.rotation.x = mousePos3d.y / 100;
-        renderer.render(scene, camera);
+        // cube.rotation.y = - mousePos3d.x / 100;
+        // cube.rotation.x = mousePos3d.y / 100;   
+        // camera.position.x = mousePos3d.y;
+        // camera.position.y = - mousePos3d.x;
+        //  camera.position.z = camera.position.z + mousePos3d.x/10;
+        // camera.position.set(0, 10, 20);
+        // renderer.render(scene, camera);
+        // animate();
+
+
         requestAnimationFrame(render);
+        // console.log("camera.position = ", camera.position);
+        controls.update();
+        renderer.render(scene, camera);
     }
 
     var pressed = false;
@@ -184,6 +180,17 @@ function make3d() {
         cancelAnimationFrame(render);
     });
 
-    get3D();
+    // get3D();
+
+    function animate() {
+
+        requestAnimationFrame(animate);
+
+        // required if controls.enableDamping or controls.autoRotate are set to true
+        controls.update();
+
+        renderer.render(scene, camera);
+
+    }
 }
 //

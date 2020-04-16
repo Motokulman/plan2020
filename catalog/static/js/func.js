@@ -112,7 +112,7 @@ function defineElement(el_type) {
     for (element of elements.values()) { // перебираем все элементы - прямые, эркеры, кривые, лестничные пролеты. Видим только те элементы, тип которых выбран
         // if (((((element.type == "wall") || (element.type == "roof")) && (element.level == level)) || (element.type != "wall")) && (element.type == selectedTool)) { // если стены, тос их видим только если они на нашем уровне
         if (element.type == el_type) { // если стены, тос их видим только если они на нашем уровне
-        for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+            for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
                 var line = lines.find(line => line.id == line_id);
                 p0 = mmToPix(points.find(point => point.id == line.id0));
                 p1 = mmToPix(points.find(point => point.id == line.id1));
@@ -163,7 +163,7 @@ function defineElement(el_type) {
         element_type: elementType
     }
     // if (a >= 0) {
-     console.log("result = ", result);
+    // console.log("result = ", result);
     // }
     return result;
     // return a;
@@ -601,6 +601,8 @@ function coordsFromDist(point0, point1, dist) {
     var rate = dist / L;
     x = Math.abs((point0.x - point1.x)) * rate;
     y = Math.abs((point0.y - point1.y)) * rate;
+    x = parseInt(x.toFixed());
+    y = parseInt(y.toFixed());
     if (point0.x <= point1.x) {
         x = x + point0.x;
     } else {
@@ -941,17 +943,18 @@ function getVertices(line) {
     pre_point = { x: point1.x, y: 0, z: point1.y };
     figurePoints.push(pre_point);
     for (element of elements.values()) { // бежим по всем имеющимся элементам
+        // сачала найдем точки фасада
         if (element.type == "roof") { // нас интересуют только крыша
             for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
                 var roof_line = lines.find(line => line.id == line_id); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
                 var roof_point0 = points.find(point => point.id == roof_line.id0);
                 var roof_point1 = points.find(point => point.id == roof_line.id1);
                 if (straightAffiliation(point0, point1, roof_point0)) {
-                    pre_point = { x: roof_point0.x, y: roof_point0.height, z: roof_point0.y };
+                    pre_point = { x: roof_point0.x, y: roof_point0.height, z: roof_point0.y, type: "wall" };
                     figurePoints.push(pre_point);
                 }
                 if (straightAffiliation(point0, point1, roof_point1)) {
-                    pre_point = { x: roof_point1.x, y: roof_point1.height, z: roof_point1.y };
+                    pre_point = { x: roof_point1.x, y: roof_point1.height, z: roof_point1.y, type: "wall" };
                     figurePoints.push(pre_point);
                 }
             }
@@ -962,23 +965,20 @@ function getVertices(line) {
     // поищем окна на этой линии 
     // var l = lengthLine(point0, point1);
     for (w of windows.values()) {
-        console.log("w = ", w);
-        console.log("w.line_id = ", w.line_id);
-        console.log("line.id = ", line.id);
         if (w.line_id == line.id) {
-            
+
             var a = coordsFromDist(point0, point1, w.distance - w.width / 2);
-            var bottom_0 = { x: a.x, y: w.bottom, z: a.y };
+            var bottom_0 = { x: a.x, y: w.bottom, z: a.y, type: "transparent" };
             figurePoints.push(bottom_0);
-            var top_0 = { x: a.x, y: w.bottom + w.height, z: a.y };
+            var top_0 = { x: a.x, y: w.bottom + w.height, z: a.y, type: "transparent" };
             figurePoints.push(top_0);
             a = coordsFromDist(point0, point1, w.distance + w.width / 2);
-            var bottom_1 = { x: a.x, y: w.bottom, z: a.y };
+            var bottom_1 = { x: a.x, y: w.bottom, z: a.y, type: "transparent" };
             figurePoints.push(bottom_1);
-            var top_1 = { x: a.x, y: w.bottom + w.height, z: a.y };
+            var top_1 = { x: a.x, y: w.bottom + w.height, z: a.y, type: "transparent" };
             figurePoints.push(top_1);
         }
-        
+
     }
     // теперь когда у нас есть массив  точек , нужно удалить повторяющиеся:
     console.log("figurePoints = ", figurePoints);
@@ -1010,15 +1010,14 @@ function get2DFrom3DVertices(vertices) {
             }
 
             // return [{ vertices: verts2D, y0: verts2D[0].y, y1: verts2D[verts2D.size - 1].y }];
+        } else {
+            for (v of vertices.values()) {
+                var p = [v.z, v.y];
+                verts2D.push(p);
+            }
+            // return [{ vertices: verts2D, x0: verts2D[0].x, y1: verts2D[verts2D.size - 1].x }];
         }
-    } else { // если стена расположена вдоль оси x или наклонная
-        for (v of vertices.values()) { // удаляем координаты у
-            var p = [v.z, v.y];
-            verts2D.push(p);
-        }
-        // return [{ vertices: verts2D, x0: verts2D[0].x, y1: verts2D[verts2D.size - 1].x }];
     }
-    
     return verts2D;
 }
 
