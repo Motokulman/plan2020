@@ -17,6 +17,7 @@ var points = []; // Массив точек в миллиметрах. Перв�
 var zeroPointPadding = { 'x': 0, 'y': 0 }; // Смещение начала координат схемы относительно начала координат канвы. Попробуем в мм.
 var lines = []; // Массив связей между точками. 
 var elements = []; // Фигура, содержит массив элементов и закон их взаимодействия
+// var roof_elements = []; // Кровельные
 var windows = []; // Содержит окна в стенах
 var doorWindows = []; // Выход на балкон: окно(а) с дверью
 var openings = []; // Проходные проемы, либо с дверью, либо без
@@ -31,6 +32,7 @@ var checked = false; // прверен проект или нет
 var plate_garage = []; // массив перекрытий гаражного типа, который включает в себя координаты точки в мм внутри поемещения. Сделать проверку, чтоб не было двух таких меток внутри одного помещения и сделать удаление
 var drawSettings = [];
 var level; // текущий уровень
+var roof_point_height = 0; // глобальная переменная для хранения высоты кровельных точек на протяжении всего цикла ввода ската
 
 var levels = new Map([['floor_1', { // настройки уровней
     height: 3000
@@ -78,7 +80,10 @@ var drawSettingsWindow = {
     lineWidth: 2,
     fillStyle: "#00ccff",
     globalAlpha: 1,
-    blur: false
+    blur: false,
+    width: 1500,
+    height: 1500,
+    bottom: 800 // расстояние от пола до подоконника
 }
 
 var drawSettingsOpening = {
@@ -95,13 +100,14 @@ var drawSettingsRoof = {
     lineWidth: 2,
     fillStyle: "#663333",
     globalAlpha: 0.5,
-    blur: false
+    blur: false, 
+    cornice: 600 // свес карниза в мм
 }
 
-var windowDefault = {
-    width: 1500,
-    height: 1500
-}
+// var windowDefault = {
+//     width: 1500,
+//     height: 1500
+// }
 
 var openingDefault = {
     width: 1500,
@@ -245,19 +251,19 @@ function drawShape(element, context, drawSettings) {
 // рисуем линию, в зависимости от содержимого прямую или кривую
 function drawLine(line, context, drawSettings) {
 
-    console.log("line = ", line);
+    // console.log("line = ", line);
     // context.strokeStyle = drawSettingsDefault.strokeStyle;
     // context.lineWidth = drawSettingsDefault.lineWidth;
 
     context.lineWidth = drawSettings.lineWidth;
-    console.log("selectedLines = ", selectedLines);
-    console.log("selectedLines.findIndex(sel => sel == line.id) = ", selectedLines.findIndex(sel => sel == line.id));
+    // console.log("selectedLines = ", selectedLines);
+    // console.log("selectedLines.findIndex(sel => sel == line.id) = ", selectedLines.findIndex(sel => sel == line.id));
     if (selectedLines.findIndex(sel => sel == line.id) >= 0) { // если данный элемент в массиве выделенных typeof line != "undefined")
         context.strokeStyle = 'lime';
     } else {
         context.strokeStyle = drawSettings.strokeStyle;
     }
-    console.log("context.strokeStyle = ", context.strokeStyle);
+    // console.log("context.strokeStyle = ", context.strokeStyle);
     context.beginPath();
     // найдем первую точку
     // line = lines.find(line => line.id == element.ids[0]);

@@ -101,7 +101,7 @@ function defineTextSize() {
 }
 
 // определение наведения на элемент
-function defineElement() {
+function defineElement(el_type) {
     // console.log("defineElement ");
     clear(ctx_1, canvas_1);
     var rate = -1;
@@ -110,8 +110,9 @@ function defineElement() {
     var a = -1; // id элемента, над которым сейчас курсор
     var b = -1; // id Линии, над которым сейчас курсор
     for (element of elements.values()) { // перебираем все элементы - прямые, эркеры, кривые, лестничные пролеты. Видим только те элементы, тип которых выбран
-        if (((((element.type == "wall") || (element.type == "roof")) && (element.level == level)) || (element.type != "wall")) && (element.type == selectedTool)) { // если стены, тос их видим только если они на нашем уровне
-            for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+        // if (((((element.type == "wall") || (element.type == "roof")) && (element.level == level)) || (element.type != "wall")) && (element.type == selectedTool)) { // если стены, тос их видим только если они на нашем уровне
+        if (element.type == el_type) { // если стены, тос их видим только если они на нашем уровне
+        for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
                 var line = lines.find(line => line.id == line_id);
                 p0 = mmToPix(points.find(point => point.id == line.id0));
                 p1 = mmToPix(points.find(point => point.id == line.id1));
@@ -162,7 +163,7 @@ function defineElement() {
         element_type: elementType
     }
     // if (a >= 0) {
-    // console.log("result = ", result);
+     console.log("result = ", result);
     // }
     return result;
     // return a;
@@ -570,6 +571,7 @@ function getMousePos(canvas, e) {
 canvas_0.addEventListener('mousemove', function (e) {
     mousePos = getMousePos(canvas_0, e);
     mmOfMousePos = pixToMm(mousePos);
+    // defineElement();
     drawAxeSize();
     clear(ctx_3, canvas_3);
     if (action == 'none') {
@@ -592,13 +594,34 @@ function lengthLine(p0, p1) {
     return length;
 }
 
+// Определение координат точки на прямой по длине от начала вектора
+function coordsFromDist(point0, point1, dist) {
+    var x, y;
+    var L = lengthLine(point0, point1);
+    var rate = dist / L;
+    x = Math.abs((point0.x - point1.x)) * rate;
+    y = Math.abs((point0.y - point1.y)) * rate;
+    if (point0.x <= point1.x) {
+        x = x + point0.x;
+    } else {
+        x = point0.x - x;
+    }
+    if (point0.y <= point1.y) {
+        y = y + point0.y;
+    } else {
+        y = point0.y - y;
+    }
+    var p = { x: x, y: y };
+    return p;
+}
+
 // сохранение итоговых точек
-function pushPoints(prePointsMM) {
+function pushPoints(prePointsMM, height) {
     for (p of prePointsMM.values()) {
         if (points.length == 0) {
-            points.push({ id: 0, x: p.x, y: p.y });
+            points.push({ id: 0, x: p.x, y: p.y, height: height });
         } else {
-            points.push({ id: findMaxId(points) + 1, x: p.x, y: p.y }); // переводим в мм и вносим в массив, приваивая индекс, соджержащийся в последней ячейке + 1
+            points.push({ id: findMaxId(points) + 1, x: p.x, y: p.y, height: height }); // переводим в мм и вносим в массив, приваивая индекс, соджержащийся в последней ячейке + 1
         }
     }
 }
@@ -623,14 +646,14 @@ function pushElement(el) { // ids - массив id линий, из котор�
 }
 
 // сохранение промежуточной точки 
-function pushPrePointMM(mmOfMousePos) {
+function pushPrePointMM(mmOfMousePos, height) {
     if ((points.length == 0) && (prePointsMM.length == 0)) { // если это первая точка в схеме, то она становится центром координат
         zeroPointPadding.x = mousePos.x * scale;
         zeroPointPadding.y = mousePos.y * scale;
         mmOfMousePos = pixToMm(mousePos);
-        prePointsMM.push({ x: 0, y: 0 });
+        prePointsMM.push({ x: 0, y: 0, height: height });
     } else {
-        prePointsMM.push({ x: mmOfMousePos.x, y: mmOfMousePos.y });
+        prePointsMM.push({ x: mmOfMousePos.x, y: mmOfMousePos.y, height: height });
         ////console.log("mmOfMousePos = ", mmOfMousePos);
     }
 }
@@ -742,7 +765,8 @@ function getScheme() {
 
 // 3d схемы
 $("#3d").click(function () {
-    get3D();
+    // get3D();
+    make3d();
 });
 
 
@@ -906,6 +930,99 @@ function lineMiddle(p0, p1) {
     return middlePoint;
 }
 
+function getVertices(line) {
+    // var wind = [];
+    var figurePoints = [];
+    var pre_point = [];
+    var point0 = points.find(point => point.id == line.id0);
+    pre_point = { x: point0.x, y: 0, z: point0.y };
+    figurePoints.push(pre_point);
+    var point1 = points.find(point => point.id == line.id1);
+    pre_point = { x: point1.x, y: 0, z: point1.y };
+    figurePoints.push(pre_point);
+    for (element of elements.values()) { // бежим по всем имеющимся элементам
+        if (element.type == "roof") { // нас интересуют только крыша
+            for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+                var roof_line = lines.find(line => line.id == line_id); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
+                var roof_point0 = points.find(point => point.id == roof_line.id0);
+                var roof_point1 = points.find(point => point.id == roof_line.id1);
+                if (straightAffiliation(point0, point1, roof_point0)) {
+                    pre_point = { x: roof_point0.x, y: roof_point0.height, z: roof_point0.y };
+                    figurePoints.push(pre_point);
+                }
+                if (straightAffiliation(point0, point1, roof_point1)) {
+                    pre_point = { x: roof_point1.x, y: roof_point1.height, z: roof_point1.y };
+                    figurePoints.push(pre_point);
+                }
+            }
+        }
+    }
+
+
+    // поищем окна на этой линии 
+    // var l = lengthLine(point0, point1);
+    for (w of windows.values()) {
+        console.log("w = ", w);
+        console.log("w.line_id = ", w.line_id);
+        console.log("line.id = ", line.id);
+        if (w.line_id == line.id) {
+            
+            var a = coordsFromDist(point0, point1, w.distance - w.width / 2);
+            var bottom_0 = { x: a.x, y: w.bottom, z: a.y };
+            figurePoints.push(bottom_0);
+            var top_0 = { x: a.x, y: w.bottom + w.height, z: a.y };
+            figurePoints.push(top_0);
+            a = coordsFromDist(point0, point1, w.distance + w.width / 2);
+            var bottom_1 = { x: a.x, y: w.bottom, z: a.y };
+            figurePoints.push(bottom_1);
+            var top_1 = { x: a.x, y: w.bottom + w.height, z: a.y };
+            figurePoints.push(top_1);
+        }
+        
+    }
+    // теперь когда у нас есть массив  точек , нужно удалить повторяющиеся:
+    console.log("figurePoints = ", figurePoints);
+    var vertices = [];
+    vertices.push(figurePoints[0]);
+    for (i = 0; i < figurePoints.length; i++) {
+        var flag = false;
+        for (j = 0; j < vertices.length; j++) {
+            if ((vertices[j].x == figurePoints[i].x) && (vertices[j].y == figurePoints[i].y) && (vertices[j].z == figurePoints[i].z)) {
+                flag = true;
+            }
+        }
+        if (flag == false) {
+            vertices.push(figurePoints[i]);
+        }
+    }
+    console.log(" vertices = ", vertices);
+    return vertices;
+}
+
+
+function get2DFrom3DVertices(vertices) {
+    var verts2D = [];
+    if (vertices.length > 1) {
+        if (vertices[0].x != vertices[1].x) { // если стена расположена вдоль оси x или наклонная
+            for (v of vertices.values()) { // удаляем координаты у
+                var p = [v.x, v.y];
+                verts2D.push(p);
+            }
+
+            // return [{ vertices: verts2D, y0: verts2D[0].y, y1: verts2D[verts2D.size - 1].y }];
+        }
+    } else { // если стена расположена вдоль оси x или наклонная
+        for (v of vertices.values()) { // удаляем координаты у
+            var p = [v.z, v.y];
+            verts2D.push(p);
+        }
+        // return [{ vertices: verts2D, x0: verts2D[0].x, y1: verts2D[verts2D.size - 1].x }];
+    }
+    
+    return verts2D;
+}
+
+
 /* <p>
     <input type="checkbox" checked name="html5" />HTML5
 </p> */
@@ -920,3 +1037,5 @@ function lineMiddle(p0, p1) {
 //     newPoint.y = middlePix.y - k * (x - middlePix.x);
 //     return newPoint;
 // }
+
+

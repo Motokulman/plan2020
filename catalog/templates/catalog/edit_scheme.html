@@ -78,9 +78,9 @@
         <button id="restore" type="button" class="btn btn-light">Получить</button>
       </div>
 
-       <div id="test_buttons" class="btn-group">
+      <div id="test_buttons" class="btn-group">
         <button id="3d" type="button" class="btn btn-light">3D</button>
-      </div> 
+      </div>
 
       <form id="canvas_form" class="canvas-field" action="" name="{{ plan_id}}" method="POST">
         {% csrf_token %}
@@ -134,6 +134,20 @@
   </div>
 </div>
 
+<!-- <div class="container-fluid" >
+  <div class="row">
+    <div class="col-sm-10" id="edit-field">
+      <svg shape-rendering="geometricPrecision">
+        <defs></defs>
+        <g id="main"></g>
+      </svg>
+      <h2>Click to add new point, click reset to start new canvas.</h2>
+      <a href="#">Reset</a>
+    </div>
+  </div>
+</div> -->
+
+
 <!-- Диалоговое окно для стен-->
 <div id="wall_dialog" title="Стены" class="ui-widget">
   <div><label for="wall_type">Тип стены: </label>
@@ -177,11 +191,13 @@
 
 
 {% load static %}
+<script type="text/javascript" src="{% static 'js/delaunay.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/canvas.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/func.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/schemeCanvasClick.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/calc.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/3d.js' %}"></script>
+
 
 {% endblock %}
 
