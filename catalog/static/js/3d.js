@@ -3,7 +3,7 @@ function make3d() {
     var canvas = document.querySelector('#canvas');
     var renderer = new THREE.WebGLRenderer({ canvas });
     renderer.setPixelRatio(window.devicePixelRatio);
-    var fov = 120;
+    var fov = 75;
     var aspect = canvas.clientWidth / canvas.clientHeight;  // значение для canvas по умолчанию
     var mousePos3d = [{ x: 100, y: 100 }];
 

@@ -299,39 +299,24 @@ canvas_0.addEventListener('click', function (e) {
                 pushPrePointMM(mmOfMousePos);
                 drawPoint(mousePos);
                 // console.log("prePointsMM.length = ", prePointsMM.length);
-                if (prePointsMM.length > 1) {
-
-                    var newLine = [];
-                    // if (elements.length > 0) {
-                    // for (element of elements.values()) { // бежим по всем имеющимся элементам. Если линия кровли совпадает точками с имеющимися элементами ( точки м.б. от разных элементов!), то копируем их для тосности
-                    //     if (element.type == "wall") { // нас интересуют только стены и колонны
-                    //         for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
-                    //             var line = lines.find(line => line.id == line_id); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
-                    //             var point0 = points.find(point => point.id == line.id0);
-                    //             var point1 = points.find(point => point.id == line.id1); // нашли все точки имеющейся окружности и проверяем, не совпадают ли они с нашими:
-                    //             if ((mmOfMousePos.x == point0.x) && (mmOfMousePos.y == point0.y)) {
-                    //                 pushPrePointMM(point0, roof_point_height); //
-                    //                 console.log("Попали первой точкой");
-                    //             } else if ((mmOfMousePos.x == point1.x) && (mmOfMousePos.y == point1.y)) {
-                    //                 pushPrePointMM(point1, roof_point_height);
-                    //                 console.log("Попали ыторой точкой");
-                    //             } else {
-                    //                 pushPrePointMM(mmOfMousePos, roof_point_height);
-                    //                 console.log("Нет попадания");
-                    //             }
-                    //         }
-                    //     }
-                    // }
-                    if (prePointsMM.length > 1) { // если точек две и более, формируем линии
-                        newLine = { p0_id: findMaxId(points) + prePointsMM.length - 1, p1_id: findMaxId(points) + prePointsMM.length };
-                        newLines.push(newLine);
-                        console.log("newLine = ", newLine);
-                    }
-
-                    // }
-
+                if (prePointsMM.length > 1) {// если точек две и более, формируем линии 
                     if ((prePointsMM[0].x == mmOfMousePos.x) && (prePointsMM[0].y == mmOfMousePos.y)) {// если точки совпали, значит конец ввода
-                        pushPoints(prePointsMM, roof_point_height);
+                        var newLine = [];
+                        newLine = { p0_id: findMaxId(points) + prePointsMM.length - 1, p1_id: findMaxId(points) + 1 };
+                        newLines.push(newLine);
+                        prePointsMM.pop(); // удалим последний элемент массива точк, поскольку последняя точка равна первой
+                        switch (level) { // в зависимости от текущего уровня сохраняем точки предустанавливая их высоту
+                            case 'floor_1':
+                                pushPoints(prePointsMM, true, false, false, 0);
+                                break;
+                            case 'floor_2':
+                                pushPoints(prePointsMM, true, true, false, 0);
+                                break;
+                            case 'floor_3':
+                                pushPoints(prePointsMM, true, true, true, 0);
+                                break;
+                        }
+
                         for (line of newLines.values()) {
                             pushLine(line.p0_id, line.p1_id, line.distance, line.direction); // занесли в массив линий нашу новую линию
                             newLinesIds.push(findMaxId(lines));
@@ -345,20 +330,15 @@ canvas_0.addEventListener('click', function (e) {
                         console.log("points = ", points);
                         drawShape(elements[elements.length - 1], ctx_0, drawSettingsRoof);
                         $('#none').trigger('click'); // делаем нажатой кнопку сброс
+                    } else {
+                        var newLine = [];
+                        newLine = { p0_id: findMaxId(points) + prePointsMM.length - 1, p1_id: findMaxId(points) + prePointsMM.length };
+                        newLines.push(newLine);
+                        // console.log("newLine = ", newLine);
                     }
                 } else { // если первый клик
                     // когда первый раз задаем скат, все точки на одном уровне. Но их высоту базово задаем от уровня пола 1 этажа в зависимости от того, на каком уровне первый раз кликнули
-                    switch (level) {
-                        case 'floor_1':
-                            roof_point_height = levels.get(level).height;
-                            break;
-                        case 'floor_2':
-                            roof_point_height = levels.get(level).height + levels.get(floor_1).height;
-                            break;
-                        case 'floor_2':
-                            roof_point_height = levels.get(level).height + levels.get(floor_1).height + levels.get(floor_2).height;
-                            break;
-                    }
+
                     // console.log("roof_point_height = ", roof_point_height);
                 }
                 break;
@@ -398,7 +378,7 @@ canvas_0.addEventListener('click', function (e) {
                         point0 = points.find(point => point.id == line.id0);
                         l = lengthLine(point0, mmOfMousePos); // пока такой вариант: не доли и не проценты, а точное расстояние, т.к. если пользователь точно введет это расстояние, оно должно сохраниться как миллиметры
                         // console.log("item = ", item);
-                        newWindow = { line_id: line.id, distance: l, height: drawSettingsWindow.height, width: drawSettingsWindow.width, bottom: drawSettingsWindow.bottom};
+                        newWindow = { line_id: line.id, distance: l, height: drawSettingsWindow.height, width: drawSettingsWindow.width, bottom: drawSettingsWindow.bottom };
                         windows.push(newWindow);
                         drawWindow(mousePos.x, mousePos.y, ctx_0, drawSettingsWindow);
                     }
@@ -568,7 +548,7 @@ canvas_0.addEventListener('click', function (e) {
         // выделяем элементы кликами:
         switch (selectedTool) {
             case 'wall':// если это стены, то алгоритм такой: клик - выделили, клик на ней же - сняли выделение
-            var el = defineElement("wall");
+                var el = defineElement("wall");
                 if (el.element_id > -1) { // реагируем только на стены
                     var selectedEl = selectedElements.findIndex(sel => sel == el.element_id); // ищем элемент, на который только что кликнули, в массиве выделенных элементов
                     if (selectedEl >= 0) {
@@ -580,32 +560,34 @@ canvas_0.addEventListener('click', function (e) {
                     selectedElements = []; // если кликнули сбоку, все сбрасываем
                 }
                 break;
-            case 'roof': // если кровля, то клик - выделили, клик - выделили линию, и далее с линиями как в стенах. Клик не на кровле - сброс всего
-            var el = defineElement("roof");
-                if (el.element_id > -1) {
-
-                    if (selectedElements.length == 0) {
-                        selectedElements.push(el.element_id); // если это первый клик, то заносим единственно возможную выбрать кровлю
+            case 'roof': // если кровля, то клик - выделили, клик - выделили точку. Клик не на кровле - сброс всего
+                var el = defineElement("roof");
+                console.log("el = ", el);
+                if (selectedElements.length == 0) {
+                    if (el.element_id > -1) {
+                        selectedElements.push(el.element_id);
                         drawShape(elements.find(element => element.id == selectedElements[0]), ctx_0, drawSettingsRoof);
-                    } else {
-                        // далее отрабатываем выделение опорных гранией selectedLines
-                        var select = selectedLines.findIndex(sel => sel == el.line_id); // ищем элемент, на который только что кликнули, в массиве выделенных элементов
-                        console.log("select = ", select);
-                        if (select >= 0) {
-                            selectedLines.splice(select, 1);
-                        } else {
-                            selectedLines.push(el.line_id);
-                        }
-                        //  console.log("selectedLines = ", selectedLines);
                     }
+                } else {
+                    if (selectedElements[0] == el.element_id) { // если, выделив крышу, мы кликаем по ее же элементам
 
-                } else { // если кликнули сбоку, то сброс
-                    selectedElements = [];
-                    selectedLines = [];
+                        // далее отрабатываем выделение опорных гранией selectedPoints
+                        var select = selectedPoints.findIndex(sel => sel == el.point_id); // ищем элемент, на который только что кликнули, в массиве выделенных элементов
+                        // console.log("select = ", select);
+                        if (select >= 0) {
+                            selectedPoints.splice(select, 1);
+                        } else {
+                            selectedPoints.push(el.point_id);
+                        }
+                        // console.log("selectedPoints = ", selectedPoints);
 
+
+                    } else { // если кликнули сбоку, то сброс
+                        selectedElements = [];
+                        selectedPoints = [];
+                    }
+                    drawElements();
                 }
-                drawElements();
-
                 break;
         }
 

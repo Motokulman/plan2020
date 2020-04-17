@@ -27,6 +27,7 @@ var sizeTextSettings = { topPadding: 10, bottomPadding: 5, leftPadding: 5, right
 var prePointsMM = []; // массив новых точек при рисовании элемента. Потом добавляется в основной массив точек
 var selectedElements = [];// массив выделенных на схеме элементов (id)
 var selectedLines = [];// массив выделенных на схеме линий (id)
+var selectedPoints = [];// массив выделенных на схеме точек (id)
 var schemeChange = false;
 var checked = false; // прверен проект или нет
 var plate_garage = []; // массив перекрытий гаражного типа, который включает в себя координаты точки в мм внутри поемещения. Сделать проверку, чтоб не было двух таких меток внутри одного помещения и сделать удаление
@@ -100,7 +101,7 @@ var drawSettingsRoof = {
     lineWidth: 2,
     fillStyle: "#663333",
     globalAlpha: 0.5,
-    blur: false, 
+    blur: false,
     cornice: 600 // свес карниза в мм
 }
 
@@ -166,10 +167,12 @@ function getLineContext(line, context) {// функуия для получен�
 
 
 // рисуем точку
-function drawPoint(p) {
+function drawPoint(p, color, diameter) {
+    var d;
+    ctx_0.fillStyle = typeof color != 'undefined' ? color : 'black';
+    d = typeof diameter != 'undefined' ? diameter : 5;
     ctx_0.beginPath();
-    ctx_0.arc(p.x, p.y, 5, 0, 2 * Math.PI);
-    ctx_0.fillStyle = 'black';
+    ctx_0.arc(p.x, p.y, d, 0, 2 * Math.PI);
     ctx_0.fill();
     ctx_0.closePath();
 }
@@ -263,7 +266,7 @@ function drawLine(line, context, drawSettings) {
     } else {
         context.strokeStyle = drawSettings.strokeStyle;
     }
-    // console.log("context.strokeStyle = ", context.strokeStyle);
+
     context.beginPath();
     // найдем первую точку
     // line = lines.find(line => line.id == element.ids[0]);
@@ -607,19 +610,19 @@ function drawElement(element) {
     } else if (element.type == 'roof') { // если это пол кровля
         drawShape(element, ctx_0, drawSettingsRoof);
         // console.log("drawSettingsGarage == ", drawSettingsGarage)
-    } else if ((element.type == 'roof') && (element.level == level)) {
-        if ((element.highSide != '') && (element.angle != 0) && (element.height != 0)) { // если еще не заданы настройки крыши, даем эо понять цветом
-            drawSettings = {
-                fillStyle: 'red',
-                globalAlpha: 0.5
-            }
-        } else {
-            drawSettings = {
-                fillStyle: 'gray',
-                globalAlpha: 0.5
-            }
-        }
-        drawShape(element, ctx_0, drawSettings);
+        // } else if ((element.type == 'roof') && (element.level == level)) {
+        //     if ((element.highSide != '') && (element.angle != 0) && (element.height != 0)) { // если еще не заданы настройки крыши, даем эо понять цветом
+        //         drawSettings = {
+        //             fillStyle: 'red',
+        //             globalAlpha: 0.5
+        //         }
+        //     } else {
+        //         drawSettings = {
+        //             fillStyle: 'gray',
+        //             globalAlpha: 0.5
+        //         }
+        //     }
+        //     drawShape(element, ctx_0, drawSettings);
     } else if ((element.type == 'outdoor_space') && (element.level == level)) {
         drawShape(element, ctx_0, drawSettingsOutdoorSpace);
     } else if ((element.type == 'steps') && (element.level == level)) {
@@ -638,8 +641,13 @@ function drawElements() {  //drawWalls
                 drawElement(element);
             }
         }
+        if (selectedPoints.length > 0) {
+            for (sel of selectedPoints.values()) {
+                var p = mmToPix(points.find(point => point.id == sel));
+                drawPoint(p, 'lime', 5);
+            }
+        }
     }
-
 }
 
 
@@ -655,16 +663,63 @@ $(function () {
 });
 
 // создаем модальное окно для кровли
-$(function () {
-    $('#roof_dialog').dialog({
-        buttons: [{ text: "OK", click: applyRoofData }, { text: "Отмена", click: function () { $(this).dialog("close") } }],
-        modal: true,
-        autoOpen: false,
-        width: 340
-    })
-});
+
+function createRoofModalDialog() {
+    $(function () {
+        $('#roof_dialog > p').remove();
+        var is_equal = true;
+        var roof_points = [];
+        var roof_point = points.find(point => point.id == selectedPoints[0]); // возьмем первую точку из массива выбранных линий
+        var is_floor_1 = roof_point.is_floor_1;
+        var is_floor_2 = roof_point.is_floor_2;
+        var is_floor_3 = roof_point.is_floor_3;
+        var height = roof_point.height;
+        console.log("roof_point = ", roof_point);
+        for (sl of selectedPoints.values()) { // проверяем, совпадают ли высоты выбранных линий
+            var p = points.find(point => point.id == sl);
+            if (p.is_floor_1 != is_floor_1) is_equal = false;
+            if (p.is_floor_2 != is_floor_2) is_equal = false;
+            if (p.is_floor_3 != is_floor_3) is_equal = false;
+            if (p.height != height) is_equal = false;
+        }
+        if (is_equal) { // если высоты всех точк одинаковые
+            if ((!is_floor_1) && (!is_floor_2) && (!is_floor_3)) {
+                $('#roof_dialog').append('<p><label><input type="checkbox" id="is_floor_1"  name="is_floor_1" />Высота 1 этажа</label></p>');
+                $('#roof_dialog').append('<p><label><input type="checkbox"  id="is_floor_2"  name="is_floor_2" />Высота 2 этажа</label></p>');
+                $('#roof_dialog').append('<p><label><input type="checkbox"  id="is_floor_3"  name="is_floor_3" />Высота 3 этажа</label></p>');
+                // $('#is_floor_1').prop('checked', true);
+                
+            } else if ((is_floor_1) && (!is_floor_2) && (!is_floor_3)) {
+                $('#roof_dialog').append('<p><label><input type="checkbox"  id="is_floor_1" checked name="is_floor_1" />Высота 1 этажа</label></p>');
+                $('#roof_dialog').append('<p><label><input type="checkbox"  id="is_floor_2"  name="is_floor_2" />Высота 2 этажа</label></p>');
+                $('#roof_dialog').append('<p><label><input type="checkbox"  id="is_floor_3"  name="is_floor_3" />Высота 3 этажа</label></p>');
+            } else if ((is_floor_1) && (is_floor_2) && (!is_floor_3)) {
+                $('#roof_dialog').append('<p><label><input type="checkbox"  id="is_floor_1" checked name="is_floor_1" />Высота 1 этажа</label></p>');
+                $('#roof_dialog').append('<p><label><input type="checkbox"  id="is_floor_2" checked name="is_floor_2" />Высота 2 этажа</label></p>');
+                $('#roof_dialog').append('<p><label><input type="checkbox"  id="is_floor_3"  name="is_floor_3" />Высота 3 этажа</label></p>');
+            } else if ((is_floor_1) && (is_floor_2) && (is_floor_3)) {
+                $('#roof_dialog').append('<p><label><input type="checkbox" id="is_floor_1" checked name="is_floor_1" />Высота 1 этажа</label></p>');
+                $('#roof_dialog').append('<p><label><input type="checkbox"  id="is_floor_2" checked name="is_floor_2" />Высота 2 этажа</label></p>');
+                $('#roof_dialog').append('<p><label><input type="checkbox"  id="is_floor_3" checked name="is_floor_3" />Высота 3 этажа</label></p>');
+            }
+            $('#roof_dialog').append('<p><label><input type="number" id="height" name="height" min="-3000" max="8000" value="' + height + '">Добавочная высота</label></p>');
+        } else {
+            $('#roof_dialog').append('<p>Выбранные точки имеют разные высоты</p>');
+            $('#roof_dialog').append('<p><label><input type="checkbox" id="is_floor_1"  name="is_floor_1" />Высота 1 этажа</label></p>');
+            $('#roof_dialog').append('<p><label><input type="checkbox"  id="is_floor_2"  name="is_floor_2" />Высота 2 этажа</label></p>');
+            $('#roof_dialog').append('<p><label><input type="checkbox"  id="is_floor_3"  name="is_floor_3" />Высота 3 этажа</label></p>');
+            $('#roof_dialog').append('<p><label><input type="number" id="height" name="height" min="-3000" max="8000" value="0">Добавочная высота</label></p>');
+        }
 
 
+        $('#roof_dialog').dialog({
+            buttons: [{ text: "OK", click: applyRoofData }, { text: "Отмена", click: function () { $(this).dialog("close") } }],
+            modal: true,
+            autoOpen: false,
+            width: 340
+        })
+    });
+}
 // обработка правого клика
 $("#stage").bind('contextmenu', function (e) {
     // $('#wall_dialog').dialog("open");
@@ -694,6 +749,8 @@ $("#stage").bind('contextmenu', function (e) {
                     $('#wall_dialog').dialog("open");
                     break;
                 case 'roof':
+                    console.log("roof r.cl = ");
+                    createRoofModalDialog();
                     $('#roof_dialog').dialog("open");
                     break;
             }
@@ -728,24 +785,27 @@ function applyWallData() {
 }
 // добавление данных о кровле
 function applyRoofData() {
-    var highSide = $('input[name=high_side]:checked').val();
-    var roofSlope = $('input[name=roof_slope]:checked').val();
-    var angle = $('input[name=angle]').val();
-    var mauerlatHeight = $('input[name=mauerlat_height]').val();
-    var ridgeHeight = $('input[name=ridge_height]').val();
-    for (sel of selectedElements.values()) {
-        for (el of elements.values()) {
-            if (el.id == sel) {
-                el.highSide = highSide;
-                el.roofSlope = roofSlope;
-                el.angle = angle;
-                el.mauerlatHeight = mauerlatHeight;
-                el.ridgeHeight = ridgeHeight;
-            }
-        }
+    var is_floor_1 = false;
+    var is_floor_2 = false;
+    var is_floor_3 = false;
+    if ($('#is_floor_1').is(':checked')) is_floor_1 = true;
+    if ($('#is_floor_2').is(':checked')) is_floor_2 = true;
+    if ($('#is_floor_3').is(':checked'))  is_floor_3 = true;
+    var height = $('input[name=height]').val();
+    for (p of selectedPoints.values()) {
+        var point = points.find(point => point.id == p);
+        point.is_floor_1 = is_floor_1;
+        point.is_floor_2 = is_floor_2;
+        point.is_floor_3 = is_floor_3;
+        point.height = height;
+        console.log("$('#is_floor_1') = ", $('#is_floor_1').attr("checked"));
+        console.log("is_floor_1 = ", is_floor_1);
+        console.log("point.is_floor_1 = ", point.is_floor_1);
+        console.log("point = ", point);
     }
     $('#roof_dialog').dialog("close");
     selectedElements = [];
+    selectedPoints = [];
     schemeChange = true;
     drawElements();
     // console.log("elements = ", elements);

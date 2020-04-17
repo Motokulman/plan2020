@@ -109,13 +109,26 @@ function defineElement(el_type) {
     var p0, p1;
     var a = -1; // id элемента, над которым сейчас курсор
     var b = -1; // id Линии, над которым сейчас курсор
+    var c = -1; // id точки, над которым сейчас курсор
     for (element of elements.values()) { // перебираем все элементы - прямые, эркеры, кривые, лестничные пролеты. Видим только те элементы, тип которых выбран
         // if (((((element.type == "wall") || (element.type == "roof")) && (element.level == level)) || (element.type != "wall")) && (element.type == selectedTool)) { // если стены, тос их видим только если они на нашем уровне
         if (element.type == el_type) { // если стены, тос их видим только если они на нашем уровне
             for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
                 var line = lines.find(line => line.id == line_id);
-                p0 = mmToPix(points.find(point => point.id == line.id0));
-                p1 = mmToPix(points.find(point => point.id == line.id1));
+                point0 = points.find(point => point.id == line.id0);
+                point1 = points.find(point => point.id == line.id1);
+                p0 = mmToPix(point0);
+                p1 = mmToPix(point1);
+                if (el_type == "roof") { // если это кровля, то выбираем точки
+                    if (selectedElements.length == 1) { // если сама кровля уже выбрана
+                        if (lengthLine(p0, mousePos) <= 5) {
+                            c = point0.id;
+                        }
+                        if (lengthLine(p1, mousePos) <= 5) {
+                            c = point1.id;
+                        }
+                    }
+                }
                 var d = lengthLine(p0, p1);
                 var D = lengthLine(p0, mousePos);
                 if (line.distance > 0) {// если это окружность
@@ -151,6 +164,7 @@ function defineElement(el_type) {
                     }
 
                 }
+
             }
         }
     }
@@ -160,6 +174,7 @@ function defineElement(el_type) {
     var result = {
         element_id: a,
         line_id: b,
+        point_id: c,
         element_type: elementType
     }
     // if (a >= 0) {
@@ -618,12 +633,12 @@ function coordsFromDist(point0, point1, dist) {
 }
 
 // сохранение итоговых точек
-function pushPoints(prePointsMM, height) {
+function pushPoints(prePointsMM, is_floor_1, is_floor_2, is_floor_3, height) {
     for (p of prePointsMM.values()) {
         if (points.length == 0) {
-            points.push({ id: 0, x: p.x, y: p.y, height: height });
+            points.push({ id: 0, x: p.x, y: p.y, is_floor_1: is_floor_1, is_floor_2: is_floor_2, is_floor_3: is_floor_3, height: height });
         } else {
-            points.push({ id: findMaxId(points) + 1, x: p.x, y: p.y, height: height }); // переводим в мм и вносим в массив, приваивая индекс, соджержащийся в последней ячейке + 1
+            points.push({ id: findMaxId(points) + 1, x: p.x, y: p.y, is_floor_1: is_floor_1, is_floor_2: is_floor_2, is_floor_3: is_floor_3, height: height });// переводим в мм и вносим в массив, приваивая индекс, соджержащийся в последней ячейке + 1
         }
     }
 }
@@ -933,9 +948,9 @@ function lineMiddle(p0, p1) {
 }
 
 function getVertices(line) {
-    // var wind = [];
     var figurePoints = [];
     var pre_point = [];
+    var roof_points = [];
     var point0 = points.find(point => point.id == line.id0);
     pre_point = { x: point0.x, y: 0, z: point0.y };
     figurePoints.push(pre_point);
@@ -947,23 +962,23 @@ function getVertices(line) {
         if (element.type == "roof") { // нас интересуют только крыша
             for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
                 var roof_line = lines.find(line => line.id == line_id); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
-                var roof_point0 = points.find(point => point.id == roof_line.id0);
-                var roof_point1 = points.find(point => point.id == roof_line.id1);
-                if (straightAffiliation(point0, point1, roof_point0)) {
-                    pre_point = { x: roof_point0.x, y: roof_point0.height, z: roof_point0.y, type: "wall" };
-                    figurePoints.push(pre_point);
-                }
-                if (straightAffiliation(point0, point1, roof_point1)) {
-                    pre_point = { x: roof_point1.x, y: roof_point1.height, z: roof_point1.y, type: "wall" };
-                    figurePoints.push(pre_point);
+                roof_points = [];
+                roof_points.push(points.find(point => point.id == roof_line.id0));
+                roof_points.push(points.find(point => point.id == roof_line.id1));
+                for (p of roof_points.values()) {
+                    var roof_point_height = p.height;
+                    if (straightAffiliation(point0, point1, p)) {
+                        if (p.is_floor_1 == true) roof_point_height = roof_point_height + levels.get('floor_1').height;
+                        if (p.is_floor_2 == true) roof_point_height = roof_point_height + levels.get('floor_2').height;
+                        if (p.is_floor_3 == true) roof_point_height = roof_point_height + levels.get('floor_3').height;
+                        pre_point = { x: p.x, y: roof_point_height, z: p.y, type: "wall" };
+                        figurePoints.push(pre_point);
+                    }
                 }
             }
         }
     }
-
-
     // поищем окна на этой линии 
-    // var l = lengthLine(point0, point1);
     for (w of windows.values()) {
         if (w.line_id == line.id) {
 
