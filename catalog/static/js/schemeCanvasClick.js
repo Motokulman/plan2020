@@ -23,12 +23,12 @@ canvas_0.addEventListener('click', function (e) {
                         pushPoints(prePointsMM);
                         drawPoint(mousePos); // Нарисовали вторую точку
                         pushLine(findMaxId(points) - 1, findMaxId(points), 0, ''); // занесли в массив линий нашу новую линию
-                        // console.log("lines = ", lines);
+                        // //console.log("lines = ", lines);
                         newLinesIds[0] = findMaxId(lines);// занесли в промежуточный массив id единственной линии, которая будет храниться в данном элементе (т.к. это просто ровная стена)
                         newElement = { ids: newLinesIds, type: 'wall', subType: '', level: level };
-                        // console.log("newElement = ", newElement);
+                        // //console.log("newElement = ", newElement);
                         pushElement(newElement); // занесли в массив с элементами id нашей линии стены/ радиус = 0 чтобы отличить стену от радиусного элемента
-                        // console.log("elements сразу после добавления = ", elements);
+                        // //console.log("elements сразу после добавления = ", elements);
                         drawLine(lines[lines.length - 1], ctx_0, drawSettingsDefault);
                         newLines = [];
                         prePointsMM = [];
@@ -152,7 +152,7 @@ canvas_0.addEventListener('click', function (e) {
                         prePointsMM = [];
                         newLinesIds = [];
                         newLines = [];
-                        //  //console.log("elements = ", elements);
+                        //  ////console.log("elements = ", elements);
                         drawLine(lines[lines.length - 1], ctx_0, drawSettingsDefault);
                     }
                 }
@@ -172,7 +172,7 @@ canvas_0.addEventListener('click', function (e) {
                     //     for (var p = prePointsMM.length - 1; p > 0; p--) {
                     //         pushLine(findMaxId(points) - p, findMaxId(points) - p + 1); // занесли в массив линий нашу новую линию
                     //         newLinesIds.push(findMaxId(lines));//
-                    //         // //console.log("lines = ", lines);
+                    //         // ////console.log("lines = ", lines);
                     //     }
                     //     prePointsMM = [];
                     //     newElement = { ids: newLinesIds, type: "Entrance group" };
@@ -202,10 +202,10 @@ canvas_0.addEventListener('click', function (e) {
                             if ((prePointsMM[prePointsMM.length - 1].x == point1.x) && (prePointsMM[prePointsMM.length - 1].y == point1.y) && (prePointsMM[prePointsMM.length - 2].x == point0.x) && (prePointsMM[prePointsMM.length - 2].y == point0.y)) {
                                 dist = line.distance;
                                 dir = line.direction;
-                                // console.log("окружность при вводе прямая ");
+                                // //console.log("окружность при вводе прямая ");
                                 break;
                             } else if ((prePointsMM[prePointsMM.length - 1].x == point0.x) && (prePointsMM[prePointsMM.length - 1].y == point0.y) && (prePointsMM[prePointsMM.length - 2].x == point1.x) && (prePointsMM[prePointsMM.length - 2].y == point1.y)) {
-                                // console.log("окружность при вводе обратная ");
+                                // //console.log("окружность при вводе обратная ");
                                 dist = line.distance;
                                 if (line.direction == "right") {
                                     dir = "left";
@@ -257,10 +257,10 @@ canvas_0.addEventListener('click', function (e) {
                             if ((prePointsMM[prePointsMM.length - 1].x == point1.x) && (prePointsMM[prePointsMM.length - 1].y == point1.y) && (prePointsMM[prePointsMM.length - 2].x == point0.x) && (prePointsMM[prePointsMM.length - 2].y == point0.y)) {
                                 dist = line.distance;
                                 dir = line.direction;
-                                // console.log("окружность при вводе прямая ");
+                                // //console.log("окружность при вводе прямая ");
                                 break;
                             } else if ((prePointsMM[prePointsMM.length - 1].x == point0.x) && (prePointsMM[prePointsMM.length - 1].y == point0.y) && (prePointsMM[prePointsMM.length - 2].x == point1.x) && (prePointsMM[prePointsMM.length - 2].y == point1.y)) {
-                                // console.log("окружность при вводе обратная ");
+                                // //console.log("окружность при вводе обратная ");
                                 dist = line.distance;
                                 if (line.direction == "right") {
                                     dir = "left";
@@ -298,7 +298,7 @@ canvas_0.addEventListener('click', function (e) {
             case 'roof': // кровля
                 pushPrePointMM(mmOfMousePos);
                 drawPoint(mousePos);
-                // console.log("prePointsMM.length = ", prePointsMM.length);
+                // //console.log("prePointsMM.length = ", prePointsMM.length);
                 if (prePointsMM.length > 1) {// если точек две и более, формируем линии 
                     if ((prePointsMM[0].x == mmOfMousePos.x) && (prePointsMM[0].y == mmOfMousePos.y)) {// если точки совпали, значит конец ввода
                         var newLine = [];
@@ -327,19 +327,19 @@ canvas_0.addEventListener('click', function (e) {
                         prePointsMM = [];
                         newLinesIds = [];
                         newLines = [];
-                        // console.log("points = ", points);
+                        // //console.log("points = ", points);
                         drawShape(elements[elements.length - 1], ctx_0, drawSettingsRoof);
                         $('#none').trigger('click'); // делаем нажатой кнопку сброс
                     } else {
                         var newLine = [];
                         newLine = { p0_id: findMaxId(points) + prePointsMM.length - 1, p1_id: findMaxId(points) + prePointsMM.length };
                         newLines.push(newLine);
-                        // console.log("newLine = ", newLine);
+                        // //console.log("newLine = ", newLine);
                     }
                 } else { // если первый клик
                     // когда первый раз задаем скат, все точки на одном уровне. Но их высоту базово задаем от уровня пола 1 этажа в зависимости от того, на каком уровне первый раз кликнули
 
-                    // console.log("roof_point_height = ", roof_point_height);
+                    // //console.log("roof_point_height = ", roof_point_height);
                 }
                 break;
             case 'window':
@@ -352,22 +352,18 @@ canvas_0.addEventListener('click', function (e) {
                 newLinesIds = [];
                 var elem = elements.find(element => element.id == set.element_id);
                 var line = lines.find(line => line.id == set.line_id);
-                // console.log("set = ", set);
-                // console.log("elem.id = ", elem.id);
-                // console.log("line.id = ", line.id);
+                // //console.log("set = ", set);
+                // //console.log("elem.id = ", elem.id);
+                // //console.log("line.id = ", line.id);
                 if ((typeof line != "undefined") && (elem.type == "wall")) {
                     for (line_id of elem.ids.values()) {
                         newLinesIds.push(line_id);
                     }
                     if (newLinesIds.length > 1) { // если это эркер - то есть линий в элементе больше чем одна, то тупо вставляем окно посередине  линии
-
-
-                        // for (item of newLinesIds.values()) {
-                        // line = lines.find(line => line.id == item);
                         point0 = points.find(point => point.id == line.id0);
                         point1 = points.find(point => point.id == line.id1);
                         l = lengthLine(point0, point1) / 2;
-                        newWindow = { line_id: line.id, distance: l, height: drawSettingsWindow.height, width: drawSettingsWindow.width, bottom: drawSettingsWindow.bottom };
+                        newWindow = { id: windows.length, line_id: line.id, distance: l, height: drawSettingsWindow.height, width: drawSettingsWindow.width, bottom: drawSettingsWindow.bottom };
                         windows.push(newWindow);
                         var middlePoint = lineMiddle(point0, point1);
                         middlePoint = mmToPix(middlePoint);
@@ -377,12 +373,12 @@ canvas_0.addEventListener('click', function (e) {
                         line = lines.find(line => line.id == newLinesIds[0]);
                         point0 = points.find(point => point.id == line.id0);
                         l = lengthLine(point0, mmOfMousePos); // пока такой вариант: не доли и не проценты, а точное расстояние, т.к. если пользователь точно введет это расстояние, оно должно сохраниться как миллиметры
-                        // console.log("item = ", item);
-                        newWindow = { line_id: line.id, distance: l, height: drawSettingsWindow.height, width: drawSettingsWindow.width, bottom: drawSettingsWindow.bottom };
+                        // //console.log("item = ", item);
+                        newWindow = { id: windows.length, line_id: line.id, distance: l, height: drawSettingsWindow.height, width: drawSettingsWindow.width, bottom: drawSettingsWindow.bottom };
                         windows.push(newWindow);
                         drawWindow(mousePos.x, mousePos.y, ctx_0, drawSettingsWindow);
                     }
-                    console.log("windows = ", windows);
+                    //console.log("windows = ", windows);
                     // появилась такая мысль, изначально рисовать только угловатые эркеры, и переводить их в круглые в кастомизации. Окна в круглых расставлять автоматом, че мучаться то. Поэтому здесь не обрабатываем.
                     // появилась вторая мысль, что при создании любого эркера окна в них создавать автоматом
                     newLinesIds = [];
@@ -401,7 +397,7 @@ canvas_0.addEventListener('click', function (e) {
                 if ((typeof line != "undefined") && (elem.type == "wall")) {
                     point0 = points.find(point => point.id == line.id0);
                     l = lengthLine(point0, mmOfMousePos); // пока такой вариант: не доли и не проценты, а точное расстояние, т.к. если пользователь точно введет это расстояние, оно должно сохраниться как миллиметры
-                    // console.log("item = ", item);
+                    // //console.log("item = ", item);
                     newDoorWindow = { line_id: line.id, distance: l, settings: doorWindowDefault };
                     doorWindows.push(newDoorWindow);
                     drawDoorWindow(mousePos.x, mousePos.y, ctx_0, drawSettingsWindow);
@@ -419,7 +415,7 @@ canvas_0.addEventListener('click', function (e) {
                 if ((typeof line != "undefined") && (elem.type == "wall")) {
                     point0 = points.find(point => point.id == line.id0);
                     l = lengthLine(point0, mmOfMousePos); // пока такой вариант: не доли и не проценты, а точное расстояние, т.к. если пользователь точно введет это расстояние, оно должно сохраниться как миллиметры
-                    // console.log("item = ", item);
+                    // //console.log("item = ", item);
                     newOpening = { line_id: line.id, distance: l, settings: openingDefault };
                     openings.push(newOpening);
                     drawOpening(mousePos.x, mousePos.y, ctx_0, drawSettingsOpening);
@@ -442,10 +438,10 @@ canvas_0.addEventListener('click', function (e) {
                             if ((prePointsMM[prePointsMM.length - 1].x == point1.x) && (prePointsMM[prePointsMM.length - 1].y == point1.y) && (prePointsMM[prePointsMM.length - 2].x == point0.x) && (prePointsMM[prePointsMM.length - 2].y == point0.y)) {
                                 dist = line.distance;
                                 dir = line.direction;
-                                // console.log("окружность при вводе прямая ");
+                                // //console.log("окружность при вводе прямая ");
                                 break;
                             } else if ((prePointsMM[prePointsMM.length - 1].x == point0.x) && (prePointsMM[prePointsMM.length - 1].y == point0.y) && (prePointsMM[prePointsMM.length - 2].x == point1.x) && (prePointsMM[prePointsMM.length - 2].y == point1.y)) {
-                                // console.log("окружность при вводе обратная ");
+                                // //console.log("окружность при вводе обратная ");
                                 dist = line.distance;
                                 if (line.direction == "right") {
                                     dir = "left";
@@ -501,10 +497,10 @@ canvas_0.addEventListener('click', function (e) {
                             if ((prePointsMM[prePointsMM.length - 1].x == point1.x) && (prePointsMM[prePointsMM.length - 1].y == point1.y) && (prePointsMM[prePointsMM.length - 2].x == point0.x) && (prePointsMM[prePointsMM.length - 2].y == point0.y)) {
                                 dist = line.distance;
                                 dir = line.direction;
-                                // console.log("окружность при вводе прямая ");
+                                // //console.log("окружность при вводе прямая ");
                                 break;
                             } else if ((prePointsMM[prePointsMM.length - 1].x == point0.x) && (prePointsMM[prePointsMM.length - 1].y == point0.y) && (prePointsMM[prePointsMM.length - 2].x == point1.x) && (prePointsMM[prePointsMM.length - 2].y == point1.y)) {
-                                // console.log("окружность при вводе обратная ");
+                                // //console.log("окружность при вводе обратная ");
                                 dist = line.distance;
                                 if (line.direction == "right") {
                                     dir = "left";
@@ -562,7 +558,7 @@ canvas_0.addEventListener('click', function (e) {
                 break;
             case 'roof': // если кровля, то клик - выделили, клик - выделили точку. Клик не на кровле - сброс всего
                 var el = defineElement("roof");
-                console.log("el = ", el);
+                //console.log("el = ", el);
                 if (el.element_id > -1) {
                     if (selectedElements.length == 0) {
                         selectedElements.push(el.element_id);
@@ -573,13 +569,13 @@ canvas_0.addEventListener('click', function (e) {
                             if (def_el.point_id >= 0) {
                                 // далее отрабатываем выделение опорных гранией selectedPoints
                                 var select = selectedPoints.findIndex(sel => sel == def_el.point_id); // ищем элемент, на который только что кликнули, в массиве выделенных элементов
-                                // console.log("select = ", select);
+                                // //console.log("select = ", select);
                                 if (select >= 0) {
                                     selectedPoints.splice(select, 1);
                                 } else {
                                     selectedPoints.push(def_el.point_id);
                                 }
-                                // console.log("selectedPoints = ", selectedPoints);
+                                // //console.log("selectedPoints = ", selectedPoints);
                             }
                         
                     }
@@ -592,5 +588,5 @@ canvas_0.addEventListener('click', function (e) {
                 break;
         }
     }
-    // console.log("elements = ", elements);
+    // //console.log("elements = ", elements);
 });

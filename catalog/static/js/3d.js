@@ -33,11 +33,11 @@ function make3d() {
         if (element.type == "wall") {
             for (line_id of element.ids.values()) {
                 var wall_line = lines.find(li => li.id == line_id);
-                // console.log("line = ", line);
+                // //console.log("line = ", line);
                 for (element of elements.values()) {
                     if (element.type == "roof") {
-                        for (line_id of element.ids.values()) {
-                            var roof_line = lines.find(l => l.id == line_id);
+                        for (lin_id of element.ids.values()) {
+                            var roof_line = lines.find(l => l.id == lin_id);
                             vert3D = getWallVertices(wall_line, roof_line);
                             if (vert3D.length >= 3) {
                                 vert2D = get2DFrom3DVertices(vert3D);
@@ -47,32 +47,44 @@ function make3d() {
                                     var a = new THREE.Vector3(v.x, v.y, v.z);
                                     geometry.vertices.push(a);
                                 }
-                                console.log("vert2D = ", vert2D);
+                                //console.log("vert2D = ", vert2D);
                                 var triangles = Delaunay.triangulate(vert2D);
-                                // console.log("triangles = ", triangles);
+                                // //console.log("triangles = ", triangles);
                                 for (i = 0; i < triangles.length; i = i + 3) {
                                     var a = new THREE.Face3(triangles[i], triangles[i + 1], triangles[i + 2]);
                                     geometry.faces.push(a);
                                 }
-                                // console.log("geometry = ", geometry);
+                                // //console.log("geometry = ", geometry);
                                 // удалим из геометрии стены все имеющиеся ниши под окна, двери и т.д.
                                 for (j = geometry.faces.length - 1; j >= 0; j--) {
                                     var flag_a = false;
                                     var flag_b = false;
                                     var flag_c = false;
+                                    var id_a;
+                                    var id_b;
+                                    var id_c;
                                     for (i = 0; i < vert2D.length; i++) {
                                         if (vert3D[i].type == "transparent") {
-                                            if (geometry.faces[j].a == i) flag_a = true;
-                                            if (geometry.faces[j].b == i) flag_b = true;
-                                            if (geometry.faces[j].c == i) flag_c = true;
+                                            if (geometry.faces[j].a == i) {
+                                                flag_a = true;
+                                                id_a = vert3D[i].id;
+                                            }
+                                            if (geometry.faces[j].b == i) {
+                                                flag_b = true;
+                                                id_b = vert3D[i].id;
+                                            }
+                                            if (geometry.faces[j].c == i) {
+                                                flag_c = true;
+                                                id_c = vert3D[i].id;
+                                            }
                                         }
                                     }
-                                    if ((flag_a) && (flag_b) && (flag_c)) geometry.faces.splice(j, 1);
+                                    if ((flag_a) && (flag_b) && (flag_c) && (id_a == id_b) && (id_b == id_c)) geometry.faces.splice(j, 1);
                                 }
                                 // geometry.computeFaceNormals();
                                 // geometry.computeFlatVertexNormals();
                                 geometry.computeVertexNormals();
-                                // console.log("geometry = ", geometry);
+                                // //console.log("geometry = ", geometry);
                                 var material = new THREE.MeshPhongMaterial({ color: 0x44aa88, side: THREE.DoubleSide }); // side: THREE.DoubleSide, // отрисовка обратной стороны. Замедляет, и не всегда нужна
                                 var cube = new THREE.Mesh(geometry, material);
                                 scene.add(cube);
@@ -130,7 +142,7 @@ function make3d() {
         }
     }
     drawRoof();
-    // console.log("geometry delete transparent= ", geometry);
+    // //console.log("geometry delete transparent= ", geometry);
 
     // geometry.vertices.push(
     //     new THREE.Vector3(-1, -1, 1),  // 0
@@ -171,7 +183,7 @@ function make3d() {
     // const saturation = 1;
     // const luminance = .5;
     // material.color.setHSL(hue, saturation, luminance);
-    // console.log('material = ', material);
+    // //console.log('material = ', material);
 
     // 
 
@@ -190,7 +202,7 @@ function make3d() {
     // requestAnimationFrame(render);
     function render() {
         // time *= 0.001;  // конвертировать время в секунды
-        // console.log('mousePos3d = ', mousePos3d);
+        // //console.log('mousePos3d = ', mousePos3d);
         // cube.rotation.y = - mousePos3d.x / 100;
         // cube.rotation.x = mousePos3d.y / 100;   
         // camera.position.x = mousePos3d.y;
@@ -202,7 +214,7 @@ function make3d() {
 
 
         requestAnimationFrame(render);
-        // console.log("camera.position = ", camera.position);
+        // //console.log("camera.position = ", camera.position);
         controls.update();
         renderer.render(scene, camera);
     }
