@@ -643,7 +643,10 @@ function drawElements() {  //drawWalls
         }
         if (selectedPoints.length > 0) {
             for (sel of selectedPoints.values()) {
+                console.log("selectedPoints = ", selectedPoints);
+                console.log("sel = ", sel);
                 var p = mmToPix(points.find(point => point.id == sel));
+                
                 drawPoint(p, 'lime', 5);
             }
         }
@@ -688,7 +691,7 @@ function createRoofModalDialog() {
                 $('#roof_dialog').append('<p><label><input type="checkbox"  id="is_floor_2"  name="is_floor_2" />Высота 2 этажа</label></p>');
                 $('#roof_dialog').append('<p><label><input type="checkbox"  id="is_floor_3"  name="is_floor_3" />Высота 3 этажа</label></p>');
                 // $('#is_floor_1').prop('checked', true);
-                
+
             } else if ((is_floor_1) && (!is_floor_2) && (!is_floor_3)) {
                 $('#roof_dialog').append('<p><label><input type="checkbox"  id="is_floor_1" checked name="is_floor_1" />Высота 1 этажа</label></p>');
                 $('#roof_dialog').append('<p><label><input type="checkbox"  id="is_floor_2"  name="is_floor_2" />Высота 2 этажа</label></p>');
@@ -790,18 +793,19 @@ function applyRoofData() {
     var is_floor_3 = false;
     if ($('#is_floor_1').is(':checked')) is_floor_1 = true;
     if ($('#is_floor_2').is(':checked')) is_floor_2 = true;
-    if ($('#is_floor_3').is(':checked'))  is_floor_3 = true;
+    if ($('#is_floor_3').is(':checked')) is_floor_3 = true;
     var height = $('input[name=height]').val();
+    height = parseInt(height);
     for (p of selectedPoints.values()) {
         var point = points.find(point => point.id == p);
         point.is_floor_1 = is_floor_1;
         point.is_floor_2 = is_floor_2;
         point.is_floor_3 = is_floor_3;
         point.height = height;
-        console.log("$('#is_floor_1') = ", $('#is_floor_1').attr("checked"));
-        console.log("is_floor_1 = ", is_floor_1);
-        console.log("point.is_floor_1 = ", point.is_floor_1);
-        console.log("point = ", point);
+        // console.log("$('#is_floor_1') = ", $('#is_floor_1').attr("checked"));
+        // console.log("is_floor_1 = ", is_floor_1);
+        // console.log("point.is_floor_1 = ", point.is_floor_1);
+        // console.log("point = ", point);
     }
     $('#roof_dialog').dialog("close");
     selectedElements = [];

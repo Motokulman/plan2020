@@ -327,7 +327,7 @@ canvas_0.addEventListener('click', function (e) {
                         prePointsMM = [];
                         newLinesIds = [];
                         newLines = [];
-                        console.log("points = ", points);
+                        // console.log("points = ", points);
                         drawShape(elements[elements.length - 1], ctx_0, drawSettingsRoof);
                         $('#none').trigger('click'); // делаем нажатой кнопку сброс
                     } else {
@@ -563,34 +563,34 @@ canvas_0.addEventListener('click', function (e) {
             case 'roof': // если кровля, то клик - выделили, клик - выделили точку. Клик не на кровле - сброс всего
                 var el = defineElement("roof");
                 console.log("el = ", el);
-                if (selectedElements.length == 0) {
-                    if (el.element_id > -1) {
+                if (el.element_id > -1) {
+                    if (selectedElements.length == 0) {
                         selectedElements.push(el.element_id);
                         drawShape(elements.find(element => element.id == selectedElements[0]), ctx_0, drawSettingsRoof);
+                    } else {
+
+                            var def_el = defineElement("roof", selectedElements[0]);
+                            if (def_el.point_id >= 0) {
+                                // далее отрабатываем выделение опорных гранией selectedPoints
+                                var select = selectedPoints.findIndex(sel => sel == def_el.point_id); // ищем элемент, на который только что кликнули, в массиве выделенных элементов
+                                // console.log("select = ", select);
+                                if (select >= 0) {
+                                    selectedPoints.splice(select, 1);
+                                } else {
+                                    selectedPoints.push(def_el.point_id);
+                                }
+                                // console.log("selectedPoints = ", selectedPoints);
+                            }
+                        
                     }
-                } else {
-                    if (selectedElements[0] == el.element_id) { // если, выделив крышу, мы кликаем по ее же элементам
-
-                        // далее отрабатываем выделение опорных гранией selectedPoints
-                        var select = selectedPoints.findIndex(sel => sel == el.point_id); // ищем элемент, на который только что кликнули, в массиве выделенных элементов
-                        // console.log("select = ", select);
-                        if (select >= 0) {
-                            selectedPoints.splice(select, 1);
-                        } else {
-                            selectedPoints.push(el.point_id);
-                        }
-                        // console.log("selectedPoints = ", selectedPoints);
-
-
-                    } else { // если кликнули сбоку, то сброс
-                        selectedElements = [];
-                        selectedPoints = [];
-                    }
-                    drawElements();
+                } else { // если кликнули сбоку, то сброс. Именно сбоку, а не на другом элементе! поскольку другим элементом м.б. элемент с той же точкой
+                    selectedElements = [];
+                    selectedPoints = [];
                 }
+                drawElements();
+
                 break;
         }
-
     }
     // console.log("elements = ", elements);
 });

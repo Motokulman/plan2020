@@ -101,7 +101,7 @@ function defineTextSize() {
 }
 
 // определение наведения на элемент
-function defineElement(el_type) {
+function defineElement(el_type, el_id) {
     // console.log("defineElement ");
     clear(ctx_1, canvas_1);
     var rate = -1;
@@ -113,57 +113,61 @@ function defineElement(el_type) {
     for (element of elements.values()) { // перебираем все элементы - прямые, эркеры, кривые, лестничные пролеты. Видим только те элементы, тип которых выбран
         // if (((((element.type == "wall") || (element.type == "roof")) && (element.level == level)) || (element.type != "wall")) && (element.type == selectedTool)) { // если стены, тос их видим только если они на нашем уровне
         if (element.type == el_type) { // если стены, тос их видим только если они на нашем уровне
-            for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
-                var line = lines.find(line => line.id == line_id);
-                point0 = points.find(point => point.id == line.id0);
-                point1 = points.find(point => point.id == line.id1);
-                p0 = mmToPix(point0);
-                p1 = mmToPix(point1);
-                if (el_type == "roof") { // если это кровля, то выбираем точки
-                    if (selectedElements.length == 1) { // если сама кровля уже выбрана
-                        if (lengthLine(p0, mousePos) <= 5) {
-                            c = point0.id;
-                        }
-                        if (lengthLine(p1, mousePos) <= 5) {
-                            c = point1.id;
+            if (((typeof el_id != 'undefined') && (element.id == el_id)) || (typeof el_id == 'undefined')) {
+                for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+                    var line = lines.find(line => line.id == line_id);
+                    point0 = points.find(point => point.id == line.id0);
+                    point1 = points.find(point => point.id == line.id1);
+                    p0 = mmToPix(point0);
+                    p1 = mmToPix(point1);
+                    if (el_type == "roof") { // если это кровля, то выбираем точки
+                        if (selectedElements.length == 1) { // если сама кровля уже выбрана
+                            if (lengthLine(p0, mousePos) <= 5) {
+                                c = point0.id;
+                            }
+                            if (lengthLine(p1, mousePos) <= 5) {
+                                c = point1.id;
+                            }
                         }
                     }
-                }
-                var d = lengthLine(p0, p1);
-                var D = lengthLine(p0, mousePos);
-                if (line.distance > 0) {// если это окружность
-                    var middle = [];
-                    middle.x = Math.min(p0.x, p1.x) + Math.abs(p0.x - p1.x) / 2;
-                    middle.y = Math.min(p0.y, p1.y) + Math.abs(p0.y - p1.y) / 2;
-                    if (Math.abs(lengthLine(mousePos, middle) - line.distance / scale) <= 5) { // если попадаем курсором на нашу упрощенную (превращенную в правльный полукруг) окружность
-                        // drawCircleElement(element, ctx_1, '#888888', true);
-                        a = element.id;
-                        b = line.id;
-                        elementType = element.type;
-                        // a = element;
-                        // определим длину дуги от начальной точки до точки клика, для сохранения расположения окон 
-                        var sin = D / d;
-                        if (sin > 1) {
-                            sin = 1;
+                    var d = lengthLine(p0, p1);
+                    var D = lengthLine(p0, mousePos);
+                    if (line.distance > 0) {// если это окружность
+                        var middle = [];
+                        middle.x = Math.min(p0.x, p1.x) + Math.abs(p0.x - p1.x) / 2;
+                        middle.y = Math.min(p0.y, p1.y) + Math.abs(p0.y - p1.y) / 2;
+                        if (Math.abs(lengthLine(mousePos, middle) - line.distance / scale) <= 5) { // если попадаем курсором на нашу упрощенную (превращенную в правльный полукруг) окружность
+                            // drawCircleElement(element, ctx_1, '#888888', true);
+                            a = element.id;
+                            b = line.id;
+                            elementType = element.type;
+                            // a = element;
+                            // определим длину дуги от начальной точки до точки клика, для сохранения расположения окон 
+                            var sin = D / d;
+                            if (sin > 1) {
+                                sin = 1;
+                            }
+                            var alpha = Math.asin(sin);
+                            if (Math.abs(alpha - Math.PI / 4) <= Math.PI / 20) { // если курсор рядом с серединой, приклеиваем к середине
+                                alpha = Math.PI / 4;
+                            }
+                            rate = 2 * alpha / Math.PI;
+                            // console.log("alpha = ", alpha);
                         }
-                        var alpha = Math.asin(sin);
-                        if (Math.abs(alpha - Math.PI / 4) <= Math.PI / 20) { // если курсор рядом с серединой, приклеиваем к середине
-                            alpha = Math.PI / 4;
+                    } else { // если же это не окружность
+                        if (straightAffiliation(p0, p1, mousePos) == true) { // если курсор лежит на прямой между этими точками, 
+                            // a = element.id;
+                            // a = element;
+                            a = element.id;
+                            b = line.id;
+                            elementType = element.type;
+                            rate = D / d;
                         }
-                        rate = 2 * alpha / Math.PI;
-                        // console.log("alpha = ", alpha);
-                    }
-                } else { // если же это не окружность
-                    if (straightAffiliation(p0, p1, mousePos) == true) { // если курсор лежит на прямой между этими точками, 
-                        // a = element.id;
-                        // a = element;
-                        a = element.id;
-                        b = line.id;
-                        elementType = element.type;
-                        rate = D / d;
+
                     }
 
                 }
+
 
             }
         }
@@ -947,56 +951,97 @@ function lineMiddle(p0, p1) {
     return middlePoint;
 }
 
-function getVertices(line) {
+function getWallVertices(wall_line, roof_line) {
     var figurePoints = [];
     var pre_point = [];
     var roof_points = [];
-    var point0 = points.find(point => point.id == line.id0);
-    pre_point = { x: point0.x, y: 0, z: point0.y };
-    figurePoints.push(pre_point);
-    var point1 = points.find(point => point.id == line.id1);
-    pre_point = { x: point1.x, y: 0, z: point1.y };
-    figurePoints.push(pre_point);
-    for (element of elements.values()) { // бежим по всем имеющимся элементам
-        // сачала найдем точки фасада
-        if (element.type == "roof") { // нас интересуют только крыша
-            for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
-                var roof_line = lines.find(line => line.id == line_id); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
-                roof_points = [];
-                roof_points.push(points.find(point => point.id == roof_line.id0));
-                roof_points.push(points.find(point => point.id == roof_line.id1));
-                for (p of roof_points.values()) {
-                    var roof_point_height = p.height;
-                    if (straightAffiliation(point0, point1, p)) {
-                        if (p.is_floor_1 == true) roof_point_height = roof_point_height + levels.get('floor_1').height;
-                        if (p.is_floor_2 == true) roof_point_height = roof_point_height + levels.get('floor_2').height;
-                        if (p.is_floor_3 == true) roof_point_height = roof_point_height + levels.get('floor_3').height;
-                        pre_point = { x: p.x, y: roof_point_height, z: p.y, type: "wall" };
-                        figurePoints.push(pre_point);
-                    }
+    // console.log("line= ", line);
+
+    var point0 = points.find(point => point.id == wall_line.id0);
+    // pre_point = { x: point0.x, y: 0, z: point0.y };
+    // figurePoints.push(pre_point);
+    var point1 = points.find(point => point.id == wall_line.id1);
+    // pre_point = { x: point1.x, y: 0, z: point1.y };
+    // figurePoints.push(pre_point);
+    // for (element of elements.values()) { // бежим по всем имеющимся элементам
+    // сачала найдем точки фасада
+    // if (element.type == "roof") { // нас интересуют только крыша
+    // for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+    // var roof_line = lines.find(line => line.id == line_id); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
+    roof_points = [];
+    roof_points.push(points.find(point => point.id == roof_line.id0));
+    roof_points.push(points.find(point => point.id == roof_line.id1));
+    if ((straightAffiliation(point0, point1, roof_points[0])) && (straightAffiliation(point0, point1, roof_points[1]))) {
+        for (p of roof_points.values()) {
+            var roof_point_height = p.height;
+            // console.log("p = ", p);
+            // if (straightAffiliation(point0, point1, p)) {
+            // console.log("enter");
+            if (p.is_floor_1 == true) roof_point_height = roof_point_height + parseInt(levels.get('floor_1').height);
+            if (p.is_floor_2 == true) roof_point_height = roof_point_height + parseInt(levels.get('floor_2').height);
+            if (p.is_floor_3 == true) roof_point_height = roof_point_height + parseInt(levels.get('floor_3').height);
+            // console.log("roof_point_height = ", roof_point_height);
+            pre_point = { x: p.x, y: roof_point_height, z: p.y, type: "wall" }; // это верхняя точка на данном участке
+            figurePoints.push(pre_point);
+            pre_point = { x: p.x, y: 0, z: p.y, type: "wall" }; // а это точка под нею
+            figurePoints.push(pre_point);
+
+            // }
+        }
+        // поищем окна на этом участке
+        for (w of windows.values()) {
+            if (w.line_id == wall_line.id) {
+                var fl1 = false;
+                var fl2 = false;
+                var a = coordsFromDist(point0, point1, w.distance - w.width / 2);
+                var p1 = { x: figurePoints[1].x, y: figurePoints[1].z };
+                var p2 = { x: figurePoints[3].x, y: figurePoints[3].z };
+                if (straightAffiliation(p1, p2, a)) {
+                    var bottom_0 = { x: a.x, y: w.bottom, z: a.y, type: "transparent" };
+                    figurePoints.push(bottom_0);
+                    console.log("Первая точка окна, нижняя = ", bottom_0);
+                    var top_0 = { x: a.x, y: w.bottom + w.height, z: a.y, type: "transparent" };
+                    console.log("Первая точка окна, верхняя = ", top_0);
+                    figurePoints.push(top_0);
+                    fl1 = true;
+                }
+                a = coordsFromDist(point0, point1, w.distance + w.width / 2);
+                if (straightAffiliation(p1, p2, a)) {
+                    var bottom_1 = { x: a.x, y: w.bottom, z: a.y, type: "transparent" };
+                    console.log("Вторая точка окна, нижняя = ", bottom_1);
+                    figurePoints.push(bottom_1);
+                    var top_1 = { x: a.x, y: w.bottom + w.height, z: a.y, type: "transparent" };
+                    console.log("Вторая точка окна, нижняя = ", top_1);
+                    figurePoints.push(top_1);
+                    fl2 = true;
+                }
+                if ((fl1 == true) && (fl2 == false)) { // значит окно заканчивается не на нашем участке и надо добавить точек
+                    var top_point = { x: p2.x, y: w.bottom + w.height, z: p2.y, type: "transparent" };
+                    console.log("Добавочная точка окна, заканчивается дальше, верхняя = ", top_point);
+                    figurePoints.push(top_point);
+                    var bottom_point = { x: p2.x, y: w.bottom, z: p2.y, type: "transparent" };
+                    console.log("Добавочная точка окна, заканчивается дальше, нижняя = ", bottom_point);
+                    figurePoints.push(bottom_point);
+                }
+                if ((fl1 == false) && (fl2 == true)) { // значит окно началось не на нашем участке и надо добавить точек
+                    var top_point = { x: p1.x, y: w.bottom + w.height, z: p1.y, type: "transparent" };
+                    console.log("Добавочная точка окна, начинается раньше, верхняя = ", top_point);
+                    figurePoints.push(top_point);
+                    var bottom_point = { x: p1.x, y: w.bottom, z: p1.y, type: "transparent" };
+                    console.log("Добавочная точка окна, начинается раньше, нижняя = ", bottom_point);
+                    figurePoints.push(bottom_point);
                 }
             }
         }
     }
-    // поищем окна на этой линии 
-    for (w of windows.values()) {
-        if (w.line_id == line.id) {
+    // console.log("figurePoints = ", figurePoints);
 
-            var a = coordsFromDist(point0, point1, w.distance - w.width / 2);
-            var bottom_0 = { x: a.x, y: w.bottom, z: a.y, type: "transparent" };
-            figurePoints.push(bottom_0);
-            var top_0 = { x: a.x, y: w.bottom + w.height, z: a.y, type: "transparent" };
-            figurePoints.push(top_0);
-            a = coordsFromDist(point0, point1, w.distance + w.width / 2);
-            var bottom_1 = { x: a.x, y: w.bottom, z: a.y, type: "transparent" };
-            figurePoints.push(bottom_1);
-            var top_1 = { x: a.x, y: w.bottom + w.height, z: a.y, type: "transparent" };
-            figurePoints.push(top_1);
-        }
+    // }
+    // }
+    // }
 
-    }
     // теперь когда у нас есть массив  точек , нужно удалить повторяющиеся:
-    console.log("figurePoints = ", figurePoints);
+    console.log("figurePoints после окон но до удаления повторов= ", figurePoints);
     var vertices = [];
     vertices.push(figurePoints[0]);
     for (i = 0; i < figurePoints.length; i++) {
@@ -1018,7 +1063,7 @@ function getVertices(line) {
 function get2DFrom3DVertices(vertices) {
     var verts2D = [];
     if (vertices.length > 1) {
-        if (vertices[0].x != vertices[1].x) { // если стена расположена вдоль оси x или наклонная
+        if (vertices[0].x != vertices[2].x) { // если стена расположена вдоль оси x или наклонная
             for (v of vertices.values()) { // удаляем координаты у
                 var p = [v.x, v.y];
                 verts2D.push(p);
@@ -1036,20 +1081,53 @@ function get2DFrom3DVertices(vertices) {
     return verts2D;
 }
 
+function get2DFrom3DVerticesRoof(vertices) {
+    var verts2D = [];
+    if (vertices.length > 1) {
+        for (v of vertices.values()) { // удаляем координаты у
+            var p = [v.x, v.z];
+            verts2D.push(p);
+        }
+    }
+    console.log("verts2D = ", verts2D);
+    return verts2D;
+}
 
-/* <p>
-    <input type="checkbox" checked name="html5" />HTML5
-</p> */
-// функция определения перпендикулярной прямой, а точнее у по х
-// function findYOnNormal(p0, p1, x) {
-//     var newPoint = [];
-//     var k = (p0.x - p1.x) / (p0.y - p1.y);
-//     var middlePix = [];// середина отрезка
-//     middlePix.x = Math.abs(p0.x - p1.x) / 2 + Math.min(p0.x, p1.x);
-//     middlePix.y = Math.abs(p0.y - p1.y) / 2 + Math.min(p0.y, p1.y);
-//     newPoint.x = x;
-//     newPoint.y = middlePix.y - k * (x - middlePix.x);
-//     return newPoint;
-// }
+function getRoofVertices(element) {
+    var figurePoints = [];
+    var pre_point = [];
+    var roof_points = [];
 
+    for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+        var roof_line = lines.find(line => line.id == line_id); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
+        roof_points = [];
+        roof_points.push(points.find(point => point.id == roof_line.id0));
+        roof_points.push(points.find(point => point.id == roof_line.id1));
+        for (p of roof_points.values()) {
+            var roof_point_height = p.height;
+            if (p.is_floor_1 == true) roof_point_height = roof_point_height + levels.get('floor_1').height;
+            if (p.is_floor_2 == true) roof_point_height = roof_point_height + levels.get('floor_2').height;
+            if (p.is_floor_3 == true) roof_point_height = roof_point_height + levels.get('floor_3').height;
+            pre_point = { x: p.x, y: roof_point_height, z: p.y }; //, type: "wall"
+            figurePoints.push(pre_point);
+        }
+    }
 
+    // теперь когда у нас есть массив  точек , нужно удалить повторяющиеся:
+    console.log("roof figurePoints = ", figurePoints);
+    var vertices = [];
+    vertices.push(figurePoints[0]);
+    for (i = 0; i < figurePoints.length; i++) {
+        var flag = false;
+        for (j = 0; j < vertices.length; j++) {
+            if ((vertices[j].x == figurePoints[i].x) && (vertices[j].y == figurePoints[i].y) && (vertices[j].z == figurePoints[i].z)) {
+                flag = true;
+            }
+        }
+        if (flag == false) {
+            vertices.push(figurePoints[i]);
+        }
+    }
+    console.log(" roof vertices = ", vertices);
+    return vertices;
+}
