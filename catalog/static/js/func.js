@@ -216,7 +216,7 @@ function defineElement(el_type, el_id) {
 //         var line = lines.find(line => line.id == item); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
 //         p0 = mmToPix(points.find(point => point.id == line.id0));
 //         p1 = mmToPix(points.find(point => point.id == line.id1));
-//         if (straightAffiliation(p0, p1, mousePos) == true) { // если курсор лежит на прямой между этими точками, то выделяем каждую линию данного элемента
+//         if (straightAffiliation(p0, p1, mousePos) == true) { // если курсор лежит на прямой между этими точками, то выделяем каждую линию данного элементаget2DFrom3DVerticesget2DFrom3DVertices
 //             for (item of element.ids.values()) { // перебираем массив id линий, хранящийся в каждом элементе
 //                 var line = lines.find(line => line.id == item); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
 //                 p0 = mmToPix(points.find(point => point.id == line.id0));
@@ -951,6 +951,25 @@ function lineMiddle(p0, p1) {
     return middlePoint;
 }
 
+// функция определения пересечения линии стены с ребрами кровли и определение их высот
+// function findIntersection(wall_point0, wall_point1, roof_point0, roof_point1) {
+//     var line3dPoints = []; // массив 3д точек для каждой линии стены
+//     var wall_line_points = [];
+//     wall_line_points.push(wall_point0, wall_point1);
+//     var roof_line_points = [];
+//     roof_line_points.push(roof_point0, roof_point1);
+//     // проверим, не приходятся ли точки кровли на точки стены - такое тоже возможно
+//     for (wall_p of wall_line_points.values()) {
+//         for (roof_p of roof_line_points.values()) {
+//             if ((roof_p.x == wall_p.x) && (roof_p.y == wall_p.y)) Х
+//             var pre_p = { x: roof_p.x, y: roof_p.height, z: roof_p.y };
+//             line3dPoints.push(pre_p);
+//         }
+//     } // конец цикла проверки точек на совпадение
+//     // далее находим пересечения линии стены с гранями кровель
+
+// }
+
 function getWallVertices(wall_line, roof_line) {
     var figurePoints = [];
     var pre_point = [];
@@ -1072,14 +1091,14 @@ function get2DFrom3DVertices(vertices) {
     if (vertices.length > 1) {
         if (vertices[0].x != vertices[2].x) { // если стена расположена вдоль оси x или наклонная
             for (v of vertices.values()) { // удаляем координаты у
-                var p = [v.x, v.y];
+                var p = [v.x, v.height];
                 verts2D.push(p);
             }
 
             // return [{ vertices: verts2D, y0: verts2D[0].y, y1: verts2D[verts2D.size - 1].y }];
         } else {
             for (v of vertices.values()) {
-                var p = [v.z, v.y];
+                var p = [v.y, v.height];
                 verts2D.push(p);
             }
             // return [{ vertices: verts2D, x0: verts2D[0].x, y1: verts2D[verts2D.size - 1].x }];
