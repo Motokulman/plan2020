@@ -1120,6 +1120,7 @@ function get2DFrom3DVerticesRoof(vertices) {
 }
 
 function getRoofVertices(element) {
+    
     var figurePoints = [];
     var pre_point = [];
     var roof_points = [];
@@ -1154,6 +1155,7 @@ function getRoofVertices(element) {
             vertices.push(figurePoints[i]);
         }
     }
-    //console.log(" roof vertices = ", vertices);
+    console.log("Draw roof. Roof element = ", element);
+    console.log(" roof vertices = ", vertices);
     return vertices;
 }

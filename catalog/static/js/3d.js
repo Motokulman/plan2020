@@ -28,18 +28,106 @@ function make3d() {
         scene.add(light);
     }
 
+    // функция определения в какой скат попадает каждая точка
+    // function defRoofAroundPoint() {
+    //     // построим из каждой точки линии стены лучи, и запишем пересечение с данной линией кровли. Если все 4 луча пересеклись с линиями одной и той же кровли, мы внутри нее.
+    //     var distance_to_intersection = new Map(); // Для счета пересечений и расстояний до них - для опеделения, внутри какого ската находится точка
+    //     for (point of points.values()) {
+    //         for (roof of elements.values()) {
+    //             if (roof.type == "roof") {
+    //                 for (lin_id of roo.ids.values()) {
+    //                     var roof_line = lines.find(l => l.id == lin_id);
+    //                     var roof_point0 = points.find(point => point.id == roof_line.id0);
+    //                     var roof_point1 = points.find(point => point.id == roof_line.id1);
+    //                     // var roof_line_points = [];
+    //                     // roof_line_points.push(roof_point0, roof_point1);
+    //                     // луч, параллельный оси х. То есть у постоянен:
+    //                     if (((point.y <= roof_point0.y) && (point.y >= roof_point1.y)) || ((point.y >= roof_point0.y) && (point.y <= roof_point1.y))) {
+    //                         // определим расстояние от точки до грани кровли
+    //                         var A = roof_point0.y - roof_point1.y;
+    //                         var B = roof_point1.x - roof_point0.x;
+    //                         var C = roof_point0.x * roof_point1.y - roof_point1.x * roof_point0.y;
+    //                         var dist = Math.abs(A * point.x + B * point.y + C) / Math.sqrt(Math.pow(A, 2) + Math.pow(B, 2));
+    //                         // путаемся получить элемент массива счетчика пересечений
+    //                         var map_item = dis
+
+    //                         if (typeof map_item == "undefined") { // если такого ската у нас еще нет, то
+    //                             var t = {
+    //                                 count: 1,
+    //                                 dist: dist
+    //                             }
+    //                             distance_to_intersection.set(roof.id, t);
+    //                         } else {
+    //                             var new_dist = map_item.dist + dist;
+    //                             var new_count = map_item.count + 1;
+    //                             distance_to_intersection.set(roof.id, {
+    //                                 count: new_count,
+    //                                 dist: new_dist
+    //                             });
+    //                         }
+    //                     }
+    //                     // луч, параллельный оси y. То есть x постоянен:
+    //                     if (((point.x <= roof_point0.x) && (point.x >= roof_point1.x)) || ((point.x >= roof_point0.x) && (point.x <= roof_point1.x))) {
+    //                         // определим расстояние от точки до грани кровли
+    //                         var A = roof_point0.y - roof_point1.y;
+    //                         var B = roof_point1.x - roof_point0.x;
+    //                         var C = roof_point0.x * roof_point1.y - roof_point1.x * roof_point0.y;
+    //                         var dist = Math.abs(A * point.x + B * point.y + C) / Math.sqrt(Math.pow(A, 2) + Math.pow(B, 2));
+    //                         // путаемся получить элемент массива счетчика пересечений
+    //                         var map_item = distance_to_intersection.get(roof.id);
+
+    //                         if (typeof map_item == "undefined") { // если такого ската у нас еще нет, то
+    //                             var t = {
+    //                                 count: 1,
+    //                                 dist: dist
+    //                             }
+    //                             distance_to_intersection.set(roof.id, t);
+    //                         } else {
+    //                             var new_dist = map_item.dist + dist;
+    //                             var new_count = map_item.count + 1;
+    //                             distance_to_intersection.set(roof.id, {
+    //                                 count: new_count,
+    //                                 dist: new_dist
+    //                             });
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         } // конец перебора кровли
+    //         // теперь мы можем понять, внутри какой кровли данная точка
+    //         var max_count = 0;
+    //         var roof_id;
+    //         var equal_amount = [];
+    //         for (item of distance_to_intersection) {
+    //             if (item.count > max_count) {
+    //                 max_count = item.count;
+    //                 equal_amount = [];
+    //                 equal_amount.push({
+    //                     roof_id: item.keys(),
+    //                     dist = item.dist
+    //                 })
+    //             } else if (item.count = max_count) { // еси вдруг нам попалось ес
+
+    //             }
+    //         }
+
+
+    //     }
+    // }
+
+
     function getWallLine3dCoords(wall_line) {
         console.log("wall_line = ", wall_line);
-        var distance_to_intersection_0 = []; // расстояние от первой точки линии стены до найденного пересечения луча, проведенного через эту стену, до найденного пересечения с ребром ската
-        var distance_to_intersection_1 = []; // расстояние от первой точки линии стены до найденного пересечения луча, проведенного через эту стену, до найденного пересечения с ребром ската
-        // var distance_to_intersection_1 = []; // впоследствии скат, расстояние до ската которого быдет наименьшим, будет искомым скатом, внктри которого находится данная точка линии стены
+
+        var intersection_0 = new Map();// расстояние от первой точки линии стены до найденного пересечения луча, проведенного произвольно из этой точки до пересечения со скатом
+        var intersection_1 = new Map();
         var line3dPoints = []; // массив 3д точек для каждой линии стены
         // var wall_line = lines.find(li => li.id == line_id);
         // определим, внутри каких скатов находится линия стены, определим пересечения с ребрами и их высоту
         var wall_point0 = points.find(point => point.id == wall_line.id0);
         var wall_point1 = points.find(point => point.id == wall_line.id1);
-        console.log("wall_point0 = ", wall_point0);
-        console.log("wall_point1 = ", wall_point1);
+        var wall_points = [];
+        wall_points.push(wall_point0, wall_point1);
         //найдем коээфициенты уравнения прямой линии стены
         var k_wall = undefined;
         var b_wall = undefined;
@@ -47,8 +135,6 @@ function make3d() {
             k_wall = (wall_point1.y - wall_point0.y) / (wall_point1.x - wall_point0.x);
             b_wall = (wall_point1.x * wall_point0.y - wall_point0.x * wall_point1.y) / (wall_point1.x - wall_point0.x);
         }
-        console.log("k_wall = ", k_wall);
-        console.log("b_wall = ", b_wall);
         for (roof_element of elements.values()) {
             if (roof_element.type == "roof") {
                 for (lin_id of roof_element.ids.values()) {
@@ -59,21 +145,24 @@ function make3d() {
                     var roof_point1 = points.find(point => point.id == roof_line.id1);
                     var roof_line_points = [];
                     roof_line_points.push(roof_point0, roof_point1);
-                    console.log("roof_point0 = ", roof_point0);
-                    console.log("roof_point1 = ", roof_point1);
-
+                    // console.log("roof_line_points до добавления высоты = ", roof_line_points);
+                    // определим высоту кровельных точек
+                    for (k = 0; k < 2; k++) {
+                        var roof_point_height = roof_line_points[k].height;
+                        if (roof_line_points[k].is_floor_1 == true) roof_point_height = roof_point_height + levels.get('floor_1').height;
+                        if (roof_line_points[k].is_floor_2 == true) roof_point_height = roof_point_height + levels.get('floor_2').height;
+                        if (roof_line_points[k].is_floor_3 == true) roof_point_height = roof_point_height + levels.get('floor_3').height;
+                        roof_line_points[k].total_height = roof_point_height;
+                    }
+                    // console.log("roof_line_points после добавления высоты = ", roof_line_points);
                     // далее находим пересечения линии стены с данной гранью
                     //найдем коээфициенты уравнения прямой линии кровли
                     var k_roof = undefined;
                     var b_roof = undefined;
                     if (roof_point1.x != roof_point0.x) {
-                        // console.log("roof_point1.x = ", roof_point1.x);
-                        // console.log("roof_point0.x = ", roof_point0.x);
                         k_roof = (roof_point1.y - roof_point0.y) / (roof_point1.x - roof_point0.x);
                         b_roof = (roof_point1.x * roof_point0.y - roof_point0.x * roof_point1.y) / (roof_point1.x - roof_point0.x);
                     }
-                    console.log("k_roof = ", k_roof);
-                    console.log("b_roof = ", b_roof);
                     if (((((typeof k_roof == "undefined") && (typeof k_wall == "undefined")) == false)) && (k_roof != k_wall)) { // если они равны, то прямые параллельны  
                         var common_p = [];
                         if (typeof k_wall == "undefined") {// если стена параллельна у
@@ -87,61 +176,180 @@ function make3d() {
                             common_p.y = k_wall * common_p.x + b_wall;
                         }
                         console.log("common_p = ", common_p);
-                        // проверяем, лежит ли найденный х на прямой линии стены
-                        if ((typeof common_p.x != "undefined") && straightAffiliation(wall_point0, wall_point1, common_p)) { // возможно придется внестри изменения в функцию для точности
+                        // проверяем, лежит ли найденная точка на прямой линии стены и на лиии кровли
+                        if ((typeof common_p.x != "undefined") && straightAffiliation(wall_point0, wall_point1, common_p) && straightAffiliation(roof_point0, roof_point1, common_p)) {
                             // если да, то продолжаем только если найденная общая точка не сопадает ни с первой точкой линии чтены, ни с последней
                             if ((((common_p.x == wall_point0.x) && (common_p.y == wall_point0.y)) == false) && (((common_p.x == wall_point1.x) && (common_p.y == wall_point1.y)) == false)) {
                                 // высоту найденной точки определим из пропорции координат точек данной кровельной линии
                                 if (roof_point0.x == roof_point1.x) { // то определяем пропорцию по координатам у
-                                    common_p.height = roof_point0.height + (roof_point1.height - roof_point0.height) * (Math.abs(common_p.y - roof_point0.y)) / Math.abs((roof_point1.y - roof_point0.y));
+                                    common_p.height = Math.min(roof_line_points[0].total_height, roof_line_points[1].total_height) + (roof_line_points[1].total_height - roof_line_points[0].total_height) * (Math.abs(common_p.y - roof_point0.y)) / Math.abs((roof_point1.y - roof_point0.y));
                                 } else {// то определяем пропорцию по координатам x
-                                    common_p.height = roof_point0.height + (roof_point1.height - roof_point0.height) * (Math.abs(common_p.x - roof_point0.x)) / Math.abs((roof_point1.x - roof_point0.x));
+                                    common_p.height = Math.min(roof_line_points[0].total_height, roof_line_points[1].total_height) + (roof_line_points[1].total_height - roof_line_points[0].total_height) * (Math.abs(common_p.x - roof_point0.x)) / Math.abs((roof_point1.x - roof_point0.x));
                                 }
                                 line3dPoints.push(common_p);
                             }
                         }
+
+
+
+
+
                         // теперь проделаем вычисления необходимые для определения ската, внутри которого находятся крайние точки данной линии стены
                         // определим, лежит ли найденная точка пересечения внутри данной линии ребра ската, то есть луч построенный по отрезку стены, пульнул прсямо в данное ребро, а не только в луч по нему построеннвй
-                        // console.log("roof_point0 = ", roof_point0);
-                        // console.log("roof_point1 = ", roof_point1);
-                        // console.log("common_p = ", common_p);
-                        if ((typeof common_p.x != "undefined") && straightAffiliation(roof_point0, roof_point1, common_p)) {
-                            console.log("yes= ");
-                            // если да, то определим расстояние от каждой точки линии стены до этой точки
-                            var interDist = {
-                                dist: lengthLine(wall_point0, common_p),
-                                roof_id: roof_element.id
-                            }
-                            distance_to_intersection_0.push(interDist);
-                            interDist = {
-                                dist: lengthLine(wall_point1, common_p),
-                                roof_id: roof_element.id
-                            }
-                            distance_to_intersection_1.push(interDist);
-                        }
+                        // if ((typeof common_p.x != "undefined") && straightAffiliation(roof_point0, roof_point1, common_p)) {
+                        //     console.log("yes= ");
+                        //     console.log("wall_point0.x = ", wall_point0.x);
+                        //     console.log("common_p.x = ", common_p.x);
+                        //     if (wall_point0.x < common_p.x) { // учитываем пересечения только с одной стороны от точки
+                        //         var item_intersec = intersection_0.get(roof_element.id);
+                        //         if (typeof item_intersec == "undefined") {
+                        //             intersection_0.set(roof_element.id, 1);
+                        //         } else {
+                        //             var count = item_intersec + 1;
+                        //             intersection_0.set(roof_element.id, count);
+                        //         }
+                        //     } else if ((wall_point0.x == common_p.x) && (wall_point0.y < common_p.y)) { // если параллельна оси у, то х постоянен, и поэтому проверяем по у
+                        //         var item_intersec = intersection_0.get(roof_element.id);
+                        //         if (typeof item_intersec == "undefined") {
+                        //             intersection_0.set(roof_element.id, 1);
+                        //         } else {
+                        //             var count = item_intersec + 1;
+                        //             intersection_0.set(roof_element.id, count);
+                        //         }
+                        //     }
+                        //     if (wall_point1.x < common_p.x) { // учитываем пересечения только с одной стороны от точки
+                        //         var item_intersec = intersection_1.get(roof_element.id);
+                        //         if (typeof item_intersec == "undefined") {
+                        //             intersection_1.set(roof_element.id, 1);
+                        //         } else {
+                        //             var count = item_intersec + 1;
+                        //             intersection_1.set(roof_element.id, count);
+                        //         }
+                        //     } else if ((wall_point1.x == common_p.x) && (wall_point1.y < common_p.y)) {
+                        //         var item_intersec = intersection_1.get(roof_element.id);
+                        //         if (typeof item_intersec == "undefined") {
+                        //             intersection_1.set(roof_element.id, 1);
+                        //         } else {
+                        //             var count = item_intersec + 1;
+                        //             intersection_1.set(roof_element.id, count);
+                        //         }
+                        //     }
+                        // }
+
+                        // console.log("intersection_0 = ", intersection_0);
+                        // console.log("intersection_1 = ", intersection_1);
+                        // if ((typeof common_p.x != "undefined") && straightAffiliation(roof_point0, roof_point1, common_p)) {
+                        //     console.log("yes= ");
+                        //     // если да, то определим расстояние от каждой точки линии стены до этой точки
+                        //     var interDist = {
+                        //         dist: lengthLine(wall_point0, common_p),
+                        //         roof_id: roof_element.id
+                        //     }
+                        //     distance_to_intersection_0.push(interDist);
+                        //     interDist = {
+                        //         dist: lengthLine(wall_point1, common_p),
+                        //         roof_id: roof_element.id
+                        //     }
+                        //     distance_to_intersection_1.push(interDist);
+                        // }
+
+
+
                     } //if
+
+                    for (d = 0; d < 2; d++) {
+                        // найдем коэффициенты произвольной прямой, которую будем использовать для поиска пересечений с гранями для определения ската, внутри которого лежит точка стены
+                        //найдем коээфициенты уравнения прямой линии стены
+                        console.log("wall_points[d] = ", wall_points[d]);
+                        var plus_x = 11;
+                        var plus_y = 465;
+                        // var new_point_x = wall_points[d].x + plus_x;
+                        // var new_point_y = wall_points[d].y + plus_y;
+                        k_x = plus_y / plus_x;
+                        b_x = ((wall_points[d].x + plus_x) * wall_points[d].y - wall_points[d].x * (wall_points[d].y + plus_y)) / plus_x;
+                        console.log("k_x = ", k_x);
+                        console.log("b_x = ", b_x);
+                        var common_x = [];
+
+                        common_x.x = (b_roof - b_x) / (k_x - k_roof);
+                        common_x.y = k_x * common_x.x + b_x;
+                        // ctx_0.beginPath();
+                        // ctx_0.moveTo(point0.x, point0.y);
+                        // ctx_0.lineTo(point1.x, point1.y);
+                        // ctx_0.stroke();
+                        var pp = {
+                            x: common_x.x,
+                            y: common_x.y
+                        }
+                        pp = mmToPix(pp);
+                        drawPoint(pp, "red", 3);
+                        console.log("common_x = ", common_x);
+                        // проверяем, лежит ли найденный х на прямой линии кровельного ребра а еще и смотрим только в одну сторону
+                        if ((typeof common_x.x != "undefined") && straightAffiliation(roof_point0, roof_point1, common_x) && (common_x.x > wall_points[d].x) && (common_x.y > wall_points[d].y)) {
+                            if (d == 0) {
+                                var item_intersec = intersection_0.get(roof_element.id);
+                                if (typeof item_intersec == "undefined") {
+                                    intersection_0.set(roof_element.id, 1);
+                                } else {
+                                    var count = item_intersec + 1;
+                                    intersection_0.set(roof_element.id, count);
+                                }
+                            }
+                            if (d == 1) {
+                                var item_intersec = intersection_1.get(roof_element.id);
+                                if (typeof item_intersec == "undefined") {
+                                    intersection_1.set(roof_element.id, 1);
+                                } else {
+                                    var count = item_intersec + 1;
+                                    intersection_1.set(roof_element.id, count);
+                                }
+                            }
+                        }
+                    }
+
+
+
+
+
                 }
             }
+        } // конец перебора roof  
+        // теперь определим, внутри каких скатов находятся точки данной линии стен
+        // первая точка
+        var id_roof_wall_points = [];
+        var roof_0_id, roof_1_id;
+        for (item of intersection_0) {
+            console.log("item of intersection_0 = ", item);
+            if (Math.abs(item[1] % 2) == 1) {
+                roof_0_id = item[0];
+            }
         }
-        console.log("distance_to_intersection_0 = ", distance_to_intersection_0);
-        console.log("distance_to_intersection_1 = ", distance_to_intersection_1);
-        var dis_to_intersec = [];
-        dis_to_intersec.push(distance_to_intersection_0);
-        dis_to_intersec.push(distance_to_intersection_1);
-        console.log("dis_to_intersec = ", dis_to_intersec);
+        for (item of intersection_1) {
+            console.log("item of intersection_1 = ", item);
+            if (Math.abs(item[1] % 2) == 1) {
+                roof_1_id = item[0];
+            }
+        }
+        id_roof_wall_points.push(roof_0_id, roof_1_id);
+
+        console.log("id_roof_wall_points = ", id_roof_wall_points);
+        // var dis_to_intersec = [];
+        // dis_to_intersec.push(distance_to_intersection_0);
+        // dis_to_intersec.push(distance_to_intersection_1);
+        // console.log("dis_to_intersec = ", dis_to_intersec);
         // разберемся с координатами точек над точками линии стены
-        var wall_points = [];
-        wall_points.push(wall_point0, wall_point1);
+
         for (i = 0; i < 2; i++) {
             // теперь определим, внутри каких скатов находятся точки данной линии стен
-            var min, id_roof_wall_point;
+            var min, id_roof_wall_point = id_roof_wall_points[i];
 
             // var arr = dis_to_intersec[i];
-            for (item of dis_to_intersec[i].values()) { }
-            if ((typeof min == "undefined") || (item.dist < min)) {
-                min = item.dist;
-                id_roof_wall_point = item.roof_id;
-            }
+            // for (item of dis_to_intersec[i].values()) { }
+            // if ((typeof min == "undefined") || (item.dist < min)) {
+            //     min = item.dist;
+            //     id_roof_wall_point = item.roof_id;
+            // }
+
             console.log("id_roof_wall_point = ", id_roof_wall_point);
 
             // Зная, в какие скаты попадают наши крайние точки, определяем их высоту
@@ -207,9 +415,27 @@ function make3d() {
             };
             line3dPoints.push(common_p);
         }
-
+        console.log("points = ", points);
         console.log("line3dPoints = ", line3dPoints);
-        return line3dPoints;
+        // если есть грань, общая для двух скатов, то там  будут дубликаты точек. Удалим их.
+        var result = [];
+        result.push({
+            x: line3dPoints[0].x,
+            y: line3dPoints[0].y,
+            height: line3dPoints[0].height
+        });
+        for (i = 1; i < line3dPoints.length; i++) {
+            var flag = false;
+            for (j = 0; j < result.length; j++) {
+                if ((line3dPoints[i].x == result[j].x) && (line3dPoints[i].y == result[j].y) && (line3dPoints[i].height == result[j].height)) {
+                    flag = true;
+                }
+            }
+            if (!flag) {
+                result.push(line3dPoints[i]);
+            }
+        }
+        return result;
     }
 
     function drawWalls() {
