@@ -182,9 +182,20 @@ function make3d() {
                             if ((((common_p.x == wall_point0.x) && (common_p.y == wall_point0.y)) == false) && (((common_p.x == wall_point1.x) && (common_p.y == wall_point1.y)) == false)) {
                                 // высоту найденной точки определим из пропорции координат точек данной кровельной линии
                                 if (roof_point0.x == roof_point1.x) { // то определяем пропорцию по координатам у
-                                    common_p.height = Math.min(roof_line_points[0].total_height, roof_line_points[1].total_height) + (roof_line_points[1].total_height - roof_line_points[0].total_height) * (Math.abs(common_p.y - roof_point0.y)) / Math.abs((roof_point1.y - roof_point0.y));
+                                    if (roof_line_points[0].total_height > roof_line_points[1].total_height) {
+                                        common_p.height = roof_line_points[0].total_height - Math.abs(roof_line_points[1].total_height - roof_line_points[0].total_height) * (Math.abs(common_p.y - roof_point0.y)) / Math.abs((roof_point1.y - roof_point0.y));
+
+                                    } else {
+                                        common_p.height = roof_line_points[0].total_height + Math.abs(roof_line_points[1].total_height - roof_line_points[0].total_height) * (Math.abs(common_p.y - roof_point0.y)) / Math.abs((roof_point1.y - roof_point0.y));
+
+                                    }
                                 } else {// то определяем пропорцию по координатам x
-                                    common_p.height = Math.min(roof_line_points[0].total_height, roof_line_points[1].total_height) + (roof_line_points[1].total_height - roof_line_points[0].total_height) * (Math.abs(common_p.x - roof_point0.x)) / Math.abs((roof_point1.x - roof_point0.x));
+                                    if (roof_line_points[0].total_height > roof_line_points[1].total_height) {
+                                        common_p.height = roof_line_points[0].total_height - Math.abs(roof_line_points[1].total_height - roof_line_points[0].total_height) * (Math.abs(common_p.x - roof_point0.x)) / Math.abs((roof_point1.x - roof_point0.x));
+                                    } else {
+                                        common_p.height = roof_line_points[0].total_height + Math.abs(roof_line_points[1].total_height - roof_line_points[0].total_height) * (Math.abs(common_p.x - roof_point0.x)) / Math.abs((roof_point1.x - roof_point0.x));
+
+                                    }
                                 }
                                 line3dPoints.push(common_p);
                             }

@@ -121,7 +121,7 @@ function defineElement(el_type, el_id) {
                     p0 = mmToPix(point0);
                     p1 = mmToPix(point1);
                     if (el_type == "roof") { // если это кровля, то выбираем точки
-                        if (selectedElements.length == 1) { // если сама кровля уже выбрана
+                        if (selectedElements.length > 0) { // если сама кровля уже выбрана
                             if (lengthLine(p0, mousePos) <= 5) {
                                 c = point0.id;
                             }
@@ -1120,7 +1120,7 @@ function get2DFrom3DVerticesRoof(vertices) {
 }
 
 function getRoofVertices(element) {
-    
+
     var figurePoints = [];
     var pre_point = [];
     var roof_points = [];
@@ -1158,4 +1158,93 @@ function getRoofVertices(element) {
     console.log("Draw roof. Roof element = ", element);
     console.log(" roof vertices = ", vertices);
     return vertices;
+}
+
+function calculateRoofPointsHeights(selectedPoints, selectedElements) {
+    var roof = [];
+    var roof = elements.find(el => el.id == selectedElements[0]);
+    console.log(" roof = ", roof);
+    // это наш скат
+    // выберем все точки первой плоскости, размеры которых надо найти, то есть за вычетом уже выбранных точек
+    var targetPoints = [];
+    var roof_point_0 = points.find(p => p.id == selectedPoints[0]);
+    var roof_point_1 = points.find(p => p.id == selectedPoints[1]);
+    var roof_point_2 = points.find(p => p.id == selectedPoints[2]);
+    for (line_id of roof.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+        var roof_line = lines.find(line => line.id == line_id); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
+        console.log(" roof_line = ", roof_line);
+        console.log(" selectedPoints = ", selectedPoints);
+        console.log(" selectedPoints.find(point => point == roof_line.id0) = ", selectedPoints.find(point => point == roof_line.id0));
+        if (typeof selectedPoints.find(point => point == roof_line.id0) == "undefined") {
+            targetPoints.push(points.find(point => point.id == roof_line.id0));
+            console.log(" Зашли = ");
+        }// проверяем, нет ли этой точки среди тех, чью высоту мы задали
+        if (typeof selectedPoints.find(point => point == roof_line.id1) == "undefined") targetPoints.push(points.find(point => point.id == roof_line.id1)); // то есть тех точек, которые в массиве выбранных точек
+    }
+    console.log(" targetPoints до = ", targetPoints);
+    for (targetPoint of targetPoints.values()) {
+        targetPoint.height = calcRoofPointHeight(roof_point_0, roof_point_1, roof_point_2, targetPoint); // Здесть мы определили добавочную высоту искомой точки
+        targetPoint.is_floor_1 = roof_point_0.is_floor_1; // добавляем в искомую точку true Или false высот этажей
+        targetPoint.is_floor_2 = roof_point_0.is_floor_2;
+        targetPoint.is_floor_3 = roof_point_0.is_floor_3;
+        console.log(" targetPoint = ", targetPoint);
+    }
+    console.log(" targetPoints после = ", targetPoints);
+}
+
+function calcRoofPointHeight(roof_point_0, roof_point_1, roof_point_2, targetPoint) {
+    // Вычисляем высоту только исходя из добавленной высоты!!
+    var roof_points = [];
+    var flat_points = []; // это массов точек плоскости
+    roof_points.push(roof_point_0, roof_point_1, roof_point_2);
+    for (k = 0; k < 3; k++) {
+        var flat_point = {
+            x: roof_points[k].x,
+            y: roof_points[k].y,
+            height: roof_points[k].height
+        }
+        flat_points.push(flat_point);
+    }
+    // определим третью координату наших точек плоскости - высоту
+
+    var a, b, c, f, h, m, o, s;
+    a = targetPoint.x - flat_points[0].x;
+    b = targetPoint.y - flat_points[0].y;
+    c = flat_points[1].x - flat_points[0].x;
+    f = flat_points[1].y - flat_points[0].y;
+    h = flat_points[1].height - flat_points[0].height;
+    m = flat_points[2].x - flat_points[0].x;
+    o = flat_points[2].y - flat_points[0].y;
+    s = flat_points[2].height - flat_points[0].height;
+
+    var searched_height = (c * b * s + a * h * o - a * f * s - b * h * m) / (c * o - m * f) + flat_points[0].height;
+
+    return searched_height;
+}
+
+function setSameRoofPoints(selectedElements) {
+    var roof = elements.find(el => el.id == selectedElements[0]);
+    var targetRoof = elements.find(el => el.id == selectedElements[1]);
+    for (targetLine_id of targetRoof.ids.values()) {
+        targetLine = lines.find(l => l.id == targetLine_id);
+        target_point_0 = points.find(p => p.id == targetLine.id0);
+        target_point_1 = points.find(p => p.id == targetLine.id1);
+        var targetPoints = [target_point_0, target_point_1];
+        for (line_id of roof.ids.values()) {
+            line = lines.find(l => l.id == line_id);
+            point_0 = points.find(p => p.id == line.id0);
+            point_1 = points.find(p => p.id == line.id1);
+            var base_points = [point_0, point_1];
+            for (i = 0; i < 2; i++) {
+                for (j = 0; j < 2; j++) {
+                    if ((targetPoints[j].x == base_points[i].x) && (targetPoints[j].y == base_points[i].y)) {
+                        targetPoints[j].height = base_points[i].height; // Здесть мы определили добавочную высоту искомой точки
+                        targetPoints[j].is_floor_1 = base_points[i].is_floor_1; // добавляем в искомую точку true Или false высот этажей
+                        targetPoints[j].is_floor_2 = base_points[i].is_floor_2;
+                        targetPoints[j].is_floor_3 = base_points[i].is_floor_3;
+                    }
+                }
+            }
+        }
+    }
 }

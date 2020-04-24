@@ -560,24 +560,20 @@ canvas_0.addEventListener('click', function (e) {
                 var el = defineElement("roof");
                 //console.log("el = ", el);
                 if (el.element_id > -1) {
-                    if (selectedElements.length == 0) {
-                        selectedElements.push(el.element_id);
-                        drawShape(elements.find(element => element.id == selectedElements[0]), ctx_0, drawSettingsRoof);
-                    } else {
-
-                            var def_el = defineElement("roof", selectedElements[0]);
-                            if (def_el.point_id >= 0) {
-                                // далее отрабатываем выделение опорных гранией selectedPoints
-                                var select = selectedPoints.findIndex(sel => sel == def_el.point_id); // ищем элемент, на который только что кликнули, в массиве выделенных элементов
-                                // //console.log("select = ", select);
-                                if (select >= 0) {
-                                    selectedPoints.splice(select, 1);
-                                } else {
-                                    selectedPoints.push(def_el.point_id);
-                                }
-                                // //console.log("selectedPoints = ", selectedPoints);
-                            }
-                        
+                    if ((el.point_id == -1) || (selectedElements.length == 0)) { // попали на скат кровли, но не на точку, или попали и на точку тоже, но при этом ни одного ската не выбрано, то выбираем скат
+                        var selectRoof = selectedElements.findIndex(sel => sel == el.element_id); // ищем элемент, на который только что кликнули, в массиве выделенных элементов
+                        if (selectRoof == -1) {// добавляем только если его еще нет
+                            selectedElements.push(el.element_id);
+                        }
+                    } else { // если у нас выбран хоть один скат и мы попали на точку
+                        var def_el = defineElement("roof", selectedElements[0]);
+                        console.log("def_el = ", def_el);
+                        var selectPoint = selectedPoints.findIndex(sel => sel == def_el.point_id); // ищем элемент, на который только что кликнули, в массиве выделенных элементов
+                        if (selectPoint >= 0) { // вариант когда повторным кликом удаляем выделенную точку
+                            selectedPoints.splice(selectPoint, 1);
+                        } else {
+                            if (selectedPoints.length < 3) selectedPoints.push(def_el.point_id); // не даем выделять более 3-х точек
+                        }
                     }
                 } else { // если кликнули сбоку, то сброс. Именно сбоку, а не на другом элементе! поскольку другим элементом м.б. элемент с той же точкой
                     selectedElements = [];
