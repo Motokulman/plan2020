@@ -68,7 +68,7 @@ function defineTextSize() {
                     axis = "y";
                     type = "abs";
                     size = points[i].y;
-                    ////console.log("size ", size);
+                    //////console.log("size ", size);
                 }
             }
         }
@@ -79,7 +79,7 @@ function defineTextSize() {
         for (let i = points.length - 2; i >= 0; i--) {
             a.y = mmToPix(points[i]).y - mmToPix(points[i + 1]).y;
             if ((Math.abs(mousePos.y - mmToPix(points[i]).y + a.y / 2 - parseInt(canvas_0.style.top, 10)) < ctx_2.measureText("0").actualBoundingBoxAscent) && (points[i].y != points[points.length - 1].y) && (a.y != 0)) {
-                // ////console.log("canvas_0.style.left/2 ", parseInt(canvas_0.style.left, 10)/2);
+                // //////console.log("canvas_0.style.left/2 ", parseInt(canvas_0.style.left, 10)/2);
                 if (Math.abs(mousePos.x - parseInt(canvas_0.style.left, 10) / 2) < parseInt(canvas_0.style.left, 10) / 2 - 15) {
                     var p = { x: 2, y: a.y / 2 + mmToPix(points[i + 1]).y + parseInt(canvas_0.style.top, 10) + ctx_2.measureText("0").actualBoundingBoxAscent };
                     var p1 = { x: parseInt(canvas_0.style.left, 10) - 10, y: a.y / 2 + mmToPix(points[i + 1]).y + parseInt(canvas_0.style.top, 10) + ctx_2.measureText("0").actualBoundingBoxAscent };
@@ -102,7 +102,7 @@ function defineTextSize() {
 
 // определение наведения на элемент
 function defineElement(el_type, el_id) {
-    // //console.log("defineElement ");
+    // ////console.log("defineElement ");
     clear(ctx_1, canvas_1);
     var rate = -1;
     var elementType = '';
@@ -152,7 +152,7 @@ function defineElement(el_type, el_id) {
                                 alpha = Math.PI / 4;
                             }
                             rate = 2 * alpha / Math.PI;
-                            // //console.log("alpha = ", alpha);
+                            // ////console.log("alpha = ", alpha);
                         }
                     } else { // если же это не окружность
                         if (straightAffiliation(p0, p1, mousePos) == true) { // если курсор лежит на прямой между этими точками, 
@@ -182,7 +182,7 @@ function defineElement(el_type, el_id) {
         element_type: elementType
     }
     // if (a >= 0) {
-    // //console.log("result = ", result);
+    // ////console.log("result = ", result);
     // }
     return result;
     // return a;
@@ -202,13 +202,13 @@ function defineElement(el_type, el_id) {
 //     var middle = [];
 //     middle.x = Math.min(point0.x, point1.x) + Math.abs(point0.x - point1.x) / 2;
 //     middle.y = Math.min(point0.y, point1.y) + Math.abs(point0.y - point1.y) / 2;
-//     // ////console.log("element = ", element);
-//     // ////console.log("element.distance = ", mmToPix(element.distance));
+//     // //////console.log("element = ", element);
+//     // //////console.log("element.distance = ", mmToPix(element.distance));
 //     if (Math.abs(lengthLine(mousePos, middle) - element.distance / scale) <= 5) { // если попадаем курсором на нашу упрощенную (превращенную в правльный полукруг) окружность
-//         //////console.log("dyenhb= ");
+//         ////////console.log("dyenhb= ");
 //         drawCircleElement(element, ctx_1, '#888888', true);
 //         a = element.id;
-//         //  ////console.log("element.id= ", element.id);
+//         //  //////console.log("element.id= ", element.id);
 //     }
 //     //drawCircleElement(element); то пока не работает
 // } else {
@@ -222,10 +222,10 @@ function defineElement(el_type, el_id) {
 //                 p0 = mmToPix(points.find(point => point.id == line.id0));
 //                 p1 = mmToPix(points.find(point => point.id == line.id1));
 //                 drawLine(p0, p1, ctx_1, '#888888', true);
-//                 //////console.log("element.id = ", element.id);
+//                 ////////console.log("element.id = ", element.id);
 //                 a = element.id;
 //             }
-//             //                   ////console.log("element.id = ", element.id);
+//             //                   //////console.log("element.id = ", element.id);
 
 //         }
 //     }
@@ -238,7 +238,7 @@ function defineElement(el_type, el_id) {
 function straightAffiliation(p0, p1, p2) {
     var tolerance = 10;
     if ((Math.abs(Math.abs(p0.x - p1.x) - Math.abs(p0.x - p2.x) - Math.abs(p2.x - p1.x)) <= tolerance) && (Math.abs(Math.abs(p0.y - p1.y) - Math.abs(p0.y - p2.y) - Math.abs(p2.y - p1.y)) <= tolerance)) {
-        //  ////console.log("defineElement = ", walls.indexOf(wall));
+        //  //////console.log("defineElement = ", walls.indexOf(wall));
         return true;
     } else {
         return false;
@@ -308,10 +308,10 @@ function stick() {
     for (item of points.values()) {
 
         a.x = mmToPix(item).x;
-        //////console.log("a.x = ", a.x);
+        ////////console.log("a.x = ", a.x);
         a.y = mmToPix(item).y;
         if (Math.abs(mousePos.x - a.x) <= stick_pix) {// поиск совпадений по х
-            //////console.log("пMath.abs(mousePos.x - a.x) = ", Math.abs(mousePos.x - a.x));
+            ////////console.log("пMath.abs(mousePos.x - a.x) = ", Math.abs(mousePos.x - a.x));
             mousePos.x = a.x;
             mmOfMousePos.x = item.x;
             drawHVLine("v");
@@ -325,10 +325,10 @@ function stick() {
     // то же для предварительного массива точек
     for (p of prePointsMM.values()) {
         a.x = mmToPix(p).x;
-        //////console.log("a.x = ", a.x);
+        ////////console.log("a.x = ", a.x);
         a.y = mmToPix(p).y;
         if (Math.abs(mousePos.x - a.x) <= stick_pix) {// поиск совпадений по х
-            //////console.log("пMath.abs(mousePos.x - a.x) = ", Math.abs(mousePos.x - a.x));
+            ////////console.log("пMath.abs(mousePos.x - a.x) = ", Math.abs(mousePos.x - a.x));
             mousePos.x = a.x;
             mmOfMousePos.x = p.x;
             drawHVLine("v");
@@ -361,12 +361,12 @@ canvas_2.addEventListener('click', function (e) {
                 if (size === null) size = '';
                 // меняем размеры
                 if ((size != "") && (+ size > 0)) { // если значение было введено
-                    ////console.log("size ", size);
+                    //////console.log("size ", size);
                     for (let i = 1; i < points.length; i++) {
                         if (data.size <= points[i].x) {
                             delta = + size - data.size + points[0].x;
                             newSize = points[i].x + delta;
-                            //////console.log("newSize ", newSize);
+                            ////////console.log("newSize ", newSize);
                             replacement = { id: points[i].id, x: newSize, y: points[i].y };
                             points.splice(i, 1, replacement);
                         }
@@ -398,14 +398,14 @@ canvas_2.addEventListener('click', function (e) {
                 size = Math.abs(data.size - points[points.length - 1].y);
                 size = prompt('', size);
                 if (size === null) size = '';
-                //////console.log("size ", size);
+                ////////console.log("size ", size);
                 // меняем размеры
                 if ((size != "") && (+ size > 0)) { // если значение было введено
                     for (let i = points.length - 1; i >= 0; i--) {
                         if (data.size >= points[i].y) {
                             delta = + size - Math.abs(data.size - points[points.length - 1].y);
                             newSize = points[i].y - delta;
-                            // ////console.log("newSize ", newSize);
+                            // //////console.log("newSize ", newSize);
                             replacement = { id: points[i].id, x: points[i].x, y: newSize };
                             points.splice(i, 1, replacement);
                         }
@@ -443,7 +443,7 @@ function drawAxeSize() {
         clear(ctx_2, canvas_2);
         sortArrByX(points);
         var text = "0"; // текст, выводимый на экран
-        //  ////console.log("canvas_0.style.left ", parseInt(canvas_0.style.left, 10));
+        //  //////console.log("canvas_0.style.left ", parseInt(canvas_0.style.left, 10));
         var textMiddle = ctx_2.measureText(text).width / 2; // длина текста, поделеная пополам для центровки по осям
         ctx_2.fillText(0, mmToPix(points[0]).x - textMiddle + parseInt(canvas_0.style.left, 10), ctx_2.measureText("0").actualBoundingBoxAscent * 1.25); // верхнияя нулевая ось х
         for (let i = 1; i < points.length; i++) {
@@ -460,7 +460,7 @@ function drawAxeSize() {
         sortArrByY(points);
         text = "0";
         textMiddle = ctx_2.measureText(text).actualBoundingBoxAscent / 2; // высота текста
-        // ////console.log("textMiddle.x = ", textMiddle);
+        // //////console.log("textMiddle.x = ", textMiddle);
         ctx_2.fillText(text, canvas_2.width - parseInt(canvas_0.style.left, 10) * 0.93, mmToPix(points[points.length - 1]).y + textMiddle + parseInt(canvas_0.style.top, 10)); // правая нулевая ось Y
         for (let i = points.length - 2; i >= 0; i--) {
             if (points[i].y != points[i + 1].y) {
@@ -500,15 +500,15 @@ function onWheel(e) {
 
     if (scale_old > scale) {
         zeroPointPadding.x = Math.round((zeroPointPadding.x / scale_old + (zeroPointPadding.x / scale_old - mousePos.x) / scale) * scale);
-        // ////console.log("zeroPointPadding.x = ", zeroPointPadding.x);
+        // //////console.log("zeroPointPadding.x = ", zeroPointPadding.x);
         zeroPointPadding.y = Math.round((zeroPointPadding.y / scale_old + (zeroPointPadding.y / scale_old - mousePos.y) / scale) * scale);
     } else {
         zeroPointPadding.x = Math.round((zeroPointPadding.x / scale_old - (zeroPointPadding.x / scale_old - mousePos.x) / scale) * scale);
         zeroPointPadding.y = Math.round((zeroPointPadding.y / scale_old - (zeroPointPadding.y / scale_old - mousePos.y) / scale) * scale);
     }
-    ////console.log('elements = ', elements);
-    ////console.log('lines = ', lines);
-    ////console.log('points = ', points);
+    //////console.log('elements = ', elements);
+    //////console.log('lines = ', lines);
+    //////console.log('points = ', points);
     clear(ctx_3, canvas_3);
     drawAxeSize();
     drawElements();
@@ -547,7 +547,7 @@ $('#test_buttons button').click(function () {
 $('#line_type_selector button').click(function () {
     $(this).addClass('active').siblings().removeClass('active');
     selectedLineType = this.id;
-    // ////console.log("selectedLineType = ", selectedLineType);
+    // //////console.log("selectedLineType = ", selectedLineType);
 });
 
 $('#polygon_sides').change(function () { // определим, сколько граней выбрал пользователь
@@ -561,7 +561,7 @@ $('#element_selector button').click(function () {
     $(this).addClass('active').siblings().removeClass('active');
     selectedTool = this.id;
     selectedElements = [];// зачистим массив выделеных элеиентов
-    ////console.log("selectedTool = ", selectedTool);
+    //////console.log("selectedTool = ", selectedTool);
 });
 
 // Определяем, какой уровень выбрал пользователь
@@ -659,7 +659,7 @@ function pushLine(id0, id1, distance, direction) {
 // сохранение элемента. Элемент состоит из одной или более линий. 
 function pushElement(el) { // ids - массив id линий, из которых состоит данный элемент  ids, distance, direction
     if (elements.length == 0) {
-        // ////console.log("el = ", el);bearType: 'not_set', liveType: 'not_set', outdoorType: 'not_set', roof_slope roofSlope: el.roofSlope, ridgeHeight: el.ridgeHeight, mauerlatHeight: el.mauerlatHeight, angle: el.angle, highSide: el.highSide
+        // //////console.log("el = ", el);bearType: 'not_set', liveType: 'not_set', outdoorType: 'not_set', roof_slope roofSlope: el.roofSlope, ridgeHeight: el.ridgeHeight, mauerlatHeight: el.mauerlatHeight, angle: el.angle, highSide: el.highSide
         elements.push({ id: 0, ids: el.ids, type: el.type, subType: el.subType, level: el.level });
     } else {
         elements.push({ id: findMaxId(elements) + 1, ids: el.ids, type: el.type, subType: el.subType, level: el.level });
@@ -675,7 +675,7 @@ function pushPrePointMM(mmOfMousePos, height) {
         prePointsMM.push({ x: 0, y: 0, height: height });
     } else {
         prePointsMM.push({ x: mmOfMousePos.x, y: mmOfMousePos.y, height: height });
-        //////console.log("mmOfMousePos = ", mmOfMousePos);
+        ////////console.log("mmOfMousePos = ", mmOfMousePos);
     }
 }
 
@@ -763,7 +763,7 @@ function getScheme() {
         cache: true,
         //async: false,
         success: function (data) {
-            ////console.log(" d = ", data);
+            //////console.log(" d = ", data);
             p = JSON.parse(data);
             d = JSON.parse(p[0].fields.scheme);
             if (d != null) {
@@ -775,26 +775,33 @@ function getScheme() {
                 checked = p.checked;
                 drawAxeSize();
                 drawElements();
-                // ////console.log(" Scheme data d = ", d);
+                // //////console.log(" Scheme data d = ", d);
             }
         },
         error: function () {
-            ////console.log("Getting stored scheme error. Scheme data = ", data);
+            //////console.log("Getting stored scheme error. Scheme data = ", data);
         }
     });
 }
 
 // 3d схемы
 $("#3d").click(function () {
-    // get3D();
+    var t = Date.now();
+    // //console.log(" today = ", today);
+    // var milliseconds = today.getMilliseconds();
+    // //console.log(" milliseconds = ", milliseconds);
+
     make3d();
+    // today = Date();
+    t = Date.now() - t;
+    console.log(" delta t = ", t);
 });
 
 
 function saveScheme() {
     var data = {};
     var d = {};
-    // ////console.log("elements= ", elements)
+    // //////console.log("elements= ", elements)
     d.elements = elements;
     d.lines = lines;
     d.points = points;
@@ -804,8 +811,8 @@ function saveScheme() {
     data.d = d;
     data.checked = false;
     data["csrfmiddlewaretoken"] = csrf_token;
-    ////console.log("data до JSON = ", data)
-    ////console.log("data после JSON, но до пересылки = ", data)
+    //////console.log("data до JSON = ", data)
+    //////console.log("data после JSON, но до пересылки = ", data)
     $.ajax({
         url: 'get_response',
         type: 'POST',
@@ -814,10 +821,10 @@ function saveScheme() {
         async: false,
         success: function (data) {
             schemeChange = false;
-            ////console.log("Схема сохранена = ", data);
+            //////console.log("Схема сохранена = ", data);
         },
         error: function () {
-            ////console.log("Ошибка сохранения схемы");
+            //////console.log("Ошибка сохранения схемы");
         }
     });
 }
@@ -832,7 +839,7 @@ $("#check").click(function () {
     if (schemeChange) { // если схема менялась, то 
         alert("Проект был изменен. Сначала сохраните изменения")
     } else if (!checked) {
-        ////console.log("checked = ", checked);
+        //////console.log("checked = ", checked);
         checkPlan();
     }
 });
@@ -849,10 +856,10 @@ function postPlan() {
         type: 'GET',
         data: data,
         success: function (data) {
-            ////console.log("Выкладка проекта завершена. Подробности:", data);
+            //////console.log("Выкладка проекта завершена. Подробности:", data);
         },
         error: function () {
-            ////console.log("Ошибка при выкладке проекта. data = ", data);
+            //////console.log("Ошибка при выкладке проекта. data = ", data);
         }
     });
 }
@@ -866,10 +873,10 @@ function checkPlan() {
         // cache: false,
         // async: false,
         success: function (data) {
-            ////console.log("Проверка завершилась. Посмотреть ошибки:", data);
+            //////console.log("Проверка завершилась. Посмотреть ошибки:", data);
         },
         error: function () {
-            ////console.log("Ошибка проверки проекта. data = ", data);
+            //////console.log("Ошибка проверки проекта. data = ", data);
         }
     });
 }
@@ -879,7 +886,7 @@ $(document).ready(function () {
     $('#straight').trigger('click'); // делаем нажатой кнопку прямая
     $('#wall').trigger('click'); // делаем нажатой кнопку стена
     $('#none').trigger('click'); // делаем нажатой кнопку сброс
-    // //console.log("$('#none')", $('#none'));
+    // ////console.log("$('#none')", $('#none'));
     $('#floor_1').trigger('click'); // делаем нажатой кнопку уровень первого этажа
 });
 
@@ -918,7 +925,7 @@ $("#calculate").click(function () {
     var arrayOfChecked = [];
     $('.alg_filter[type="checkbox"]:checked').each(function () {
         arrayOfChecked.push(this.id)
-        //////console.log('arrayOfChecked = ', arrayOfChecked);    
+        ////////console.log('arrayOfChecked = ', arrayOfChecked);    
     });
 
     // отправляем на сервер массив с выбранными фильтрами, в ответ получаем список посчитаных вариантов
@@ -929,10 +936,10 @@ $("#calculate").click(function () {
         cache: true,
         //async: false,
         success: function (data) {
-            ////console.log(" d = ", data);
+            //////console.log(" d = ", data);
         },
         error: function () {
-            ////console.log("Getting cost error. Scheme data = ", data);
+            //////console.log("Getting cost error. Scheme data = ", data);
         }
     });
 
@@ -983,13 +990,13 @@ function getWallVertices(wall_line, roof_line) {
     for (p of roof_points.values()) {
         if (straightAffiliation(point0, point1, p)) {
             var roof_point_height = p.height;
-            // //console.log("p = ", p);
+            // ////console.log("p = ", p);
             // if (straightAffiliation(point0, point1, p)) {
-            // //console.log("enter");
+            // ////console.log("enter");
             if (p.is_floor_1 == true) roof_point_height = roof_point_height + parseInt(levels.get('floor_1').height);
             if (p.is_floor_2 == true) roof_point_height = roof_point_height + parseInt(levels.get('floor_2').height);
             if (p.is_floor_3 == true) roof_point_height = roof_point_height + parseInt(levels.get('floor_3').height);
-            //console.log("roof_point_height = ", roof_point_height);
+            ////console.log("roof_point_height = ", roof_point_height);
             pre_point = { x: p.x, y: roof_point_height, z: p.y, type: "wall" }; // это верхняя точка на данном участке
             figurePoints.push(pre_point);
             pre_point = { x: p.x, y: 0, z: p.y, type: "wall" }; // а это точка под нею
@@ -998,7 +1005,7 @@ function getWallVertices(wall_line, roof_line) {
             // }
         }
     }
-    //console.log("figurePoints = ", figurePoints);
+    ////console.log("figurePoints = ", figurePoints);
     // }
     // }
     // }
@@ -1067,7 +1074,7 @@ function getWallVertices(wall_line, roof_line) {
 
     }
     // теперь когда у нас есть массив  точек , нужно удалить повторяющиеся:
-    //console.log("figurePoints после окон но до удаления повторов= ", figurePoints);
+    ////console.log("figurePoints после окон но до удаления повторов= ", figurePoints);
     var vertices = [];
     vertices.push(figurePoints[0]);
     for (i = 0; i < figurePoints.length; i++) {
@@ -1081,7 +1088,7 @@ function getWallVertices(wall_line, roof_line) {
             vertices.push(figurePoints[i]);
         }
     }
-    //console.log(" vertices = ", vertices);
+    ////console.log(" vertices = ", vertices);
     return vertices;
 }
 
@@ -1115,7 +1122,7 @@ function get2DFrom3DVerticesRoof(vertices) {
             verts2D.push(p);
         }
     }
-    //console.log("verts2D = ", verts2D);
+    ////console.log("verts2D = ", verts2D);
     return verts2D;
 }
 
@@ -1141,7 +1148,7 @@ function getRoofVertices(element) {
     }
 
     // теперь когда у нас есть массив  точек , нужно удалить повторяющиеся:
-    //console.log("roof figurePoints = ", figurePoints);
+    ////console.log("roof figurePoints = ", figurePoints);
     var vertices = [];
     vertices.push(figurePoints[0]);
     for (i = 0; i < figurePoints.length; i++) {
@@ -1155,15 +1162,15 @@ function getRoofVertices(element) {
             vertices.push(figurePoints[i]);
         }
     }
-    console.log("Draw roof. Roof element = ", element);
-    console.log(" roof vertices = ", vertices);
+    //console.log("Draw roof. Roof element = ", element);
+    //console.log(" roof vertices = ", vertices);
     return vertices;
 }
 
 function calculateRoofPointsHeights(selectedPoints, selectedElements) {
     var roof = [];
     var roof = elements.find(el => el.id == selectedElements[0]);
-    console.log(" roof = ", roof);
+    //console.log(" roof = ", roof);
     // это наш скат
     // выберем все точки первой плоскости, размеры которых надо найти, то есть за вычетом уже выбранных точек
     var targetPoints = [];
@@ -1172,24 +1179,24 @@ function calculateRoofPointsHeights(selectedPoints, selectedElements) {
     var roof_point_2 = points.find(p => p.id == selectedPoints[2]);
     for (line_id of roof.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
         var roof_line = lines.find(line => line.id == line_id); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
-        console.log(" roof_line = ", roof_line);
-        console.log(" selectedPoints = ", selectedPoints);
-        console.log(" selectedPoints.find(point => point == roof_line.id0) = ", selectedPoints.find(point => point == roof_line.id0));
+        //console.log(" roof_line = ", roof_line);
+        //console.log(" selectedPoints = ", selectedPoints);
+        //console.log(" selectedPoints.find(point => point == roof_line.id0) = ", selectedPoints.find(point => point == roof_line.id0));
         if (typeof selectedPoints.find(point => point == roof_line.id0) == "undefined") {
             targetPoints.push(points.find(point => point.id == roof_line.id0));
-            console.log(" Зашли = ");
+            //console.log(" Зашли = ");
         }// проверяем, нет ли этой точки среди тех, чью высоту мы задали
         if (typeof selectedPoints.find(point => point == roof_line.id1) == "undefined") targetPoints.push(points.find(point => point.id == roof_line.id1)); // то есть тех точек, которые в массиве выбранных точек
     }
-    console.log(" targetPoints до = ", targetPoints);
+    //console.log(" targetPoints до = ", targetPoints);
     for (targetPoint of targetPoints.values()) {
         targetPoint.height = calcRoofPointHeight(roof_point_0, roof_point_1, roof_point_2, targetPoint); // Здесть мы определили добавочную высоту искомой точки
         targetPoint.is_floor_1 = roof_point_0.is_floor_1; // добавляем в искомую точку true Или false высот этажей
         targetPoint.is_floor_2 = roof_point_0.is_floor_2;
         targetPoint.is_floor_3 = roof_point_0.is_floor_3;
-        console.log(" targetPoint = ", targetPoint);
+        //console.log(" targetPoint = ", targetPoint);
     }
-    console.log(" targetPoints после = ", targetPoints);
+    //console.log(" targetPoints после = ", targetPoints);
 }
 
 function calcRoofPointHeight(roof_point_0, roof_point_1, roof_point_2, targetPoint) {

@@ -126,8 +126,8 @@ var doorWindowDefault = {
 }
 
 function getLineContext(line, context) {// функуия для получения контекста в зависимоти от формы линии. Если так не сделать, в разных функциях приедтся кодить для кривой
-    // //console.log('points.find(point => point.id == line.id0) = ', points.find(point => point.id == line.id0));
-    // //console.log('points.find(point => point.id == line.id1) = ', points.find(point => point.id == line.id1));
+    // ////console.log('points.find(point => point.id == line.id0) = ', points.find(point => point.id == line.id0));
+    // ////console.log('points.find(point => point.id == line.id1) = ', points.find(point => point.id == line.id1));
     // var point0 = mmToPix(points.find(point => point.id == line.id0));
     // var point1 = mmToPix(points.find(point => point.id == line.id1));
     // if (line.distance > 0) {// если это окружность
@@ -160,10 +160,10 @@ function getLineContext(line, context) {// функуия для получен�
     //     context.moveTo(point0.x, point0.y);
     //     context.lineTo(point1.x, point1.y);
     // }
-    // //console.log("point0.x = ", point0.x);
-    // //console.log("point0.y = ", point0.y);
-    // //console.log("point1.x = ", point1.x);
-    // //console.log("point1.y = ", point1.y);
+    // ////console.log("point0.x = ", point0.x);
+    // ////console.log("point0.y = ", point0.y);
+    // ////console.log("point1.x = ", point1.x);
+    // ////console.log("point1.y = ", point1.y);
     // return context;
 }
 
@@ -180,14 +180,14 @@ function drawPoint(p, color, diameter) {
 }
 
 function drawShape(element, context, drawSettings) {
-    //   //console.log("drawSettings = ", drawSettings);
+    //   ////console.log("drawSettings = ", drawSettings);
     // var ctx = context;
     var line = [];
     context.strokeStyle = drawSettings.strokeStyle;
     context.lineWidth = drawSettings.lineWidth;
     context.fillStyle = drawSettings.fillStyle;
     context.globalAlpha = drawSettings.globalAlpha;
-    // //console.log("drawSettings.blur = ", drawSettings.blur);
+    // ////console.log("drawSettings.blur = ", drawSettings.blur);
     if (selectedElements.find(sel => sel == element.id) >= 0) { // если данный элемент в массиве выделенных
         context.shadowBlur = 30;
         context.shadowColor = "black";
@@ -198,14 +198,14 @@ function drawShape(element, context, drawSettings) {
     // найдем первую точку
     line = lines.find(line => line.id == element.ids[0]);
     context.moveTo(mmToPix(points.find(point => point.id == line.id0)).x, mmToPix(points.find(point => point.id == line.id0)).y);
-    // //console.log("delement.ids.values() = ", element.ids.values());
+    // ////console.log("delement.ids.values() = ", element.ids.values());
     for (line_id of element.ids.values()) {
-        // //console.log("line_id= ", line_id);
+        // ////console.log("line_id= ", line_id);
         line = lines.find(line => line.id == line_id);
         var point0 = mmToPix(points.find(point => point.id == line.id0));
         var point1 = mmToPix(points.find(point => point.id == line.id1));
         if (line.distance > 0) {// если это окружность
-            // //console.log("окружность ");
+            // ////console.log("окружность ");
             var middle = [];
             middle.x = Math.min(point0.x, point1.x) + Math.abs(point0.x - point1.x) / 2;
             middle.y = Math.min(point0.y, point1.y) + Math.abs(point0.y - point1.y) / 2;
@@ -234,13 +234,13 @@ function drawShape(element, context, drawSettings) {
         } else { // если это не окружность, значит это просто прямая
             // context.moveTo(point0.x, point0.y);
             context.lineTo(point1.x, point1.y);
-            // //console.log("element= ", element);
-            // //console.log("lineTo= ", point1);
+            // ////console.log("element= ", element);
+            // ////console.log("lineTo= ", point1);
         }
     }
 
 
-    // //console.log("context.fillStyle= ", context.fillStyle);
+    // ////console.log("context.fillStyle= ", context.fillStyle);
     // S.closePath();
     // context.fillStyle = "red";
     // context.strokeStyle = "blue";
@@ -256,13 +256,13 @@ function drawShape(element, context, drawSettings) {
 // рисуем линию, в зависимости от содержимого прямую или кривую
 function drawLine(line, context, drawSettings) {
 
-    // //console.log("line = ", line);
+    // ////console.log("line = ", line);
     // context.strokeStyle = drawSettingsDefault.strokeStyle;
     // context.lineWidth = drawSettingsDefault.lineWidth;
 
     context.lineWidth = drawSettings.lineWidth;
-    // //console.log("selectedLines = ", selectedLines);
-    // //console.log("selectedLines.findIndex(sel => sel == line.id) = ", selectedLines.findIndex(sel => sel == line.id));
+    // ////console.log("selectedLines = ", selectedLines);
+    // ////console.log("selectedLines.findIndex(sel => sel == line.id) = ", selectedLines.findIndex(sel => sel == line.id));
     if (selectedLines.findIndex(sel => sel == line.id) >= 0) { // если данный элемент в массиве выделенных typeof line != "undefined")
         context.strokeStyle = 'lime';
     } else {
@@ -307,12 +307,12 @@ function drawLine(line, context, drawSettings) {
         context.moveTo(point0.x, point0.y);
         context.lineTo(point1.x, point1.y);
     }
-    // //console.log("context = ", context);
+    // ////console.log("context = ", context);
     context.stroke();
 
     // отрисуем окна на этой линии
     for (item of windows.values()) {
-        // //console.log("item = ", item);
+        // ////console.log("item = ", item);
         if (item.line_id == line.id) {
             var x, y;
             var L = lengthLine(point0, point1);
@@ -335,7 +335,7 @@ function drawLine(line, context, drawSettings) {
     }
     // отрисуем doow windows на этой линии
     for (item of doorWindows.values()) {
-        // //console.log("item = ", item);
+        // ////console.log("item = ", item);
         if (item.line_id == line.id) {
             var x, y;
             var L = lengthLine(point0, point1);
@@ -359,7 +359,7 @@ function drawLine(line, context, drawSettings) {
 
     // отрисуем openings на этой линии
     for (item of openings.values()) {
-        // //console.log("item = ", item);
+        // ////console.log("item = ", item);
         if (item.line_id == line.id) {
             var x, y;
             var L = lengthLine(point0, point1);
@@ -384,7 +384,7 @@ function drawLine(line, context, drawSettings) {
 
 
 function drawWindow(x, y, context, drawSettings) {
-    // //console.log("drawShape element = ", element);
+    // ////console.log("drawShape element = ", element);
     context.strokeStyle = drawSettings.strokeStyle;
     context.lineWidth = drawSettings.lineWidth;
     context.fillStyle = drawSettings.fillStyle;
@@ -429,7 +429,7 @@ function drawOpening(x, y, context, drawSettings) {
 }
 
 function drawDoorWindow(x, y, context, drawSettings) {
-    // //console.log("drawShape element = ", element);
+    // ////console.log("drawShape element = ", element);
     context.strokeStyle = drawSettings.strokeStyle;
     context.lineWidth = drawSettings.lineWidth;
     context.fillStyle = drawSettings.fillStyle;
@@ -514,7 +514,7 @@ function drawDoorWindow(x, y, context, drawSettings) {
 // let key = "мир";
 // let firstPos = hello.indexOf(key);
 function drawElement(element) {
-    // //console.log('drawElement element! = ', element);
+    // ////console.log('drawElement element! = ', element);
     drawSettings = drawSettingsDefault;
     if (element.type == 'wall') { // если это стена
         if (selectedElements.findIndex(sel => sel == element.id)) { // если данный элемент в массиве выделенных
@@ -611,7 +611,7 @@ function drawElement(element) {
         drawShape(element, ctx_0, drawSettingsGarage);
     } else if (element.type == 'roof') { // если это пол кровля
         drawShape(element, ctx_0, drawSettingsRoof);
-        // //console.log("drawSettingsGarage == ", drawSettingsGarage)
+        // ////console.log("drawSettingsGarage == ", drawSettingsGarage)
         // } else if ((element.type == 'roof') && (element.level == level)) {
         //     if ((element.highSide != '') && (element.angle != 0) && (element.height != 0)) { // если еще не заданы настройки крыши, даем эо понять цветом
         //         drawSettings = {
@@ -693,7 +693,7 @@ function createRoofModalDialog() {
         // var is_floor_2 = roof_point.is_floor_2;
         // var is_floor_3 = roof_point.is_floor_3;
         // var height = roof_point.height;
-        // //console.log("roof_point = ", roof_point);
+        // ////console.log("roof_point = ", roof_point);
 
         if (selectedPoints.length > 0) { // если выбрана хоть одна точка
             $('#roof_dialog').append('<p><label><input type="checkbox" id="is_floor_1"  />Высота 1 этажа</label></p>');
@@ -791,14 +791,14 @@ $("#stage").bind('contextmenu', function (e) {
             }
         }
         if (selectedElements.length == num) {
-            // //console.log('type  = ', type);
+            // ////console.log('type  = ', type);
             switch (type) {
                 case 'wall':
-                    // //console.log("num = ", num);
+                    // ////console.log("num = ", num);
                     $('#wall_dialog').dialog("open");
                     break;
                 case 'roof':
-                    //console.log("roof r.cl = ");
+                    ////console.log("roof r.cl = ");
                     createRoofModalDialog();
                     $('#roof_dialog').dialog("open");
                     break;
@@ -817,7 +817,7 @@ function applyWallData() {
     for (sel of selectedElements.values()) {
         for (el of elements.values()) {
             if (el.id == sel) {
-                // ////console.log("sel = ", sel);
+                // //////console.log("sel = ", sel);
                 var a = bearType + "_" + liveType;
                 if (bearType == "bearing") {
                     a = a + "_" + outdoorType;
@@ -830,7 +830,7 @@ function applyWallData() {
     selectedElements = [];
     schemeChange = true;
     drawElements();
-    // //console.log("elements = ", elements);
+    // ////console.log("elements = ", elements);
 }
 // добавление данных о кровле
 function applyRoofData() {
@@ -864,7 +864,7 @@ function applyRoofData() {
     selectedPoints = [];
     schemeChange = true;
     drawElements();
-    // //console.log("elements = ", elements);
+    // ////console.log("elements = ", elements);
 }
 
 function setSameData() {

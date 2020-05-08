@@ -117,7 +117,7 @@ function make3d() {
 
 
     function getWallLine3dCoords(wall_line) {
-        console.log("wall_line = ", wall_line);
+        //console.log("wall_line = ", wall_line);
 
         var intersection_0 = new Map();// расстояние от первой точки линии стены до найденного пересечения луча, проведенного произвольно из этой точки до пересечения со скатом
         var intersection_1 = new Map();
@@ -138,14 +138,14 @@ function make3d() {
         for (roof_element of elements.values()) {
             if (roof_element.type == "roof") {
                 for (lin_id of roof_element.ids.values()) {
-                    console.log("**************** new roof line ************");
+                    //console.log("**************** new roof line ************");
                     var roof_line = lines.find(l => l.id == lin_id);
-                    console.log("roof_line = ", roof_line);
+                    //console.log("roof_line = ", roof_line);
                     var roof_point0 = points.find(point => point.id == roof_line.id0);
                     var roof_point1 = points.find(point => point.id == roof_line.id1);
                     var roof_line_points = [];
                     roof_line_points.push(roof_point0, roof_point1);
-                    // console.log("roof_line_points до добавления высоты = ", roof_line_points);
+                    // //console.log("roof_line_points до добавления высоты = ", roof_line_points);
                     // определим высоту кровельных точек
                     for (k = 0; k < 2; k++) {
                         var roof_point_height = roof_line_points[k].height;
@@ -154,7 +154,7 @@ function make3d() {
                         if (roof_line_points[k].is_floor_3 == true) roof_point_height = roof_point_height + levels.get('floor_3').height;
                         roof_line_points[k].total_height = roof_point_height;
                     }
-                    // console.log("roof_line_points после добавления высоты = ", roof_line_points);
+                    // //console.log("roof_line_points после добавления высоты = ", roof_line_points);
                     // далее находим пересечения линии стены с данной гранью
                     //найдем коээфициенты уравнения прямой линии кровли
                     var k_roof = undefined;
@@ -175,7 +175,7 @@ function make3d() {
                             common_p.x = (b_roof - b_wall) / (k_wall - k_roof);
                             common_p.y = k_wall * common_p.x + b_wall;
                         }
-                        console.log("common_p = ", common_p);
+                        //console.log("common_p = ", common_p);
                         // проверяем, лежит ли найденная точка на прямой линии стены и на лиии кровли
                         if ((typeof common_p.x != "undefined") && straightAffiliation(wall_point0, wall_point1, common_p) && straightAffiliation(roof_point0, roof_point1, common_p)) {
                             // если да, то продолжаем только если найденная общая точка не сопадает ни с первой точкой линии чтены, ни с последней
@@ -208,9 +208,9 @@ function make3d() {
                         // теперь проделаем вычисления необходимые для определения ската, внутри которого находятся крайние точки данной линии стены
                         // определим, лежит ли найденная точка пересечения внутри данной линии ребра ската, то есть луч построенный по отрезку стены, пульнул прсямо в данное ребро, а не только в луч по нему построеннвй
                         // if ((typeof common_p.x != "undefined") && straightAffiliation(roof_point0, roof_point1, common_p)) {
-                        //     console.log("yes= ");
-                        //     console.log("wall_point0.x = ", wall_point0.x);
-                        //     console.log("common_p.x = ", common_p.x);
+                        //     //console.log("yes= ");
+                        //     //console.log("wall_point0.x = ", wall_point0.x);
+                        //     //console.log("common_p.x = ", common_p.x);
                         //     if (wall_point0.x < common_p.x) { // учитываем пересечения только с одной стороны от точки
                         //         var item_intersec = intersection_0.get(roof_element.id);
                         //         if (typeof item_intersec == "undefined") {
@@ -247,10 +247,10 @@ function make3d() {
                         //     }
                         // }
 
-                        // console.log("intersection_0 = ", intersection_0);
-                        // console.log("intersection_1 = ", intersection_1);
+                        // //console.log("intersection_0 = ", intersection_0);
+                        // //console.log("intersection_1 = ", intersection_1);
                         // if ((typeof common_p.x != "undefined") && straightAffiliation(roof_point0, roof_point1, common_p)) {
-                        //     console.log("yes= ");
+                        //     //console.log("yes= ");
                         //     // если да, то определим расстояние от каждой точки линии стены до этой точки
                         //     var interDist = {
                         //         dist: lengthLine(wall_point0, common_p),
@@ -271,15 +271,15 @@ function make3d() {
                     for (d = 0; d < 2; d++) {
                         // найдем коэффициенты произвольной прямой, которую будем использовать для поиска пересечений с гранями для определения ската, внутри которого лежит точка стены
                         //найдем коээфициенты уравнения прямой линии стены
-                        console.log("wall_points[d] = ", wall_points[d]);
+                        //console.log("wall_points[d] = ", wall_points[d]);
                         var plus_x = 11;
                         var plus_y = 465;
                         // var new_point_x = wall_points[d].x + plus_x;
                         // var new_point_y = wall_points[d].y + plus_y;
                         k_x = plus_y / plus_x;
                         b_x = ((wall_points[d].x + plus_x) * wall_points[d].y - wall_points[d].x * (wall_points[d].y + plus_y)) / plus_x;
-                        console.log("k_x = ", k_x);
-                        console.log("b_x = ", b_x);
+                        //console.log("k_x = ", k_x);
+                        //console.log("b_x = ", b_x);
                         var common_x = [];
 
                         common_x.x = (b_roof - b_x) / (k_x - k_roof);
@@ -294,7 +294,7 @@ function make3d() {
                         }
                         pp = mmToPix(pp);
                         drawPoint(pp, "red", 3);
-                        console.log("common_x = ", common_x);
+                        //console.log("common_x = ", common_x);
                         // проверяем, лежит ли найденный х на прямой линии кровельного ребра а еще и смотрим только в одну сторону
                         if ((typeof common_x.x != "undefined") && straightAffiliation(roof_point0, roof_point1, common_x) && (common_x.x > wall_points[d].x) && (common_x.y > wall_points[d].y)) {
                             if (d == 0) {
@@ -330,24 +330,24 @@ function make3d() {
         var id_roof_wall_points = [];
         var roof_0_id, roof_1_id;
         for (item of intersection_0) {
-            console.log("item of intersection_0 = ", item);
+            //console.log("item of intersection_0 = ", item);
             if (Math.abs(item[1] % 2) == 1) {
                 roof_0_id = item[0];
             }
         }
         for (item of intersection_1) {
-            console.log("item of intersection_1 = ", item);
+            //console.log("item of intersection_1 = ", item);
             if (Math.abs(item[1] % 2) == 1) {
                 roof_1_id = item[0];
             }
         }
         id_roof_wall_points.push(roof_0_id, roof_1_id);
 
-        console.log("id_roof_wall_points = ", id_roof_wall_points);
+        //console.log("id_roof_wall_points = ", id_roof_wall_points);
         // var dis_to_intersec = [];
         // dis_to_intersec.push(distance_to_intersection_0);
         // dis_to_intersec.push(distance_to_intersection_1);
-        // console.log("dis_to_intersec = ", dis_to_intersec);
+        // //console.log("dis_to_intersec = ", dis_to_intersec);
         // разберемся с координатами точек над точками линии стены
 
         for (i = 0; i < 2; i++) {
@@ -361,7 +361,7 @@ function make3d() {
             //     id_roof_wall_point = item.roof_id;
             // }
 
-            console.log("id_roof_wall_point = ", id_roof_wall_point);
+            //console.log("id_roof_wall_point = ", id_roof_wall_point);
 
             // Зная, в какие скаты попадают наши крайние точки, определяем их высоту
             // сначала, зная id ската, найдем его три любые точки для составления уравнения плоскости
@@ -390,7 +390,7 @@ function make3d() {
                 flat_points.push(flat_point);
             }
 
-            console.log("flat_points  = ", flat_points);
+            //console.log("flat_points  = ", flat_points);
             // определим третью координату наших точек плоскости - высоту
 
             var a, b, c, f, h, m, o, s;
@@ -426,8 +426,8 @@ function make3d() {
             };
             line3dPoints.push(common_p);
         }
-        console.log("points = ", points);
-        console.log("line3dPoints = ", line3dPoints);
+        //console.log("points = ", points);
+        //console.log("line3dPoints = ", line3dPoints);
         // если есть грань, общая для двух скатов, то там  будут дубликаты точек. Удалим их.
         var result = [];
         result.push({
@@ -453,13 +453,13 @@ function make3d() {
         for (element of elements.values()) { // отрисуем стены
             if (element.type == "wall") {
                 for (line_id of element.ids.values()) {
-                    console.log("line_id = ", line_id);
+                    //console.log("line_id = ", line_id);
                     var wall_line = lines.find(li => li.id == line_id);
                     var vert3D = getWallLine3dCoords(wall_line);
-                    console.log("vert3D = ", vert3D);
+                    //console.log("vert3D = ", vert3D);
                     if (vert3D.length >= 3) {
                         vert2D = get2DFrom3DVertices(vert3D);
-                        console.log("vert2D = ", vert2D);
+                        //console.log("vert2D = ", vert2D);
                         var geometry = new THREE.Geometry();
                         for (v of vert3D.values()) {
                             var a = new THREE.Vector3(v.x, v.height, v.y);
@@ -470,7 +470,7 @@ function make3d() {
                             var a = new THREE.Face3(triangles[i], triangles[i + 1], triangles[i + 2]);
                             geometry.faces.push(a);
                         }
-                        console.log("geometry = ", geometry);
+                        //console.log("geometry = ", geometry);
                         geometry.computeVertexNormals();
                         var material = new THREE.MeshPhongMaterial({ color: 0x44aa88, side: THREE.DoubleSide }); // side: THREE.DoubleSide, // отрисовка обратной стороны. Замедляет, и не всегда нужна
                         var cube = new THREE.Mesh(geometry, material);
@@ -496,7 +496,7 @@ function make3d() {
     //     if (element.type == "wall") {
     //         for (line_id of element.ids.values()) {
     //             var wall_line = lines.find(li => li.id == line_id);
-    //             // //console.log("line = ", line);
+    //             // ////console.log("line = ", line);
     //             for (element of elements.values()) {
     //                 if (element.type == "roof") {
     //                     for (lin_id of element.ids.values()) {
@@ -510,14 +510,14 @@ function make3d() {
     //                                 var a = new THREE.Vector3(v.x, v.y, v.z);
     //                                 geometry.vertices.push(a);
     //                             }
-    //                             //console.log("vert2D = ", vert2D);
+    //                             ////console.log("vert2D = ", vert2D);
     //                             var triangles = Delaunay.triangulate(vert2D);
-    //                             // //console.log("triangles = ", triangles);
+    //                             // ////console.log("triangles = ", triangles);
     //                             for (i = 0; i < triangles.length; i = i + 3) {
     //                                 var a = new THREE.Face3(triangles[i], triangles[i + 1], triangles[i + 2]);
     //                                 geometry.faces.push(a);
     //                             }
-    //                             // //console.log("geometry = ", geometry);
+    //                             // ////console.log("geometry = ", geometry);
     //                             // удалим из геометрии стены все имеющиеся ниши под окна, двери и т.д.
     //                             for (j = geometry.faces.length - 1; j >= 0; j--) {
     //                                 var flag_a = false;
@@ -547,7 +547,7 @@ function make3d() {
     //                             // geometry.computeFaceNormals();
     //                             // geometry.computeFlatVertexNormals();
     //                             geometry.computeVertexNormals();
-    //                             // //console.log("geometry = ", geometry);
+    //                             // ////console.log("geometry = ", geometry);
     //                             var material = new THREE.MeshPhongMaterial({ color: 0x44aa88, side: THREE.DoubleSide }); // side: THREE.DoubleSide, // отрисовка обратной стороны. Замедляет, и не всегда нужна
     //                             var cube = new THREE.Mesh(geometry, material);
     //                             scene.add(cube);
@@ -605,7 +605,7 @@ function make3d() {
         }
     }
     drawRoof();
-    // //console.log("geometry delete transparent= ", geometry);
+    // ////console.log("geometry delete transparent= ", geometry);
 
     // geometry.vertices.push(
     //     new THREE.Vector3(-1, -1, 1),  // 0
@@ -646,7 +646,7 @@ function make3d() {
     // const saturation = 1;
     // const luminance = .5;
     // material.color.setHSL(hue, saturation, luminance);
-    // //console.log('material = ', material);
+    // ////console.log('material = ', material);
 
     // 
 
@@ -665,7 +665,7 @@ function make3d() {
     // requestAnimationFrame(render);
     function render() {
         // time *= 0.001;  // конвертировать время в секунды
-        // //console.log('mousePos3d = ', mousePos3d);
+        // ////console.log('mousePos3d = ', mousePos3d);
         // cube.rotation.y = - mousePos3d.x / 100;
         // cube.rotation.x = mousePos3d.y / 100;   
         // camera.position.x = mousePos3d.y;
@@ -677,7 +677,7 @@ function make3d() {
 
 
         requestAnimationFrame(render);
-        // //console.log("camera.position = ", camera.position);
+        // ////console.log("camera.position = ", camera.position);
         controls.update();
         renderer.render(scene, camera);
     }
