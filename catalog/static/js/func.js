@@ -775,11 +775,11 @@ function getScheme() {
                 checked = p.checked;
                 drawAxeSize();
                 drawElements();
-                // //////console.log(" Scheme data d = ", d);
+                console.log(" Scheme data d = ", d);
             }
         },
         error: function () {
-            //////console.log("Getting stored scheme error. Scheme data = ", data);
+            console.log("Getting stored scheme error. Scheme data = ", data);
         }
     });
 }

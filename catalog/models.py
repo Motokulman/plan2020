@@ -4,8 +4,8 @@ from suppliers.models import Provider
 from suppliers.models import Manufacturer
 from geography.models import City
 from brands.models import Brand
-from names.models import *
-from materials.models import *
+# from names.models import *
+# from materials.models import *
 # from materials.models import *
 # Used to generate URLs by reversing the URL patterns
 from django.urls import reverse

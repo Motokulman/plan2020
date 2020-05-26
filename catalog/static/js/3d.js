@@ -28,97 +28,8 @@ function make3d() {
         scene.add(light);
     }
 
-    // функция определения в какой скат попадает каждая точка
-    // function defRoofAroundPoint() {
-    //     // построим из каждой точки линии стены лучи, и запишем пересечение с данной линией кровли. Если все 4 луча пересеклись с линиями одной и той же кровли, мы внутри нее.
-    //     var distance_to_intersection = new Map(); // Для счета пересечений и расстояний до них - для опеделения, внутри какого ската находится точка
-    //     for (point of points.values()) {
-    //         for (roof of elements.values()) {
-    //             if (roof.type == "roof") {
-    //                 for (lin_id of roo.ids.values()) {
-    //                     var roof_line = lines.find(l => l.id == lin_id);
-    //                     var roof_point0 = points.find(point => point.id == roof_line.id0);
-    //                     var roof_point1 = points.find(point => point.id == roof_line.id1);
-    //                     // var roof_line_points = [];
-    //                     // roof_line_points.push(roof_point0, roof_point1);
-    //                     // луч, параллельный оси х. То есть у постоянен:
-    //                     if (((point.y <= roof_point0.y) && (point.y >= roof_point1.y)) || ((point.y >= roof_point0.y) && (point.y <= roof_point1.y))) {
-    //                         // определим расстояние от точки до грани кровли
-    //                         var A = roof_point0.y - roof_point1.y;
-    //                         var B = roof_point1.x - roof_point0.x;
-    //                         var C = roof_point0.x * roof_point1.y - roof_point1.x * roof_point0.y;
-    //                         var dist = Math.abs(A * point.x + B * point.y + C) / Math.sqrt(Math.pow(A, 2) + Math.pow(B, 2));
-    //                         // путаемся получить элемент массива счетчика пересечений
-    //                         var map_item = dis
-
-    //                         if (typeof map_item == "undefined") { // если такого ската у нас еще нет, то
-    //                             var t = {
-    //                                 count: 1,
-    //                                 dist: dist
-    //                             }
-    //                             distance_to_intersection.set(roof.id, t);
-    //                         } else {
-    //                             var new_dist = map_item.dist + dist;
-    //                             var new_count = map_item.count + 1;
-    //                             distance_to_intersection.set(roof.id, {
-    //                                 count: new_count,
-    //                                 dist: new_dist
-    //                             });
-    //                         }
-    //                     }
-    //                     // луч, параллельный оси y. То есть x постоянен:
-    //                     if (((point.x <= roof_point0.x) && (point.x >= roof_point1.x)) || ((point.x >= roof_point0.x) && (point.x <= roof_point1.x))) {
-    //                         // определим расстояние от точки до грани кровли
-    //                         var A = roof_point0.y - roof_point1.y;
-    //                         var B = roof_point1.x - roof_point0.x;
-    //                         var C = roof_point0.x * roof_point1.y - roof_point1.x * roof_point0.y;
-    //                         var dist = Math.abs(A * point.x + B * point.y + C) / Math.sqrt(Math.pow(A, 2) + Math.pow(B, 2));
-    //                         // путаемся получить элемент массива счетчика пересечений
-    //                         var map_item = distance_to_intersection.get(roof.id);
-
-    //                         if (typeof map_item == "undefined") { // если такого ската у нас еще нет, то
-    //                             var t = {
-    //                                 count: 1,
-    //                                 dist: dist
-    //                             }
-    //                             distance_to_intersection.set(roof.id, t);
-    //                         } else {
-    //                             var new_dist = map_item.dist + dist;
-    //                             var new_count = map_item.count + 1;
-    //                             distance_to_intersection.set(roof.id, {
-    //                                 count: new_count,
-    //                                 dist: new_dist
-    //                             });
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         } // конец перебора кровли
-    //         // теперь мы можем понять, внутри какой кровли данная точка
-    //         var max_count = 0;
-    //         var roof_id;
-    //         var equal_amount = [];
-    //         for (item of distance_to_intersection) {
-    //             if (item.count > max_count) {
-    //                 max_count = item.count;
-    //                 equal_amount = [];
-    //                 equal_amount.push({
-    //                     roof_id: item.keys(),
-    //                     dist = item.dist
-    //                 })
-    //             } else if (item.count = max_count) { // еси вдруг нам попалось ес
-
-    //             }
-    //         }
-
-
-    //     }
-    // }
-
 
     function getWallLine3dCoords(wall_line) {
-        //console.log("wall_line = ", wall_line);
-
         var intersection_0 = new Map();// расстояние от первой точки линии стены до найденного пересечения луча, проведенного произвольно из этой точки до пересечения со скатом
         var intersection_1 = new Map();
         var line3dPoints = []; // массив 3д точек для каждой линии стены
@@ -198,73 +109,9 @@ function make3d() {
                                     }
                                 }
                                 line3dPoints.push(common_p);
+
                             }
                         }
-
-
-
-
-
-                        // теперь проделаем вычисления необходимые для определения ската, внутри которого находятся крайние точки данной линии стены
-                        // определим, лежит ли найденная точка пересечения внутри данной линии ребра ската, то есть луч построенный по отрезку стены, пульнул прсямо в данное ребро, а не только в луч по нему построеннвй
-                        // if ((typeof common_p.x != "undefined") && straightAffiliation(roof_point0, roof_point1, common_p)) {
-                        //     //console.log("yes= ");
-                        //     //console.log("wall_point0.x = ", wall_point0.x);
-                        //     //console.log("common_p.x = ", common_p.x);
-                        //     if (wall_point0.x < common_p.x) { // учитываем пересечения только с одной стороны от точки
-                        //         var item_intersec = intersection_0.get(roof_element.id);
-                        //         if (typeof item_intersec == "undefined") {
-                        //             intersection_0.set(roof_element.id, 1);
-                        //         } else {
-                        //             var count = item_intersec + 1;
-                        //             intersection_0.set(roof_element.id, count);
-                        //         }
-                        //     } else if ((wall_point0.x == common_p.x) && (wall_point0.y < common_p.y)) { // если параллельна оси у, то х постоянен, и поэтому проверяем по у
-                        //         var item_intersec = intersection_0.get(roof_element.id);
-                        //         if (typeof item_intersec == "undefined") {
-                        //             intersection_0.set(roof_element.id, 1);
-                        //         } else {
-                        //             var count = item_intersec + 1;
-                        //             intersection_0.set(roof_element.id, count);
-                        //         }
-                        //     }
-                        //     if (wall_point1.x < common_p.x) { // учитываем пересечения только с одной стороны от точки
-                        //         var item_intersec = intersection_1.get(roof_element.id);
-                        //         if (typeof item_intersec == "undefined") {
-                        //             intersection_1.set(roof_element.id, 1);
-                        //         } else {
-                        //             var count = item_intersec + 1;
-                        //             intersection_1.set(roof_element.id, count);
-                        //         }
-                        //     } else if ((wall_point1.x == common_p.x) && (wall_point1.y < common_p.y)) {
-                        //         var item_intersec = intersection_1.get(roof_element.id);
-                        //         if (typeof item_intersec == "undefined") {
-                        //             intersection_1.set(roof_element.id, 1);
-                        //         } else {
-                        //             var count = item_intersec + 1;
-                        //             intersection_1.set(roof_element.id, count);
-                        //         }
-                        //     }
-                        // }
-
-                        // //console.log("intersection_0 = ", intersection_0);
-                        // //console.log("intersection_1 = ", intersection_1);
-                        // if ((typeof common_p.x != "undefined") && straightAffiliation(roof_point0, roof_point1, common_p)) {
-                        //     //console.log("yes= ");
-                        //     // если да, то определим расстояние от каждой точки линии стены до этой точки
-                        //     var interDist = {
-                        //         dist: lengthLine(wall_point0, common_p),
-                        //         roof_id: roof_element.id
-                        //     }
-                        //     distance_to_intersection_0.push(interDist);
-                        //     interDist = {
-                        //         dist: lengthLine(wall_point1, common_p),
-                        //         roof_id: roof_element.id
-                        //     }
-                        //     distance_to_intersection_1.push(interDist);
-                        // }
-
-
 
                     } //if
 
@@ -446,7 +293,9 @@ function make3d() {
                 result.push(line3dPoints[i]);
             }
         }
+        console.log("result = ", result);
         return result;
+        
     }
 
     function drawWalls() {
@@ -457,7 +306,7 @@ function make3d() {
                     var wall_line = lines.find(li => li.id == line_id);
                     var vert3D = getWallLine3dCoords(wall_line);
                     //console.log("vert3D = ", vert3D);
-                    if (vert3D.length >= 3) {
+                    if (vert3D.length >= 3) { // если это не колонна 
                         vert2D = get2DFrom3DVertices(vert3D);
                         //console.log("vert2D = ", vert2D);
                         var geometry = new THREE.Geometry();
@@ -483,6 +332,8 @@ function make3d() {
                         line.material.opacity = 0.25;
                         line.material.transparent = true;
                         scene.add(line);
+                    } else { // если это колонна, то есть всего две координаты, то делаем из нее объемную фигуру и рисуем
+
                     }
                 }
             }
@@ -492,86 +343,7 @@ function make3d() {
     drawWalls();
 
 
-    // for (element of elements.values()) { // отрисуем стены
-    //     if (element.type == "wall") {
-    //         for (line_id of element.ids.values()) {
-    //             var wall_line = lines.find(li => li.id == line_id);
-    //             // ////console.log("line = ", line);
-    //             for (element of elements.values()) {
-    //                 if (element.type == "roof") {
-    //                     for (lin_id of element.ids.values()) {
-    //                         var roof_line = lines.find(l => l.id == lin_id);
-    //                         vert3D = getWallVertices(wall_line, roof_line);
-    //                         if (vert3D.length >= 3) {
-    //                             vert2D = get2DFrom3DVertices(vert3D);
 
-    //                             var geometry = new THREE.Geometry();
-    //                             for (v of vert3D.values()) {
-    //                                 var a = new THREE.Vector3(v.x, v.y, v.z);
-    //                                 geometry.vertices.push(a);
-    //                             }
-    //                             ////console.log("vert2D = ", vert2D);
-    //                             var triangles = Delaunay.triangulate(vert2D);
-    //                             // ////console.log("triangles = ", triangles);
-    //                             for (i = 0; i < triangles.length; i = i + 3) {
-    //                                 var a = new THREE.Face3(triangles[i], triangles[i + 1], triangles[i + 2]);
-    //                                 geometry.faces.push(a);
-    //                             }
-    //                             // ////console.log("geometry = ", geometry);
-    //                             // удалим из геометрии стены все имеющиеся ниши под окна, двери и т.д.
-    //                             for (j = geometry.faces.length - 1; j >= 0; j--) {
-    //                                 var flag_a = false;
-    //                                 var flag_b = false;
-    //                                 var flag_c = false;
-    //                                 var id_a;
-    //                                 var id_b;
-    //                                 var id_c;
-    //                                 for (i = 0; i < vert2D.length; i++) {
-    //                                     if (vert3D[i].type == "transparent") {
-    //                                         if (geometry.faces[j].a == i) {
-    //                                             flag_a = true;
-    //                                             id_a = vert3D[i].id;
-    //                                         }
-    //                                         if (geometry.faces[j].b == i) {
-    //                                             flag_b = true;
-    //                                             id_b = vert3D[i].id;
-    //                                         }
-    //                                         if (geometry.faces[j].c == i) {
-    //                                             flag_c = true;
-    //                                             id_c = vert3D[i].id;
-    //                                         }
-    //                                     }
-    //                                 }
-    //                                 if ((flag_a) && (flag_b) && (flag_c) && (id_a == id_b) && (id_b == id_c)) geometry.faces.splice(j, 1);
-    //                             }
-    //                             // geometry.computeFaceNormals();
-    //                             // geometry.computeFlatVertexNormals();
-    //                             geometry.computeVertexNormals();
-    //                             // ////console.log("geometry = ", geometry);
-    //                             var material = new THREE.MeshPhongMaterial({ color: 0x44aa88, side: THREE.DoubleSide }); // side: THREE.DoubleSide, // отрисовка обратной стороны. Замедляет, и не всегда нужна
-    //                             var cube = new THREE.Mesh(geometry, material);
-    //                             scene.add(cube);
-    //                             renderer.render(scene, camera);
-
-    //                             var wireframe = new THREE.WireframeGeometry(geometry);
-    //                             var line = new THREE.LineSegments(wireframe);
-    //                             line.material.depthTest = false;
-    //                             line.material.opacity = 0.25;
-    //                             line.material.transparent = true;
-    //                             scene.add(line);
-    //                         }
-    //                     }
-    //                 }
-    //             }
-
-
-
-
-    //         }
-    //     }
-    //     vert3D = [];
-    //     vert2D = [];
-    // }
 
     function drawRoof() {// отрисуем кровлю
         for (element of elements.values()) { // бежим по всем имеющимся элементам

@@ -18,7 +18,7 @@ var points = []; // Массив точек в миллиметрах. Перв�
 var zeroPointPadding = { 'x': 0, 'y': 0 }; // Смещение начала координат схемы относительно начала координат канвы. Попробуем в мм.
 var lines = []; // Массив связей между точками. 
 var elements = []; // Фигура, содержит массив элементов и закон их взаимодействия
-// var roof_elements = []; // Кровельные
+var vents = []; // Вентканалы
 var windows = []; // Содержит окна в стенах
 var doorWindows = []; // Выход на балкон: окно(а) с дверью
 var openings = []; // Проходные проемы, либо с дверью, либо без
@@ -88,6 +88,13 @@ var drawSettingsWindow = {
     bottom: 800 // расстояние от пола до подоконника
 }
 
+var drawSettingsVent = {
+    strokeStyle: 'black',
+    lineWidth: 2,
+    fillStyle: "lime",
+    globalAlpha: 1,
+    blur: false,
+}
 var drawSettingsOpening = {
     strokeStyle: 'black',
     lineWidth: 2,
@@ -125,47 +132,11 @@ var doorWindowDefault = {
     doorHeight: 2000
 }
 
-function getLineContext(line, context) {// функуия для получения контекста в зависимоти от формы линии. Если так не сделать, в разных функциях приедтся кодить для кривой
-    // ////console.log('points.find(point => point.id == line.id0) = ', points.find(point => point.id == line.id0));
-    // ////console.log('points.find(point => point.id == line.id1) = ', points.find(point => point.id == line.id1));
-    // var point0 = mmToPix(points.find(point => point.id == line.id0));
-    // var point1 = mmToPix(points.find(point => point.id == line.id1));
-    // if (line.distance > 0) {// если это окружность
-    //     var middle = [];
-    //     middle.x = Math.min(point0.x, point1.x) + Math.abs(point0.x - point1.x) / 2;
-    //     middle.y = Math.min(point0.y, point1.y) + Math.abs(point0.y - point1.y) / 2;
-    //     var radius = lengthLine(point0, point1) / 2;
-    //     if (point0.y == point1.y) {
-    //         if (((line.direction == "left") && (point0.x < point1.x))) {
-    //             context.arc(middle.x, middle.y, radius, 0, Math.PI, true);
-    //         } else if (((line.direction == "right") && (point0.x < point1.x))) {
-    //             context.arc(middle.x, middle.y, radius, 0, Math.PI, false);
-    //         } else if (((line.direction == "left") && (point0.x > point1.x))) {
-    //             context.arc(middle.x, middle.y, radius, Math.PI, 0, true);
-    //         } else if (((line.direction == "right") && (point0.x > point1.x))) {
-    //             context.arc(middle.x, middle.y, radius, Math.PI, 0, false);
-    //         }
-    //     } else if (point0.x == point1.x) {
-    //         if (((line.direction == "left") && (point0.y < point1.y))) {
-    //             context.arc(middle.x, middle.y, radius, Math.PI / 2, 3 * Math.PI / 2, true);
-    //         } else if (((line.direction == "right") && (point0.y < point1.y))) {
-    //             context.arc(middle.x, middle.y, radius, Math.PI / 2, 3 * Math.PI / 2, false);
-    //         } else if (((line.direction == "right") && (point0.y > point1.y))) {
-    //             context.arc(middle.x, middle.y, radius, 3 * Math.PI / 2, Math.PI / 2, false);
-    //         } else if (((line.direction == "left") && (point0.y > point1.y))) {
-    //             context.arc(middle.x, middle.y, radius, 3 * Math.PI / 2, Math.PI / 2, true);
-    //         }
-    //     }
-    // } else { // если это не окружность, значит это просто прямая
-    //     context.moveTo(point0.x, point0.y);
-    //     context.lineTo(point1.x, point1.y);
-    // }
-    // ////console.log("point0.x = ", point0.x);
-    // ////console.log("point0.y = ", point0.y);
-    // ////console.log("point1.x = ", point1.x);
-    // ////console.log("point1.y = ", point1.y);
-    // return context;
+var ventDefault = {
+    quantity: 3 // количество вентканалов
+
 }
+
 
 
 // рисуем точку
@@ -356,7 +327,29 @@ function drawLine(line, context, drawSettings) {
             drawDoorWindow(x, y, ctx_0, drawSettingsWindow);
         }
     }
-
+    // отрисуем vent на этой линии
+    for (item of vents.values()) {
+        // ////console.log("item = ", item);
+        if (item.line_id == line.id) {
+            var x, y;
+            var L = lengthLine(point0, point1);
+            var rate = item.distance / scale;
+            rate = rate / L;
+            x = Math.abs((point0.x - point1.x)) * rate;
+            y = Math.abs((point0.y - point1.y)) * rate;
+            if (point0.x <= point1.x) {
+                x = x + point0.x;
+            } else {
+                x = point0.x - x;
+            }
+            if (point0.y <= point1.y) {
+                y = y + point0.y;
+            } else {
+                y = point0.y - y;
+            }
+            drawVent(x, y, ctx_0, drawSettingsVent);
+        }
+    }
     // отрисуем openings на этой линии
     for (item of openings.values()) {
         // ////console.log("item = ", item);
@@ -467,52 +460,46 @@ function drawDoorWindow(x, y, context, drawSettings) {
 
 }
 
+function drawVent(x, y, context, drawSettings) {
+    // ////console.log("drawShape element = ", element);
+    context.strokeStyle = drawSettings.strokeStyle;
+    context.lineWidth = drawSettings.lineWidth;
+    context.fillStyle = drawSettings.fillStyle;
+    context.globalAlpha = drawSettings.globalAlpha;
+    if (drawSettings.blur == true) {
+        context.shadowBlur = 5;
+        context.shadowColor = "green";
+    }
+    context.beginPath();
+    context.moveTo(x - 16, y - 10);
+    context.lineTo(x - 5, y - 10);
+    context.lineTo(x - 5, y + 2);
+    context.lineTo(x - 16, y + 2);
+    context.closePath();
+    context.stroke();
+    context.fill();
 
-// функция рисования окружности 
-// function drawCircleElement(element, context, color, blur) {
-//     context.beginPath();
-//     // поскольку мы пока упростили и при создании окружности она становится правильным полукругом, то центр окружности тупо середина базовой линии
-//     var line = lines.find(line => line.id == element.ids[0]); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
-//     var point0 = mmToPix(points.find(point => point.id == line.id0)); // ищем и заносим в первую точку для рисования линии id первой точки сразу переводя в пиксели
-//     var point1 = mmToPix(points.find(point => point.id == line.id1)); // ищем и заносим в первую точку для рисования линии id первой точки сразу переводя в пиксели
-//     drawPoint(point0);
-//     drawPoint(point1);
-//     var middle = [];
-//     middle.x = Math.min(point0.x, point1.x) + Math.abs(point0.x - point1.x) / 2;
-//     middle.y = Math.min(point0.y, point1.y) + Math.abs(point0.y - point1.y) / 2;
-//     var radius = lengthLine(point0, point1) / 2;
-//     if (point0.y == point1.y) {
-//         if (((element.direction == "left") && (point0.x < point1.x))) {
-//             context.arc(middle.x, middle.y, radius, 0, Math.PI, true);
-//         } else if (((element.direction == "right") && (point0.x < point1.x))) {
-//             context.arc(middle.x, middle.y, radius, 0, Math.PI, false);
-//         } else if (((element.direction == "left") && (point0.x > point1.x))) {
-//             context.arc(middle.x, middle.y, radius, Math.PI, 0, true);
-//         } else if (((element.direction == "right") && (point0.x > point1.x))) {
-//             context.arc(middle.x, middle.y, radius, Math.PI, 0, false);
-//         }
-//     } else if (point0.x == point1.x) {
-//         if (((element.direction == "left") && (point0.y < point1.y))) {
-//             context.arc(middle.x, middle.y, radius, Math.PI / 2, 3 * Math.PI / 2, true);
-//         } else if (((element.direction == "right") && (point0.y < point1.y))) {
-//             context.arc(middle.x, middle.y, radius, Math.PI / 2, 3 * Math.PI / 2, false);
-//         } else if (((element.direction == "right") && (point0.y > point1.y))) {
-//             context.arc(middle.x, middle.y, radius, 3 * Math.PI / 2, Math.PI / 2, false);
-//         } else if (((element.direction == "left") && (point0.y > point1.y))) {
-//             context.arc(middle.x, middle.y, radius, 3 * Math.PI / 2, Math.PI / 2, true);
-//         }
-//     }
-//     context.strokeStyle = color;
-//     if (blur == true) {
-//         context.shadowBlur = 5;
-//         context.shadowColor = "blue";
-//     }
-//     context.stroke();
-// }
+    context.beginPath();
+    context.moveTo(x - 5, y - 10);
+    context.lineTo(x + 5, y - 10);
+    context.lineTo(x + 5, y + 10);
+    context.lineTo(x - 5, y + 10);
+    context.closePath();
+    context.stroke();
+    context.fill();
 
-// let hello = "привет мир. пока мир";
-// let key = "мир";
-// let firstPos = hello.indexOf(key);
+    context.beginPath();
+    context.moveTo(x + 6, y - 10);
+    context.lineTo(x + 16, y - 10);
+    context.lineTo(x + 16, y + 2);
+    context.lineTo(x + 6, y + 2);
+    context.closePath();
+    context.stroke();
+    context.fill();
+
+}
+
+
 function drawElement(element) {
     // ////console.log('drawElement element! = ', element);
     drawSettings = drawSettingsDefault;

@@ -305,17 +305,18 @@ canvas_0.addEventListener('click', function (e) {
                         newLine = { p0_id: findMaxId(points) + prePointsMM.length - 1, p1_id: findMaxId(points) + 1 };
                         newLines.push(newLine);
                         prePointsMM.pop(); // удалим последний элемент массива точк, поскольку последняя точка равна первой
-                        switch (level) { // в зависимости от текущего уровня сохраняем точки предустанавливая их высоту
-                            case 'floor_1':
-                                pushPoints(prePointsMM, true, false, false, 0);
-                                break;
-                            case 'floor_2':
-                                pushPoints(prePointsMM, true, true, false, 0);
-                                break;
-                            case 'floor_3':
-                                pushPoints(prePointsMM, true, true, true, 0);
-                                break;
-                        }
+                        pushPoints(prePointsMM, true, false, false, 0); // кровлю задаем потом отдельно, поэтому по умолчанию пока поставим на первом этаже
+                        // switch (level) { // в зависимости от текущего уровня сохраняем точки предустанавливая их высоту
+                        //     case 'floor_1':
+                        //         pushPoints(prePointsMM, true, false, false, 0);
+                        //         break;
+                        //     case 'floor_2':
+                        //         pushPoints(prePointsMM, true, true, false, 0);
+                        //         break;
+                        //     case 'floor_3':
+                        //         pushPoints(prePointsMM, true, true, true, 0);
+                        //         break;
+                        // }
 
                         for (line of newLines.values()) {
                             pushLine(line.p0_id, line.p1_id, line.distance, line.direction); // занесли в массив линий нашу новую линию
@@ -478,6 +479,24 @@ canvas_0.addEventListener('click', function (e) {
                     newLines = [];
                     pushPrePointMM(mmOfMousePos);
                     drawPoint(mousePos);
+                }
+                break;
+            case 'vent':
+                var set = defineElement("wall");
+                var l;
+                var point0;
+                var point1;
+                var line;
+                var newVent = [];
+                var elem = elements.find(element => element.id == set.element_id);
+                var line = lines.find(line => line.id == set.line_id);
+                if ((typeof line != "undefined") && (elem.type == "wall")) {
+                    point0 = points.find(point => point.id == line.id0);
+                    l = lengthLine(point0, mmOfMousePos); // пока такой вариант: не доли и не проценты, а точное расстояние, т.к. если пользователь точно введет это расстояние, оно должно сохраниться как миллиметры
+                    // ////console.log("item = ", item);
+                    newVent = { line_id: line.id, distance: l, settings: ventDefault };
+                    vents.push(newVent);
+                    drawVent(mousePos.x, mousePos.y, ctx_0, drawSettingsVent);
                 }
                 break;
             case 'steps': // ступеньки при входе в дом
