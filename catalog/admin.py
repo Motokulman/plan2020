@@ -44,7 +44,7 @@ admin.site.register(Plan)
 # class PileGrillageFoundationWorkPricesAdmin(admin.ModelAdmin):
 #     list_display = ('const_expenditure', 'transportation_procurement_cost', 'owner')
 
-@admin.register(Profile)
-class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['user', 'city']
+# @admin.register(Profile)
+# class ProfileAdmin(admin.ModelAdmin):
+#     list_display = ['user', 'city']
 

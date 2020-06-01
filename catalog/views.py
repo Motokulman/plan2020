@@ -17,7 +17,7 @@ from django.contrib.auth.models import Permission, Group
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
-from catalog.forms import UserRegistrationForm, UserEditForm, ProfileEditForm
+# from catalog.forms import UserRegistrationForm, UserEditForm, ProfileEditForm
 import json
 
 
@@ -79,19 +79,19 @@ def edit_scheme(request, pk):
 
     # a, b = calc.calc(request)
     plan_scheme = plan.scheme
-    if plan_scheme != None:
+    # if plan_scheme != None:
         # test = calc.calc_variants(request, pk)
-        # city = get_city()
-        algorithms = calc.get_algorithms(calc.get_materials(
-            calc.get_city(request)))  # получили уникальные алгоритмы
-        algorithms = serializers.serialize('json', algorithms)
-    else:
-        algorithms = "Нет данных"
+    #     # city = get_city()
+    #     algorithms = calc.get_algorithms(calc.get_materials(
+    #         calc.get_city(request)))  # получили уникальные алгоритмы
+    #     algorithms = serializers.serialize('json', algorithms)
+    # else:
+    #     algorithms = "Нет данных"
 
     context = {
         'plan_title': plan_title,
         'plan_id': plan_id,
-        'test': algorithms,
+        # 'test': algorithms,
     }
 
     return render(request, 'catalog/edit_scheme.html', context)
@@ -113,39 +113,39 @@ def edit_variant(request, pk):
     return render(request, 'catalog/edit_variant.html', context)
 
 
-# Создаем нового пользователя
-def register(request):
-    if request.method == 'POST':
-        user_form = UserRegistrationForm(request.POST)
-        if user_form.is_valid():
-            # Создаем нового пользователя, но пока не сохраняем в базу данных.
-            new_user = user_form.save(commit=False)
-            # Задаем пользователю зашифрованный пароль.
-            new_user.set_password(user_form.cleaned_data['password'])
-            # Сохраняем пользователя в базе данных.
-            new_user.save()
-            # Создание профиля пользователя
-            Profile.objects.create(user=new_user)
-            return render(request, 'register/register_done.html', {'new_user': new_user})
-    else:
-        user_form = UserRegistrationForm()
-    return render(request, 'register/register.html', {'user_form': user_form})
+# # Создаем нового пользователя
+# def register(request):
+#     if request.method == 'POST':
+#         user_form = UserRegistrationForm(request.POST)
+#         if user_form.is_valid():
+#             # Создаем нового пользователя, но пока не сохраняем в базу данных.
+#             new_user = user_form.save(commit=False)
+#             # Задаем пользователю зашифрованный пароль.
+#             new_user.set_password(user_form.cleaned_data['password'])
+#             # Сохраняем пользователя в базе данных.
+#             new_user.save()
+#             # Создание профиля пользователя
+#             Profile.objects.create(user=new_user)
+#             return render(request, 'register/register_done.html', {'new_user': new_user})
+#     else:
+#         user_form = UserRegistrationForm()
+#     return render(request, 'register/register.html', {'user_form': user_form})
 
 
-# Изменение профиля пользователя
-@login_required
-def edit(request):
-    if request.method == 'POST':
-        user_form = UserEditForm(instance=request.user, data=request.POST)
-        profile_form = ProfileEditForm(
-            instance=request.user.profile, data=request.POST, files=request.FILES)
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-    else:
-        user_form = UserEditForm(instance=request.user)
-        profile_form = ProfileEditForm(instance=request.user.profile)
-    return render(request, 'register/edit.html', {'user_form': user_form, 'profile_form': profile_form})
+# # Изменение профиля пользователя
+# @login_required
+# def edit(request):
+#     if request.method == 'POST':
+#         user_form = UserEditForm(instance=request.user, data=request.POST)
+#         profile_form = ProfileEditForm(
+#             instance=request.user.profile, data=request.POST, files=request.FILES)
+#         if user_form.is_valid() and profile_form.is_valid():
+#             user_form.save()
+#             profile_form.save()
+#     else:
+#         user_form = UserEditForm(instance=request.user)
+#         profile_form = ProfileEditForm(instance=request.user.profile)
+#     return render(request, 'register/edit.html', {'user_form': user_form, 'profile_form': profile_form})
 
 
 def set_scheme(request, pk):

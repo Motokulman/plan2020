@@ -20,13 +20,33 @@
       <div class="col-12 col-md-12">
         <div id="nav">
           <a href="{% url 'index' %}" class="btn ">Главная</a>
+          <a href="{% url 'index'%}?next={{request.path}}" class="btn ">Пользователь: {{ user.get_username }}</a>
           {% if user.is_authenticated %}
+          {% if request.user.is_authenticated %}
+          <ul class="menu">
+            <li {% if section == "dashboard" %} class="selected" {% endif %}>
+              <a href="{% url 'dashboard' %}">Личный кабинет</a>
+            </li>
+
+          </ul>
+          {% endif %}
+          <span class="user">
+            {% if request.user.is_authenticated %}
+            Hello {{ request.user.first_name }},
+            <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+            <a href="{% url 'login' %}">Log-in</a>
+            {% endif %}
+          </span>
+
+
+
           <a href="{% url 'index'%}?next={{request.path}}" class="btn ">Пользователь: {{ user.get_username }}</a>
 
           <a href="{% url 'logout'%}?next={{request.path}}" class="btn ">Выйти</a>
           {% else %}
           <a href="{% url 'login'%}?next={{request.path}}" class="btn ">Войти</a>
-          <a href="{% url 'register'%}?next={{request.path}}" class="btn ">Регистрация</a>
+   
           {% endif %}
         </div>
         <div class="col-sm-12 ">{% block content %}{% endblock %}</div>
@@ -39,9 +59,9 @@
     <li><a href="{% url 'plans' %}">Мои проекты</a></li>
     <li><a href="">Мои цены на материалы</a></li>
     <!--  url 'my-wall-materials-prices'  -->
-    <li><a href="">Мои цены на работы/услуги</a></li> 
+    <li><a href="">Мои цены на работы/услуги</a></li>
     <!--  url 'my-work-prices'  -->
-    <li><a href="{% url 'edit' %}">Мой профиль</a></li>
+
 
     {% endif %}
 

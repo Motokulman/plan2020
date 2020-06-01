@@ -4,8 +4,8 @@ from suppliers.models import Provider
 from suppliers.models import Manufacturer
 from geography.models import City
 from brands.models import Brand
-# from names.models import *
-# from materials.models import *
+from names.models import *
+from materials.models import *
 # from materials.models import *
 # Used to generate URLs by reversing the URL patterns
 from django.urls import reverse
@@ -14,6 +14,67 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission, Group
 from django.contrib.postgres.fields import JSONField
 
+
+class Algorithm(models.Model):
+    """Модель, представляющая алгоритм расчета стены"""
+    identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
+                                  help_text='Имя переменной, идентификатор для исопльзования в коде')
+    name = models.CharField(unique=True, max_length=200,
+                            help_text='Название для понимания')
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Алгоритм'
+        verbose_name_plural = 'Алгоритмы'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.name}, {self.identifier}'
+
+
+class Plan(models.Model):
+    """Модель, представляющая Информацию о проекте"""
+    title = models.CharField(max_length=200)
+    # Автор проекта. Если копировать один и тот же проект автор не меняется!
+    scheme = JSONField(null=True, blank=True)
+    author = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Автор')
+    # проверен проект или нет. Проверенные доступны к выкладыванию в системе. Расчет происходит при выкладывании
+    checked = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = 'Проект'
+        verbose_name_plural = 'Проекты'
+
+    def __str__(self):
+        """String for representing the Plan object."""
+        return self.title
+
+    def get_absolute_url(self):
+        """Returns the url to access a detail record for this Plan."""
+        return reverse('plan-detail', args=[str(self.id)])
+
+# Расширение модели пользователя для хранения настроек
+
+
+# class Profile(models.Model):
+#     # user = models.OneToOneField(settings.AUTH_USER_MODEL,
+#     #                             on_delete=models.CASCADE)
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL,
+#                              on_delete=models.CASCADE)
+
+#     city = models.ForeignKey(
+#         City, help_text='Выберите город', on_delete=models.SET_NULL, null=True, blank=True)
+
+#     # provider = models.ManyToManyField('Provider',
+#     #                          help_text='Выберите поставщика, которому принадлежит этот офис,торговая точка', blank=True)
+
+#     class Meta:
+#         verbose_name = 'Профиль пользователя'
+#         verbose_name_plural = 'Профили пользователей'
+
+#     def __str__(self):
+#         return 'Профиль пользователя {}'.format(self.user.username)
 
 # Добавим классу пользователя новые поля, в которых будем хранить настройки
 
@@ -138,22 +199,6 @@ from django.contrib.postgres.fields import JSONField
 #         """String for representing the Model object."""
 #         return self.name
 
-class Algorithm(models.Model):
-    """Модель, представляющая алгоритм расчета стены"""
-    identifier = models.CharField(unique=True, default='default_identifier', max_length=200,
-                                  help_text='Имя переменной, идентификатор для исопльзования в коде')
-    name = models.CharField(unique=True, max_length=200,
-                            help_text='Название для понимания')
-
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Алгоритм'
-        verbose_name_plural = 'Алгоритмы'
-
-    def __str__(self):
-        """String for representing the Model object."""
-        return f'{self.name}, {self.identifier}'
-
 
 # class Factory(models.Model):
 #     """Модель, представляющая завод - непосредственного производителя материала. Например, Кощаковский завод, Чайковский и т.д. Какой-нибудь местный завод может производить под маркой Wienerberger например"""
@@ -215,7 +260,7 @@ class Algorithm(models.Model):
 
 #     usage = models.ManyToManyField(
 #         GridUsage, help_text='Выберите применение данной сетки', related_name='secondary_activity')
-    
+
 #     brand = models.ForeignKey(
 #         'Brand', help_text='Выберите бренд (например, Wienerberger), если есть', on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -308,7 +353,7 @@ class Algorithm(models.Model):
 #                             help_text='Регион', null=True, blank=True)
 #     heating_period_duration = models.IntegerField(help_text='Продолжительность отопительного периода, сут. СНиП 23-01-99 "Строительная климатология и геофизика". См. Таблица 1, столбец 11', null=True, blank=True)  # СНиП 23-01-99 "Строительная климатология и геофизика". См. Таблица 1, столбец 11, https://www.teplo-info.com/snip/otopitelniy_period
 #     heating_period_temperature = models.FloatField(help_text='РАЗДЕЛИТЕЛЬ - ТОЧКА. Средняя температура отопительного периода, град. C. столбец 12', null=True, blank=True)  # СНиП 23-01-99 "Строительная климатология и геофизика". См. Таблица 1, столбец 12, https://www.teplo-info.com/snip/otopitelniy_period
- 
+
 #     class Meta:
 #         ordering = ('name',)
 #         verbose_name = 'Город'
@@ -335,7 +380,7 @@ class Algorithm(models.Model):
 # class Region(models.Model):
 #     """Модель, представляющая список регионов стран"""
 #     name = models.CharField(unique=True, max_length=200,
-#                             help_text='Введите регион')    
+#                             help_text='Введите регион')
 #     code = models.IntegerField(unique=True,
 #                             help_text='Цифровой код региона', null=True, blank=True)
 #     country = models.ForeignKey('Country', on_delete=models.CASCADE,
@@ -354,7 +399,7 @@ class Algorithm(models.Model):
 # class DecorativeBrickFace(models.Model):
 #     """Модель, представляющая названия декоративных граней рядовых кирпичей """
 #     name = models.CharField(max_length=200,
-#                             help_text='Название рисунка') 
+#                             help_text='Название рисунка')
 #     brand = models.ManyToManyField('Brand',
 #                              help_text='Бренд,который делает такой рисунок на своих кирпичах. М.б.несколько', blank=True)
 
@@ -389,13 +434,6 @@ class Algorithm(models.Model):
 
 
 
-
-
-
-
-
-
-
 # class MasonryBonding(models.Model):
 #     """Модель хранящая способы скрепления кладки"""
 #     name = models.CharField(
@@ -412,7 +450,7 @@ class Algorithm(models.Model):
 #         default='cement',
 #         help_text='Тип раствора',
 #     )
-    
+
 #     REINFORCEMENT = (
 #         ('metal', 'Металлическая сетка'),
 #         ('plastic', 'Пластиковая сетка'),
@@ -425,7 +463,7 @@ class Algorithm(models.Model):
 #         choices=REINFORCEMENT,
 #         default='metal',
 #         help_text='Армирование',
-#     )    
+#     )
 
 #     REINFORCING_BELT = (
 #         ('yes', 'Требуется'),
@@ -462,14 +500,6 @@ class Algorithm(models.Model):
 
 
 
-
-
-
-
-
-
-
-
 # class Customization(models.Model):
 #     """Модель, представляющая индивидуальные настройки для проекта, привязанные к самому проекту или к пользователю"""
 #     # У пользователя может быть множество кастомизаций, по которым он сравнивает проекты. У проекта - только одна.
@@ -490,66 +520,15 @@ class Algorithm(models.Model):
 #         return reverse('plan-detail', args=[str(self.id)])
 
 
-class Plan(models.Model):
-    """Модель, представляющая Информацию о проекте"""
-    title = models.CharField(max_length=200)
-    # Автор проекта. Если копировать один и тот же проект автор не меняется!
-    scheme = JSONField(null=True, blank=True)
-    author = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Автор')
-    checked = models.BooleanField(default=False) # проверен проект или нет. Проверенные доступны к выкладыванию в системе. Расчет происходит при выкладывании
-    # Кастомизация проекта. Если нет, то нет. Если есть, то высчитываем цену.
-    # customization = models.ForeignKey(
-    #     Customization, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Кастомизация')
-
-    # paddingX = models.IntegerField(null=True, blank=True)
-    # paddingY = models.IntegerField(null=True, blank=True)
-    # scheme_scale = models.FloatField(
-        # null=True, blank=True, verbose_name='Масштаб схемы')
-
-    class Meta:
-        verbose_name = 'Проект'
-        verbose_name_plural = 'Проекты'
-
-    def __str__(self):
-        """String for representing the Plan object."""
-        return self.title
-
-    def get_absolute_url(self):
-        """Returns the url to access a detail record for this Plan."""
-        return reverse('plan-detail', args=[str(self.id)])
-
-# Расширение модели пользователя для хранения настроек
-
-
-class Profile(models.Model):
-    # user = models.OneToOneField(settings.AUTH_USER_MODEL,
-    #                             on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                                on_delete=models.CASCADE)
-    
-    city = models.ForeignKey(
-        City, help_text='Выберите город', on_delete=models.SET_NULL, null=True, blank=True)
-
-    # provider = models.ManyToManyField('Provider',
-    #                          help_text='Выберите поставщика, которому принадлежит этот офис,торговая точка', blank=True)
-
-    class Meta:
-        verbose_name = 'Профиль пользователя'
-        verbose_name_plural = 'Профили пользователей'
-
-    def __str__(self):
-        return 'Профиль пользователя {}'.format(self.user.username)
-
 # class PlanCityCost(models.Model):
 #     """Модель используется для хранения минимальных цен на строительство проектов для быстрого поиска"""
 #     plan = models.ForeignKey(Plan, on_delete=models.CASCADE, null=True)
 #     city = models.ForeignKey(City, on_delete=models.CASCADE, null=True)
-#     material = models.ForeignKey(RockWallMaterialUnit, on_delete=models.CASCADE, null=True)   
+#     material = models.ForeignKey(RockWallMaterialUnit, on_delete=models.CASCADE, null=True)
 #     cost = models.IntegerField(blank=True, null=True)
 
 #     class Meta:
-#         ordering = ['material', 'cost'] 
+#         ordering = ['material', 'cost']
 #         verbose_name = 'Минимальная цена строительства'
 #         verbose_name_plural = 'Минимальные цены строительства'
 

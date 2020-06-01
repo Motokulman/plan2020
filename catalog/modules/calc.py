@@ -1,4 +1,5 @@
 from catalog.models import *
+from account.models import *
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission, Group
 from catalog.modules import solid_ceramic_brick

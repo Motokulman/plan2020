@@ -596,7 +596,7 @@ function drawElement(element) {
         drawShape(element, ctx_0, drawSettingsDefault);
     } else if ((element.type == 'floor') && (element.subType == 'garage')) { // если это пол гаража 
         drawShape(element, ctx_0, drawSettingsGarage);
-    } else if (element.type == 'roof') { // если это пол кровля
+    } else if (element.type == 'roof') { // если это кровля
         drawShape(element, ctx_0, drawSettingsRoof);
         // ////console.log("drawSettingsGarage == ", drawSettingsGarage)
         // } else if ((element.type == 'roof') && (element.level == level)) {

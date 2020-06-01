@@ -25,14 +25,14 @@ urlpatterns += [
 ]
 
 # Создание пользователя
-urlpatterns += [
-    path('register/', views.register, name='register'),
-]
+# urlpatterns += [
+#     path('register/', views.register, name='register'),
+# ]
 
-# Изменение настроек пользователя - редактирование профиля
-urlpatterns += [
-    path('edit/', views.edit, name='edit'),
-]
+# # Изменение настроек пользователя - редактирование профиля
+# urlpatterns += [
+#     path('edit/', views.edit, name='edit'),
+# ]
 
 # Редактирование варианта
 urlpatterns += [

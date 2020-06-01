@@ -746,10 +746,10 @@ function drawHVLine(type) {
 
 // Сохранение схемы
 $("#save").click(function () {
-    // if (schemeChange) { // если схема менялась
-    //     saveScheme();
-    //     checked = false;
-    // }
+    if (schemeChange) { // если схема менялась
+        saveScheme();
+        checked = false;
+    }
 });
 
 // Воспроизведение схемы
@@ -771,11 +771,16 @@ function getScheme() {
                 lines = d.lines;
                 points = d.points;
                 scale = d.scale;
+                vents = d.vents;
+                windows = d.windows;
+                doorWindows = d.doorWindows;
+                openings = d.openings;
                 zeroPointPadding = d.zeroPointPadding;
                 checked = p.checked;
                 drawAxeSize();
                 drawElements();
-                console.log(" Scheme data d = ", d);
+                make3d();
+                console.log(" Данные = ", d);
             }
         },
         error: function () {
@@ -786,25 +791,29 @@ function getScheme() {
 
 // 3d схемы
 $("#3d").click(function () {
-    var t = Date.now();
+    // var t = Date.now();
     // //console.log(" today = ", today);
     // var milliseconds = today.getMilliseconds();
     // //console.log(" milliseconds = ", milliseconds);
 
     make3d();
     // today = Date();
-    t = Date.now() - t;
-    console.log(" delta t = ", t);
+    // t = Date.now() - t;
+    // console.log(" delta t = ", t);
 });
 
 
 function saveScheme() {
     var data = {};
     var d = {};
-    // //////console.log("elements= ", elements)
+    console.log("elements при сохранении= ", elements)
     d.elements = elements;
     d.lines = lines;
     d.points = points;
+    d.vents = vents;
+    d.windows = windows;
+    d.doorWindows = doorWindows;
+    d.openings = openings;
     d.scale = scale;
     d.zeroPointPadding = zeroPointPadding;
     d = JSON.stringify(d);
