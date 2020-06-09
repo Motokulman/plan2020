@@ -293,7 +293,7 @@ function make3d() {
                 result.push(line3dPoints[i]);
             }
         }
-        console.log("result = ", result);
+        // console.log("result = ", result);
         return result;
         
     }

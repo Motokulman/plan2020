@@ -1,7 +1,8 @@
 from catalog.models import *
 from catalog.modules import calc
+from materials.models import RoofCoverType
 # from catalog.modules import porotherm44
-
+# from catalog.forms import SelectRoofMaterialTypeForm
 
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -76,7 +77,8 @@ def edit_scheme(request, pk):
     plan = get_object_or_404(Plan, pk=pk)
     plan_title = plan.title
     plan_id = plan.id
-
+    # roof_material = RoofCoverMaterial.objects.all()
+    # test = Plan.objects.all()
     # a, b = calc.calc(request)
     plan_scheme = plan.scheme
     # if plan_scheme != None:
@@ -91,7 +93,7 @@ def edit_scheme(request, pk):
     context = {
         'plan_title': plan_title,
         'plan_id': plan_id,
-        # 'test': algorithms,
+        # 'test': roof_material,
     }
 
     return render(request, 'catalog/edit_scheme.html', context)
@@ -112,40 +114,37 @@ def edit_variant(request, pk):
 
     return render(request, 'catalog/edit_variant.html', context)
 
+# форма создания архиткурного скина
+# def arch_skin(request, pk):
+#     """форма создания архиткурного скина"""
+#     plan = get_object_or_404(Plan, pk=pk)
 
-# # Создаем нового пользователя
-# def register(request):
+#     # If this is a POST request then process the Form data
 #     if request.method == 'POST':
-#         user_form = UserRegistrationForm(request.POST)
-#         if user_form.is_valid():
-#             # Создаем нового пользователя, но пока не сохраняем в базу данных.
-#             new_user = user_form.save(commit=False)
-#             # Задаем пользователю зашифрованный пароль.
-#             new_user.set_password(user_form.cleaned_data['password'])
-#             # Сохраняем пользователя в базе данных.
-#             new_user.save()
-#             # Создание профиля пользователя
-#             Profile.objects.create(user=new_user)
-#             return render(request, 'register/register_done.html', {'new_user': new_user})
-#     else:
-#         user_form = UserRegistrationForm()
-#     return render(request, 'register/register.html', {'user_form': user_form})
 
+#         # Create a form instance and populate it with data from the request (binding):
+#         form = SelectRoofMaterialTypeForm(request.POST)
 
-# # Изменение профиля пользователя
-# @login_required
-# def edit(request):
-#     if request.method == 'POST':
-#         user_form = UserEditForm(instance=request.user, data=request.POST)
-#         profile_form = ProfileEditForm(
-#             instance=request.user.profile, data=request.POST, files=request.FILES)
-#         if user_form.is_valid() and profile_form.is_valid():
-#             user_form.save()
-#             profile_form.save()
+#         # Check if the form is valid:
+#         if form.is_valid():
+#             # process the data in form.cleaned_data as required (here we just write it to the model due_back field)
+#             book_instance.due_back = form.cleaned_data['renewal_date']
+#             book_instance.save()
+
+#             # redirect to a new URL:
+#             return HttpResponseRedirect(reverse('all-borrowed') )
+
+#     # If this is a GET (or any other method) create the default form.
 #     else:
-#         user_form = UserEditForm(instance=request.user)
-#         profile_form = ProfileEditForm(instance=request.user.profile)
-#     return render(request, 'register/edit.html', {'user_form': user_form, 'profile_form': profile_form})
+#         proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
+#         form = RenewBookForm(initial={'renewal_date': proposed_renewal_date})
+
+#     context = {
+#         'form': form,
+#         'book_instance': book_instance,
+#     }
+
+#     return render(request, 'catalog/book_renew_librarian.html', context)
 
 
 def set_scheme(request, pk):

@@ -32,6 +32,33 @@ class Algorithm(models.Model):
         return f'{self.name}, {self.identifier}'
 
 
+class FacadeMaterialType(models.Model):
+    """Типы фасадных (облицовочных) материалов"""
+
+    name = models.CharField(unique=True, max_length=200, help_text='Название для понимания')
+
+    IDENTIFIER = (
+        ('brick', 'Облицовочный кирпич'),
+        ('plaster', 'Штукатурка'),
+        ('tile', 'Плитка'),
+    )
+    identifier = models.CharField(
+        max_length=20,
+        choices=IDENTIFIER,
+        default='brick',
+        help_text='Идентификатор для использования в коде',
+    )
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Тип фасадного (облицовочного) материала'
+        verbose_name_plural = 'Типы фасадных (облицовочных) материалов'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.name}, {self.identifier}'
+
+
 class Plan(models.Model):
     """Модель, представляющая Информацию о проекте"""
     title = models.CharField(max_length=200)
@@ -53,6 +80,46 @@ class Plan(models.Model):
     def get_absolute_url(self):
         """Returns the url to access a detail record for this Plan."""
         return reverse('plan-detail', args=[str(self.id)])
+
+
+
+
+class Shell(models.Model):
+    """Шаблон оформления фасада"""
+    name = models.CharField(max_length=200)
+
+    roof_material_type = models.ForeignKey(RoofCoverType, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Тип материала кровли')
+    roof_material_id = models.IntegerField(help_text='id материала кровли из той таблицы типа материала, который выбрал пользователь')
+
+    SOFFIT_STYLE = (
+        ('horizontal', 'Горизонтальный'),
+        ('inclined', 'Наклонный'),
+    )
+    soffit_style = models.CharField(
+        max_length=20,
+        choices=SOFFIT_STYLE,
+        default='horizontal',
+        help_text='Стиль нижней части свеса',
+    )
+
+    # soffit_material_type = models.ForeignKey(FacadeMaterialType, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Тип материала облицовки цоколя')
+    # soffit_material_id = models.IntegerField(help_text='id материала из той таблицы типа материала, который выбрал пользователь')
+
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Автор')
+
+    wall_material_type_0 = models.ForeignKey(FacadeMaterialType, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Тип материала облицовки основной части стен', related_name='wall_material_type')
+    wall_material_0_id = models.IntegerField(help_text='id материала из той таблицы типа материала, который выбрал пользователь')
+
+    socle_material_type = models.ForeignKey(FacadeMaterialType, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Тип материала облицовки цоколя', related_name='socle_material_type')
+    socle_material_id = models.IntegerField(help_text='id материала из той таблицы типа материала, который выбрал пользователь')
+
+    class Meta:
+        verbose_name = 'Шаблон оформления фасада'
+        verbose_name_plural = 'Шаблоны оформления фасада'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.name}, {self.roof_material}, {self.wall_material_type_0}, {self.socle_material_type}'
 
 # Расширение модели пользователя для хранения настроек
 

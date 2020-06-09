@@ -5,9 +5,9 @@ from catalog.models import *
 
 # admin.site.register(Brand)
 # admin.site.register(SubBrand_1)
-# admin.site.register(SubBrand_2)
+admin.site.register(FacadeMaterialType)
 admin.site.register(Algorithm)
-# admin.site.register(Factory)
+admin.site.register(Shell)
 
 admin.site.register(Plan)
 

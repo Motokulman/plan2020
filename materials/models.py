@@ -6,9 +6,170 @@ from brands.models import *
 from standards.models import *
 from names.models import *
 
+
+class MaterialUse(models.Model):
+    """Области применения материалов"""
+
+    # NAME = (
+    #     ('roof_covering', 'Кровельное покрытие'),
+    #     ('soffit', 'Соффит (подшивка карниза)'),
+    #     ('facade_cladding', 'Облицовка фасада'),
+    #     ('wall', 'Стеновой материал'),
+    #     ('socle_facing', 'Специально (или идеально) для облицовки цоколя'),
+
+    # )
+    name = models.CharField(
+        max_length=200, help_text='Наименование', blank=True, unique = True)
+
+    identifier = models.CharField(
+        max_length=200, help_text='Идентификатор', blank=True, unique = True)
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Назначение материала'
+        verbose_name_plural = 'Назначения материалов'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.name}, {self.identifier}  '
+
+
+class RoofCoverType(models.Model):
+    """Типы кровельных поркрытий"""
+
+    name = models.CharField(
+        max_length=200, help_text='Наименование', blank=True, unique = True)
+
+    identifier = models.CharField(
+        max_length=200, help_text='Идентификатор', blank=True, unique = True)
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Тип кровельного материала'
+        verbose_name_plural = 'Типы кровельных материалов'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.name}, {self.identifier}  '
+
+class MetalTile(models.Model):
+    """Металлочерепица"""
+
+    name = models.CharField(max_length=200, help_text='Наименование', blank=True, unique = True)
+
+    texture = models.URLField(help_text='Путь к текстуре', default='http://asd.ru')
+
+    class Meta:
+        ordering = ('name', )
+        verbose_name = 'Металлочерепица'
+        verbose_name_plural = 'Металлочерепица'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.name} '
+
+
+class FlexibleTile(models.Model):
+    """Гибкая черепица"""
+
+    name = models.CharField(max_length=200, help_text='Наименование', blank=True, unique = True)
+
+    texture = models.URLField(help_text='Путь к текстуре', default='http://asd.ru')
+
+    class Meta:
+        ordering = ('name', )
+        verbose_name = 'Гибкая черепица'
+        verbose_name_plural = 'Гибкая черепица'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.name} '
+
+        
+# class RoofCoverMaterial(models.Model):
+#     """Материалы кровельных покрытий"""
+
+#     name = models.CharField(
+#         max_length=200, help_text='Наименование', blank=True, unique = True)
+
+#     material_type = models.ForeignKey(
+#         RoofCoverType, help_text='Тип материала', on_delete=models.SET_NULL, null=True, blank=True)
+
+#     texture = models.URLField(help_text='Путь к текстуре', default='http://asd.ru')
+
+#     class Meta:
+#         ordering = ('material_type', 'name',)
+#         verbose_name = 'Кровельный материал'
+#         verbose_name_plural = 'Кровлельные материалы'
+
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return f'{self.name}, {self.material_type.name}  '
+
+
+class Siding(models.Model):  
+    """Сайдинг"""
+    
+    MATERIAL = (
+        ('metal', 'Металл'),
+        ('wood', 'Дерево'),
+        ('vinyl', 'Винил'),
+    )
+    material = models.CharField(
+        max_length=20,
+        choices=MATERIAL,
+        default='metal',
+        help_text='Материал',
+    )
+    
+    ALTERNATIVE_NAME = (
+        ('block_house', 'Деревянный блок-хаус'),
+        ('batten', 'Деревянная вагонка'),
+    )
+    alternative_name = models.CharField(
+        max_length=20,
+        choices=ALTERNATIVE_NAME,
+        null=True,
+        blank=True,
+        help_text='Альтернативное название',
+    )
+    use = models.ManyToManyField(
+        MaterialUse, help_text='Выберите область применения данного материала')
+
+    manufacturer = models.ForeignKey(
+        Manufacturer, help_text='Производитель материала', on_delete=models.SET_NULL, null=True, blank=True)
+
+    brand = models.ForeignKey(
+        Brand, help_text='Выберите главный бренд, например, Wienerberger', on_delete=models.SET_NULL, null=True, blank=True)
+
+    texture = models.URLField(help_text='Путь к текстуре')
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f' Металлочерепица {self.use}, {self.brand}, {self.manufacturer}'
+
+
+class Plaster(models.Model):  
+    """Штукатурка"""
+
+    use = models.ManyToManyField(
+        MaterialUse, help_text='Выберите область применения данного материала')
+
+    manufacturer = models.ForeignKey(
+        Manufacturer, help_text='Производитель материала', on_delete=models.SET_NULL, null=True, blank=True)
+
+    brand = models.ForeignKey(
+        Brand, help_text='Выберите главный бренд, например, Wienerberger', on_delete=models.SET_NULL, null=True, blank=True)
+
+    texture = models.URLField(help_text='Путь к текстуре', default='http://asd.ru')
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f' Штукатурка {self.use}, {self.brand}, {self.manufacturer}'
+
 class BulkSand(models.Model):
     """Песок россыпью в самосвалах"""
-    
+
     NAME = (
         ('quarry', 'Карьерный'),
         ('river', 'Речной'),
@@ -18,7 +179,7 @@ class BulkSand(models.Model):
         choices=NAME,
         default='quarry',
         help_text='Тип песка',
-    )    
+    )
     weight = models.IntegerField(help_text='Масса песка в грузовике, тонн')
 
     class Meta:
@@ -30,8 +191,51 @@ class BulkSand(models.Model):
         """String for representing the Model object."""
         return f'{self.name} ({self.weight}) тонн'
 
-class RockWallMaterialUnit(models.Model):
-    """Модель описывает единицу стенового каменного материала, конкретное изделие конкретного производителя. Но без цены."""
+class StoneProductLine(models.Model):
+    """Продуктовые линейки стеновых (самонесущих, т.е. их не надо клеить, они лежат на фундаменте) каменных материалов без размеров, т.к. в линейке м.б. доборные элементы"""
+    
+    name = models.CharField(
+        max_length=200, help_text='Наименование', blank=True)
+
+    use = models.ManyToManyField(
+        MaterialUse, help_text='Выберите область применения данного материала')
+
+    manufacturer = models.ForeignKey(
+        Manufacturer, help_text='Производитель материала', on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        ordering = ('name', )
+        verbose_name = 'Продуктовая линейка кирпича (блока)'
+        verbose_name_plural = 'Продуктовые линейки кирпичей (блоков)'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f' Продуктовая линейка {self.name}, {self.use}'
+
+class StoneUnit(models.Model):
+    """Единица стенового материала из продуктовой линейки. Здесь и основные и доборные элементы одной линейки материала"""
+    
+    name = models.CharField(
+        max_length=200, help_text='Наименование', blank=True)
+    
+    product_line = models.ForeignKey(
+        StoneProductLine, help_text='Продуктовая линейка', on_delete=models.CASCADE, null=True, blank=True)
+
+    texture = models.URLField(help_text='Путь к текстуре', default='http://asd.ru')
+
+    class Meta:
+        ordering = ('name', 'product_line')
+        verbose_name = 'Элемент из продуктовой линейки кирпича (блока)'
+        verbose_name_plural = 'Элементы из продуктовых линеей кирпичей (блоков)'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f' Элмент {self.name}, {self.product_line.name}'
+
+
+
+class RockWallMaterialUnit(models.Model): 
+    """ НЕ НУЖНО БОЛЬШЕ?? Модель описывает единицу стенового каменного материала, конкретное изделие конкретного производителя. Но без цены."""
 
     NAME = (
         ('brick', 'Кирпич'),
@@ -89,13 +293,13 @@ class RockWallMaterialUnit(models.Model):
     #     ('3', '3'),
     #     ('no', 'Не применимо'),
     # )
-    
+
     # min_pix_1_floor = models.CharField(
     #     max_length=3,
     #     choices=MIN_PICS,
     #     default='no',
     #     help_text='Минимальная тощина в кирпичах для 1 этажного дома',
-    # )    
+    # )
 
     # min_pix_2_floor = models.CharField(
     #     max_length=3,
@@ -103,7 +307,7 @@ class RockWallMaterialUnit(models.Model):
     #     default='no',
     #     help_text='Минимальная тощина в кирпичах для 2-х этажного дома',
     # )
-    
+
     # min_pix_3_floor = models.CharField(
     #     max_length=3,
     #     choices=MIN_PICS,
@@ -167,7 +371,6 @@ class RockWallMaterialUnit(models.Model):
     #     help_text='Сколько этажей можно постороить на этом размере',
     # )
 
-
     # nf_size = models.ForeignKey('NFSize', help_text='Выбрите размер НФ, которому соответствует изделие',
     #                             on_delete=models.SET_NULL, null=True, blank=True)
     # лишнее. проще определять потом автоматически. но так проще поиск пока сделать
@@ -211,13 +414,13 @@ class RockWallMaterialUnit(models.Model):
         ('yes', 'Да'),
     )
 
-    tongue_and_groove  = models.CharField(
+    tongue_and_groove = models.CharField(
         max_length=3,
         choices=YN,
         default='no',
         help_text='Пазогребневая система',
-    )    
-    
+    )
+
     polish = models.CharField(
         max_length=3,
         choices=YN,
@@ -236,7 +439,7 @@ class RockWallMaterialUnit(models.Model):
         choices=PURPOSE,
         default='wall',
         help_text='Назначение: рядовой, лицевой',
-    )  
+    )
 
     face = models.ForeignKey(
         DecorativeBrickFace, help_text='Выберите название рисунка декоратьивной грани', on_delete=models.SET_NULL, null=True, blank=True)
@@ -265,7 +468,7 @@ class RockWallMaterialUnit(models.Model):
         default='solid',
         help_text='Пустотелый или полнотелый',
     )
-        
+
     blind_hollow = models.CharField(
         max_length=3,
         choices=YN,
@@ -284,9 +487,8 @@ class RockWallMaterialUnit(models.Model):
         choices=PRIMARY_OR_ADDITIONAL,
         default='primary',
         help_text='Тип элемента: основной или доборный',
-    ) 
+    )
 
-    
     # THICKNESS_CALC = (
     #     ('mm', 'Только мм'),
     #     ('both', 'И мм. и шт.'),
@@ -330,7 +532,7 @@ class Insulation(models.Model):
         choices=MATTYPE,
         default='xps',
         help_text='Тип утеплителя',
-    ) 
+    )
 
     THICK = (
         ('20', '20 мм'),
@@ -344,7 +546,7 @@ class Insulation(models.Model):
         choices=THICK,
         default='20',
         help_text='Толщина',
-    ) 
+    )
 
     class Meta:
         ordering = ('brand',)
@@ -356,10 +558,9 @@ class Insulation(models.Model):
         return f'{self.brand} ({self.thick})'
 
 
-
 # class Cement(models.Model):
 #     """Цемент"""
-    
+
 #     NAME = (
 #         ('quarry', 'Карьерный'),
 #         ('river', 'Речной'),
@@ -369,7 +570,7 @@ class Insulation(models.Model):
 #         choices=NAME,
 #         default='quarry',
 #         help_text='Тип песка',
-#     )    
+#     )
 #     weight = models.IntegerField(help_text='Масса песка в грузовике')
 
 #     class Meta:

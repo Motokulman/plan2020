@@ -69,3 +69,7 @@ urlpatterns += [
     path('plan/<int:pk>/edit_scheme/post_plan',
          views.post_plan, name='post_plan'),
 ]
+
+# urlpatterns += [   
+#     path('plan/<int:pk>/arch_skin/', views.arch_skin, name='arch-skin'),
+# ]

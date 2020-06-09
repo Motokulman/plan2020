@@ -752,6 +752,14 @@ $("#save").click(function () {
     }
 });
 
+
+$("#roof_material_type").change(function () {
+    // alert($(this).val());
+    // if ($(this).val() == "metal_tile") {
+
+    // }
+});
+
 // Воспроизведение схемы
 function getScheme() {
     var data = {};
@@ -766,6 +774,7 @@ function getScheme() {
             //////console.log(" d = ", data);
             p = JSON.parse(data);
             d = JSON.parse(p[0].fields.scheme);
+            console.log(" Данные = ", d);
             if (d != null) {
                 elements = d.elements;
                 lines = d.lines;
@@ -780,7 +789,23 @@ function getScheme() {
                 drawAxeSize();
                 drawElements();
                 make3d();
-                console.log(" Данные = ", d);
+                // console.log(" Данные = ", d);
+                console.log(" Текстура материала кровли: http://asd.ru ");
+                console.log(" Тип свеса карниза : горизонтальный");
+                console.log(" Текстура лобовой доски: http://asd.ru ");
+                console.log(" Текстура ветровой доски: http://asd.ru ");
+                console.log(" Лобовая доска : наклонная");
+                console.log(" Крышка вентиляции : кирпич");
+                console.log(" Текстура материала стен: http://asd.ru");
+                console.log(" Текстура материала цоколя: http://asd.ru");
+                console.log(" Текстура материала отливов: http://asd.ru");
+                console.log(" Текстура материала отмостки: http://asd.ru");
+                console.log(" Текстура материала поребриков отмостки: http://asd.ru");
+                console.log(" 3D модель окна 1: http://asd.ru");
+                console.log(" 3D модель окна n: http://asd.ru");
+                console.log(" 3D модель двери 1: http://asd.ru");
+                console.log(" 3D модель двери n: http://asd.ru");
+                
             }
         },
         error: function () {

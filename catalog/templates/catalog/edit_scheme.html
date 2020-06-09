@@ -87,6 +87,55 @@
         {% csrf_token %}
       </form>
 
+
+      <label for="roof_material_type">Материал кровли:</label>
+      <select id="roof_material_type">
+        {% for t in test %}
+        <option value="{{ t.identifier }}">{{ t.name }}, {{ t.material_type.name }}</option>
+        {% endfor %}
+      </select>
+
+      <label for="fasade_material">Облицовка фасада</label>
+
+      <input type="radio" id="brick" name="fasade_material" value="brick">
+      <label for="brick">Лицевой кирпич</label>
+
+      <label for="face_wall_brick">Стены:</label>
+      <select id="face_wall_brick">
+        {% for t in test %}
+        <option value="{{ t.identifier }}">{{ t.name }}, {{ t.material_type.name }}</option>
+        {% endfor %}
+      </select>
+      <label for="face_socle_brick">Цоколь:</label>
+      <select id="face_socle_brick">
+        {% for t in test %}
+        <option value="{{ t.identifier }}">{{ t.name }}, {{ t.material_type.name }}</option>
+        {% endfor %}
+      </select>
+
+
+      <input type="radio" id="plaster" name="fasade_material" value="plaster">
+      <label for="plaster">Штукатурка</label>
+
+      <label for="face_wall_brick">Цвет стен:</label>
+      <select id="face_wall_brick">
+        {% for t in test %}
+        <option value="{{ t.identifier }}">{{ t.name }}, {{ t.material_type.name }}</option>
+        {% endfor %}
+      </select>
+      <label for="face_socle_brick">Цвет цоколя:</label>
+      <select id="face_socle_brick">
+        {% for t in test %}
+        <option value="{{ t.identifier }}">{{ t.name }}, {{ t.material_type.name }}</option>
+        {% endfor %}
+      </select>
+
+      <!-- <select id="roof_covering" name="">
+        <option value="2">Металлочерепица</option>
+        <option value="3" selected>3</option>
+        <option value="4">4</option>
+      </select> -->
+
       <!-- <input type="text" id="user-input" autofocus=""><br>
       <button type="button" id="save">Сохранить</button><br> -->
       <!-- <p id="p-text">foo bar</p> -->
