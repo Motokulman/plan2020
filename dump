@@ -1,0 +1,5603 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.0
+-- Dumped by pg_dump version 12.0
+
+-- Started on 2020-06-09 14:59:06
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 274 (class 1259 OID 31058)
+-- Name: account_profile; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.account_profile (
+    id integer NOT NULL,
+    photo character varying(100) NOT NULL,
+    user_id integer NOT NULL,
+    city_id integer
+);
+
+
+ALTER TABLE public.account_profile OWNER TO postgres;
+
+--
+-- TOC entry 273 (class 1259 OID 31056)
+-- Name: account_profile_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.account_profile_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.account_profile_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3576 (class 0 OID 0)
+-- Dependencies: 273
+-- Name: account_profile_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.account_profile_id_seq OWNED BY public.account_profile.id;
+
+
+--
+-- TOC entry 209 (class 1259 OID 30459)
+-- Name: auth_group; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auth_group (
+    id integer NOT NULL,
+    name character varying(150) NOT NULL
+);
+
+
+ALTER TABLE public.auth_group OWNER TO postgres;
+
+--
+-- TOC entry 208 (class 1259 OID 30457)
+-- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auth_group_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3577 (class 0 OID 0)
+-- Dependencies: 208
+-- Name: auth_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auth_group_id_seq OWNED BY public.auth_group.id;
+
+
+--
+-- TOC entry 211 (class 1259 OID 30469)
+-- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auth_group_permissions (
+    id integer NOT NULL,
+    group_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_group_permissions OWNER TO postgres;
+
+--
+-- TOC entry 210 (class 1259 OID 30467)
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auth_group_permissions_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_permissions_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3578 (class 0 OID 0)
+-- Dependencies: 210
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auth_group_permissions_id_seq OWNED BY public.auth_group_permissions.id;
+
+
+--
+-- TOC entry 207 (class 1259 OID 30451)
+-- Name: auth_permission; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auth_permission (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    content_type_id integer NOT NULL,
+    codename character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.auth_permission OWNER TO postgres;
+
+--
+-- TOC entry 206 (class 1259 OID 30449)
+-- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auth_permission_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_permission_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3579 (class 0 OID 0)
+-- Dependencies: 206
+-- Name: auth_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auth_permission_id_seq OWNED BY public.auth_permission.id;
+
+
+--
+-- TOC entry 213 (class 1259 OID 30477)
+-- Name: auth_user; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auth_user (
+    id integer NOT NULL,
+    password character varying(128) NOT NULL,
+    last_login timestamp with time zone,
+    is_superuser boolean NOT NULL,
+    username character varying(150) NOT NULL,
+    first_name character varying(30) NOT NULL,
+    last_name character varying(150) NOT NULL,
+    email character varying(254) NOT NULL,
+    is_staff boolean NOT NULL,
+    is_active boolean NOT NULL,
+    date_joined timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.auth_user OWNER TO postgres;
+
+--
+-- TOC entry 215 (class 1259 OID 30487)
+-- Name: auth_user_groups; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auth_user_groups (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    group_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_user_groups OWNER TO postgres;
+
+--
+-- TOC entry 214 (class 1259 OID 30485)
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auth_user_groups_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_groups_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3580 (class 0 OID 0)
+-- Dependencies: 214
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auth_user_groups_id_seq OWNED BY public.auth_user_groups.id;
+
+
+--
+-- TOC entry 212 (class 1259 OID 30475)
+-- Name: auth_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auth_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3581 (class 0 OID 0)
+-- Dependencies: 212
+-- Name: auth_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auth_user_id_seq OWNED BY public.auth_user.id;
+
+
+--
+-- TOC entry 217 (class 1259 OID 30495)
+-- Name: auth_user_user_permissions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auth_user_user_permissions (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_user_user_permissions OWNER TO postgres;
+
+--
+-- TOC entry 216 (class 1259 OID 30493)
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auth_user_user_permissions_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_user_permissions_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3582 (class 0 OID 0)
+-- Dependencies: 216
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auth_user_user_permissions_id_seq OWNED BY public.auth_user_user_permissions.id;
+
+
+--
+-- TOC entry 221 (class 1259 OID 30588)
+-- Name: brands_brand; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.brands_brand (
+    id integer NOT NULL,
+    name character varying(200) NOT NULL
+);
+
+
+ALTER TABLE public.brands_brand OWNER TO postgres;
+
+--
+-- TOC entry 220 (class 1259 OID 30586)
+-- Name: brands_brand_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.brands_brand_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.brands_brand_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3583 (class 0 OID 0)
+-- Dependencies: 220
+-- Name: brands_brand_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.brands_brand_id_seq OWNED BY public.brands_brand.id;
+
+
+--
+-- TOC entry 223 (class 1259 OID 30598)
+-- Name: brands_subbrand_1; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.brands_subbrand_1 (
+    id integer NOT NULL,
+    name character varying(200) NOT NULL,
+    brand_id integer
+);
+
+
+ALTER TABLE public.brands_subbrand_1 OWNER TO postgres;
+
+--
+-- TOC entry 222 (class 1259 OID 30596)
+-- Name: brands_subbrand_1_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.brands_subbrand_1_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.brands_subbrand_1_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3584 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: brands_subbrand_1_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.brands_subbrand_1_id_seq OWNED BY public.brands_subbrand_1.id;
+
+
+--
+-- TOC entry 225 (class 1259 OID 30608)
+-- Name: brands_subbrand_2; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.brands_subbrand_2 (
+    id integer NOT NULL,
+    name character varying(200) NOT NULL,
+    sub_brand_1_id integer NOT NULL
+);
+
+
+ALTER TABLE public.brands_subbrand_2 OWNER TO postgres;
+
+--
+-- TOC entry 224 (class 1259 OID 30606)
+-- Name: brands_subbrand_2_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.brands_subbrand_2_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.brands_subbrand_2_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3585 (class 0 OID 0)
+-- Dependencies: 224
+-- Name: brands_subbrand_2_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.brands_subbrand_2_id_seq OWNED BY public.brands_subbrand_2.id;
+
+
+--
+-- TOC entry 233 (class 1259 OID 30677)
+-- Name: catalog_algorithm; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.catalog_algorithm (
+    id integer NOT NULL,
+    identifier character varying(200) NOT NULL,
+    name character varying(200) NOT NULL
+);
+
+
+ALTER TABLE public.catalog_algorithm OWNER TO postgres;
+
+--
+-- TOC entry 232 (class 1259 OID 30675)
+-- Name: catalog_algorithm_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.catalog_algorithm_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.catalog_algorithm_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3586 (class 0 OID 0)
+-- Dependencies: 232
+-- Name: catalog_algorithm_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.catalog_algorithm_id_seq OWNED BY public.catalog_algorithm.id;
+
+
+--
+-- TOC entry 298 (class 1259 OID 31373)
+-- Name: catalog_facadematerialtype; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.catalog_facadematerialtype (
+    id integer NOT NULL,
+    name character varying(200) NOT NULL,
+    identifier character varying(20) NOT NULL
+);
+
+
+ALTER TABLE public.catalog_facadematerialtype OWNER TO postgres;
+
+--
+-- TOC entry 297 (class 1259 OID 31371)
+-- Name: catalog_facadematerialtype_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.catalog_facadematerialtype_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.catalog_facadematerialtype_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3587 (class 0 OID 0)
+-- Dependencies: 297
+-- Name: catalog_facadematerialtype_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.catalog_facadematerialtype_id_seq OWNED BY public.catalog_facadematerialtype.id;
+
+
+--
+-- TOC entry 235 (class 1259 OID 30697)
+-- Name: catalog_plan; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.catalog_plan (
+    id integer NOT NULL,
+    title character varying(200) NOT NULL,
+    scheme jsonb,
+    checked boolean NOT NULL,
+    author_id integer
+);
+
+
+ALTER TABLE public.catalog_plan OWNER TO postgres;
+
+--
+-- TOC entry 234 (class 1259 OID 30695)
+-- Name: catalog_plan_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.catalog_plan_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.catalog_plan_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3588 (class 0 OID 0)
+-- Dependencies: 234
+-- Name: catalog_plan_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.catalog_plan_id_seq OWNED BY public.catalog_plan.id;
+
+
+--
+-- TOC entry 300 (class 1259 OID 31383)
+-- Name: catalog_shell; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.catalog_shell (
+    id integer NOT NULL,
+    name character varying(200) NOT NULL,
+    roof_material_id integer NOT NULL,
+    soffit_style character varying(20) NOT NULL,
+    wall_material_0_id integer NOT NULL,
+    socle_material_id integer NOT NULL,
+    author_id integer,
+    roof_material_type_id integer,
+    socle_material_type_id integer,
+    wall_material_type_0_id integer
+);
+
+
+ALTER TABLE public.catalog_shell OWNER TO postgres;
+
+--
+-- TOC entry 299 (class 1259 OID 31381)
+-- Name: catalog_shell_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.catalog_shell_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.catalog_shell_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3589 (class 0 OID 0)
+-- Dependencies: 299
+-- Name: catalog_shell_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.catalog_shell_id_seq OWNED BY public.catalog_shell.id;
+
+
+--
+-- TOC entry 219 (class 1259 OID 30555)
+-- Name: django_admin_log; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.django_admin_log (
+    id integer NOT NULL,
+    action_time timestamp with time zone NOT NULL,
+    object_id text,
+    object_repr character varying(200) NOT NULL,
+    action_flag smallint NOT NULL,
+    change_message text NOT NULL,
+    content_type_id integer,
+    user_id integer NOT NULL,
+    CONSTRAINT django_admin_log_action_flag_check CHECK ((action_flag >= 0))
+);
+
+
+ALTER TABLE public.django_admin_log OWNER TO postgres;
+
+--
+-- TOC entry 218 (class 1259 OID 30553)
+-- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.django_admin_log_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_admin_log_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3590 (class 0 OID 0)
+-- Dependencies: 218
+-- Name: django_admin_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.django_admin_log_id_seq OWNED BY public.django_admin_log.id;
+
+
+--
+-- TOC entry 205 (class 1259 OID 30441)
+-- Name: django_content_type; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.django_content_type (
+    id integer NOT NULL,
+    app_label character varying(100) NOT NULL,
+    model character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.django_content_type OWNER TO postgres;
+
+--
+-- TOC entry 204 (class 1259 OID 30439)
+-- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.django_content_type_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_content_type_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3591 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: django_content_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.django_content_type_id_seq OWNED BY public.django_content_type.id;
+
+
+--
+-- TOC entry 203 (class 1259 OID 30430)
+-- Name: django_migrations; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.django_migrations (
+    id integer NOT NULL,
+    app character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    applied timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_migrations OWNER TO postgres;
+
+--
+-- TOC entry 202 (class 1259 OID 30428)
+-- Name: django_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.django_migrations_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_migrations_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3592 (class 0 OID 0)
+-- Dependencies: 202
+-- Name: django_migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.django_migrations_id_seq OWNED BY public.django_migrations.id;
+
+
+--
+-- TOC entry 270 (class 1259 OID 31031)
+-- Name: django_session; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.django_session (
+    session_key character varying(40) NOT NULL,
+    session_data text NOT NULL,
+    expire_date timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_session OWNER TO postgres;
+
+--
+-- TOC entry 231 (class 1259 OID 30655)
+-- Name: geography_city; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.geography_city (
+    id integer NOT NULL,
+    name character varying(200) NOT NULL,
+    heating_period_duration integer,
+    heating_period_temperature double precision,
+    region_id integer
+);
+
+
+ALTER TABLE public.geography_city OWNER TO postgres;
+
+--
+-- TOC entry 230 (class 1259 OID 30653)
+-- Name: geography_city_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.geography_city_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.geography_city_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3593 (class 0 OID 0)
+-- Dependencies: 230
+-- Name: geography_city_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.geography_city_id_seq OWNED BY public.geography_city.id;
+
+
+--
+-- TOC entry 227 (class 1259 OID 30633)
+-- Name: geography_country; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.geography_country (
+    id integer NOT NULL,
+    name character varying(200)
+);
+
+
+ALTER TABLE public.geography_country OWNER TO postgres;
+
+--
+-- TOC entry 226 (class 1259 OID 30631)
+-- Name: geography_country_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.geography_country_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.geography_country_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3594 (class 0 OID 0)
+-- Dependencies: 226
+-- Name: geography_country_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.geography_country_id_seq OWNED BY public.geography_country.id;
+
+
+--
+-- TOC entry 229 (class 1259 OID 30643)
+-- Name: geography_region; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.geography_region (
+    id integer NOT NULL,
+    name character varying(200) NOT NULL,
+    code integer,
+    country_id integer
+);
+
+
+ALTER TABLE public.geography_region OWNER TO postgres;
+
+--
+-- TOC entry 228 (class 1259 OID 30641)
+-- Name: geography_region_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.geography_region_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.geography_region_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3595 (class 0 OID 0)
+-- Dependencies: 228
+-- Name: geography_region_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.geography_region_id_seq OWNED BY public.geography_region.id;
+
+
+--
+-- TOC entry 269 (class 1259 OID 31001)
+-- Name: materialprices_insulationprice; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.materialprices_insulationprice (
+    id integer NOT NULL,
+    price double precision NOT NULL,
+    name_id integer NOT NULL,
+    owner_id integer
+);
+
+
+ALTER TABLE public.materialprices_insulationprice OWNER TO postgres;
+
+--
+-- TOC entry 268 (class 1259 OID 30999)
+-- Name: materialprices_insulationprice_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.materialprices_insulationprice_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.materialprices_insulationprice_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3596 (class 0 OID 0)
+-- Dependencies: 268
+-- Name: materialprices_insulationprice_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.materialprices_insulationprice_id_seq OWNED BY public.materialprices_insulationprice.id;
+
+
+--
+-- TOC entry 267 (class 1259 OID 30993)
+-- Name: materialprices_rockwallmaterialprice; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.materialprices_rockwallmaterialprice (
+    id integer NOT NULL,
+    price double precision NOT NULL,
+    name_id integer NOT NULL,
+    owner_id integer
+);
+
+
+ALTER TABLE public.materialprices_rockwallmaterialprice OWNER TO postgres;
+
+--
+-- TOC entry 266 (class 1259 OID 30991)
+-- Name: materialprices_rockwallmaterialprice_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.materialprices_rockwallmaterialprice_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.materialprices_rockwallmaterialprice_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3597 (class 0 OID 0)
+-- Dependencies: 266
+-- Name: materialprices_rockwallmaterialprice_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.materialprices_rockwallmaterialprice_id_seq OWNED BY public.materialprices_rockwallmaterialprice.id;
+
+
+--
+-- TOC entry 261 (class 1259 OID 30897)
+-- Name: materials_bulksand; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.materials_bulksand (
+    id integer NOT NULL,
+    name character varying(6) NOT NULL,
+    weight integer NOT NULL
+);
+
+
+ALTER TABLE public.materials_bulksand OWNER TO postgres;
+
+--
+-- TOC entry 260 (class 1259 OID 30895)
+-- Name: materials_bulksand_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.materials_bulksand_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.materials_bulksand_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3598 (class 0 OID 0)
+-- Dependencies: 260
+-- Name: materials_bulksand_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.materials_bulksand_id_seq OWNED BY public.materials_bulksand.id;
+
+
+--
+-- TOC entry 294 (class 1259 OID 31351)
+-- Name: materials_flexibletile; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.materials_flexibletile (
+    id integer NOT NULL,
+    name character varying(200) NOT NULL,
+    texture character varying(200) NOT NULL
+);
+
+
+ALTER TABLE public.materials_flexibletile OWNER TO postgres;
+
+--
+-- TOC entry 293 (class 1259 OID 31349)
+-- Name: materials_flexibletile_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.materials_flexibletile_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.materials_flexibletile_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3599 (class 0 OID 0)
+-- Dependencies: 293
+-- Name: materials_flexibletile_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.materials_flexibletile_id_seq OWNED BY public.materials_flexibletile.id;
+
+
+--
+-- TOC entry 265 (class 1259 OID 30913)
+-- Name: materials_insulation; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.materials_insulation (
+    id integer NOT NULL,
+    thermal_conductivity double precision,
+    mat_type character varying(9) NOT NULL,
+    thick character varying(3) NOT NULL,
+    brand_id integer
+);
+
+
+ALTER TABLE public.materials_insulation OWNER TO postgres;
+
+--
+-- TOC entry 264 (class 1259 OID 30911)
+-- Name: materials_insulation_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.materials_insulation_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.materials_insulation_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3600 (class 0 OID 0)
+-- Dependencies: 264
+-- Name: materials_insulation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.materials_insulation_id_seq OWNED BY public.materials_insulation.id;
+
+
+--
+-- TOC entry 276 (class 1259 OID 31079)
+-- Name: materials_materialuse; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.materials_materialuse (
+    id integer NOT NULL,
+    name character varying(200) NOT NULL,
+    identifier character varying(200) NOT NULL
+);
+
+
+ALTER TABLE public.materials_materialuse OWNER TO postgres;
+
+--
+-- TOC entry 275 (class 1259 OID 31077)
+-- Name: materials_materialuse_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.materials_materialuse_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.materials_materialuse_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3601 (class 0 OID 0)
+-- Dependencies: 275
+-- Name: materials_materialuse_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.materials_materialuse_id_seq OWNED BY public.materials_materialuse.id;
+
+
+--
+-- TOC entry 296 (class 1259 OID 31361)
+-- Name: materials_metaltile; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.materials_metaltile (
+    id integer NOT NULL,
+    name character varying(200) NOT NULL,
+    texture character varying(200) NOT NULL
+);
+
+
+ALTER TABLE public.materials_metaltile OWNER TO postgres;
+
+--
+-- TOC entry 295 (class 1259 OID 31359)
+-- Name: materials_metaltile_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.materials_metaltile_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.materials_metaltile_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3602 (class 0 OID 0)
+-- Dependencies: 295
+-- Name: materials_metaltile_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.materials_metaltile_id_seq OWNED BY public.materials_metaltile.id;
+
+
+--
+-- TOC entry 284 (class 1259 OID 31139)
+-- Name: materials_plaster; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.materials_plaster (
+    id integer NOT NULL,
+    texture character varying(200) NOT NULL,
+    brand_id integer,
+    manufacturer_id integer
+);
+
+
+ALTER TABLE public.materials_plaster OWNER TO postgres;
+
+--
+-- TOC entry 283 (class 1259 OID 31137)
+-- Name: materials_plaster_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.materials_plaster_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.materials_plaster_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3603 (class 0 OID 0)
+-- Dependencies: 283
+-- Name: materials_plaster_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.materials_plaster_id_seq OWNED BY public.materials_plaster.id;
+
+
+--
+-- TOC entry 286 (class 1259 OID 31147)
+-- Name: materials_plaster_use; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.materials_plaster_use (
+    id integer NOT NULL,
+    plaster_id integer NOT NULL,
+    materialuse_id integer NOT NULL
+);
+
+
+ALTER TABLE public.materials_plaster_use OWNER TO postgres;
+
+--
+-- TOC entry 285 (class 1259 OID 31145)
+-- Name: materials_plaster_use_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.materials_plaster_use_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.materials_plaster_use_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3604 (class 0 OID 0)
+-- Dependencies: 285
+-- Name: materials_plaster_use_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.materials_plaster_use_id_seq OWNED BY public.materials_plaster_use.id;
+
+
+--
+-- TOC entry 263 (class 1259 OID 30905)
+-- Name: materials_rockwallmaterialunit; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.materials_rockwallmaterialunit (
+    id integer NOT NULL,
+    name character varying(5) NOT NULL,
+    material character varying(18) NOT NULL,
+    greater_bed_size integer,
+    minor_bed_size integer,
+    height integer,
+    tongue_and_groove character varying(3) NOT NULL,
+    polish character varying(3) NOT NULL,
+    purpose character varying(10) NOT NULL,
+    partition_or_bearing character varying(9) NOT NULL,
+    body_type character varying(6) NOT NULL,
+    blind_hollow character varying(3) NOT NULL,
+    primary_or_additional character varying(10) NOT NULL,
+    algorithm_id integer,
+    brand_id integer,
+    class_average_density_id integer,
+    class_b_id integer,
+    face_id integer,
+    manufacturer_id integer,
+    mark_d_id integer,
+    mark_f_id integer,
+    mark_m_id integer,
+    sub_brand_1_id integer,
+    sub_brand_2_id integer
+);
+
+
+ALTER TABLE public.materials_rockwallmaterialunit OWNER TO postgres;
+
+--
+-- TOC entry 262 (class 1259 OID 30903)
+-- Name: materials_rockwallmaterialunit_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.materials_rockwallmaterialunit_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.materials_rockwallmaterialunit_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3605 (class 0 OID 0)
+-- Dependencies: 262
+-- Name: materials_rockwallmaterialunit_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.materials_rockwallmaterialunit_id_seq OWNED BY public.materials_rockwallmaterialunit.id;
+
+
+--
+-- TOC entry 278 (class 1259 OID 31087)
+-- Name: materials_roofcovertype; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.materials_roofcovertype (
+    id integer NOT NULL,
+    name character varying(200) NOT NULL,
+    identifier character varying(200) NOT NULL
+);
+
+
+ALTER TABLE public.materials_roofcovertype OWNER TO postgres;
+
+--
+-- TOC entry 277 (class 1259 OID 31085)
+-- Name: materials_roofcovertype_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.materials_roofcovertype_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.materials_roofcovertype_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3606 (class 0 OID 0)
+-- Dependencies: 277
+-- Name: materials_roofcovertype_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.materials_roofcovertype_id_seq OWNED BY public.materials_roofcovertype.id;
+
+
+--
+-- TOC entry 280 (class 1259 OID 31115)
+-- Name: materials_siding; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.materials_siding (
+    id integer NOT NULL,
+    material character varying(20) NOT NULL,
+    alternative_name character varying(20),
+    texture character varying(200) NOT NULL,
+    brand_id integer,
+    manufacturer_id integer
+);
+
+
+ALTER TABLE public.materials_siding OWNER TO postgres;
+
+--
+-- TOC entry 279 (class 1259 OID 31113)
+-- Name: materials_siding_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.materials_siding_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.materials_siding_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3607 (class 0 OID 0)
+-- Dependencies: 279
+-- Name: materials_siding_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.materials_siding_id_seq OWNED BY public.materials_siding.id;
+
+
+--
+-- TOC entry 282 (class 1259 OID 31123)
+-- Name: materials_siding_use; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.materials_siding_use (
+    id integer NOT NULL,
+    siding_id integer NOT NULL,
+    materialuse_id integer NOT NULL
+);
+
+
+ALTER TABLE public.materials_siding_use OWNER TO postgres;
+
+--
+-- TOC entry 281 (class 1259 OID 31121)
+-- Name: materials_siding_use_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.materials_siding_use_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.materials_siding_use_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3608 (class 0 OID 0)
+-- Dependencies: 281
+-- Name: materials_siding_use_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.materials_siding_use_id_seq OWNED BY public.materials_siding_use.id;
+
+
+--
+-- TOC entry 288 (class 1259 OID 31293)
+-- Name: materials_stoneproductline; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.materials_stoneproductline (
+    id integer NOT NULL,
+    name character varying(200) NOT NULL,
+    manufacturer_id integer
+);
+
+
+ALTER TABLE public.materials_stoneproductline OWNER TO postgres;
+
+--
+-- TOC entry 287 (class 1259 OID 31291)
+-- Name: materials_stoneproductline_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.materials_stoneproductline_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.materials_stoneproductline_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3609 (class 0 OID 0)
+-- Dependencies: 287
+-- Name: materials_stoneproductline_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.materials_stoneproductline_id_seq OWNED BY public.materials_stoneproductline.id;
+
+
+--
+-- TOC entry 290 (class 1259 OID 31301)
+-- Name: materials_stoneproductline_use; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.materials_stoneproductline_use (
+    id integer NOT NULL,
+    stoneproductline_id integer NOT NULL,
+    materialuse_id integer NOT NULL
+);
+
+
+ALTER TABLE public.materials_stoneproductline_use OWNER TO postgres;
+
+--
+-- TOC entry 289 (class 1259 OID 31299)
+-- Name: materials_stoneproductline_use_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.materials_stoneproductline_use_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.materials_stoneproductline_use_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3610 (class 0 OID 0)
+-- Dependencies: 289
+-- Name: materials_stoneproductline_use_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.materials_stoneproductline_use_id_seq OWNED BY public.materials_stoneproductline_use.id;
+
+
+--
+-- TOC entry 292 (class 1259 OID 31309)
+-- Name: materials_stoneunit; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.materials_stoneunit (
+    id integer NOT NULL,
+    name character varying(200) NOT NULL,
+    texture character varying(200) NOT NULL,
+    product_line_id integer
+);
+
+
+ALTER TABLE public.materials_stoneunit OWNER TO postgres;
+
+--
+-- TOC entry 291 (class 1259 OID 31307)
+-- Name: materials_stoneunit_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.materials_stoneunit_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.materials_stoneunit_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3611 (class 0 OID 0)
+-- Dependencies: 291
+-- Name: materials_stoneunit_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.materials_stoneunit_id_seq OWNED BY public.materials_stoneunit.id;
+
+
+--
+-- TOC entry 257 (class 1259 OID 30867)
+-- Name: names_decorativebrickface; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.names_decorativebrickface (
+    id integer NOT NULL,
+    name character varying(200) NOT NULL
+);
+
+
+ALTER TABLE public.names_decorativebrickface OWNER TO postgres;
+
+--
+-- TOC entry 259 (class 1259 OID 30875)
+-- Name: names_decorativebrickface_brand; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.names_decorativebrickface_brand (
+    id integer NOT NULL,
+    decorativebrickface_id integer NOT NULL,
+    brand_id integer NOT NULL
+);
+
+
+ALTER TABLE public.names_decorativebrickface_brand OWNER TO postgres;
+
+--
+-- TOC entry 258 (class 1259 OID 30873)
+-- Name: names_decorativebrickface_brand_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.names_decorativebrickface_brand_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.names_decorativebrickface_brand_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3612 (class 0 OID 0)
+-- Dependencies: 258
+-- Name: names_decorativebrickface_brand_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.names_decorativebrickface_brand_id_seq OWNED BY public.names_decorativebrickface_brand.id;
+
+
+--
+-- TOC entry 256 (class 1259 OID 30865)
+-- Name: names_decorativebrickface_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.names_decorativebrickface_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.names_decorativebrickface_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3613 (class 0 OID 0)
+-- Dependencies: 256
+-- Name: names_decorativebrickface_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.names_decorativebrickface_id_seq OWNED BY public.names_decorativebrickface.id;
+
+
+--
+-- TOC entry 245 (class 1259 OID 30801)
+-- Name: standards_classb; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.standards_classb (
+    id integer NOT NULL,
+    identifier character varying(200) NOT NULL,
+    name character varying(5) NOT NULL
+);
+
+
+ALTER TABLE public.standards_classb OWNER TO postgres;
+
+--
+-- TOC entry 244 (class 1259 OID 30799)
+-- Name: standards_classb_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.standards_classb_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.standards_classb_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3614 (class 0 OID 0)
+-- Dependencies: 244
+-- Name: standards_classb_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.standards_classb_id_seq OWNED BY public.standards_classb.id;
+
+
+--
+-- TOC entry 247 (class 1259 OID 30811)
+-- Name: standards_classаveragedensity; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."standards_classаveragedensity" (
+    id integer NOT NULL,
+    identifier character varying(200) NOT NULL,
+    name character varying(5) NOT NULL
+);
+
+
+ALTER TABLE public."standards_classаveragedensity" OWNER TO postgres;
+
+--
+-- TOC entry 246 (class 1259 OID 30809)
+-- Name: standards_classаveragedensity_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public."standards_classаveragedensity_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public."standards_classаveragedensity_id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 3615 (class 0 OID 0)
+-- Dependencies: 246
+-- Name: standards_classаveragedensity_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public."standards_classаveragedensity_id_seq" OWNED BY public."standards_classаveragedensity".id;
+
+
+--
+-- TOC entry 249 (class 1259 OID 30821)
+-- Name: standards_markd; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.standards_markd (
+    id integer NOT NULL,
+    identifier character varying(200) NOT NULL,
+    name character varying(5) NOT NULL
+);
+
+
+ALTER TABLE public.standards_markd OWNER TO postgres;
+
+--
+-- TOC entry 248 (class 1259 OID 30819)
+-- Name: standards_markd_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.standards_markd_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.standards_markd_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3616 (class 0 OID 0)
+-- Dependencies: 248
+-- Name: standards_markd_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.standards_markd_id_seq OWNED BY public.standards_markd.id;
+
+
+--
+-- TOC entry 251 (class 1259 OID 30831)
+-- Name: standards_markf; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.standards_markf (
+    id integer NOT NULL,
+    identifier character varying(200) NOT NULL,
+    name character varying(5) NOT NULL
+);
+
+
+ALTER TABLE public.standards_markf OWNER TO postgres;
+
+--
+-- TOC entry 250 (class 1259 OID 30829)
+-- Name: standards_markf_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.standards_markf_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.standards_markf_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3617 (class 0 OID 0)
+-- Dependencies: 250
+-- Name: standards_markf_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.standards_markf_id_seq OWNED BY public.standards_markf.id;
+
+
+--
+-- TOC entry 253 (class 1259 OID 30841)
+-- Name: standards_markm; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.standards_markm (
+    id integer NOT NULL,
+    identifier character varying(200) NOT NULL,
+    name character varying(5) NOT NULL
+);
+
+
+ALTER TABLE public.standards_markm OWNER TO postgres;
+
+--
+-- TOC entry 252 (class 1259 OID 30839)
+-- Name: standards_markm_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.standards_markm_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.standards_markm_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3618 (class 0 OID 0)
+-- Dependencies: 252
+-- Name: standards_markm_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.standards_markm_id_seq OWNED BY public.standards_markm.id;
+
+
+--
+-- TOC entry 255 (class 1259 OID 30851)
+-- Name: standards_nfsize; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.standards_nfsize (
+    id integer NOT NULL,
+    identifier character varying(200) NOT NULL,
+    name character varying(200) NOT NULL,
+    greater_bed_size integer,
+    minor_bed_size integer,
+    height integer
+);
+
+
+ALTER TABLE public.standards_nfsize OWNER TO postgres;
+
+--
+-- TOC entry 254 (class 1259 OID 30849)
+-- Name: standards_nfsize_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.standards_nfsize_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.standards_nfsize_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3619 (class 0 OID 0)
+-- Dependencies: 254
+-- Name: standards_nfsize_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.standards_nfsize_id_seq OWNED BY public.standards_nfsize.id;
+
+
+--
+-- TOC entry 237 (class 1259 OID 30728)
+-- Name: suppliers_activity; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.suppliers_activity (
+    id integer NOT NULL,
+    identifier character varying(200) NOT NULL,
+    name character varying(200) NOT NULL
+);
+
+
+ALTER TABLE public.suppliers_activity OWNER TO postgres;
+
+--
+-- TOC entry 236 (class 1259 OID 30726)
+-- Name: suppliers_activity_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.suppliers_activity_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.suppliers_activity_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3620 (class 0 OID 0)
+-- Dependencies: 236
+-- Name: suppliers_activity_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.suppliers_activity_id_seq OWNED BY public.suppliers_activity.id;
+
+
+--
+-- TOC entry 243 (class 1259 OID 30756)
+-- Name: suppliers_manufacturer; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.suppliers_manufacturer (
+    id integer NOT NULL,
+    alias character varying(200) NOT NULL,
+    name character varying(200) NOT NULL,
+    brand_id integer,
+    city_id integer
+);
+
+
+ALTER TABLE public.suppliers_manufacturer OWNER TO postgres;
+
+--
+-- TOC entry 242 (class 1259 OID 30754)
+-- Name: suppliers_manufacturer_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.suppliers_manufacturer_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.suppliers_manufacturer_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3621 (class 0 OID 0)
+-- Dependencies: 242
+-- Name: suppliers_manufacturer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.suppliers_manufacturer_id_seq OWNED BY public.suppliers_manufacturer.id;
+
+
+--
+-- TOC entry 239 (class 1259 OID 30738)
+-- Name: suppliers_provider; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.suppliers_provider (
+    id integer NOT NULL,
+    name character varying(200) NOT NULL,
+    primary_activity_id integer
+);
+
+
+ALTER TABLE public.suppliers_provider OWNER TO postgres;
+
+--
+-- TOC entry 238 (class 1259 OID 30736)
+-- Name: suppliers_provider_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.suppliers_provider_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.suppliers_provider_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3622 (class 0 OID 0)
+-- Dependencies: 238
+-- Name: suppliers_provider_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.suppliers_provider_id_seq OWNED BY public.suppliers_provider.id;
+
+
+--
+-- TOC entry 241 (class 1259 OID 30748)
+-- Name: suppliers_provider_secondary_activity; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.suppliers_provider_secondary_activity (
+    id integer NOT NULL,
+    provider_id integer NOT NULL,
+    activity_id integer NOT NULL
+);
+
+
+ALTER TABLE public.suppliers_provider_secondary_activity OWNER TO postgres;
+
+--
+-- TOC entry 240 (class 1259 OID 30746)
+-- Name: suppliers_provider_secondary_activity_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.suppliers_provider_secondary_activity_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.suppliers_provider_secondary_activity_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3623 (class 0 OID 0)
+-- Dependencies: 240
+-- Name: suppliers_provider_secondary_activity_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.suppliers_provider_secondary_activity_id_seq OWNED BY public.suppliers_provider_secondary_activity.id;
+
+
+--
+-- TOC entry 272 (class 1259 OID 31043)
+-- Name: workprices_pilegrillagefoundationworkprices; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.workprices_pilegrillagefoundationworkprices (
+    id integer NOT NULL,
+    const_expenditure double precision NOT NULL,
+    transportation_procurement_cost double precision NOT NULL,
+    reinforcement_binding double precision NOT NULL,
+    clamp double precision NOT NULL,
+    pile_frame double precision NOT NULL,
+    formwork double precision NOT NULL,
+    length_costs double precision NOT NULL,
+    square_costs double precision NOT NULL,
+    volume_costs double precision NOT NULL,
+    pile_pour double precision NOT NULL,
+    man_hours_cost integer NOT NULL,
+    man_hours_profit integer NOT NULL,
+    owner_id integer
+);
+
+
+ALTER TABLE public.workprices_pilegrillagefoundationworkprices OWNER TO postgres;
+
+--
+-- TOC entry 271 (class 1259 OID 31041)
+-- Name: workprices_pilegrillagefoundationworkprices_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.workprices_pilegrillagefoundationworkprices_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.workprices_pilegrillagefoundationworkprices_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3624 (class 0 OID 0)
+-- Dependencies: 271
+-- Name: workprices_pilegrillagefoundationworkprices_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.workprices_pilegrillagefoundationworkprices_id_seq OWNED BY public.workprices_pilegrillagefoundationworkprices.id;
+
+
+--
+-- TOC entry 3020 (class 2604 OID 31061)
+-- Name: account_profile id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.account_profile ALTER COLUMN id SET DEFAULT nextval('public.account_profile_id_seq'::regclass);
+
+
+--
+-- TOC entry 2987 (class 2604 OID 30462)
+-- Name: auth_group id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group ALTER COLUMN id SET DEFAULT nextval('public.auth_group_id_seq'::regclass);
+
+
+--
+-- TOC entry 2988 (class 2604 OID 30472)
+-- Name: auth_group_permissions id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions ALTER COLUMN id SET DEFAULT nextval('public.auth_group_permissions_id_seq'::regclass);
+
+
+--
+-- TOC entry 2986 (class 2604 OID 30454)
+-- Name: auth_permission id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_permission ALTER COLUMN id SET DEFAULT nextval('public.auth_permission_id_seq'::regclass);
+
+
+--
+-- TOC entry 2989 (class 2604 OID 30480)
+-- Name: auth_user id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user ALTER COLUMN id SET DEFAULT nextval('public.auth_user_id_seq'::regclass);
+
+
+--
+-- TOC entry 2990 (class 2604 OID 30490)
+-- Name: auth_user_groups id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_groups ALTER COLUMN id SET DEFAULT nextval('public.auth_user_groups_id_seq'::regclass);
+
+
+--
+-- TOC entry 2991 (class 2604 OID 30498)
+-- Name: auth_user_user_permissions id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions ALTER COLUMN id SET DEFAULT nextval('public.auth_user_user_permissions_id_seq'::regclass);
+
+
+--
+-- TOC entry 2994 (class 2604 OID 30591)
+-- Name: brands_brand id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brands_brand ALTER COLUMN id SET DEFAULT nextval('public.brands_brand_id_seq'::regclass);
+
+
+--
+-- TOC entry 2995 (class 2604 OID 30601)
+-- Name: brands_subbrand_1 id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brands_subbrand_1 ALTER COLUMN id SET DEFAULT nextval('public.brands_subbrand_1_id_seq'::regclass);
+
+
+--
+-- TOC entry 2996 (class 2604 OID 30611)
+-- Name: brands_subbrand_2 id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brands_subbrand_2 ALTER COLUMN id SET DEFAULT nextval('public.brands_subbrand_2_id_seq'::regclass);
+
+
+--
+-- TOC entry 3000 (class 2604 OID 30680)
+-- Name: catalog_algorithm id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.catalog_algorithm ALTER COLUMN id SET DEFAULT nextval('public.catalog_algorithm_id_seq'::regclass);
+
+
+--
+-- TOC entry 3032 (class 2604 OID 31376)
+-- Name: catalog_facadematerialtype id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.catalog_facadematerialtype ALTER COLUMN id SET DEFAULT nextval('public.catalog_facadematerialtype_id_seq'::regclass);
+
+
+--
+-- TOC entry 3001 (class 2604 OID 30700)
+-- Name: catalog_plan id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.catalog_plan ALTER COLUMN id SET DEFAULT nextval('public.catalog_plan_id_seq'::regclass);
+
+
+--
+-- TOC entry 3033 (class 2604 OID 31386)
+-- Name: catalog_shell id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.catalog_shell ALTER COLUMN id SET DEFAULT nextval('public.catalog_shell_id_seq'::regclass);
+
+
+--
+-- TOC entry 2992 (class 2604 OID 30558)
+-- Name: django_admin_log id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_admin_log ALTER COLUMN id SET DEFAULT nextval('public.django_admin_log_id_seq'::regclass);
+
+
+--
+-- TOC entry 2985 (class 2604 OID 30444)
+-- Name: django_content_type id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_content_type ALTER COLUMN id SET DEFAULT nextval('public.django_content_type_id_seq'::regclass);
+
+
+--
+-- TOC entry 2984 (class 2604 OID 30433)
+-- Name: django_migrations id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('public.django_migrations_id_seq'::regclass);
+
+
+--
+-- TOC entry 2999 (class 2604 OID 30658)
+-- Name: geography_city id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.geography_city ALTER COLUMN id SET DEFAULT nextval('public.geography_city_id_seq'::regclass);
+
+
+--
+-- TOC entry 2997 (class 2604 OID 30636)
+-- Name: geography_country id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.geography_country ALTER COLUMN id SET DEFAULT nextval('public.geography_country_id_seq'::regclass);
+
+
+--
+-- TOC entry 2998 (class 2604 OID 30646)
+-- Name: geography_region id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.geography_region ALTER COLUMN id SET DEFAULT nextval('public.geography_region_id_seq'::regclass);
+
+
+--
+-- TOC entry 3018 (class 2604 OID 31004)
+-- Name: materialprices_insulationprice id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materialprices_insulationprice ALTER COLUMN id SET DEFAULT nextval('public.materialprices_insulationprice_id_seq'::regclass);
+
+
+--
+-- TOC entry 3017 (class 2604 OID 30996)
+-- Name: materialprices_rockwallmaterialprice id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materialprices_rockwallmaterialprice ALTER COLUMN id SET DEFAULT nextval('public.materialprices_rockwallmaterialprice_id_seq'::regclass);
+
+
+--
+-- TOC entry 3014 (class 2604 OID 30900)
+-- Name: materials_bulksand id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_bulksand ALTER COLUMN id SET DEFAULT nextval('public.materials_bulksand_id_seq'::regclass);
+
+
+--
+-- TOC entry 3030 (class 2604 OID 31354)
+-- Name: materials_flexibletile id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_flexibletile ALTER COLUMN id SET DEFAULT nextval('public.materials_flexibletile_id_seq'::regclass);
+
+
+--
+-- TOC entry 3016 (class 2604 OID 30916)
+-- Name: materials_insulation id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_insulation ALTER COLUMN id SET DEFAULT nextval('public.materials_insulation_id_seq'::regclass);
+
+
+--
+-- TOC entry 3021 (class 2604 OID 31082)
+-- Name: materials_materialuse id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_materialuse ALTER COLUMN id SET DEFAULT nextval('public.materials_materialuse_id_seq'::regclass);
+
+
+--
+-- TOC entry 3031 (class 2604 OID 31364)
+-- Name: materials_metaltile id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_metaltile ALTER COLUMN id SET DEFAULT nextval('public.materials_metaltile_id_seq'::regclass);
+
+
+--
+-- TOC entry 3025 (class 2604 OID 31142)
+-- Name: materials_plaster id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_plaster ALTER COLUMN id SET DEFAULT nextval('public.materials_plaster_id_seq'::regclass);
+
+
+--
+-- TOC entry 3026 (class 2604 OID 31150)
+-- Name: materials_plaster_use id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_plaster_use ALTER COLUMN id SET DEFAULT nextval('public.materials_plaster_use_id_seq'::regclass);
+
+
+--
+-- TOC entry 3015 (class 2604 OID 30908)
+-- Name: materials_rockwallmaterialunit id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_rockwallmaterialunit ALTER COLUMN id SET DEFAULT nextval('public.materials_rockwallmaterialunit_id_seq'::regclass);
+
+
+--
+-- TOC entry 3022 (class 2604 OID 31090)
+-- Name: materials_roofcovertype id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_roofcovertype ALTER COLUMN id SET DEFAULT nextval('public.materials_roofcovertype_id_seq'::regclass);
+
+
+--
+-- TOC entry 3023 (class 2604 OID 31118)
+-- Name: materials_siding id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_siding ALTER COLUMN id SET DEFAULT nextval('public.materials_siding_id_seq'::regclass);
+
+
+--
+-- TOC entry 3024 (class 2604 OID 31126)
+-- Name: materials_siding_use id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_siding_use ALTER COLUMN id SET DEFAULT nextval('public.materials_siding_use_id_seq'::regclass);
+
+
+--
+-- TOC entry 3027 (class 2604 OID 31296)
+-- Name: materials_stoneproductline id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_stoneproductline ALTER COLUMN id SET DEFAULT nextval('public.materials_stoneproductline_id_seq'::regclass);
+
+
+--
+-- TOC entry 3028 (class 2604 OID 31304)
+-- Name: materials_stoneproductline_use id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_stoneproductline_use ALTER COLUMN id SET DEFAULT nextval('public.materials_stoneproductline_use_id_seq'::regclass);
+
+
+--
+-- TOC entry 3029 (class 2604 OID 31312)
+-- Name: materials_stoneunit id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_stoneunit ALTER COLUMN id SET DEFAULT nextval('public.materials_stoneunit_id_seq'::regclass);
+
+
+--
+-- TOC entry 3012 (class 2604 OID 30870)
+-- Name: names_decorativebrickface id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.names_decorativebrickface ALTER COLUMN id SET DEFAULT nextval('public.names_decorativebrickface_id_seq'::regclass);
+
+
+--
+-- TOC entry 3013 (class 2604 OID 30878)
+-- Name: names_decorativebrickface_brand id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.names_decorativebrickface_brand ALTER COLUMN id SET DEFAULT nextval('public.names_decorativebrickface_brand_id_seq'::regclass);
+
+
+--
+-- TOC entry 3006 (class 2604 OID 30804)
+-- Name: standards_classb id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.standards_classb ALTER COLUMN id SET DEFAULT nextval('public.standards_classb_id_seq'::regclass);
+
+
+--
+-- TOC entry 3007 (class 2604 OID 30814)
+-- Name: standards_classаveragedensity id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."standards_classаveragedensity" ALTER COLUMN id SET DEFAULT nextval('public."standards_classаveragedensity_id_seq"'::regclass);
+
+
+--
+-- TOC entry 3008 (class 2604 OID 30824)
+-- Name: standards_markd id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.standards_markd ALTER COLUMN id SET DEFAULT nextval('public.standards_markd_id_seq'::regclass);
+
+
+--
+-- TOC entry 3009 (class 2604 OID 30834)
+-- Name: standards_markf id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.standards_markf ALTER COLUMN id SET DEFAULT nextval('public.standards_markf_id_seq'::regclass);
+
+
+--
+-- TOC entry 3010 (class 2604 OID 30844)
+-- Name: standards_markm id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.standards_markm ALTER COLUMN id SET DEFAULT nextval('public.standards_markm_id_seq'::regclass);
+
+
+--
+-- TOC entry 3011 (class 2604 OID 30854)
+-- Name: standards_nfsize id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.standards_nfsize ALTER COLUMN id SET DEFAULT nextval('public.standards_nfsize_id_seq'::regclass);
+
+
+--
+-- TOC entry 3002 (class 2604 OID 30731)
+-- Name: suppliers_activity id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.suppliers_activity ALTER COLUMN id SET DEFAULT nextval('public.suppliers_activity_id_seq'::regclass);
+
+
+--
+-- TOC entry 3005 (class 2604 OID 30759)
+-- Name: suppliers_manufacturer id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.suppliers_manufacturer ALTER COLUMN id SET DEFAULT nextval('public.suppliers_manufacturer_id_seq'::regclass);
+
+
+--
+-- TOC entry 3003 (class 2604 OID 30741)
+-- Name: suppliers_provider id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.suppliers_provider ALTER COLUMN id SET DEFAULT nextval('public.suppliers_provider_id_seq'::regclass);
+
+
+--
+-- TOC entry 3004 (class 2604 OID 30751)
+-- Name: suppliers_provider_secondary_activity id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.suppliers_provider_secondary_activity ALTER COLUMN id SET DEFAULT nextval('public.suppliers_provider_secondary_activity_id_seq'::regclass);
+
+
+--
+-- TOC entry 3019 (class 2604 OID 31046)
+-- Name: workprices_pilegrillagefoundationworkprices id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.workprices_pilegrillagefoundationworkprices ALTER COLUMN id SET DEFAULT nextval('public.workprices_pilegrillagefoundationworkprices_id_seq'::regclass);
+
+
+--
+-- TOC entry 3544 (class 0 OID 31058)
+-- Dependencies: 274
+-- Data for Name: account_profile; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.account_profile (id, photo, user_id, city_id) FROM stdin;
+1		1	1
+2		2	1
+\.
+
+
+--
+-- TOC entry 3479 (class 0 OID 30459)
+-- Dependencies: 209
+-- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auth_group (id, name) FROM stdin;
+1	Клиент
+\.
+
+
+--
+-- TOC entry 3481 (class 0 OID 30469)
+-- Dependencies: 211
+-- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auth_group_permissions (id, group_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3477 (class 0 OID 30451)
+-- Dependencies: 207
+-- Data for Name: auth_permission; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
+1	Can add log entry	1	add_logentry
+2	Can change log entry	1	change_logentry
+3	Can delete log entry	1	delete_logentry
+4	Can view log entry	1	view_logentry
+5	Can add permission	2	add_permission
+6	Can change permission	2	change_permission
+7	Can delete permission	2	delete_permission
+8	Can view permission	2	view_permission
+9	Can add group	3	add_group
+10	Can change group	3	change_group
+11	Can delete group	3	delete_group
+12	Can view group	3	view_group
+13	Can add user	4	add_user
+14	Can change user	4	change_user
+15	Can delete user	4	delete_user
+16	Can view user	4	view_user
+17	Can add content type	5	add_contenttype
+18	Can change content type	5	change_contenttype
+19	Can delete content type	5	delete_contenttype
+20	Can view content type	5	view_contenttype
+21	Can add session	6	add_session
+22	Can change session	6	change_session
+23	Can delete session	6	delete_session
+24	Can view session	6	view_session
+25	Can add Алгоритм	7	add_algorithm
+26	Can change Алгоритм	7	change_algorithm
+27	Can delete Алгоритм	7	delete_algorithm
+28	Can view Алгоритм	7	view_algorithm
+29	Can add Профиль пользователя	8	add_profile
+30	Can change Профиль пользователя	8	change_profile
+31	Can delete Профиль пользователя	8	delete_profile
+32	Can view Профиль пользователя	8	view_profile
+33	Can add Проект	9	add_plan
+34	Can change Проект	9	change_plan
+35	Can delete Проект	9	delete_plan
+36	Can view Проект	9	view_plan
+37	Can add Песок россыпью в самосвалах	10	add_bulksand
+38	Can change Песок россыпью в самосвалах	10	change_bulksand
+39	Can delete Песок россыпью в самосвалах	10	delete_bulksand
+40	Can view Песок россыпью в самосвалах	10	view_bulksand
+41	Can add Единица стенового материала	11	add_rockwallmaterialunit
+42	Can change Единица стенового материала	11	change_rockwallmaterialunit
+43	Can delete Единица стенового материала	11	delete_rockwallmaterialunit
+44	Can view Единица стенового материала	11	view_rockwallmaterialunit
+45	Can add Утеплитель	12	add_insulation
+46	Can change Утеплитель	12	change_insulation
+47	Can delete Утеплитель	12	delete_insulation
+48	Can view Утеплитель	12	view_insulation
+49	Can add Вид деятельности	13	add_activity
+50	Can change Вид деятельности	13	change_activity
+51	Can delete Вид деятельности	13	delete_activity
+52	Can view Вид деятельности	13	view_activity
+53	Can add Поставщик услуг/материалов	14	add_provider
+54	Can change Поставщик услуг/материалов	14	change_provider
+55	Can delete Поставщик услуг/материалов	14	delete_provider
+56	Can view Поставщик услуг/материалов	14	view_provider
+57	Can add Производитель материала	15	add_manufacturer
+58	Can change Производитель материала	15	change_manufacturer
+59	Can delete Производитель материала	15	delete_manufacturer
+60	Can view Производитель материала	15	view_manufacturer
+61	Can add Страна	16	add_country
+62	Can change Страна	16	change_country
+63	Can delete Страна	16	delete_country
+64	Can view Страна	16	view_country
+65	Can add Регион	17	add_region
+66	Can change Регион	17	change_region
+67	Can delete Регион	17	delete_region
+68	Can view Регион	17	view_region
+69	Can add Город	18	add_city
+70	Can change Город	18	change_city
+71	Can delete Город	18	delete_city
+72	Can view Город	18	view_city
+73	Can add Основной бренд	19	add_brand
+74	Can change Основной бренд	19	change_brand
+75	Can delete Основной бренд	19	delete_brand
+76	Can view Основной бренд	19	view_brand
+77	Can add Подбренд 1)	20	add_subbrand_1
+78	Can change Подбренд 1)	20	change_subbrand_1
+79	Can delete Подбренд 1)	20	delete_subbrand_1
+80	Can view Подбренд 1)	20	view_subbrand_1
+81	Can add Подбренд 2)	21	add_subbrand_2
+82	Can change Подбренд 2)	21	change_subbrand_2
+83	Can delete Подбренд 2)	21	delete_subbrand_2
+84	Can view Подбренд 2)	21	view_subbrand_2
+85	Can add Названея декоративной грани рядового кирпича	22	add_decorativebrickface
+86	Can change Названея декоративной грани рядового кирпича	22	change_decorativebrickface
+87	Can delete Названея декоративной грани рядового кирпича	22	delete_decorativebrickface
+88	Can view Названея декоративной грани рядового кирпича	22	view_decorativebrickface
+89	Can add Класс В бетона	23	add_classb
+90	Can change Класс В бетона	23	change_classb
+91	Can delete Класс В бетона	23	delete_classb
+92	Can view Класс В бетона	23	view_classb
+93	Can add Класс средней плотности	24	add_classаveragedensity
+94	Can change Класс средней плотности	24	change_classаveragedensity
+95	Can delete Класс средней плотности	24	delete_classаveragedensity
+96	Can view Класс средней плотности	24	view_classаveragedensity
+97	Can add Марка D	25	add_markd
+98	Can change Марка D	25	change_markd
+99	Can delete Марка D	25	delete_markd
+100	Can view Марка D	25	view_markd
+101	Can add Марка морозостойкости F	26	add_markf
+102	Can change Марка морозостойкости F	26	change_markf
+103	Can delete Марка морозостойкости F	26	delete_markf
+104	Can view Марка морозостойкости F	26	view_markf
+105	Can add Марка М	27	add_markm
+106	Can change Марка М	27	change_markm
+107	Can delete Марка М	27	delete_markm
+108	Can view Марка М	27	view_markm
+109	Can add Размер НФ	28	add_nfsize
+110	Can change Размер НФ	28	change_nfsize
+111	Can delete Размер НФ	28	delete_nfsize
+112	Can view Размер НФ	28	view_nfsize
+113	Can add Цены каменные стеновые материалы	29	add_rockwallmaterialprice
+114	Can change Цены каменные стеновые материалы	29	change_rockwallmaterialprice
+115	Can delete Цены каменные стеновые материалы	29	delete_rockwallmaterialprice
+116	Can view Цены каменные стеновые материалы	29	view_rockwallmaterialprice
+117	Can add Цены утеплители	30	add_insulationprice
+118	Can change Цены утеплители	30	change_insulationprice
+119	Can delete Цены утеплители	30	delete_insulationprice
+120	Can view Цены утеплители	30	view_insulationprice
+121	Can add Стоимость свайно-ростверкового фундамента	31	add_pilegrillagefoundationworkprices
+122	Can change Стоимость свайно-ростверкового фундамента	31	change_pilegrillagefoundationworkprices
+123	Can delete Стоимость свайно-ростверкового фундамента	31	delete_pilegrillagefoundationworkprices
+124	Can view Стоимость свайно-ростверкового фундамента	31	view_pilegrillagefoundationworkprices
+125	Can add profile	32	add_profile
+126	Can change profile	32	change_profile
+127	Can delete profile	32	delete_profile
+128	Can view profile	32	view_profile
+129	Can add roof cover type	33	add_roofcovertype
+130	Can change roof cover type	33	change_roofcovertype
+131	Can delete roof cover type	33	delete_roofcovertype
+132	Can view roof cover type	33	view_roofcovertype
+133	Can add metal tile	34	add_metaltile
+134	Can change metal tile	34	change_metaltile
+135	Can delete metal tile	34	delete_metaltile
+136	Can view metal tile	34	view_metaltile
+137	Can add flexible tile	35	add_flexibletile
+138	Can change flexible tile	35	change_flexibletile
+139	Can delete flexible tile	35	delete_flexibletile
+140	Can view flexible tile	35	view_flexibletile
+141	Can add Назначение материала	36	add_materialuse
+142	Can change Назначение материала	36	change_materialuse
+143	Can delete Назначение материала	36	delete_materialuse
+144	Can view Назначение материала	36	view_materialuse
+145	Can add selfbearing stone product line	37	add_selfbearingstoneproductline
+146	Can change selfbearing stone product line	37	change_selfbearingstoneproductline
+147	Can delete selfbearing stone product line	37	delete_selfbearingstoneproductline
+148	Can view selfbearing stone product line	37	view_selfbearingstoneproductline
+149	Can add siding	38	add_siding
+150	Can change siding	38	change_siding
+151	Can delete siding	38	delete_siding
+152	Can view siding	38	view_siding
+153	Can add plaster	39	add_plaster
+154	Can change plaster	39	change_plaster
+155	Can delete plaster	39	delete_plaster
+156	Can view plaster	39	view_plaster
+157	Can add selfbearing stone unit	40	add_selfbearingstoneunit
+158	Can change selfbearing stone unit	40	change_selfbearingstoneunit
+159	Can delete selfbearing stone unit	40	delete_selfbearingstoneunit
+160	Can view selfbearing stone unit	40	view_selfbearingstoneunit
+161	Can add Кровельный материал	41	add_roofcovermaterial
+162	Can change Кровельный материал	41	change_roofcovermaterial
+163	Can delete Кровельный материал	41	delete_roofcovermaterial
+164	Can view Кровельный материал	41	view_roofcovermaterial
+165	Can add stone unit	42	add_stoneunit
+166	Can change stone unit	42	change_stoneunit
+167	Can delete stone unit	42	delete_stoneunit
+168	Can view stone unit	42	view_stoneunit
+169	Can add stone product line	43	add_stoneproductline
+170	Can change stone product line	43	change_stoneproductline
+171	Can delete stone product line	43	delete_stoneproductline
+172	Can view stone product line	43	view_stoneproductline
+173	Can add Тип фасадного (облицовочного) материала	44	add_facadematerialtype
+174	Can change Тип фасадного (облицовочного) материала	44	change_facadematerialtype
+175	Can delete Тип фасадного (облицовочного) материала	44	delete_facadematerialtype
+176	Can view Тип фасадного (облицовочного) материала	44	view_facadematerialtype
+177	Can add Шаблон оформления фасада	45	add_shell
+178	Can change Шаблон оформления фасада	45	change_shell
+179	Can delete Шаблон оформления фасада	45	delete_shell
+180	Can view Шаблон оформления фасада	45	view_shell
+\.
+
+
+--
+-- TOC entry 3483 (class 0 OID 30477)
+-- Dependencies: 213
+-- Data for Name: auth_user; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
+2	pbkdf2_sha256$180000$HazoqEyLXWTs$oxnxkZsg9GKmBYk+ee2D7pJuPaz5Wa+om0rzL4rA2R8=	2020-05-26 15:30:24+03	f	Мегастрой	Александр		2594501@mail.ru	f	t	2020-05-26 15:30:19+03
+1	pbkdf2_sha256$180000$qhTrD1Vx6b9U$vGtCpCRX5E0pO8feNTQ2LFlW6I7sPQOPWS2SXEN61Ro=	2020-06-05 17:29:07.050105+03	t	admin	Александр	Луценко	2594501@mail.ru	t	t	2020-03-17 15:04:16+03
+\.
+
+
+--
+-- TOC entry 3485 (class 0 OID 30487)
+-- Dependencies: 215
+-- Data for Name: auth_user_groups; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auth_user_groups (id, user_id, group_id) FROM stdin;
+1	1	1
+2	2	1
+\.
+
+
+--
+-- TOC entry 3487 (class 0 OID 30495)
+-- Dependencies: 217
+-- Data for Name: auth_user_user_permissions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3491 (class 0 OID 30588)
+-- Dependencies: 221
+-- Data for Name: brands_brand; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.brands_brand (id, name) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3493 (class 0 OID 30598)
+-- Dependencies: 223
+-- Data for Name: brands_subbrand_1; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.brands_subbrand_1 (id, name, brand_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3495 (class 0 OID 30608)
+-- Dependencies: 225
+-- Data for Name: brands_subbrand_2; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.brands_subbrand_2 (id, name, sub_brand_1_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3503 (class 0 OID 30677)
+-- Dependencies: 233
+-- Data for Name: catalog_algorithm; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.catalog_algorithm (id, identifier, name) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3568 (class 0 OID 31373)
+-- Dependencies: 298
+-- Data for Name: catalog_facadematerialtype; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.catalog_facadematerialtype (id, name, identifier) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3505 (class 0 OID 30697)
+-- Dependencies: 235
+-- Data for Name: catalog_plan; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.catalog_plan (id, title, scheme, checked, author_id) FROM stdin;
+5	New plan	"{\\"elements\\":[{\\"id\\":0,\\"ids\\":[0],\\"type\\":\\"wall\\",\\"subType\\":\\"\\",\\"level\\":\\"floor_1\\"},{\\"id\\":1,\\"ids\\":[1],\\"type\\":\\"wall\\",\\"subType\\":\\"\\",\\"level\\":\\"floor_1\\"},{\\"id\\":2,\\"ids\\":[2],\\"type\\":\\"wall\\",\\"subType\\":\\"\\",\\"level\\":\\"floor_1\\"},{\\"id\\":3,\\"ids\\":[3],\\"type\\":\\"wall\\",\\"subType\\":\\"\\",\\"level\\":\\"floor_1\\"},{\\"id\\":4,\\"ids\\":[4],\\"type\\":\\"wall\\",\\"subType\\":\\"\\",\\"level\\":\\"floor_1\\"},{\\"id\\":5,\\"ids\\":[5],\\"type\\":\\"wall\\",\\"subType\\":\\"\\",\\"level\\":\\"floor_1\\"},{\\"id\\":6,\\"ids\\":[6,7,8,9],\\"type\\":\\"roof\\"},{\\"id\\":7,\\"ids\\":[10,11,12,13],\\"type\\":\\"roof\\"}],\\"lines\\":[{\\"id\\":0,\\"id0\\":0,\\"id1\\":1,\\"distance\\":0,\\"direction\\":\\"\\"},{\\"id\\":1,\\"id0\\":2,\\"id1\\":3,\\"distance\\":0,\\"direction\\":\\"\\"},{\\"id\\":2,\\"id0\\":4,\\"id1\\":5,\\"distance\\":0,\\"direction\\":\\"\\"},{\\"id\\":3,\\"id0\\":6,\\"id1\\":7,\\"distance\\":0,\\"direction\\":\\"\\"},{\\"id\\":4,\\"id0\\":8,\\"id1\\":9,\\"distance\\":0,\\"direction\\":\\"\\"},{\\"id\\":5,\\"id0\\":10,\\"id1\\":11,\\"distance\\":0,\\"direction\\":\\"\\"},{\\"id\\":6,\\"id0\\":12,\\"id1\\":13},{\\"id\\":7,\\"id0\\":13,\\"id1\\":14},{\\"id\\":8,\\"id0\\":14,\\"id1\\":15},{\\"id\\":9,\\"id0\\":15,\\"id1\\":12},{\\"id\\":10,\\"id0\\":16,\\"id1\\":17},{\\"id\\":11,\\"id0\\":17,\\"id1\\":18},{\\"id\\":12,\\"id0\\":18,\\"id1\\":19},{\\"id\\":13,\\"id0\\":19,\\"id1\\":16}],\\"points\\":[{\\"id\\":12,\\"x\\":-1600,\\"y\\":-1350,\\"height\\":0,\\"is_floor_1\\":true,\\"is_floor_2\\":false,\\"is_floor_3\\":false,\\"total_height\\":3000},{\\"id\\":13,\\"x\\":2800,\\"y\\":-1350,\\"is_floor_1\\":true,\\"is_floor_2\\":false,\\"is_floor_3\\":false,\\"height\\":1000,\\"total_height\\":4000},{\\"id\\":16,\\"x\\":2800,\\"y\\":-1350,\\"is_floor_1\\":true,\\"is_floor_2\\":false,\\"is_floor_3\\":false,\\"height\\":1000,\\"total_height\\":4000},{\\"id\\":17,\\"x\\":7400,\\"y\\":-1350,\\"is_floor_1\\":true,\\"is_floor_2\\":false,\\"is_floor_3\\":false,\\"height\\":0,\\"total_height\\":3000},{\\"id\\":0,\\"x\\":-600,\\"y\\":-350},{\\"id\\":7,\\"x\\":-600,\\"y\\":-350},{\\"id\\":1,\\"x\\":6400,\\"y\\":-350},{\\"id\\":2,\\"x\\":6400,\\"y\\":-350},{\\"id\\":8,\\"x\\":-600,\\"y\\":2650},{\\"id\\":10,\\"x\\":3400,\\"y\\":2650},{\\"id\\":9,\\"x\\":6400,\\"y\\":2650},{\\"id\\":5,\\"x\\":-600,\\"y\\":5650},{\\"id\\":6,\\"x\\":-600,\\"y\\":5650},{\\"id\\":11,\\"x\\":3400,\\"y\\":5650},{\\"id\\":3,\\"x\\":6400,\\"y\\":5650},{\\"id\\":4,\\"x\\":6400,\\"y\\":5650},{\\"id\\":15,\\"x\\":-1600,\\"y\\":6650,\\"is_floor_1\\":true,\\"is_floor_2\\":false,\\"is_floor_3\\":false,\\"height\\":0,\\"total_height\\":3000},{\\"id\\":14,\\"x\\":2800,\\"y\\":6650,\\"is_floor_1\\":true,\\"is_floor_2\\":false,\\"is_floor_3\\":false,\\"height\\":1000,\\"total_height\\":4000},{\\"id\\":19,\\"x\\":2800,\\"y\\":6650,\\"height\\":1000,\\"is_floor_1\\":true,\\"is_floor_2\\":false,\\"is_floor_3\\":false,\\"total_height\\":4000},{\\"id\\":18,\\"x\\":7400,\\"y\\":6650,\\"is_floor_1\\":true,\\"is_floor_2\\":false,\\"is_floor_3\\":false,\\"height\\":0,\\"total_height\\":3000}],\\"vents\\":[],\\"windows\\":[],\\"doorWindows\\":[],\\"openings\\":[],\\"scale\\":25,\\"zeroPointPadding\\":{\\"x\\":5275,\\"y\\":4575}}"	f	1
+\.
+
+
+--
+-- TOC entry 3570 (class 0 OID 31383)
+-- Dependencies: 300
+-- Data for Name: catalog_shell; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.catalog_shell (id, name, roof_material_id, soffit_style, wall_material_0_id, socle_material_id, author_id, roof_material_type_id, socle_material_type_id, wall_material_type_0_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3489 (class 0 OID 30555)
+-- Dependencies: 219
+-- Data for Name: django_admin_log; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) FROM stdin;
+1	2020-05-26 11:35:50.807776+03	3	New plan	2	[{"changed": {"fields": ["\\u0410\\u0432\\u0442\\u043e\\u0440"]}}]	9	1
+2	2020-05-26 11:36:44.18883+03	3	New plan	3		9	1
+3	2020-05-26 17:35:18.204361+03	1	Profile for user admin	1	[{"added": {}}]	32	1
+4	2020-05-26 17:35:25.761793+03	2	Profile for user Мегастрой	1	[{"added": {}}]	32	1
+5	2020-05-26 17:58:22.120516+03	4	New plan	2	[{"changed": {"fields": ["\\u0410\\u0432\\u0442\\u043e\\u0440"]}}]	9	1
+6	2020-05-26 19:48:09.813311+03	1	Россия	1	[{"added": {}}]	16	1
+7	2020-05-26 19:48:15.770652+03	1	Татарстан	1	[{"added": {}}]	17	1
+8	2020-05-26 19:48:21.116957+03	1	Казань	1	[{"added": {}}]	18	1
+9	2020-05-26 19:48:27.055297+03	1	Profile for user admin	2	[{"changed": {"fields": ["City"]}}]	32	1
+10	2020-05-26 19:48:34.001694+03	2	Profile for user Мегастрой	2	[{"changed": {"fields": ["City"]}}]	32	1
+11	2020-05-26 19:50:27.803203+03	1	Клиент	1	[{"added": {}}]	3	1
+12	2020-05-26 19:50:56.174826+03	1	admin	2	[{"changed": {"fields": ["Groups"]}}]	4	1
+13	2020-05-26 19:51:04.075278+03	2	Мегастрой	2	[{"changed": {"fields": ["Groups"]}}]	4	1
+14	2020-06-03 11:56:31.045469+03	1	Металлочерепица, metal_tile  	1	[{"added": {}}]	33	1
+15	2020-06-03 11:56:55.726881+03	2	Гибкая черепица, flexible_tile  	1	[{"added": {}}]	33	1
+16	2020-06-03 13:31:37.928884+03	2	Монтеррей, Металлочерепица  	1	[{"added": {}}]	41	1
+17	2020-06-03 13:32:33.031036+03	3	SHINGLAS Континент (Азия), Гибкая черепица  	1	[{"added": {}}]	41	1
+18	2020-06-03 13:35:01.023501+03	3	SHINGLAS Континент (Азия), Гибкая черепица  	3		41	1
+19	2020-06-03 13:35:01.028501+03	2	Монтеррей, Металлочерепица  	3		41	1
+20	2020-06-03 13:39:33.101063+03	4	Монтеррей, Металлочерепица  	1	[{"added": {}}]	41	1
+21	2020-06-03 13:40:07.207013+03	5	Континент (Азия), Гибкая черепица  	1	[{"added": {}}]	41	1
+\.
+
+
+--
+-- TOC entry 3475 (class 0 OID 30441)
+-- Dependencies: 205
+-- Data for Name: django_content_type; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.django_content_type (id, app_label, model) FROM stdin;
+1	admin	logentry
+2	auth	permission
+3	auth	group
+4	auth	user
+5	contenttypes	contenttype
+6	sessions	session
+7	catalog	algorithm
+8	catalog	profile
+9	catalog	plan
+10	materials	bulksand
+11	materials	rockwallmaterialunit
+12	materials	insulation
+13	suppliers	activity
+14	suppliers	provider
+15	suppliers	manufacturer
+16	geography	country
+17	geography	region
+18	geography	city
+19	brands	brand
+20	brands	subbrand_1
+21	brands	subbrand_2
+22	names	decorativebrickface
+23	standards	classb
+24	standards	classаveragedensity
+25	standards	markd
+26	standards	markf
+27	standards	markm
+28	standards	nfsize
+29	materialprices	rockwallmaterialprice
+30	materialprices	insulationprice
+31	workprices	pilegrillagefoundationworkprices
+32	account	profile
+33	materials	roofcovertype
+34	materials	metaltile
+35	materials	flexibletile
+36	materials	materialuse
+37	materials	selfbearingstoneproductline
+38	materials	siding
+39	materials	plaster
+40	materials	selfbearingstoneunit
+41	materials	roofcovermaterial
+42	materials	stoneunit
+43	materials	stoneproductline
+44	catalog	facadematerialtype
+45	catalog	shell
+\.
+
+
+--
+-- TOC entry 3473 (class 0 OID 30430)
+-- Dependencies: 203
+-- Data for Name: django_migrations; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.django_migrations (id, app, name, applied) FROM stdin;
+1	contenttypes	0001_initial	2020-03-17 15:02:02.481316+03
+2	auth	0001_initial	2020-03-17 15:02:02.55832+03
+3	admin	0001_initial	2020-03-17 15:02:02.666327+03
+4	admin	0002_logentry_remove_auto_add	2020-03-17 15:02:02.690328+03
+5	admin	0003_logentry_add_action_flag_choices	2020-03-17 15:02:02.701329+03
+6	contenttypes	0002_remove_content_type_name	2020-03-17 15:02:02.72433+03
+7	auth	0002_alter_permission_name_max_length	2020-03-17 15:02:02.73133+03
+8	auth	0003_alter_user_email_max_length	2020-03-17 15:02:02.742331+03
+9	auth	0004_alter_user_username_opts	2020-03-17 15:02:02.755332+03
+10	auth	0005_alter_user_last_login_null	2020-03-17 15:02:02.766332+03
+11	auth	0006_require_contenttypes_0002	2020-03-17 15:02:02.769332+03
+12	auth	0007_alter_validators_add_error_messages	2020-03-17 15:02:02.780333+03
+13	auth	0008_alter_user_username_max_length	2020-03-17 15:02:02.820335+03
+14	auth	0009_alter_user_last_name_max_length	2020-03-17 15:02:02.834336+03
+15	auth	0010_alter_group_name_max_length	2020-03-17 15:02:02.848337+03
+16	auth	0011_update_proxy_permissions	2020-03-17 15:02:02.859338+03
+17	brands	0001_initial	2020-03-17 15:02:03.001346+03
+18	geography	0001_initial	2020-03-17 15:02:03.07835+03
+19	catalog	0001_initial	2020-03-17 15:02:03.178356+03
+20	suppliers	0001_initial	2020-03-17 15:02:03.276361+03
+21	standards	0001_initial	2020-03-17 15:02:03.529376+03
+22	names	0001_initial	2020-03-17 15:02:03.59838+03
+23	materials	0001_initial	2020-03-17 15:02:03.631382+03
+24	materials	0002_auto_20200317_1501	2020-03-17 15:02:03.704386+03
+25	materialprices	0001_initial	2020-03-17 15:02:03.893397+03
+26	sessions	0001_initial	2020-03-17 15:02:03.938399+03
+27	workprices	0001_initial	2020-03-17 15:02:03.987402+03
+28	account	0001_initial	2020-05-26 16:16:44.414748+03
+29	catalog	0002_delete_profile	2020-05-26 16:16:44.45175+03
+30	account	0002_profile_city	2020-05-26 19:46:47.603609+03
+31	materials	0003_flexibletile_materialuse_metaltile_plaster_roofcovertype_selfbearingstoneproductline_selfbearingston	2020-06-03 10:22:24.040479+03
+32	materials	0004_auto_20200603_1310	2020-06-03 13:10:37.928816+03
+33	materials	0005_roofcovermaterial_texture	2020-06-03 13:37:03.339497+03
+34	materials	0006_auto_20200603_1433	2020-06-03 14:33:15.207357+03
+35	materials	0007_stoneproductline_stoneunit	2020-06-03 14:34:00.672957+03
+36	materials	0008_auto_20200603_1456	2020-06-03 14:56:47.777151+03
+37	materials	0009_auto_20200605_1718	2020-06-05 17:18:13.195707+03
+38	catalog	0003_facadematerialtype_shell	2020-06-05 17:18:13.320714+03
+\.
+
+
+--
+-- TOC entry 3540 (class 0 OID 31031)
+-- Dependencies: 270
+-- Data for Name: django_session; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
+a6coxbqlexit10avw2ougy4mex66z37t	NTE3ZGNhZTI3Nzk5OTRhNDVkYTFjODIyMzUwMjdmNmJjZWExOGMzZTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmY2E2MzkyMmFmNzRkZjQ4NWYzNGE4NzA3MGJmZjdiZDg1OTUxMjEyIn0=	2020-03-31 15:04:29.648733+03
+1bm0hm8rwnvuenpzj20sxgv0m9pcj9fm	NTE3ZGNhZTI3Nzk5OTRhNDVkYTFjODIyMzUwMjdmNmJjZWExOGMzZTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmY2E2MzkyMmFmNzRkZjQ4NWYzNGE4NzA3MGJmZjdiZDg1OTUxMjEyIn0=	2020-04-20 14:18:00.122147+03
+bxnrldmsuyzh68v8bsz7cz16kx9ghgod	NTE3ZGNhZTI3Nzk5OTRhNDVkYTFjODIyMzUwMjdmNmJjZWExOGMzZTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmY2E2MzkyMmFmNzRkZjQ4NWYzNGE4NzA3MGJmZjdiZDg1OTUxMjEyIn0=	2020-05-07 13:11:00.50997+03
+9vonrmqshs4pgy0y0qgsyvenmf0uy922	NTE3ZGNhZTI3Nzk5OTRhNDVkYTFjODIyMzUwMjdmNmJjZWExOGMzZTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmY2E2MzkyMmFmNzRkZjQ4NWYzNGE4NzA3MGJmZjdiZDg1OTUxMjEyIn0=	2020-06-19 17:29:07.052105+03
+\.
+
+
+--
+-- TOC entry 3501 (class 0 OID 30655)
+-- Dependencies: 231
+-- Data for Name: geography_city; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.geography_city (id, name, heating_period_duration, heating_period_temperature, region_id) FROM stdin;
+1	Казань	1	1	1
+\.
+
+
+--
+-- TOC entry 3497 (class 0 OID 30633)
+-- Dependencies: 227
+-- Data for Name: geography_country; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.geography_country (id, name) FROM stdin;
+1	Россия
+\.
+
+
+--
+-- TOC entry 3499 (class 0 OID 30643)
+-- Dependencies: 229
+-- Data for Name: geography_region; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.geography_region (id, name, code, country_id) FROM stdin;
+1	Татарстан	16	1
+\.
+
+
+--
+-- TOC entry 3539 (class 0 OID 31001)
+-- Dependencies: 269
+-- Data for Name: materialprices_insulationprice; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.materialprices_insulationprice (id, price, name_id, owner_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3537 (class 0 OID 30993)
+-- Dependencies: 267
+-- Data for Name: materialprices_rockwallmaterialprice; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.materialprices_rockwallmaterialprice (id, price, name_id, owner_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3531 (class 0 OID 30897)
+-- Dependencies: 261
+-- Data for Name: materials_bulksand; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.materials_bulksand (id, name, weight) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3564 (class 0 OID 31351)
+-- Dependencies: 294
+-- Data for Name: materials_flexibletile; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.materials_flexibletile (id, name, texture) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3535 (class 0 OID 30913)
+-- Dependencies: 265
+-- Data for Name: materials_insulation; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.materials_insulation (id, thermal_conductivity, mat_type, thick, brand_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3546 (class 0 OID 31079)
+-- Dependencies: 276
+-- Data for Name: materials_materialuse; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.materials_materialuse (id, name, identifier) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3566 (class 0 OID 31361)
+-- Dependencies: 296
+-- Data for Name: materials_metaltile; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.materials_metaltile (id, name, texture) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3554 (class 0 OID 31139)
+-- Dependencies: 284
+-- Data for Name: materials_plaster; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.materials_plaster (id, texture, brand_id, manufacturer_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3556 (class 0 OID 31147)
+-- Dependencies: 286
+-- Data for Name: materials_plaster_use; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.materials_plaster_use (id, plaster_id, materialuse_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3533 (class 0 OID 30905)
+-- Dependencies: 263
+-- Data for Name: materials_rockwallmaterialunit; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.materials_rockwallmaterialunit (id, name, material, greater_bed_size, minor_bed_size, height, tongue_and_groove, polish, purpose, partition_or_bearing, body_type, blind_hollow, primary_or_additional, algorithm_id, brand_id, class_average_density_id, class_b_id, face_id, manufacturer_id, mark_d_id, mark_f_id, mark_m_id, sub_brand_1_id, sub_brand_2_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3548 (class 0 OID 31087)
+-- Dependencies: 278
+-- Data for Name: materials_roofcovertype; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.materials_roofcovertype (id, name, identifier) FROM stdin;
+1	Металлочерепица	metal_tile
+2	Гибкая черепица	flexible_tile
+\.
+
+
+--
+-- TOC entry 3550 (class 0 OID 31115)
+-- Dependencies: 280
+-- Data for Name: materials_siding; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.materials_siding (id, material, alternative_name, texture, brand_id, manufacturer_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3552 (class 0 OID 31123)
+-- Dependencies: 282
+-- Data for Name: materials_siding_use; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.materials_siding_use (id, siding_id, materialuse_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3558 (class 0 OID 31293)
+-- Dependencies: 288
+-- Data for Name: materials_stoneproductline; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.materials_stoneproductline (id, name, manufacturer_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3560 (class 0 OID 31301)
+-- Dependencies: 290
+-- Data for Name: materials_stoneproductline_use; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.materials_stoneproductline_use (id, stoneproductline_id, materialuse_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3562 (class 0 OID 31309)
+-- Dependencies: 292
+-- Data for Name: materials_stoneunit; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.materials_stoneunit (id, name, texture, product_line_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3527 (class 0 OID 30867)
+-- Dependencies: 257
+-- Data for Name: names_decorativebrickface; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.names_decorativebrickface (id, name) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3529 (class 0 OID 30875)
+-- Dependencies: 259
+-- Data for Name: names_decorativebrickface_brand; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.names_decorativebrickface_brand (id, decorativebrickface_id, brand_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3515 (class 0 OID 30801)
+-- Dependencies: 245
+-- Data for Name: standards_classb; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.standards_classb (id, identifier, name) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3517 (class 0 OID 30811)
+-- Dependencies: 247
+-- Data for Name: standards_classаveragedensity; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."standards_classаveragedensity" (id, identifier, name) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3519 (class 0 OID 30821)
+-- Dependencies: 249
+-- Data for Name: standards_markd; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.standards_markd (id, identifier, name) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3521 (class 0 OID 30831)
+-- Dependencies: 251
+-- Data for Name: standards_markf; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.standards_markf (id, identifier, name) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3523 (class 0 OID 30841)
+-- Dependencies: 253
+-- Data for Name: standards_markm; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.standards_markm (id, identifier, name) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3525 (class 0 OID 30851)
+-- Dependencies: 255
+-- Data for Name: standards_nfsize; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.standards_nfsize (id, identifier, name, greater_bed_size, minor_bed_size, height) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3507 (class 0 OID 30728)
+-- Dependencies: 237
+-- Data for Name: suppliers_activity; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.suppliers_activity (id, identifier, name) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3513 (class 0 OID 30756)
+-- Dependencies: 243
+-- Data for Name: suppliers_manufacturer; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.suppliers_manufacturer (id, alias, name, brand_id, city_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3509 (class 0 OID 30738)
+-- Dependencies: 239
+-- Data for Name: suppliers_provider; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.suppliers_provider (id, name, primary_activity_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3511 (class 0 OID 30748)
+-- Dependencies: 241
+-- Data for Name: suppliers_provider_secondary_activity; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.suppliers_provider_secondary_activity (id, provider_id, activity_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3542 (class 0 OID 31043)
+-- Dependencies: 272
+-- Data for Name: workprices_pilegrillagefoundationworkprices; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.workprices_pilegrillagefoundationworkprices (id, const_expenditure, transportation_procurement_cost, reinforcement_binding, clamp, pile_frame, formwork, length_costs, square_costs, volume_costs, pile_pour, man_hours_cost, man_hours_profit, owner_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3625 (class 0 OID 0)
+-- Dependencies: 273
+-- Name: account_profile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.account_profile_id_seq', 2, true);
+
+
+--
+-- TOC entry 3626 (class 0 OID 0)
+-- Dependencies: 208
+-- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_group_id_seq', 1, true);
+
+
+--
+-- TOC entry 3627 (class 0 OID 0)
+-- Dependencies: 210
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
+
+
+--
+-- TOC entry 3628 (class 0 OID 0)
+-- Dependencies: 206
+-- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 180, true);
+
+
+--
+-- TOC entry 3629 (class 0 OID 0)
+-- Dependencies: 214
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_user_groups_id_seq', 2, true);
+
+
+--
+-- TOC entry 3630 (class 0 OID 0)
+-- Dependencies: 212
+-- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_user_id_seq', 2, true);
+
+
+--
+-- TOC entry 3631 (class 0 OID 0)
+-- Dependencies: 216
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
+
+
+--
+-- TOC entry 3632 (class 0 OID 0)
+-- Dependencies: 220
+-- Name: brands_brand_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.brands_brand_id_seq', 1, false);
+
+
+--
+-- TOC entry 3633 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: brands_subbrand_1_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.brands_subbrand_1_id_seq', 1, false);
+
+
+--
+-- TOC entry 3634 (class 0 OID 0)
+-- Dependencies: 224
+-- Name: brands_subbrand_2_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.brands_subbrand_2_id_seq', 1, false);
+
+
+--
+-- TOC entry 3635 (class 0 OID 0)
+-- Dependencies: 232
+-- Name: catalog_algorithm_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.catalog_algorithm_id_seq', 1, false);
+
+
+--
+-- TOC entry 3636 (class 0 OID 0)
+-- Dependencies: 297
+-- Name: catalog_facadematerialtype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.catalog_facadematerialtype_id_seq', 1, false);
+
+
+--
+-- TOC entry 3637 (class 0 OID 0)
+-- Dependencies: 234
+-- Name: catalog_plan_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.catalog_plan_id_seq', 5, true);
+
+
+--
+-- TOC entry 3638 (class 0 OID 0)
+-- Dependencies: 299
+-- Name: catalog_shell_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.catalog_shell_id_seq', 1, false);
+
+
+--
+-- TOC entry 3639 (class 0 OID 0)
+-- Dependencies: 218
+-- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 21, true);
+
+
+--
+-- TOC entry 3640 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 45, true);
+
+
+--
+-- TOC entry 3641 (class 0 OID 0)
+-- Dependencies: 202
+-- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 38, true);
+
+
+--
+-- TOC entry 3642 (class 0 OID 0)
+-- Dependencies: 230
+-- Name: geography_city_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.geography_city_id_seq', 1, true);
+
+
+--
+-- TOC entry 3643 (class 0 OID 0)
+-- Dependencies: 226
+-- Name: geography_country_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.geography_country_id_seq', 1, true);
+
+
+--
+-- TOC entry 3644 (class 0 OID 0)
+-- Dependencies: 228
+-- Name: geography_region_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.geography_region_id_seq', 1, true);
+
+
+--
+-- TOC entry 3645 (class 0 OID 0)
+-- Dependencies: 268
+-- Name: materialprices_insulationprice_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.materialprices_insulationprice_id_seq', 1, false);
+
+
+--
+-- TOC entry 3646 (class 0 OID 0)
+-- Dependencies: 266
+-- Name: materialprices_rockwallmaterialprice_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.materialprices_rockwallmaterialprice_id_seq', 1, false);
+
+
+--
+-- TOC entry 3647 (class 0 OID 0)
+-- Dependencies: 260
+-- Name: materials_bulksand_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.materials_bulksand_id_seq', 1, false);
+
+
+--
+-- TOC entry 3648 (class 0 OID 0)
+-- Dependencies: 293
+-- Name: materials_flexibletile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.materials_flexibletile_id_seq', 1, false);
+
+
+--
+-- TOC entry 3649 (class 0 OID 0)
+-- Dependencies: 264
+-- Name: materials_insulation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.materials_insulation_id_seq', 1, false);
+
+
+--
+-- TOC entry 3650 (class 0 OID 0)
+-- Dependencies: 275
+-- Name: materials_materialuse_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.materials_materialuse_id_seq', 1, false);
+
+
+--
+-- TOC entry 3651 (class 0 OID 0)
+-- Dependencies: 295
+-- Name: materials_metaltile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.materials_metaltile_id_seq', 1, false);
+
+
+--
+-- TOC entry 3652 (class 0 OID 0)
+-- Dependencies: 283
+-- Name: materials_plaster_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.materials_plaster_id_seq', 1, false);
+
+
+--
+-- TOC entry 3653 (class 0 OID 0)
+-- Dependencies: 285
+-- Name: materials_plaster_use_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.materials_plaster_use_id_seq', 1, false);
+
+
+--
+-- TOC entry 3654 (class 0 OID 0)
+-- Dependencies: 262
+-- Name: materials_rockwallmaterialunit_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.materials_rockwallmaterialunit_id_seq', 1, false);
+
+
+--
+-- TOC entry 3655 (class 0 OID 0)
+-- Dependencies: 277
+-- Name: materials_roofcovertype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.materials_roofcovertype_id_seq', 2, true);
+
+
+--
+-- TOC entry 3656 (class 0 OID 0)
+-- Dependencies: 279
+-- Name: materials_siding_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.materials_siding_id_seq', 1, false);
+
+
+--
+-- TOC entry 3657 (class 0 OID 0)
+-- Dependencies: 281
+-- Name: materials_siding_use_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.materials_siding_use_id_seq', 1, false);
+
+
+--
+-- TOC entry 3658 (class 0 OID 0)
+-- Dependencies: 287
+-- Name: materials_stoneproductline_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.materials_stoneproductline_id_seq', 1, false);
+
+
+--
+-- TOC entry 3659 (class 0 OID 0)
+-- Dependencies: 289
+-- Name: materials_stoneproductline_use_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.materials_stoneproductline_use_id_seq', 1, false);
+
+
+--
+-- TOC entry 3660 (class 0 OID 0)
+-- Dependencies: 291
+-- Name: materials_stoneunit_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.materials_stoneunit_id_seq', 1, false);
+
+
+--
+-- TOC entry 3661 (class 0 OID 0)
+-- Dependencies: 258
+-- Name: names_decorativebrickface_brand_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.names_decorativebrickface_brand_id_seq', 1, false);
+
+
+--
+-- TOC entry 3662 (class 0 OID 0)
+-- Dependencies: 256
+-- Name: names_decorativebrickface_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.names_decorativebrickface_id_seq', 1, false);
+
+
+--
+-- TOC entry 3663 (class 0 OID 0)
+-- Dependencies: 244
+-- Name: standards_classb_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.standards_classb_id_seq', 1, false);
+
+
+--
+-- TOC entry 3664 (class 0 OID 0)
+-- Dependencies: 246
+-- Name: standards_classаveragedensity_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."standards_classаveragedensity_id_seq"', 1, false);
+
+
+--
+-- TOC entry 3665 (class 0 OID 0)
+-- Dependencies: 248
+-- Name: standards_markd_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.standards_markd_id_seq', 1, false);
+
+
+--
+-- TOC entry 3666 (class 0 OID 0)
+-- Dependencies: 250
+-- Name: standards_markf_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.standards_markf_id_seq', 1, false);
+
+
+--
+-- TOC entry 3667 (class 0 OID 0)
+-- Dependencies: 252
+-- Name: standards_markm_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.standards_markm_id_seq', 1, false);
+
+
+--
+-- TOC entry 3668 (class 0 OID 0)
+-- Dependencies: 254
+-- Name: standards_nfsize_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.standards_nfsize_id_seq', 1, false);
+
+
+--
+-- TOC entry 3669 (class 0 OID 0)
+-- Dependencies: 236
+-- Name: suppliers_activity_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.suppliers_activity_id_seq', 1, false);
+
+
+--
+-- TOC entry 3670 (class 0 OID 0)
+-- Dependencies: 242
+-- Name: suppliers_manufacturer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.suppliers_manufacturer_id_seq', 1, false);
+
+
+--
+-- TOC entry 3671 (class 0 OID 0)
+-- Dependencies: 238
+-- Name: suppliers_provider_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.suppliers_provider_id_seq', 1, false);
+
+
+--
+-- TOC entry 3672 (class 0 OID 0)
+-- Dependencies: 240
+-- Name: suppliers_provider_secondary_activity_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.suppliers_provider_secondary_activity_id_seq', 1, false);
+
+
+--
+-- TOC entry 3673 (class 0 OID 0)
+-- Dependencies: 271
+-- Name: workprices_pilegrillagefoundationworkprices_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.workprices_pilegrillagefoundationworkprices_id_seq', 1, false);
+
+
+--
+-- TOC entry 3218 (class 2606 OID 31063)
+-- Name: account_profile account_profile_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.account_profile
+    ADD CONSTRAINT account_profile_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3220 (class 2606 OID 31065)
+-- Name: account_profile account_profile_user_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.account_profile
+    ADD CONSTRAINT account_profile_user_id_key UNIQUE (user_id);
+
+
+--
+-- TOC entry 3047 (class 2606 OID 30584)
+-- Name: auth_group auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group
+    ADD CONSTRAINT auth_group_name_key UNIQUE (name);
+
+
+--
+-- TOC entry 3052 (class 2606 OID 30511)
+-- Name: auth_group_permissions auth_group_permissions_group_id_permission_id_0cd325b0_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_permission_id_0cd325b0_uniq UNIQUE (group_id, permission_id);
+
+
+--
+-- TOC entry 3055 (class 2606 OID 30474)
+-- Name: auth_group_permissions auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3049 (class 2606 OID 30464)
+-- Name: auth_group auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group
+    ADD CONSTRAINT auth_group_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3042 (class 2606 OID 30502)
+-- Name: auth_permission auth_permission_content_type_id_codename_01ab375a_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_codename_01ab375a_uniq UNIQUE (content_type_id, codename);
+
+
+--
+-- TOC entry 3044 (class 2606 OID 30456)
+-- Name: auth_permission auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3063 (class 2606 OID 30492)
+-- Name: auth_user_groups auth_user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3066 (class 2606 OID 30526)
+-- Name: auth_user_groups auth_user_groups_user_id_group_id_94350c0c_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_group_id_94350c0c_uniq UNIQUE (user_id, group_id);
+
+
+--
+-- TOC entry 3057 (class 2606 OID 30482)
+-- Name: auth_user auth_user_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user
+    ADD CONSTRAINT auth_user_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3069 (class 2606 OID 30500)
+-- Name: auth_user_user_permissions auth_user_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3072 (class 2606 OID 30540)
+-- Name: auth_user_user_permissions auth_user_user_permissions_user_id_permission_id_14a6b632_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_user_id_permission_id_14a6b632_uniq UNIQUE (user_id, permission_id);
+
+
+--
+-- TOC entry 3060 (class 2606 OID 30578)
+-- Name: auth_user auth_user_username_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user
+    ADD CONSTRAINT auth_user_username_key UNIQUE (username);
+
+
+--
+-- TOC entry 3079 (class 2606 OID 30595)
+-- Name: brands_brand brands_brand_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brands_brand
+    ADD CONSTRAINT brands_brand_name_key UNIQUE (name);
+
+
+--
+-- TOC entry 3081 (class 2606 OID 30593)
+-- Name: brands_brand brands_brand_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brands_brand
+    ADD CONSTRAINT brands_brand_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3085 (class 2606 OID 30605)
+-- Name: brands_subbrand_1 brands_subbrand_1_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brands_subbrand_1
+    ADD CONSTRAINT brands_subbrand_1_name_key UNIQUE (name);
+
+
+--
+-- TOC entry 3087 (class 2606 OID 30603)
+-- Name: brands_subbrand_1 brands_subbrand_1_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brands_subbrand_1
+    ADD CONSTRAINT brands_subbrand_1_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3090 (class 2606 OID 30615)
+-- Name: brands_subbrand_2 brands_subbrand_2_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brands_subbrand_2
+    ADD CONSTRAINT brands_subbrand_2_name_key UNIQUE (name);
+
+
+--
+-- TOC entry 3092 (class 2606 OID 30613)
+-- Name: brands_subbrand_2 brands_subbrand_2_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brands_subbrand_2
+    ADD CONSTRAINT brands_subbrand_2_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3112 (class 2606 OID 30684)
+-- Name: catalog_algorithm catalog_algorithm_identifier_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.catalog_algorithm
+    ADD CONSTRAINT catalog_algorithm_identifier_key UNIQUE (identifier);
+
+
+--
+-- TOC entry 3115 (class 2606 OID 30686)
+-- Name: catalog_algorithm catalog_algorithm_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.catalog_algorithm
+    ADD CONSTRAINT catalog_algorithm_name_key UNIQUE (name);
+
+
+--
+-- TOC entry 3117 (class 2606 OID 30682)
+-- Name: catalog_algorithm catalog_algorithm_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.catalog_algorithm
+    ADD CONSTRAINT catalog_algorithm_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3281 (class 2606 OID 31380)
+-- Name: catalog_facadematerialtype catalog_facadematerialtype_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.catalog_facadematerialtype
+    ADD CONSTRAINT catalog_facadematerialtype_name_key UNIQUE (name);
+
+
+--
+-- TOC entry 3283 (class 2606 OID 31378)
+-- Name: catalog_facadematerialtype catalog_facadematerialtype_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.catalog_facadematerialtype
+    ADD CONSTRAINT catalog_facadematerialtype_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3120 (class 2606 OID 30705)
+-- Name: catalog_plan catalog_plan_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.catalog_plan
+    ADD CONSTRAINT catalog_plan_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3286 (class 2606 OID 31388)
+-- Name: catalog_shell catalog_shell_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.catalog_shell
+    ADD CONSTRAINT catalog_shell_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3075 (class 2606 OID 30564)
+-- Name: django_admin_log django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3037 (class 2606 OID 30448)
+-- Name: django_content_type django_content_type_app_label_model_76bd3d3b_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_content_type
+    ADD CONSTRAINT django_content_type_app_label_model_76bd3d3b_uniq UNIQUE (app_label, model);
+
+
+--
+-- TOC entry 3039 (class 2606 OID 30446)
+-- Name: django_content_type django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_content_type
+    ADD CONSTRAINT django_content_type_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3035 (class 2606 OID 30438)
+-- Name: django_migrations django_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_migrations
+    ADD CONSTRAINT django_migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3211 (class 2606 OID 31038)
+-- Name: django_session django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_session
+    ADD CONSTRAINT django_session_pkey PRIMARY KEY (session_key);
+
+
+--
+-- TOC entry 3108 (class 2606 OID 30660)
+-- Name: geography_city geography_city_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.geography_city
+    ADD CONSTRAINT geography_city_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3096 (class 2606 OID 30640)
+-- Name: geography_country geography_country_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.geography_country
+    ADD CONSTRAINT geography_country_name_key UNIQUE (name);
+
+
+--
+-- TOC entry 3098 (class 2606 OID 30638)
+-- Name: geography_country geography_country_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.geography_country
+    ADD CONSTRAINT geography_country_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3100 (class 2606 OID 30652)
+-- Name: geography_region geography_region_code_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.geography_region
+    ADD CONSTRAINT geography_region_code_key UNIQUE (code);
+
+
+--
+-- TOC entry 3104 (class 2606 OID 30650)
+-- Name: geography_region geography_region_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.geography_region
+    ADD CONSTRAINT geography_region_name_key UNIQUE (name);
+
+
+--
+-- TOC entry 3106 (class 2606 OID 30648)
+-- Name: geography_region geography_region_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.geography_region
+    ADD CONSTRAINT geography_region_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3208 (class 2606 OID 31006)
+-- Name: materialprices_insulationprice materialprices_insulationprice_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materialprices_insulationprice
+    ADD CONSTRAINT materialprices_insulationprice_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3204 (class 2606 OID 30998)
+-- Name: materialprices_rockwallmaterialprice materialprices_rockwallmaterialprice_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materialprices_rockwallmaterialprice
+    ADD CONSTRAINT materialprices_rockwallmaterialprice_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3184 (class 2606 OID 30902)
+-- Name: materials_bulksand materials_bulksand_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_bulksand
+    ADD CONSTRAINT materials_bulksand_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3271 (class 2606 OID 31358)
+-- Name: materials_flexibletile materials_flexibletile_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_flexibletile
+    ADD CONSTRAINT materials_flexibletile_name_key UNIQUE (name);
+
+
+--
+-- TOC entry 3273 (class 2606 OID 31356)
+-- Name: materials_flexibletile materials_flexibletile_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_flexibletile
+    ADD CONSTRAINT materials_flexibletile_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3200 (class 2606 OID 30918)
+-- Name: materials_insulation materials_insulation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_insulation
+    ADD CONSTRAINT materials_insulation_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3223 (class 2606 OID 31344)
+-- Name: materials_materialuse materials_materialuse_identifier_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_materialuse
+    ADD CONSTRAINT materials_materialuse_identifier_key UNIQUE (identifier);
+
+
+--
+-- TOC entry 3226 (class 2606 OID 31346)
+-- Name: materials_materialuse materials_materialuse_name_012faa14_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_materialuse
+    ADD CONSTRAINT materials_materialuse_name_012faa14_uniq UNIQUE (name);
+
+
+--
+-- TOC entry 3228 (class 2606 OID 31084)
+-- Name: materials_materialuse materials_materialuse_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_materialuse
+    ADD CONSTRAINT materials_materialuse_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3276 (class 2606 OID 31368)
+-- Name: materials_metaltile materials_metaltile_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_metaltile
+    ADD CONSTRAINT materials_metaltile_name_key UNIQUE (name);
+
+
+--
+-- TOC entry 3278 (class 2606 OID 31366)
+-- Name: materials_metaltile materials_metaltile_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_metaltile
+    ADD CONSTRAINT materials_metaltile_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3250 (class 2606 OID 31144)
+-- Name: materials_plaster materials_plaster_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_plaster
+    ADD CONSTRAINT materials_plaster_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3253 (class 2606 OID 31152)
+-- Name: materials_plaster_use materials_plaster_use_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_plaster_use
+    ADD CONSTRAINT materials_plaster_use_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3256 (class 2606 OID 31236)
+-- Name: materials_plaster_use materials_plaster_use_plaster_id_materialuse_id_9371ddbc_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_plaster_use
+    ADD CONSTRAINT materials_plaster_use_plaster_id_materialuse_id_9371ddbc_uniq UNIQUE (plaster_id, materialuse_id);
+
+
+--
+-- TOC entry 3195 (class 2606 OID 30910)
+-- Name: materials_rockwallmaterialunit materials_rockwallmaterialunit_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_rockwallmaterialunit
+    ADD CONSTRAINT materials_rockwallmaterialunit_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3231 (class 2606 OID 31096)
+-- Name: materials_roofcovertype materials_roofcovertype_identifier_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_roofcovertype
+    ADD CONSTRAINT materials_roofcovertype_identifier_key UNIQUE (identifier);
+
+
+--
+-- TOC entry 3234 (class 2606 OID 31094)
+-- Name: materials_roofcovertype materials_roofcovertype_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_roofcovertype
+    ADD CONSTRAINT materials_roofcovertype_name_key UNIQUE (name);
+
+
+--
+-- TOC entry 3236 (class 2606 OID 31092)
+-- Name: materials_roofcovertype materials_roofcovertype_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_roofcovertype
+    ADD CONSTRAINT materials_roofcovertype_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3240 (class 2606 OID 31120)
+-- Name: materials_siding materials_siding_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_siding
+    ADD CONSTRAINT materials_siding_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3243 (class 2606 OID 31128)
+-- Name: materials_siding_use materials_siding_use_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_siding_use
+    ADD CONSTRAINT materials_siding_use_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3246 (class 2606 OID 31204)
+-- Name: materials_siding_use materials_siding_use_siding_id_materialuse_id_c91a5f6e_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_siding_use
+    ADD CONSTRAINT materials_siding_use_siding_id_materialuse_id_c91a5f6e_uniq UNIQUE (siding_id, materialuse_id);
+
+
+--
+-- TOC entry 3261 (class 2606 OID 31322)
+-- Name: materials_stoneproductline_use materials_stoneproductli_stoneproductline_id_mate_0a83adbd_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_stoneproductline_use
+    ADD CONSTRAINT materials_stoneproductli_stoneproductline_id_mate_0a83adbd_uniq UNIQUE (stoneproductline_id, materialuse_id);
+
+
+--
+-- TOC entry 3259 (class 2606 OID 31298)
+-- Name: materials_stoneproductline materials_stoneproductline_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_stoneproductline
+    ADD CONSTRAINT materials_stoneproductline_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3264 (class 2606 OID 31306)
+-- Name: materials_stoneproductline_use materials_stoneproductline_use_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_stoneproductline_use
+    ADD CONSTRAINT materials_stoneproductline_use_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3267 (class 2606 OID 31314)
+-- Name: materials_stoneunit materials_stoneunit_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_stoneunit
+    ADD CONSTRAINT materials_stoneunit_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3178 (class 2606 OID 30882)
+-- Name: names_decorativebrickface_brand names_decorativebrickfac_decorativebrickface_id_b_2f3593b3_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.names_decorativebrickface_brand
+    ADD CONSTRAINT names_decorativebrickfac_decorativebrickface_id_b_2f3593b3_uniq UNIQUE (decorativebrickface_id, brand_id);
+
+
+--
+-- TOC entry 3182 (class 2606 OID 30880)
+-- Name: names_decorativebrickface_brand names_decorativebrickface_brand_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.names_decorativebrickface_brand
+    ADD CONSTRAINT names_decorativebrickface_brand_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3176 (class 2606 OID 30872)
+-- Name: names_decorativebrickface names_decorativebrickface_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.names_decorativebrickface
+    ADD CONSTRAINT names_decorativebrickface_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3147 (class 2606 OID 30808)
+-- Name: standards_classb standards_classb_identifier_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.standards_classb
+    ADD CONSTRAINT standards_classb_identifier_key UNIQUE (identifier);
+
+
+--
+-- TOC entry 3149 (class 2606 OID 30806)
+-- Name: standards_classb standards_classb_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.standards_classb
+    ADD CONSTRAINT standards_classb_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3152 (class 2606 OID 30818)
+-- Name: standards_classаveragedensity standards_classаveragedensity_identifier_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."standards_classаveragedensity"
+    ADD CONSTRAINT "standards_classаveragedensity_identifier_key" UNIQUE (identifier);
+
+
+--
+-- TOC entry 3154 (class 2606 OID 30816)
+-- Name: standards_classаveragedensity standards_classаveragedensity_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."standards_classаveragedensity"
+    ADD CONSTRAINT "standards_classаveragedensity_pkey" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3157 (class 2606 OID 30828)
+-- Name: standards_markd standards_markd_identifier_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.standards_markd
+    ADD CONSTRAINT standards_markd_identifier_key UNIQUE (identifier);
+
+
+--
+-- TOC entry 3159 (class 2606 OID 30826)
+-- Name: standards_markd standards_markd_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.standards_markd
+    ADD CONSTRAINT standards_markd_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3162 (class 2606 OID 30838)
+-- Name: standards_markf standards_markf_identifier_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.standards_markf
+    ADD CONSTRAINT standards_markf_identifier_key UNIQUE (identifier);
+
+
+--
+-- TOC entry 3164 (class 2606 OID 30836)
+-- Name: standards_markf standards_markf_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.standards_markf
+    ADD CONSTRAINT standards_markf_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3167 (class 2606 OID 30848)
+-- Name: standards_markm standards_markm_identifier_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.standards_markm
+    ADD CONSTRAINT standards_markm_identifier_key UNIQUE (identifier);
+
+
+--
+-- TOC entry 3169 (class 2606 OID 30846)
+-- Name: standards_markm standards_markm_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.standards_markm
+    ADD CONSTRAINT standards_markm_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3172 (class 2606 OID 30858)
+-- Name: standards_nfsize standards_nfsize_identifier_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.standards_nfsize
+    ADD CONSTRAINT standards_nfsize_identifier_key UNIQUE (identifier);
+
+
+--
+-- TOC entry 3174 (class 2606 OID 30856)
+-- Name: standards_nfsize standards_nfsize_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.standards_nfsize
+    ADD CONSTRAINT standards_nfsize_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3123 (class 2606 OID 30735)
+-- Name: suppliers_activity suppliers_activity_identifier_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.suppliers_activity
+    ADD CONSTRAINT suppliers_activity_identifier_key UNIQUE (identifier);
+
+
+--
+-- TOC entry 3125 (class 2606 OID 30733)
+-- Name: suppliers_activity suppliers_activity_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.suppliers_activity
+    ADD CONSTRAINT suppliers_activity_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3142 (class 2606 OID 30763)
+-- Name: suppliers_manufacturer suppliers_manufacturer_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.suppliers_manufacturer
+    ADD CONSTRAINT suppliers_manufacturer_name_key UNIQUE (name);
+
+
+--
+-- TOC entry 3144 (class 2606 OID 30761)
+-- Name: suppliers_manufacturer suppliers_manufacturer_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.suppliers_manufacturer
+    ADD CONSTRAINT suppliers_manufacturer_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3128 (class 2606 OID 30745)
+-- Name: suppliers_provider suppliers_provider_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.suppliers_provider
+    ADD CONSTRAINT suppliers_provider_name_key UNIQUE (name);
+
+
+--
+-- TOC entry 3130 (class 2606 OID 30743)
+-- Name: suppliers_provider suppliers_provider_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.suppliers_provider
+    ADD CONSTRAINT suppliers_provider_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3133 (class 2606 OID 30773)
+-- Name: suppliers_provider_secondary_activity suppliers_provider_secon_provider_id_activity_id_edc7fd0d_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.suppliers_provider_secondary_activity
+    ADD CONSTRAINT suppliers_provider_secon_provider_id_activity_id_edc7fd0d_uniq UNIQUE (provider_id, activity_id);
+
+
+--
+-- TOC entry 3136 (class 2606 OID 30753)
+-- Name: suppliers_provider_secondary_activity suppliers_provider_secondary_activity_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.suppliers_provider_secondary_activity
+    ADD CONSTRAINT suppliers_provider_secondary_activity_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3215 (class 2606 OID 31048)
+-- Name: workprices_pilegrillagefoundationworkprices workprices_pilegrillagefoundationworkprices_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.workprices_pilegrillagefoundationworkprices
+    ADD CONSTRAINT workprices_pilegrillagefoundationworkprices_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3216 (class 1259 OID 31076)
+-- Name: account_profile_city_id_207f6508; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX account_profile_city_id_207f6508 ON public.account_profile USING btree (city_id);
+
+
+--
+-- TOC entry 3045 (class 1259 OID 30585)
+-- Name: auth_group_name_a6ea08ec_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_group_name_a6ea08ec_like ON public.auth_group USING btree (name varchar_pattern_ops);
+
+
+--
+-- TOC entry 3050 (class 1259 OID 30522)
+-- Name: auth_group_permissions_group_id_b120cbf9; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_group_permissions_group_id_b120cbf9 ON public.auth_group_permissions USING btree (group_id);
+
+
+--
+-- TOC entry 3053 (class 1259 OID 30523)
+-- Name: auth_group_permissions_permission_id_84c5c92e; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_group_permissions_permission_id_84c5c92e ON public.auth_group_permissions USING btree (permission_id);
+
+
+--
+-- TOC entry 3040 (class 1259 OID 30508)
+-- Name: auth_permission_content_type_id_2f476e4b; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_permission_content_type_id_2f476e4b ON public.auth_permission USING btree (content_type_id);
+
+
+--
+-- TOC entry 3061 (class 1259 OID 30538)
+-- Name: auth_user_groups_group_id_97559544; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_user_groups_group_id_97559544 ON public.auth_user_groups USING btree (group_id);
+
+
+--
+-- TOC entry 3064 (class 1259 OID 30537)
+-- Name: auth_user_groups_user_id_6a12ed8b; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_user_groups_user_id_6a12ed8b ON public.auth_user_groups USING btree (user_id);
+
+
+--
+-- TOC entry 3067 (class 1259 OID 30552)
+-- Name: auth_user_user_permissions_permission_id_1fbb5f2c; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_user_user_permissions_permission_id_1fbb5f2c ON public.auth_user_user_permissions USING btree (permission_id);
+
+
+--
+-- TOC entry 3070 (class 1259 OID 30551)
+-- Name: auth_user_user_permissions_user_id_a95ead1b; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_user_user_permissions_user_id_a95ead1b ON public.auth_user_user_permissions USING btree (user_id);
+
+
+--
+-- TOC entry 3058 (class 1259 OID 30579)
+-- Name: auth_user_username_6821ab7c_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_user_username_6821ab7c_like ON public.auth_user USING btree (username varchar_pattern_ops);
+
+
+--
+-- TOC entry 3077 (class 1259 OID 30616)
+-- Name: brands_brand_name_5759061b_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX brands_brand_name_5759061b_like ON public.brands_brand USING btree (name varchar_pattern_ops);
+
+
+--
+-- TOC entry 3082 (class 1259 OID 30623)
+-- Name: brands_subbrand_1_brand_id_7085621b; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX brands_subbrand_1_brand_id_7085621b ON public.brands_subbrand_1 USING btree (brand_id);
+
+
+--
+-- TOC entry 3083 (class 1259 OID 30622)
+-- Name: brands_subbrand_1_name_f5c24720_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX brands_subbrand_1_name_f5c24720_like ON public.brands_subbrand_1 USING btree (name varchar_pattern_ops);
+
+
+--
+-- TOC entry 3088 (class 1259 OID 30629)
+-- Name: brands_subbrand_2_name_d930b212_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX brands_subbrand_2_name_d930b212_like ON public.brands_subbrand_2 USING btree (name varchar_pattern_ops);
+
+
+--
+-- TOC entry 3093 (class 1259 OID 30630)
+-- Name: brands_subbrand_2_sub_brand_1_id_16ad81ef; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX brands_subbrand_2_sub_brand_1_id_16ad81ef ON public.brands_subbrand_2 USING btree (sub_brand_1_id);
+
+
+--
+-- TOC entry 3110 (class 1259 OID 30706)
+-- Name: catalog_algorithm_identifier_eb6862d5_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX catalog_algorithm_identifier_eb6862d5_like ON public.catalog_algorithm USING btree (identifier varchar_pattern_ops);
+
+
+--
+-- TOC entry 3113 (class 1259 OID 30707)
+-- Name: catalog_algorithm_name_5dd925d3_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX catalog_algorithm_name_5dd925d3_like ON public.catalog_algorithm USING btree (name varchar_pattern_ops);
+
+
+--
+-- TOC entry 3279 (class 1259 OID 31389)
+-- Name: catalog_facadematerialtype_name_75e83a0b_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX catalog_facadematerialtype_name_75e83a0b_like ON public.catalog_facadematerialtype USING btree (name varchar_pattern_ops);
+
+
+--
+-- TOC entry 3118 (class 1259 OID 30725)
+-- Name: catalog_plan_author_id_19443bad; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX catalog_plan_author_id_19443bad ON public.catalog_plan USING btree (author_id);
+
+
+--
+-- TOC entry 3284 (class 1259 OID 31410)
+-- Name: catalog_shell_author_id_c4c4abab; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX catalog_shell_author_id_c4c4abab ON public.catalog_shell USING btree (author_id);
+
+
+--
+-- TOC entry 3287 (class 1259 OID 31411)
+-- Name: catalog_shell_roof_material_type_id_cecb1252; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX catalog_shell_roof_material_type_id_cecb1252 ON public.catalog_shell USING btree (roof_material_type_id);
+
+
+--
+-- TOC entry 3288 (class 1259 OID 31412)
+-- Name: catalog_shell_socle_material_type_id_8b9c900c; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX catalog_shell_socle_material_type_id_8b9c900c ON public.catalog_shell USING btree (socle_material_type_id);
+
+
+--
+-- TOC entry 3289 (class 1259 OID 31413)
+-- Name: catalog_shell_wall_material_type_0_id_816c36ae; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX catalog_shell_wall_material_type_0_id_816c36ae ON public.catalog_shell USING btree (wall_material_type_0_id);
+
+
+--
+-- TOC entry 3073 (class 1259 OID 30575)
+-- Name: django_admin_log_content_type_id_c4bce8eb; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX django_admin_log_content_type_id_c4bce8eb ON public.django_admin_log USING btree (content_type_id);
+
+
+--
+-- TOC entry 3076 (class 1259 OID 30576)
+-- Name: django_admin_log_user_id_c564eba6; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX django_admin_log_user_id_c564eba6 ON public.django_admin_log USING btree (user_id);
+
+
+--
+-- TOC entry 3209 (class 1259 OID 31040)
+-- Name: django_session_expire_date_a5c62663; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX django_session_expire_date_a5c62663 ON public.django_session USING btree (expire_date);
+
+
+--
+-- TOC entry 3212 (class 1259 OID 31039)
+-- Name: django_session_session_key_c0390e0f_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX django_session_session_key_c0390e0f_like ON public.django_session USING btree (session_key varchar_pattern_ops);
+
+
+--
+-- TOC entry 3109 (class 1259 OID 30674)
+-- Name: geography_city_region_id_ea133d50; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX geography_city_region_id_ea133d50 ON public.geography_city USING btree (region_id);
+
+
+--
+-- TOC entry 3094 (class 1259 OID 30661)
+-- Name: geography_country_name_477df8ef_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX geography_country_name_477df8ef_like ON public.geography_country USING btree (name varchar_pattern_ops);
+
+
+--
+-- TOC entry 3101 (class 1259 OID 30668)
+-- Name: geography_region_country_id_7b89c739; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX geography_region_country_id_7b89c739 ON public.geography_region USING btree (country_id);
+
+
+--
+-- TOC entry 3102 (class 1259 OID 30667)
+-- Name: geography_region_name_78b61e6a_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX geography_region_name_78b61e6a_like ON public.geography_region USING btree (name varchar_pattern_ops);
+
+
+--
+-- TOC entry 3205 (class 1259 OID 31029)
+-- Name: materialprices_insulationprice_name_id_a70a0ae5; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materialprices_insulationprice_name_id_a70a0ae5 ON public.materialprices_insulationprice USING btree (name_id);
+
+
+--
+-- TOC entry 3206 (class 1259 OID 31030)
+-- Name: materialprices_insulationprice_owner_id_ea647b28; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materialprices_insulationprice_owner_id_ea647b28 ON public.materialprices_insulationprice USING btree (owner_id);
+
+
+--
+-- TOC entry 3201 (class 1259 OID 31017)
+-- Name: materialprices_rockwallmaterialprice_name_id_5a769348; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materialprices_rockwallmaterialprice_name_id_5a769348 ON public.materialprices_rockwallmaterialprice USING btree (name_id);
+
+
+--
+-- TOC entry 3202 (class 1259 OID 31018)
+-- Name: materialprices_rockwallmaterialprice_owner_id_ea24bd0d; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materialprices_rockwallmaterialprice_owner_id_ea24bd0d ON public.materialprices_rockwallmaterialprice USING btree (owner_id);
+
+
+--
+-- TOC entry 3269 (class 1259 OID 31369)
+-- Name: materials_flexibletile_name_d3837b01_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_flexibletile_name_d3837b01_like ON public.materials_flexibletile USING btree (name varchar_pattern_ops);
+
+
+--
+-- TOC entry 3198 (class 1259 OID 30990)
+-- Name: materials_insulation_brand_id_dd7669b2; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_insulation_brand_id_dd7669b2 ON public.materials_insulation USING btree (brand_id);
+
+
+--
+-- TOC entry 3221 (class 1259 OID 31348)
+-- Name: materials_materialuse_identifier_a010716f_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_materialuse_identifier_a010716f_like ON public.materials_materialuse USING btree (identifier varchar_pattern_ops);
+
+
+--
+-- TOC entry 3224 (class 1259 OID 31347)
+-- Name: materials_materialuse_name_012faa14_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_materialuse_name_012faa14_like ON public.materials_materialuse USING btree (name varchar_pattern_ops);
+
+
+--
+-- TOC entry 3274 (class 1259 OID 31370)
+-- Name: materials_metaltile_name_3bb29633_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_metaltile_name_3bb29633_like ON public.materials_metaltile USING btree (name varchar_pattern_ops);
+
+
+--
+-- TOC entry 3247 (class 1259 OID 31233)
+-- Name: materials_plaster_brand_id_cc3e5323; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_plaster_brand_id_cc3e5323 ON public.materials_plaster USING btree (brand_id);
+
+
+--
+-- TOC entry 3248 (class 1259 OID 31234)
+-- Name: materials_plaster_manufacturer_id_060021cd; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_plaster_manufacturer_id_060021cd ON public.materials_plaster USING btree (manufacturer_id);
+
+
+--
+-- TOC entry 3251 (class 1259 OID 31248)
+-- Name: materials_plaster_use_materialuse_id_3f0e40e1; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_plaster_use_materialuse_id_3f0e40e1 ON public.materials_plaster_use USING btree (materialuse_id);
+
+
+--
+-- TOC entry 3254 (class 1259 OID 31247)
+-- Name: materials_plaster_use_plaster_id_1ce61346; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_plaster_use_plaster_id_1ce61346 ON public.materials_plaster_use USING btree (plaster_id);
+
+
+--
+-- TOC entry 3185 (class 1259 OID 30976)
+-- Name: materials_rockwallmaterial_class_average_density_id_beb6fff9; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_rockwallmaterial_class_average_density_id_beb6fff9 ON public.materials_rockwallmaterialunit USING btree (class_average_density_id);
+
+
+--
+-- TOC entry 3186 (class 1259 OID 30974)
+-- Name: materials_rockwallmaterialunit_algorithm_id_4183f114; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_rockwallmaterialunit_algorithm_id_4183f114 ON public.materials_rockwallmaterialunit USING btree (algorithm_id);
+
+
+--
+-- TOC entry 3187 (class 1259 OID 30975)
+-- Name: materials_rockwallmaterialunit_brand_id_4deb8894; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_rockwallmaterialunit_brand_id_4deb8894 ON public.materials_rockwallmaterialunit USING btree (brand_id);
+
+
+--
+-- TOC entry 3188 (class 1259 OID 30977)
+-- Name: materials_rockwallmaterialunit_class_b_id_1de59e0b; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_rockwallmaterialunit_class_b_id_1de59e0b ON public.materials_rockwallmaterialunit USING btree (class_b_id);
+
+
+--
+-- TOC entry 3189 (class 1259 OID 30978)
+-- Name: materials_rockwallmaterialunit_face_id_712ecb1a; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_rockwallmaterialunit_face_id_712ecb1a ON public.materials_rockwallmaterialunit USING btree (face_id);
+
+
+--
+-- TOC entry 3190 (class 1259 OID 30979)
+-- Name: materials_rockwallmaterialunit_manufacturer_id_c1176543; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_rockwallmaterialunit_manufacturer_id_c1176543 ON public.materials_rockwallmaterialunit USING btree (manufacturer_id);
+
+
+--
+-- TOC entry 3191 (class 1259 OID 30980)
+-- Name: materials_rockwallmaterialunit_mark_d_id_e456d3f5; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_rockwallmaterialunit_mark_d_id_e456d3f5 ON public.materials_rockwallmaterialunit USING btree (mark_d_id);
+
+
+--
+-- TOC entry 3192 (class 1259 OID 30981)
+-- Name: materials_rockwallmaterialunit_mark_f_id_48ec4578; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_rockwallmaterialunit_mark_f_id_48ec4578 ON public.materials_rockwallmaterialunit USING btree (mark_f_id);
+
+
+--
+-- TOC entry 3193 (class 1259 OID 30982)
+-- Name: materials_rockwallmaterialunit_mark_m_id_e96cf97b; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_rockwallmaterialunit_mark_m_id_e96cf97b ON public.materials_rockwallmaterialunit USING btree (mark_m_id);
+
+
+--
+-- TOC entry 3196 (class 1259 OID 30983)
+-- Name: materials_rockwallmaterialunit_sub_brand_1_id_6717e0fb; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_rockwallmaterialunit_sub_brand_1_id_6717e0fb ON public.materials_rockwallmaterialunit USING btree (sub_brand_1_id);
+
+
+--
+-- TOC entry 3197 (class 1259 OID 30984)
+-- Name: materials_rockwallmaterialunit_sub_brand_2_id_15c37d7b; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_rockwallmaterialunit_sub_brand_2_id_15c37d7b ON public.materials_rockwallmaterialunit USING btree (sub_brand_2_id);
+
+
+--
+-- TOC entry 3229 (class 1259 OID 31170)
+-- Name: materials_roofcovertype_identifier_8eed0695_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_roofcovertype_identifier_8eed0695_like ON public.materials_roofcovertype USING btree (identifier varchar_pattern_ops);
+
+
+--
+-- TOC entry 3232 (class 1259 OID 31169)
+-- Name: materials_roofcovertype_name_e791d481_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_roofcovertype_name_e791d481_like ON public.materials_roofcovertype USING btree (name varchar_pattern_ops);
+
+
+--
+-- TOC entry 3237 (class 1259 OID 31201)
+-- Name: materials_siding_brand_id_947adead; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_siding_brand_id_947adead ON public.materials_siding USING btree (brand_id);
+
+
+--
+-- TOC entry 3238 (class 1259 OID 31202)
+-- Name: materials_siding_manufacturer_id_4bd6fcdc; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_siding_manufacturer_id_4bd6fcdc ON public.materials_siding USING btree (manufacturer_id);
+
+
+--
+-- TOC entry 3241 (class 1259 OID 31216)
+-- Name: materials_siding_use_materialuse_id_27444db6; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_siding_use_materialuse_id_27444db6 ON public.materials_siding_use USING btree (materialuse_id);
+
+
+--
+-- TOC entry 3244 (class 1259 OID 31215)
+-- Name: materials_siding_use_siding_id_a2f23e27; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_siding_use_siding_id_a2f23e27 ON public.materials_siding_use USING btree (siding_id);
+
+
+--
+-- TOC entry 3257 (class 1259 OID 31320)
+-- Name: materials_stoneproductline_manufacturer_id_c1271051; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_stoneproductline_manufacturer_id_c1271051 ON public.materials_stoneproductline USING btree (manufacturer_id);
+
+
+--
+-- TOC entry 3262 (class 1259 OID 31334)
+-- Name: materials_stoneproductline_use_materialuse_id_7e20150f; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_stoneproductline_use_materialuse_id_7e20150f ON public.materials_stoneproductline_use USING btree (materialuse_id);
+
+
+--
+-- TOC entry 3265 (class 1259 OID 31333)
+-- Name: materials_stoneproductline_use_stoneproductline_id_6477c585; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_stoneproductline_use_stoneproductline_id_6477c585 ON public.materials_stoneproductline_use USING btree (stoneproductline_id);
+
+
+--
+-- TOC entry 3268 (class 1259 OID 31340)
+-- Name: materials_stoneunit_product_line_id_c1b449ac; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX materials_stoneunit_product_line_id_c1b449ac ON public.materials_stoneunit USING btree (product_line_id);
+
+
+--
+-- TOC entry 3179 (class 1259 OID 30894)
+-- Name: names_decorativebrickface_brand_brand_id_92646ca6; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX names_decorativebrickface_brand_brand_id_92646ca6 ON public.names_decorativebrickface_brand USING btree (brand_id);
+
+
+--
+-- TOC entry 3180 (class 1259 OID 30893)
+-- Name: names_decorativebrickface_brand_decorativebrickface_id_f4bd2916; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX names_decorativebrickface_brand_decorativebrickface_id_f4bd2916 ON public.names_decorativebrickface_brand USING btree (decorativebrickface_id);
+
+
+--
+-- TOC entry 3145 (class 1259 OID 30859)
+-- Name: standards_classb_identifier_9c57cd5d_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX standards_classb_identifier_9c57cd5d_like ON public.standards_classb USING btree (identifier varchar_pattern_ops);
+
+
+--
+-- TOC entry 3150 (class 1259 OID 30860)
+-- Name: standards_classаveragedensity_identifier_4f590a03_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "standards_classаveragedensity_identifier_4f590a03_like" ON public."standards_classаveragedensity" USING btree (identifier varchar_pattern_ops);
+
+
+--
+-- TOC entry 3155 (class 1259 OID 30861)
+-- Name: standards_markd_identifier_a2035296_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX standards_markd_identifier_a2035296_like ON public.standards_markd USING btree (identifier varchar_pattern_ops);
+
+
+--
+-- TOC entry 3160 (class 1259 OID 30862)
+-- Name: standards_markf_identifier_79848dc8_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX standards_markf_identifier_79848dc8_like ON public.standards_markf USING btree (identifier varchar_pattern_ops);
+
+
+--
+-- TOC entry 3165 (class 1259 OID 30863)
+-- Name: standards_markm_identifier_2b0b47b2_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX standards_markm_identifier_2b0b47b2_like ON public.standards_markm USING btree (identifier varchar_pattern_ops);
+
+
+--
+-- TOC entry 3170 (class 1259 OID 30864)
+-- Name: standards_nfsize_identifier_625c4c07_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX standards_nfsize_identifier_625c4c07_like ON public.standards_nfsize USING btree (identifier varchar_pattern_ops);
+
+
+--
+-- TOC entry 3121 (class 1259 OID 30764)
+-- Name: suppliers_activity_identifier_d8d3a5df_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX suppliers_activity_identifier_d8d3a5df_like ON public.suppliers_activity USING btree (identifier varchar_pattern_ops);
+
+
+--
+-- TOC entry 3138 (class 1259 OID 30797)
+-- Name: suppliers_manufacturer_brand_id_18bff0a3; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX suppliers_manufacturer_brand_id_18bff0a3 ON public.suppliers_manufacturer USING btree (brand_id);
+
+
+--
+-- TOC entry 3139 (class 1259 OID 30798)
+-- Name: suppliers_manufacturer_city_id_734a9037; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX suppliers_manufacturer_city_id_734a9037 ON public.suppliers_manufacturer USING btree (city_id);
+
+
+--
+-- TOC entry 3140 (class 1259 OID 30796)
+-- Name: suppliers_manufacturer_name_2cb797cf_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX suppliers_manufacturer_name_2cb797cf_like ON public.suppliers_manufacturer USING btree (name varchar_pattern_ops);
+
+
+--
+-- TOC entry 3126 (class 1259 OID 30770)
+-- Name: suppliers_provider_name_99a51456_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX suppliers_provider_name_99a51456_like ON public.suppliers_provider USING btree (name varchar_pattern_ops);
+
+
+--
+-- TOC entry 3131 (class 1259 OID 30771)
+-- Name: suppliers_provider_primary_activity_id_93261e15; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX suppliers_provider_primary_activity_id_93261e15 ON public.suppliers_provider USING btree (primary_activity_id);
+
+
+--
+-- TOC entry 3134 (class 1259 OID 30785)
+-- Name: suppliers_provider_secondary_activity_activity_id_31284a51; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX suppliers_provider_secondary_activity_activity_id_31284a51 ON public.suppliers_provider_secondary_activity USING btree (activity_id);
+
+
+--
+-- TOC entry 3137 (class 1259 OID 30784)
+-- Name: suppliers_provider_secondary_activity_provider_id_2fab0709; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX suppliers_provider_secondary_activity_provider_id_2fab0709 ON public.suppliers_provider_secondary_activity USING btree (provider_id);
+
+
+--
+-- TOC entry 3213 (class 1259 OID 31054)
+-- Name: workprices_pilegrillagefoundationworkprices_owner_id_d59cdcc2; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX workprices_pilegrillagefoundationworkprices_owner_id_d59cdcc2 ON public.workprices_pilegrillagefoundationworkprices USING btree (owner_id);
+
+
+--
+-- TOC entry 3329 (class 2606 OID 31071)
+-- Name: account_profile account_profile_city_id_207f6508_fk_geography_city_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.account_profile
+    ADD CONSTRAINT account_profile_city_id_207f6508_fk_geography_city_id FOREIGN KEY (city_id) REFERENCES public.geography_city(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3328 (class 2606 OID 31066)
+-- Name: account_profile account_profile_user_id_bdd52018_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.account_profile
+    ADD CONSTRAINT account_profile_user_id_bdd52018_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3292 (class 2606 OID 30517)
+-- Name: auth_group_permissions auth_group_permissio_permission_id_84c5c92e_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissio_permission_id_84c5c92e_fk_auth_perm FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3291 (class 2606 OID 30512)
+-- Name: auth_group_permissions auth_group_permissions_group_id_b120cbf9_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_b120cbf9_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3290 (class 2606 OID 30503)
+-- Name: auth_permission auth_permission_content_type_id_2f476e4b_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_2f476e4b_fk_django_co FOREIGN KEY (content_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3294 (class 2606 OID 30532)
+-- Name: auth_user_groups auth_user_groups_group_id_97559544_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_group_id_97559544_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3293 (class 2606 OID 30527)
+-- Name: auth_user_groups auth_user_groups_user_id_6a12ed8b_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_6a12ed8b_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3296 (class 2606 OID 30546)
+-- Name: auth_user_user_permissions auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3295 (class 2606 OID 30541)
+-- Name: auth_user_user_permissions auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3299 (class 2606 OID 30617)
+-- Name: brands_subbrand_1 brands_subbrand_1_brand_id_7085621b_fk_brands_brand_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brands_subbrand_1
+    ADD CONSTRAINT brands_subbrand_1_brand_id_7085621b_fk_brands_brand_id FOREIGN KEY (brand_id) REFERENCES public.brands_brand(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3300 (class 2606 OID 30624)
+-- Name: brands_subbrand_2 brands_subbrand_2_sub_brand_1_id_16ad81ef_fk_brands_su; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brands_subbrand_2
+    ADD CONSTRAINT brands_subbrand_2_sub_brand_1_id_16ad81ef_fk_brands_su FOREIGN KEY (sub_brand_1_id) REFERENCES public.brands_subbrand_1(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3303 (class 2606 OID 30720)
+-- Name: catalog_plan catalog_plan_author_id_19443bad_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.catalog_plan
+    ADD CONSTRAINT catalog_plan_author_id_19443bad_fk_auth_user_id FOREIGN KEY (author_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3342 (class 2606 OID 31390)
+-- Name: catalog_shell catalog_shell_author_id_c4c4abab_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.catalog_shell
+    ADD CONSTRAINT catalog_shell_author_id_c4c4abab_fk_auth_user_id FOREIGN KEY (author_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3343 (class 2606 OID 31395)
+-- Name: catalog_shell catalog_shell_roof_material_type_i_cecb1252_fk_materials; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.catalog_shell
+    ADD CONSTRAINT catalog_shell_roof_material_type_i_cecb1252_fk_materials FOREIGN KEY (roof_material_type_id) REFERENCES public.materials_roofcovertype(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3344 (class 2606 OID 31400)
+-- Name: catalog_shell catalog_shell_socle_material_type__8b9c900c_fk_catalog_f; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.catalog_shell
+    ADD CONSTRAINT catalog_shell_socle_material_type__8b9c900c_fk_catalog_f FOREIGN KEY (socle_material_type_id) REFERENCES public.catalog_facadematerialtype(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3345 (class 2606 OID 31405)
+-- Name: catalog_shell catalog_shell_wall_material_type_0_816c36ae_fk_catalog_f; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.catalog_shell
+    ADD CONSTRAINT catalog_shell_wall_material_type_0_816c36ae_fk_catalog_f FOREIGN KEY (wall_material_type_0_id) REFERENCES public.catalog_facadematerialtype(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3297 (class 2606 OID 30565)
+-- Name: django_admin_log django_admin_log_content_type_id_c4bce8eb_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_content_type_id_c4bce8eb_fk_django_co FOREIGN KEY (content_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3298 (class 2606 OID 30570)
+-- Name: django_admin_log django_admin_log_user_id_c564eba6_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_user_id_c564eba6_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3302 (class 2606 OID 30669)
+-- Name: geography_city geography_city_region_id_ea133d50_fk_geography_region_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.geography_city
+    ADD CONSTRAINT geography_city_region_id_ea133d50_fk_geography_region_id FOREIGN KEY (region_id) REFERENCES public.geography_region(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3301 (class 2606 OID 30662)
+-- Name: geography_region geography_region_country_id_7b89c739_fk_geography_country_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.geography_region
+    ADD CONSTRAINT geography_region_country_id_7b89c739_fk_geography_country_id FOREIGN KEY (country_id) REFERENCES public.geography_country(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3325 (class 2606 OID 31019)
+-- Name: materialprices_insulationprice materialprices_insul_name_id_a70a0ae5_fk_materials; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materialprices_insulationprice
+    ADD CONSTRAINT materialprices_insul_name_id_a70a0ae5_fk_materials FOREIGN KEY (name_id) REFERENCES public.materials_insulation(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3326 (class 2606 OID 31024)
+-- Name: materialprices_insulationprice materialprices_insul_owner_id_ea647b28_fk_auth_user; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materialprices_insulationprice
+    ADD CONSTRAINT materialprices_insul_owner_id_ea647b28_fk_auth_user FOREIGN KEY (owner_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3323 (class 2606 OID 31007)
+-- Name: materialprices_rockwallmaterialprice materialprices_rockw_name_id_5a769348_fk_materials; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materialprices_rockwallmaterialprice
+    ADD CONSTRAINT materialprices_rockw_name_id_5a769348_fk_materials FOREIGN KEY (name_id) REFERENCES public.materials_rockwallmaterialunit(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3324 (class 2606 OID 31012)
+-- Name: materialprices_rockwallmaterialprice materialprices_rockw_owner_id_ea24bd0d_fk_auth_user; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materialprices_rockwallmaterialprice
+    ADD CONSTRAINT materialprices_rockw_owner_id_ea24bd0d_fk_auth_user FOREIGN KEY (owner_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3322 (class 2606 OID 30985)
+-- Name: materials_insulation materials_insulation_brand_id_dd7669b2_fk_brands_brand_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_insulation
+    ADD CONSTRAINT materials_insulation_brand_id_dd7669b2_fk_brands_brand_id FOREIGN KEY (brand_id) REFERENCES public.brands_brand(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3334 (class 2606 OID 31223)
+-- Name: materials_plaster materials_plaster_brand_id_cc3e5323_fk_brands_brand_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_plaster
+    ADD CONSTRAINT materials_plaster_brand_id_cc3e5323_fk_brands_brand_id FOREIGN KEY (brand_id) REFERENCES public.brands_brand(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3335 (class 2606 OID 31228)
+-- Name: materials_plaster materials_plaster_manufacturer_id_060021cd_fk_suppliers; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_plaster
+    ADD CONSTRAINT materials_plaster_manufacturer_id_060021cd_fk_suppliers FOREIGN KEY (manufacturer_id) REFERENCES public.suppliers_manufacturer(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3337 (class 2606 OID 31242)
+-- Name: materials_plaster_use materials_plaster_us_materialuse_id_3f0e40e1_fk_materials; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_plaster_use
+    ADD CONSTRAINT materials_plaster_us_materialuse_id_3f0e40e1_fk_materials FOREIGN KEY (materialuse_id) REFERENCES public.materials_materialuse(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3336 (class 2606 OID 31237)
+-- Name: materials_plaster_use materials_plaster_us_plaster_id_1ce61346_fk_materials; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_plaster_use
+    ADD CONSTRAINT materials_plaster_us_plaster_id_1ce61346_fk_materials FOREIGN KEY (plaster_id) REFERENCES public.materials_plaster(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3311 (class 2606 OID 30919)
+-- Name: materials_rockwallmaterialunit materials_rockwallma_algorithm_id_4183f114_fk_catalog_a; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_rockwallmaterialunit
+    ADD CONSTRAINT materials_rockwallma_algorithm_id_4183f114_fk_catalog_a FOREIGN KEY (algorithm_id) REFERENCES public.catalog_algorithm(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3312 (class 2606 OID 30924)
+-- Name: materials_rockwallmaterialunit materials_rockwallma_brand_id_4deb8894_fk_brands_br; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_rockwallmaterialunit
+    ADD CONSTRAINT materials_rockwallma_brand_id_4deb8894_fk_brands_br FOREIGN KEY (brand_id) REFERENCES public.brands_brand(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3313 (class 2606 OID 30929)
+-- Name: materials_rockwallmaterialunit materials_rockwallma_class_average_densit_beb6fff9_fk_standards; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_rockwallmaterialunit
+    ADD CONSTRAINT materials_rockwallma_class_average_densit_beb6fff9_fk_standards FOREIGN KEY (class_average_density_id) REFERENCES public."standards_classаveragedensity"(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3314 (class 2606 OID 30934)
+-- Name: materials_rockwallmaterialunit materials_rockwallma_class_b_id_1de59e0b_fk_standards; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_rockwallmaterialunit
+    ADD CONSTRAINT materials_rockwallma_class_b_id_1de59e0b_fk_standards FOREIGN KEY (class_b_id) REFERENCES public.standards_classb(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3315 (class 2606 OID 30939)
+-- Name: materials_rockwallmaterialunit materials_rockwallma_face_id_712ecb1a_fk_names_dec; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_rockwallmaterialunit
+    ADD CONSTRAINT materials_rockwallma_face_id_712ecb1a_fk_names_dec FOREIGN KEY (face_id) REFERENCES public.names_decorativebrickface(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3316 (class 2606 OID 30944)
+-- Name: materials_rockwallmaterialunit materials_rockwallma_manufacturer_id_c1176543_fk_suppliers; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_rockwallmaterialunit
+    ADD CONSTRAINT materials_rockwallma_manufacturer_id_c1176543_fk_suppliers FOREIGN KEY (manufacturer_id) REFERENCES public.suppliers_manufacturer(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3317 (class 2606 OID 30949)
+-- Name: materials_rockwallmaterialunit materials_rockwallma_mark_d_id_e456d3f5_fk_standards; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_rockwallmaterialunit
+    ADD CONSTRAINT materials_rockwallma_mark_d_id_e456d3f5_fk_standards FOREIGN KEY (mark_d_id) REFERENCES public.standards_markd(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3318 (class 2606 OID 30954)
+-- Name: materials_rockwallmaterialunit materials_rockwallma_mark_f_id_48ec4578_fk_standards; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_rockwallmaterialunit
+    ADD CONSTRAINT materials_rockwallma_mark_f_id_48ec4578_fk_standards FOREIGN KEY (mark_f_id) REFERENCES public.standards_markf(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3319 (class 2606 OID 30959)
+-- Name: materials_rockwallmaterialunit materials_rockwallma_mark_m_id_e96cf97b_fk_standards; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_rockwallmaterialunit
+    ADD CONSTRAINT materials_rockwallma_mark_m_id_e96cf97b_fk_standards FOREIGN KEY (mark_m_id) REFERENCES public.standards_markm(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3320 (class 2606 OID 30964)
+-- Name: materials_rockwallmaterialunit materials_rockwallma_sub_brand_1_id_6717e0fb_fk_brands_su; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_rockwallmaterialunit
+    ADD CONSTRAINT materials_rockwallma_sub_brand_1_id_6717e0fb_fk_brands_su FOREIGN KEY (sub_brand_1_id) REFERENCES public.brands_subbrand_1(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3321 (class 2606 OID 30969)
+-- Name: materials_rockwallmaterialunit materials_rockwallma_sub_brand_2_id_15c37d7b_fk_brands_su; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_rockwallmaterialunit
+    ADD CONSTRAINT materials_rockwallma_sub_brand_2_id_15c37d7b_fk_brands_su FOREIGN KEY (sub_brand_2_id) REFERENCES public.brands_subbrand_2(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3330 (class 2606 OID 31191)
+-- Name: materials_siding materials_siding_brand_id_947adead_fk_brands_brand_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_siding
+    ADD CONSTRAINT materials_siding_brand_id_947adead_fk_brands_brand_id FOREIGN KEY (brand_id) REFERENCES public.brands_brand(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3331 (class 2606 OID 31196)
+-- Name: materials_siding materials_siding_manufacturer_id_4bd6fcdc_fk_suppliers; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_siding
+    ADD CONSTRAINT materials_siding_manufacturer_id_4bd6fcdc_fk_suppliers FOREIGN KEY (manufacturer_id) REFERENCES public.suppliers_manufacturer(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3333 (class 2606 OID 31210)
+-- Name: materials_siding_use materials_siding_use_materialuse_id_27444db6_fk_materials; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_siding_use
+    ADD CONSTRAINT materials_siding_use_materialuse_id_27444db6_fk_materials FOREIGN KEY (materialuse_id) REFERENCES public.materials_materialuse(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3332 (class 2606 OID 31205)
+-- Name: materials_siding_use materials_siding_use_siding_id_a2f23e27_fk_materials_siding_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_siding_use
+    ADD CONSTRAINT materials_siding_use_siding_id_a2f23e27_fk_materials_siding_id FOREIGN KEY (siding_id) REFERENCES public.materials_siding(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3338 (class 2606 OID 31315)
+-- Name: materials_stoneproductline materials_stoneprodu_manufacturer_id_c1271051_fk_suppliers; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_stoneproductline
+    ADD CONSTRAINT materials_stoneprodu_manufacturer_id_c1271051_fk_suppliers FOREIGN KEY (manufacturer_id) REFERENCES public.suppliers_manufacturer(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3340 (class 2606 OID 31328)
+-- Name: materials_stoneproductline_use materials_stoneprodu_materialuse_id_7e20150f_fk_materials; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_stoneproductline_use
+    ADD CONSTRAINT materials_stoneprodu_materialuse_id_7e20150f_fk_materials FOREIGN KEY (materialuse_id) REFERENCES public.materials_materialuse(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3339 (class 2606 OID 31323)
+-- Name: materials_stoneproductline_use materials_stoneprodu_stoneproductline_id_6477c585_fk_materials; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_stoneproductline_use
+    ADD CONSTRAINT materials_stoneprodu_stoneproductline_id_6477c585_fk_materials FOREIGN KEY (stoneproductline_id) REFERENCES public.materials_stoneproductline(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3341 (class 2606 OID 31335)
+-- Name: materials_stoneunit materials_stoneunit_product_line_id_c1b449ac_fk_materials; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.materials_stoneunit
+    ADD CONSTRAINT materials_stoneunit_product_line_id_c1b449ac_fk_materials FOREIGN KEY (product_line_id) REFERENCES public.materials_stoneproductline(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3310 (class 2606 OID 30888)
+-- Name: names_decorativebrickface_brand names_decorativebric_brand_id_92646ca6_fk_brands_br; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.names_decorativebrickface_brand
+    ADD CONSTRAINT names_decorativebric_brand_id_92646ca6_fk_brands_br FOREIGN KEY (brand_id) REFERENCES public.brands_brand(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3309 (class 2606 OID 30883)
+-- Name: names_decorativebrickface_brand names_decorativebric_decorativebrickface__f4bd2916_fk_names_dec; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.names_decorativebrickface_brand
+    ADD CONSTRAINT names_decorativebric_decorativebrickface__f4bd2916_fk_names_dec FOREIGN KEY (decorativebrickface_id) REFERENCES public.names_decorativebrickface(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3307 (class 2606 OID 30786)
+-- Name: suppliers_manufacturer suppliers_manufacturer_brand_id_18bff0a3_fk_brands_brand_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.suppliers_manufacturer
+    ADD CONSTRAINT suppliers_manufacturer_brand_id_18bff0a3_fk_brands_brand_id FOREIGN KEY (brand_id) REFERENCES public.brands_brand(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3308 (class 2606 OID 30791)
+-- Name: suppliers_manufacturer suppliers_manufacturer_city_id_734a9037_fk_geography_city_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.suppliers_manufacturer
+    ADD CONSTRAINT suppliers_manufacturer_city_id_734a9037_fk_geography_city_id FOREIGN KEY (city_id) REFERENCES public.geography_city(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3304 (class 2606 OID 30765)
+-- Name: suppliers_provider suppliers_provider_primary_activity_id_93261e15_fk_suppliers; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.suppliers_provider
+    ADD CONSTRAINT suppliers_provider_primary_activity_id_93261e15_fk_suppliers FOREIGN KEY (primary_activity_id) REFERENCES public.suppliers_activity(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3306 (class 2606 OID 30779)
+-- Name: suppliers_provider_secondary_activity suppliers_provider_s_activity_id_31284a51_fk_suppliers; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.suppliers_provider_secondary_activity
+    ADD CONSTRAINT suppliers_provider_s_activity_id_31284a51_fk_suppliers FOREIGN KEY (activity_id) REFERENCES public.suppliers_activity(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3305 (class 2606 OID 30774)
+-- Name: suppliers_provider_secondary_activity suppliers_provider_s_provider_id_2fab0709_fk_suppliers; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.suppliers_provider_secondary_activity
+    ADD CONSTRAINT suppliers_provider_s_provider_id_2fab0709_fk_suppliers FOREIGN KEY (provider_id) REFERENCES public.suppliers_provider(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3327 (class 2606 OID 31049)
+-- Name: workprices_pilegrillagefoundationworkprices workprices_pilegrill_owner_id_d59cdcc2_fk_auth_user; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.workprices_pilegrillagefoundationworkprices
+    ADD CONSTRAINT workprices_pilegrill_owner_id_d59cdcc2_fk_auth_user FOREIGN KEY (owner_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+-- Completed on 2020-06-09 14:59:08
+
+--
+-- PostgreSQL database dump complete
+--
+

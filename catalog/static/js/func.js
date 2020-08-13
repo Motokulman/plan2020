@@ -845,8 +845,8 @@ function saveScheme() {
     data.d = d;
     data.checked = false;
     data["csrfmiddlewaretoken"] = csrf_token;
-    //////console.log("data до JSON = ", data)
-    //////console.log("data после JSON, но до пересылки = ", data)
+    console.log("data до JSON = ", data)
+    console.log("data после JSON, но до пересылки = ", data)
     $.ajax({
         url: 'get_response',
         type: 'POST',
@@ -855,10 +855,10 @@ function saveScheme() {
         async: false,
         success: function (data) {
             schemeChange = false;
-            //////console.log("Схема сохранена = ", data);
+            console.log("Схема сохранена = ", data);
         },
         error: function () {
-            //////console.log("Ошибка сохранения схемы");
+            console.log("Ошибка сохранения схемы");
         }
     });
 }

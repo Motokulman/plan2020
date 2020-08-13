@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission, Group
-from django.contrib.postgres.fields import JSONField
+# from django.contrib.postgres.fields import JSONField
 
 
 class Algorithm(models.Model):
@@ -63,7 +63,7 @@ class Plan(models.Model):
     """Модель, представляющая Информацию о проекте"""
     title = models.CharField(max_length=200)
     # Автор проекта. Если копировать один и тот же проект автор не меняется!
-    scheme = JSONField(null=True, blank=True)
+    scheme = models.TextField(null=True, blank=True)
     author = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Автор')
     # проверен проект или нет. Проверенные доступны к выкладыванию в системе. Расчет происходит при выкладывании
@@ -120,6 +120,29 @@ class Shell(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.name}, {self.roof_material}, {self.wall_material_type_0}, {self.socle_material_type}'
+
+
+class FacadeMaterial(models.Model):
+    """Фасадные материалы для отделки стен. СОдержат по всем проектам записи со ссылками на конкретные материалы"""
+
+    plan = models.ForeignKey(Plan, on_delete = models.CASCADE) # реализация сязи "один ко многим"
+
+    coord = models.TextField(null=True, blank=True) # координаты сегмента для данного материала
+
+    # тип фасадного материала, чтоб понимать, из какой таблицы брать материал
+    material_type = models.ForeignKey(FacadeMaterialType, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Автор')
+    
+    # id материала, по нему берется материал из таблицы согласно типу материала
+    material_id = models.IntegerField(null=True, blank=True)
+
+    class Meta:
+        ordering = ('material_type', 'material_id')
+        verbose_name = 'Сектор отделки фасада'
+        verbose_name_plural = 'Сектора отделки фасада'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.material_type}, {self.material_id}'
 
 # Расширение модели пользователя для хранения настроек
 

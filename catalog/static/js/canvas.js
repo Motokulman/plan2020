@@ -273,7 +273,10 @@ function drawLine(line, context, drawSettings) {
             }
         }
     } else if (lengthLine(point0, point1) == 0) { // если это не окружность, значит это просто прямая. Если ее длина == 0, то это колонна
-        context.strokeRect(point0.x - 3, point0.y - 3, 6, 6);
+        context.moveTo(point0.x - 3, point0.y);
+        context.lineTo(point1.x + 3, point1.y);
+        context.moveTo(point0.x, point0.y + 3);
+        context.lineTo(point1.x , point1.y - 3);
     } else { // иначе это просто прямая
         context.moveTo(point0.x, point0.y);
         context.lineTo(point1.x, point1.y);
