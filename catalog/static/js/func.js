@@ -567,7 +567,18 @@ $('#element_selector button').click(function () {
 // Определяем, какой уровень выбрал пользователь
 $('#level_selector button').click(function () {
     $(this).addClass('active').siblings().removeClass('active');
-    level = this.id;
+    // level = this.id;
+    switch (this.id) { // в зависимости от текущего уровня сохраняем точки предустанавливая их высоту
+        case 'floor_1':
+            level = 1;
+            break;
+        case 'floor_2':
+            level = 2;
+            break;
+        case 'floor_3':
+            level = 3;
+            break;
+    }
     drawElements();
 });
 
@@ -660,9 +671,9 @@ function pushLine(id0, id1, distance, direction) {
 function pushElement(el) { // ids - массив id линий, из которых состоит данный элемент  ids, distance, direction
     if (elements.length == 0) {
         // //////console.log("el = ", el);bearType: 'not_set', liveType: 'not_set', outdoorType: 'not_set', roof_slope roofSlope: el.roofSlope, ridgeHeight: el.ridgeHeight, mauerlatHeight: el.mauerlatHeight, angle: el.angle, highSide: el.highSide
-        elements.push({ id: 0, ids: el.ids, type: el.type, subType: el.subType, level: el.level });
+        elements.push({ id: 0, ids: el.ids, type: el.type, subType: el.subType, level: el.level, limitation: el.limitation });
     } else {
-        elements.push({ id: findMaxId(elements) + 1, ids: el.ids, type: el.type, subType: el.subType, level: el.level });
+        elements.push({ id: findMaxId(elements) + 1, ids: el.ids, type: el.type, subType: el.subType, level: el.level, limitation: el.limitation });
     }
 }
 
@@ -805,7 +816,7 @@ function getScheme() {
                 console.log(" 3D модель окна n: http://asd.ru");
                 console.log(" 3D модель двери 1: http://asd.ru");
                 console.log(" 3D модель двери n: http://asd.ru");
-                
+
             }
         },
         error: function () {

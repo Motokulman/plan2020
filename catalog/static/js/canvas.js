@@ -35,13 +35,29 @@ var plate_garage = []; // массив перекрытий гаражного �
 var drawSettings = [];
 var level; // текущий уровень
 var roof_point_height = 0; // глобальная переменная для хранения высоты кровельных точек на протяжении всего цикла ввода ската
+// var surface = [];  // поверхности стен. Для отрисовки фасада и т.д.
 
 var levels = new Map([['floor_1', { // настройки уровней
-    height: 3000
+    height: 3000, // высота стены в чистом виле, то есть от белового пола до белового потолка
+    insulate: 0, // утеплитель пола
+    screed: 70,  // стяжка пола
+    plate: 220, // перекрытие
+    ceiling: 50, // потолок
+    covering: 20 // покрытие пола
 }], ['floor_2', {
-    height: 3000
+    height: 3000,
+    insulate: 0,
+    screed: 70,
+    plate: 220,
+    ceiling: 50,
+    covering: 20
 }], ['floor_3', {
-    height: 3000
+    height: 3000,
+    insulate: 0,
+    screed: 70,
+    plate: 220,
+    ceiling: 50,
+    covering: 20
 }]]);
 
 
@@ -276,7 +292,7 @@ function drawLine(line, context, drawSettings) {
         context.moveTo(point0.x - 3, point0.y);
         context.lineTo(point1.x + 3, point1.y);
         context.moveTo(point0.x, point0.y + 3);
-        context.lineTo(point1.x , point1.y - 3);
+        context.lineTo(point1.x, point1.y - 3);
     } else { // иначе это просто прямая
         context.moveTo(point0.x, point0.y);
         context.lineTo(point1.x, point1.y);
@@ -504,8 +520,9 @@ function drawVent(x, y, context, drawSettings) {
 
 
 function drawElement(element) {
-    // ////console.log('drawElement element! = ', element);
+    console.log('element = ', element);
     drawSettings = drawSettingsDefault;
+    var draw_it = false;
     if (element.type == 'wall') { // если это стена
         if (selectedElements.findIndex(sel => sel == element.id)) { // если данный элемент в массиве выделенных
             drawSettings.blur = true;
@@ -513,40 +530,48 @@ function drawElement(element) {
             drawSettings.blur = false;
         }
         if (element.subType.indexOf("partition") >= 0) {// если это перегородка
-            if (element.level == level) {
+            if (element.limitation > level) { // если стены не ограничены текущим уровнем, то рисуем нормально
                 drawSettings = {
                     lineWidth: 6,
                     strokeStyle: "black"
                 }
-            } else { //if (level != "floor_1")
+                draw_it = true;
+            } else if (element.limitation == level) { // если стены ограничены текущим уровнем, то их рисуем серым. Если ограничены уровнем ниже, то вовсе не рисуем
                 drawSettings = {
                     lineWidth: 6,
                     strokeStyle: "gray"
                 }
+                draw_it = true;
             }
-
-            for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
-                var line = lines.find(line => line.id == line_id);
-                drawLine(line, ctx_0, drawSettings);
+            if (draw_it == true) { // рисуем только не ограниченные текущим уровнем и серым, если ограничены текущим. Все что ниже не рисуем
+                for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+                    var line = lines.find(line => line.id == line_id);
+                    drawLine(line, ctx_0, drawSettings);
+                }
             }
+            draw_it = false;
         } else if (element.subType.indexOf("bearing") >= 0) {// если это несущая стена 
-            if (element.level == level) {
+            if (element.limitation > level) {
                 drawSettings = {
                     lineWidth: 12,
                     strokeStyle: "black"
                 }
-            } else { // if (level != "floor_1")
+                draw_it = true;
+            } else if (element.limitation == level) { // if (level != "floor_1")
                 drawSettings = {
                     lineWidth: 12,
                     strokeStyle: "gray"
                 }
+                draw_it = true;
             }
-
-            for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
-                var line = lines.find(line => line.id == line_id);
-                drawLine(line, ctx_0, drawSettings);
+            if (draw_it == true) {
+                for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+                    var line = lines.find(line => line.id == line_id);
+                    drawLine(line, ctx_0, drawSettings);
+                }
             }
-            if (element.level == level) {
+            draw_it = false;
+            if (element.limitation > level) {
                 if (element.subType.indexOf("outdoor") >= 0) {
                     drawSettings = {
                         lineWidth: 10,
@@ -571,7 +596,7 @@ function drawElement(element) {
                 drawLine(line, ctx_0, drawSettings);
             }
         }
-        if (element.level == level) {
+        if (element.limitation > level) {
             if (element.subType.indexOf("living") >= 0) {// если это смженая сжилым
                 drawSettings = {
                     lineWidth: 4,
@@ -629,7 +654,7 @@ function drawElements() {  //drawWalls
     clear(ctx_0, canvas_0);
     if (elements.length > 0) {
         for (element of elements.values()) {// перебираем все элементы 
-            if (((element.type == "wall") && (level == "floor_1") && (element.level == "floor_1")) || ((element.type == "wall") && (level == "floor_2")) || ((element.type == "wall") && (level == "floor_3")) || (element.type != "wall")) {
+            if (((element.type == "wall") && (level == 1) && (element.level == 1)) || ((element.type == "wall") && (level == 2)) || ((element.type == "wall") && (level == 3)) || (element.type != "wall")) {
                 drawElement(element);
             }
         }

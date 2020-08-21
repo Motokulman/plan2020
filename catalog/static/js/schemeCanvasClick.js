@@ -25,8 +25,8 @@ canvas_0.addEventListener('click', function (e) {
                         pushLine(findMaxId(points) - 1, findMaxId(points), 0, ''); // занесли в массив линий нашу новую линию
                         // ////console.log("lines = ", lines);
                         newLinesIds[0] = findMaxId(lines);// занесли в промежуточный массив id единственной линии, которая будет храниться в данном элементе (т.к. это просто ровная стена)
-                        newElement = { ids: newLinesIds, type: 'wall', subType: '', level: level };
-                        // ////console.log("newElement = ", newElement);
+                        newElement = { ids: newLinesIds, type: 'wall', subType: '', level: level, limitation: 10 };
+                        console.log("newElement = ", newElement);
                         pushElement(newElement); // занесли в массив с элементами id нашей линии стены/ радиус = 0 чтобы отличить стену от радиусного элемента
                         // ////console.log("elements сразу после добавления = ", elements);
                         drawLine(lines[lines.length - 1], ctx_0, drawSettingsDefault);
@@ -106,7 +106,7 @@ canvas_0.addEventListener('click', function (e) {
                         newLinesIds[0] = findMaxId(lines) - 2;
                         newLinesIds[1] = findMaxId(lines) - 1;
                         newLinesIds[2] = findMaxId(lines);
-                        newElement = { ids: newLinesIds, distance: distance, type: 'wall', subType: '', level: level };
+                        newElement = { ids: newLinesIds, distance: distance, type: 'wall', subType: '', level: level, limitation: 10 };
                         pushElement(newElement);
                         drawElement(elements[elements.length - 1]);
                         mousePosArray = [];
@@ -146,7 +146,7 @@ canvas_0.addEventListener('click', function (e) {
                         // newLinesIds[0] = findMaxId(lines);// занесли в промежуточный массив id единственной линии
                         // pushLine(findMaxId(points) - 1, findMaxId(points), 0, ''); // занесли в массив линий нашу новую линию
                         newLinesIds[0] = findMaxId(lines);// занесли в промежуточный массив id единственной линии
-                        newElement = { ids: newLinesIds, type: 'wall', subType: '', level: level }; // заносим линию в элемент
+                        newElement = { ids: newLinesIds, type: 'wall', subType: '', level: level, limitation: 10 }; // заносим линию в элемент
                         pushElement(newElement);
                         newLines = [];
                         prePointsMM = [];
@@ -463,7 +463,7 @@ canvas_0.addEventListener('click', function (e) {
                             pushLine(line.p0_id, line.p1_id, line.distance, line.direction); // занесли в массив линий нашу новую линию
                             newLinesIds.push(findMaxId(lines));
                         }
-                        newElement = { ids: newLinesIds, type: 'outdoor_space', level: level }; // , level: level 
+                        newElement = { ids: newLinesIds, type: 'outdoor_space', level: level}; // , level: level 
                         pushElement(newElement);
                         newLinesIds = [];
                         prePointsMM = [];
@@ -559,7 +559,7 @@ canvas_0.addEventListener('click', function (e) {
                 }
                 break;
         }
-    } else {
+    } else if (action == "none") {
         // выделяем элементы кликами:
         switch (selectedTool) {
             case 'wall':// если это стены, то алгоритм такой: клик - выделили, клик на ней же - сняли выделение
@@ -602,6 +602,19 @@ canvas_0.addEventListener('click', function (e) {
 
                 break;
         }
+    } else if (action == "limitation") { // Обрезаем стены на уровне выбранного этажа
+        // console.log("action = ", action);
+        if (level > 1) { // обрезаем только если это выше первого этажа
+            var el = defineElement("wall");
+            // console.log("defined el = ", el);
+            if (el.element_id > -1) { // реагируем только на стены
+                var elem = elements.find(element => element.id == el.element_id);
+                elem.limitation = level; // ограничиваем текущим уровнем
+                // console.log("elem = ", elem);
+            }
+        }
     }
+
+
     // ////console.log("elements = ", elements);
 });
