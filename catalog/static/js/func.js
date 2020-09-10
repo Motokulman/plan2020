@@ -661,9 +661,9 @@ function pushPoints(prePointsMM, is_floor_1, is_floor_2, is_floor_3, height) {
 // сохранение факта связи двух точек. Линия содержит две точки, которые соединяются между собой и закон, по которому они соединяются, то есть прямая, кривая и т.д.
 function pushLine(id0, id1, distance, direction) {
     if (lines.length == 0) {
-        lines.push({ id: 0, id0: id0, id1: id1, distance: distance, direction: direction });
+        lines.push({ id: 0, id0: id0, id1: id1, distance: distance, direction: direction, alignmentThisSide: undefined, alignmentId: undefined, alignmentOtherSide: undefined });
     } else {
-        lines.push({ id: findMaxId(lines) + 1, id0: id0, id1: id1, distance: distance, direction: direction });
+        lines.push({ id: findMaxId(lines) + 1, id0: id0, id1: id1, distance: distance, direction: direction, alignmentThisSide: undefined, alignmentId: undefined, alignmentOtherSide: undefined });
     }
 }
 
@@ -692,10 +692,41 @@ function pushPrePointMM(mmOfMousePos, height) {
 
 // Обработка нажатий клавиатуры
 $(document).keydown(function (eventObject) {// Удаление, если вдруг передумал рисовать 
+    console.log("eventObject.which  = ", eventObject.which);
     if (eventObject.which == 27) { // если нажата клавиша escape
         if (prePointsMM.length != 0) { // если массив точек при рисовании не пуст, то есть мы еще рисуем
             prePointsMM = []; // удаляем последние точки
             selectedElements = [];// зачистим массив выделеных элеиентов
+        }
+    }
+    if (eventObject.which == 13) { // если нажата клавиша enter
+         console.log("readyForAlignment  = ", readyForAlignment);
+        // console.log("(typeof selectedLines[0].alignmentThisSide == undefined)  = ", (typeof selectedLines[0].alignmentThisSide == undefined));
+        selectedLines[0].alignmentId = selectedLines[1].id;
+        if (readyForAlignment == true) { // если выбраны две линии для выравнивания
+            if (typeof selectedLines[0].alignmentThisSide == "undefined") { // если выравнивание не задано
+                // console.log("typeof[0] = ");
+                console.log("selectedLines[0] = ", selectedLines[0]);
+                selectedLines[0].alignmentThisSide = 'right';
+                selectedLines[0].alignmentOtherSide = 'right';
+                // console.log("selectedLines[0] = ", selectedLines[0]);
+            } else if ((selectedLines[0].alignmentThisSide == 'right') && (selectedLines[0].alignmentOtherSide == 'right')) {
+                console.log("111 ");
+                selectedLines[0].alignmentOtherSide = 'left';
+            } else if ((selectedLines[0].alignmentThisSide == 'right') && (selectedLines[0].alignmentOtherSide == 'left')) {
+                console.log("222 ");
+                selectedLines[0].alignmentThisSide = 'left';
+            } else if ((selectedLines[0].alignmentThisSide == 'left') && (selectedLines[0].alignmentOtherSide == 'left')) {
+                console.log("333 ");
+                selectedLines[0].alignmentOtherSide = 'right';
+            } else if ((selectedLines[0].alignmentThisSide == 'left') && (selectedLines[0].alignmentOtherSide == 'right')) {
+                console.log("444 ");
+                selectedLines[0].alignmentThisSide = undefined;
+                selectedLines[0].alignmentOtherSide = undefined;
+                selectedLines[0].alignmentId = undefined;
+            }
+            console.log("selectedLines[0] = ", selectedLines[0]);
+            getFundament();
         }
     }
     if ((eventObject.which == 46) && (selectedElements.length > 0)) { // если нажата клавиша delete и если есть выделенные элементы
@@ -827,17 +858,12 @@ function getScheme() {
 
 // 3d схемы
 $("#3d").click(function () {
-    // var t = Date.now();
-    // //console.log(" today = ", today);
-    // var milliseconds = today.getMilliseconds();
-    // //console.log(" milliseconds = ", milliseconds);
-
     make3d();
-    // today = Date();
-    // t = Date.now() - t;
-    // console.log(" delta t = ", t);
 });
 
+$("#get_fundament").click(function () {  // обработка кнопки получения фундамента
+    getFundament();
+});
 
 function saveScheme() {
     var data = {};

@@ -35,6 +35,9 @@ var plate_garage = []; // массив перекрытий гаражного �
 var drawSettings = [];
 var level; // текущий уровень
 var roof_point_height = 0; // глобальная переменная для хранения высоты кровельных точек на протяжении всего цикла ввода ската
+var bearingOutdoorWidth = 500; // ширина несущей наружной стены
+var bearingIndoorWidth = 400; // ширина несущей внутренней стены
+var readyForAlignment = false; // когда выбраны две стены для выравнивания по своим сторонам
 // var surface = [];  // поверхности стен. Для отрисовки фасада и т.д.
 
 var levels = new Map([['floor_1', { // настройки уровней
@@ -77,10 +80,17 @@ var drawSettingsGarage = {
     blur: false
 }
 
-var drawSettingsOutdoorSpace = {
+var drawSettingsOutdoorPlate = {
     strokeStyle: 'black',
     lineWidth: 2,
     fillStyle: "blue",
+    globalAlpha: 0.5,
+    blur: false
+}
+var drawSettingsIndoorPlate = {
+    strokeStyle: 'black',
+    lineWidth: 2,
+    fillStyle: "green",
     globalAlpha: 0.5,
     blur: false
 }
@@ -89,6 +99,14 @@ var drawSettingsSteps = {
     strokeStyle: 'black',
     lineWidth: 2,
     fillStyle: "pink",
+    globalAlpha: 0.5,
+    blur: false
+}
+
+var drawSettingsEntranceGroup = {
+    strokeStyle: 'black',
+    lineWidth: 2,
+    fillStyle: "GoldenRod",
     globalAlpha: 0.5,
     blur: false
 }
@@ -108,6 +126,13 @@ var drawSettingsVent = {
     strokeStyle: 'black',
     lineWidth: 2,
     fillStyle: "lime",
+    globalAlpha: 1,
+    blur: false,
+}
+var drawSettingsGray = {
+    strokeStyle: 'gray',
+    lineWidth: 2,
+    fillStyle: "white",
     globalAlpha: 1,
     blur: false,
 }
@@ -520,7 +545,7 @@ function drawVent(x, y, context, drawSettings) {
 
 
 function drawElement(element) {
-    console.log('element = ', element);
+    // console.log('element = ', element);
     drawSettings = drawSettingsDefault;
     var draw_it = false;
     if (element.type == 'wall') { // если это стена
@@ -640,10 +665,18 @@ function drawElement(element) {
         //         }
         //     }
         //     drawShape(element, ctx_0, drawSettings);
-    } else if ((element.type == 'outdoor_space') && (element.level == level)) {
-        drawShape(element, ctx_0, drawSettingsOutdoorSpace);
+    } else if ((element.type == 'indoor_plate') && (element.level == level)) {
+        drawShape(element, ctx_0, drawSettingsIndoorPlate);
+    } else if ((element.type == 'outdoor_plate') && (element.level == level)) {
+        drawShape(element, ctx_0, drawSettingsOutdoorPlate);
     } else if ((element.type == 'steps') && (element.level == level)) {
         drawShape(element, ctx_0, drawSettingsSteps);
+    } else if (element.type == 'entrance_group') {
+        if (element.level == level) {
+            drawShape(element, ctx_0, drawSettingsEntranceGroup);
+        } else if (element.level < level) {
+            drawShape(element, ctx_0, drawSettingsGray);
+        }
     }
 }
 
@@ -651,6 +684,8 @@ function drawElement(element) {
 
 // Воспроизведение из массива стен
 function drawElements() {  //drawWalls
+    // readyForDefineFasadeSide(elements);
+    // console.log("elements[0] = ", elements[0] );
     clear(ctx_0, canvas_0);
     if (elements.length > 0) {
         for (element of elements.values()) {// перебираем все элементы 

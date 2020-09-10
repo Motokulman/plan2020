@@ -27,7 +27,7 @@
     <div class="col-sm-2">
       <div id="line_type_selector" class="btn-group">
         <button id="straight" type="button" class="btn btn-light">Прямая</button>
-        <button id="curve" type="button" class="btn btn-light">Кривая</button>
+        <!-- <button id="curve" type="button" class="btn btn-light">Кривая</button> -->
         <button id="polygon" type="button" class="btn btn-light">Многоугольник</button>
         <select id="polygon_sides" name="">
           <option value="2">2</option>
@@ -49,6 +49,8 @@
           <button id="none" type="button" class="btn btn-light">Выбирать</button>
           <button id="draw" type="button" class="btn btn-light">Рисовать</button>
           <button id="limitation" type="button" class="btn btn-light">Ограничить</button>
+          <button id="side_alignment" type="button" class="btn btn-light">Подровнять</button>
+          <!-- <button id="define_fasade" type="button" class="btn btn-light">Офасадить</button> -->
         </div>
       </div>
 
@@ -60,7 +62,9 @@
             <button id="stairwell" type="button" class="btn btn-light">Лестничный пролёт</button>
             <button id="plate_garage" type="button" class="btn btn-light">Пол гаража</button>
             <button id="roof" type="button" class="btn btn-light">Кровля</button>
-            <button id="outdoor_space" type="button" class="btn btn-light">Открытое</button>
+            <!-- <label>Перекрытия:</label> -->
+            <button id="indoor_plate" type="button" class="btn btn-light">Внутреннее перекрытие</button>
+            <button id="outdoor_plate" type="button" class="btn btn-light">Открытое перекрытие</button>
             <button id="steps" type="button" class="btn btn-light">Ступени</button>
             <button id="window" type="button" class="btn btn-light">Окно</button>
             <button id="door_window" type="button" class="btn btn-light">Дверь + окно</button>
@@ -83,7 +87,9 @@
 
       <div id="test_buttons" class="btn-group">
         <button id="3d" type="button" class="btn btn-light">3D</button>
+        <button id="get_fundament" type="button" class="btn btn-light">Получить фундамент</button>
       </div>
+
 
       <form id="canvas_form" class="canvas-field" action="" name="{{ plan_id}}" method="POST">
         {% csrf_token %}
@@ -132,15 +138,6 @@
         {% endfor %}
       </select>
 
-      <!-- <select id="roof_covering" name="">
-        <option value="2">Металлочерепица</option>
-        <option value="3" selected>3</option>
-        <option value="4">4</option>
-      </select> -->
-
-      <!-- <input type="text" id="user-input" autofocus=""><br>
-      <button type="button" id="save">Сохранить</button><br> -->
-      <!-- <p id="p-text">foo bar</p> -->
 
       <script>
 
@@ -262,6 +259,7 @@
 <script type="text/javascript" src="{% static 'js/schemeCanvasClick.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/calc.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/3d.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/getFundament.js' %}"></script>
 
 
 {% endblock %}

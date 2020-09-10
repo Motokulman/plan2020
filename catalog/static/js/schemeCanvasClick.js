@@ -162,27 +162,27 @@ canvas_0.addEventListener('click', function (e) {
 
                 }
                 break;
-            case 'entrance_group': // если входная группа. Ее вообще задавать точкой и направлением. Или как свойство входной двери.
+            case 'entrance_group': //  входная группа. Может, Ее вообще задавать точкой и направлением. Или как свойство входной двери.
                 newLinesIds = [];
                 if (prePointsMM.length > 0) {
-                    // pushPrePointMM(mmOfMousePos);
-                    // drawPoint(mousePos);
-                    // if ((prePointsMM[0].x == mmOfMousePos.x) && (prePointsMM[0].y == mmOfMousePos.y)) { // если точки совпали, значит конец ввода группы
-                    //     pushPoints(prePointsMM);
-                    //     for (var p = prePointsMM.length - 1; p > 0; p--) {
-                    //         pushLine(findMaxId(points) - p, findMaxId(points) - p + 1); // занесли в массив линий нашу новую линию
-                    //         newLinesIds.push(findMaxId(lines));//
-                    //         // //////console.log("lines = ", lines);
-                    //     }
-                    //     prePointsMM = [];
-                    //     newElement = { ids: newLinesIds, type: "Entrance group" };
-                    //     newLinesIds = [];
-                    //     pushElement(newElement);
-                    //     drawElements();
-                    // }
+                    pushPrePointMM(mmOfMousePos);
+                    drawPoint(mousePos);
+                    if ((prePointsMM[0].x == mmOfMousePos.x) && (prePointsMM[0].y == mmOfMousePos.y)) { // если точки совпали, значит конец ввода группы
+                        pushPoints(prePointsMM);
+                        for (var p = prePointsMM.length - 1; p > 0; p--) {
+                            pushLine(findMaxId(points) - p, findMaxId(points) - p + 1); // занесли в массив линий нашу новую линию
+                            newLinesIds.push(findMaxId(lines));//
+                            // //////console.log("lines = ", lines);
+                        }
+                        prePointsMM = [];
+                        newElement = { ids: newLinesIds, level: level, type: "entrance_group" };
+                        newLinesIds = [];
+                        pushElement(newElement);
+                        drawElements();
+                    }
                 } else { // если это самая первая точка
-                    // pushPrePointMM(mmOfMousePos);
-                    // drawPoint(mousePos);
+                    pushPrePointMM(mmOfMousePos);
+                    drawPoint(mousePos);
                 }
                 break;
             case 'plate_garage': // пол гаража. Должен хранить ограничивающие его несущие стены. Потом определять автоматом, а пока сделать явный выбор стен.
@@ -422,7 +422,7 @@ canvas_0.addEventListener('click', function (e) {
                     drawOpening(mousePos.x, mousePos.y, ctx_0, drawSettingsOpening);
                 }
                 break;
-            case 'outdoor_space': // открытое пространство: балкон, веранда, лоджия и т.д. В зависимости от контекста
+            case 'indoor_plate': // внутреннее перекрытие. Рисоватьтак, чтобы первая линия была опорной
                 newLinesIds = [];
                 if (prePointsMM.length > 0) {
                     pushPrePointMM(mmOfMousePos);
@@ -463,13 +463,72 @@ canvas_0.addEventListener('click', function (e) {
                             pushLine(line.p0_id, line.p1_id, line.distance, line.direction); // занесли в массив линий нашу новую линию
                             newLinesIds.push(findMaxId(lines));
                         }
-                        newElement = { ids: newLinesIds, type: 'outdoor_space', level: level}; // , level: level 
+                        newElement = { ids: newLinesIds, type: 'indoor_plate', level: level }; // , level: level 
                         pushElement(newElement);
                         newLinesIds = [];
                         prePointsMM = [];
                         newLinesIds = [];
                         newLines = [];
-                        drawShape(elements[elements.length - 1], ctx_0, drawSettingsOutdoorSpace);
+                        drawShape(elements[elements.length - 1], ctx_0, drawSettingsOutdoorPlate);
+                        $('#none').trigger('click'); // делаем нажатой кнопку сброс
+                    }
+                } else { // если это самая первая точка
+                    newLines = [];
+                    prePointsMM = [];
+                    newLinesIds = [];
+                    newLines = [];
+                    pushPrePointMM(mmOfMousePos);
+                    drawPoint(mousePos);
+                }
+                break;
+            case 'outdoor_plate': // перекрытие открытого пространства: балкон, веранда, лоджия и т.д. В зависимости от контекста
+                newLinesIds = [];
+                if (prePointsMM.length > 0) {
+                    pushPrePointMM(mmOfMousePos);
+                    drawPoint(mousePos);
+                    // проверяем, не попалась ли нам окружность на этот раз. Тупо проверяем не попали ли на элемент целиком и тупо копируем его, линия, окружность - не важно
+                    var dist = 0;
+                    var dir = '';
+                    var newLine = [];
+                    if (elements.length > 0) {
+                        for (element of elements.values()) { // бежим по всем имеющимся элементам
+                            var line = lines.find(line => line.id == element.ids[0]); // ищем в массиве линий линию, сооьветствующиему Id в данной итерации
+                            var point0 = points.find(point => point.id == line.id0);
+                            var point1 = points.find(point => point.id == line.id1); // нашли все точки имеющейся окружности и проверяем, не совпадают ли они с нашими
+                            if ((prePointsMM[prePointsMM.length - 1].x == point1.x) && (prePointsMM[prePointsMM.length - 1].y == point1.y) && (prePointsMM[prePointsMM.length - 2].x == point0.x) && (prePointsMM[prePointsMM.length - 2].y == point0.y)) {
+                                dist = line.distance;
+                                dir = line.direction;
+                                // ////console.log("окружность при вводе прямая ");
+                                break;
+                            } else if ((prePointsMM[prePointsMM.length - 1].x == point0.x) && (prePointsMM[prePointsMM.length - 1].y == point0.y) && (prePointsMM[prePointsMM.length - 2].x == point1.x) && (prePointsMM[prePointsMM.length - 2].y == point1.y)) {
+                                // ////console.log("окружность при вводе обратная ");
+                                dist = line.distance;
+                                if (line.direction == "right") {
+                                    dir = "left";
+                                } else {
+                                    dir = "right";
+                                }
+                                break;
+                            }
+                        }
+                        newLine = { p0_id: findMaxId(points) + prePointsMM.length - 1, p1_id: findMaxId(points) + prePointsMM.length, distance: dist, direction: dir };
+                    } else {
+                        newLine = { p0_id: prePointsMM.length - 2, p1_id: prePointsMM.length - 1, distance: dist, direction: dir };
+                    }
+                    newLines.push(newLine);
+                    if ((prePointsMM[0].x == mmOfMousePos.x) && (prePointsMM[0].y == mmOfMousePos.y)) { // если точки совпали, значит конец ввода
+                        pushPoints(prePointsMM);
+                        for (line of newLines.values()) {
+                            pushLine(line.p0_id, line.p1_id, line.distance, line.direction); // занесли в массив линий нашу новую линию
+                            newLinesIds.push(findMaxId(lines));
+                        }
+                        newElement = { ids: newLinesIds, type: 'outdoor_plate', level: level }; // , level: level 
+                        pushElement(newElement);
+                        newLinesIds = [];
+                        prePointsMM = [];
+                        newLinesIds = [];
+                        newLines = [];
+                        drawShape(elements[elements.length - 1], ctx_0, drawSettingsOutdoorPlate);
                         $('#none').trigger('click'); // делаем нажатой кнопку сброс
                     }
                 } else { // если это самая первая точка
@@ -613,6 +672,26 @@ canvas_0.addEventListener('click', function (e) {
                 // console.log("elem = ", elem);
             }
         }
+    }
+    else if (action == "side_alignment") { // выравнивание стороны стены по стороне другой стены
+
+        if (defineElement("wall").element_id > -1) { // если мы попали наа элемент
+            // console.log("selectedLines = ", selectedLines);
+            if (selectedLines.length < 2) {
+                var id = defineElement("wall").line_id;
+                var li = lines.find(line => line.id == id);
+                selectedLines.push(li);
+            } else if (selectedLines.length == 2) { // если выбраны две стены
+                readyForAlignment = true;
+                console.log("selectedLines = ", selectedLines);
+            }
+        } else { // если кликнули сбоку, то сброс. 
+            selectedLines = [];
+            $('#none').trigger('click'); // делаем нажатой кнопку сброс
+            readyForAlignment = false;
+        }
+
+
     }
 
 

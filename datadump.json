@@ -1,0 +1,1588 @@
+[
+{
+  "model": "auth.permission",
+  "pk": 1,
+  "fields": {
+    "name": "Can add profile",
+    "content_type": 1,
+    "codename": "add_profile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 2,
+  "fields": {
+    "name": "Can change profile",
+    "content_type": 1,
+    "codename": "change_profile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 3,
+  "fields": {
+    "name": "Can delete profile",
+    "content_type": 1,
+    "codename": "delete_profile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 4,
+  "fields": {
+    "name": "Can view profile",
+    "content_type": 1,
+    "codename": "view_profile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 5,
+  "fields": {
+    "name": "Can add log entry",
+    "content_type": 2,
+    "codename": "add_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 6,
+  "fields": {
+    "name": "Can change log entry",
+    "content_type": 2,
+    "codename": "change_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 7,
+  "fields": {
+    "name": "Can delete log entry",
+    "content_type": 2,
+    "codename": "delete_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 8,
+  "fields": {
+    "name": "Can view log entry",
+    "content_type": 2,
+    "codename": "view_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 9,
+  "fields": {
+    "name": "Can add permission",
+    "content_type": 3,
+    "codename": "add_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 10,
+  "fields": {
+    "name": "Can change permission",
+    "content_type": 3,
+    "codename": "change_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 11,
+  "fields": {
+    "name": "Can delete permission",
+    "content_type": 3,
+    "codename": "delete_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 12,
+  "fields": {
+    "name": "Can view permission",
+    "content_type": 3,
+    "codename": "view_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 13,
+  "fields": {
+    "name": "Can add group",
+    "content_type": 4,
+    "codename": "add_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 14,
+  "fields": {
+    "name": "Can change group",
+    "content_type": 4,
+    "codename": "change_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 15,
+  "fields": {
+    "name": "Can delete group",
+    "content_type": 4,
+    "codename": "delete_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 16,
+  "fields": {
+    "name": "Can view group",
+    "content_type": 4,
+    "codename": "view_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 17,
+  "fields": {
+    "name": "Can add user",
+    "content_type": 5,
+    "codename": "add_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 18,
+  "fields": {
+    "name": "Can change user",
+    "content_type": 5,
+    "codename": "change_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 19,
+  "fields": {
+    "name": "Can delete user",
+    "content_type": 5,
+    "codename": "delete_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 20,
+  "fields": {
+    "name": "Can view user",
+    "content_type": 5,
+    "codename": "view_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 21,
+  "fields": {
+    "name": "Can add content type",
+    "content_type": 6,
+    "codename": "add_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 22,
+  "fields": {
+    "name": "Can change content type",
+    "content_type": 6,
+    "codename": "change_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 23,
+  "fields": {
+    "name": "Can delete content type",
+    "content_type": 6,
+    "codename": "delete_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 24,
+  "fields": {
+    "name": "Can view content type",
+    "content_type": 6,
+    "codename": "view_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 25,
+  "fields": {
+    "name": "Can add session",
+    "content_type": 7,
+    "codename": "add_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 26,
+  "fields": {
+    "name": "Can change session",
+    "content_type": 7,
+    "codename": "change_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 27,
+  "fields": {
+    "name": "Can delete session",
+    "content_type": 7,
+    "codename": "delete_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 28,
+  "fields": {
+    "name": "Can view session",
+    "content_type": 7,
+    "codename": "view_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 29,
+  "fields": {
+    "name": "Can add \u0410\u043b\u0433\u043e\u0440\u0438\u0442\u043c",
+    "content_type": 8,
+    "codename": "add_algorithm"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 30,
+  "fields": {
+    "name": "Can change \u0410\u043b\u0433\u043e\u0440\u0438\u0442\u043c",
+    "content_type": 8,
+    "codename": "change_algorithm"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 31,
+  "fields": {
+    "name": "Can delete \u0410\u043b\u0433\u043e\u0440\u0438\u0442\u043c",
+    "content_type": 8,
+    "codename": "delete_algorithm"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 32,
+  "fields": {
+    "name": "Can view \u0410\u043b\u0433\u043e\u0440\u0438\u0442\u043c",
+    "content_type": 8,
+    "codename": "view_algorithm"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 33,
+  "fields": {
+    "name": "Can add \u041f\u0440\u043e\u0435\u043a\u0442",
+    "content_type": 9,
+    "codename": "add_plan"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 34,
+  "fields": {
+    "name": "Can change \u041f\u0440\u043e\u0435\u043a\u0442",
+    "content_type": 9,
+    "codename": "change_plan"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 35,
+  "fields": {
+    "name": "Can delete \u041f\u0440\u043e\u0435\u043a\u0442",
+    "content_type": 9,
+    "codename": "delete_plan"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 36,
+  "fields": {
+    "name": "Can view \u041f\u0440\u043e\u0435\u043a\u0442",
+    "content_type": 9,
+    "codename": "view_plan"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 37,
+  "fields": {
+    "name": "Can add \u0422\u0438\u043f \u0444\u0430\u0441\u0430\u0434\u043d\u043e\u0433\u043e (\u043e\u0431\u043b\u0438\u0446\u043e\u0432\u043e\u0447\u043d\u043e\u0433\u043e) \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 10,
+    "codename": "add_facadematerialtype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 38,
+  "fields": {
+    "name": "Can change \u0422\u0438\u043f \u0444\u0430\u0441\u0430\u0434\u043d\u043e\u0433\u043e (\u043e\u0431\u043b\u0438\u0446\u043e\u0432\u043e\u0447\u043d\u043e\u0433\u043e) \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 10,
+    "codename": "change_facadematerialtype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 39,
+  "fields": {
+    "name": "Can delete \u0422\u0438\u043f \u0444\u0430\u0441\u0430\u0434\u043d\u043e\u0433\u043e (\u043e\u0431\u043b\u0438\u0446\u043e\u0432\u043e\u0447\u043d\u043e\u0433\u043e) \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 10,
+    "codename": "delete_facadematerialtype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 40,
+  "fields": {
+    "name": "Can view \u0422\u0438\u043f \u0444\u0430\u0441\u0430\u0434\u043d\u043e\u0433\u043e (\u043e\u0431\u043b\u0438\u0446\u043e\u0432\u043e\u0447\u043d\u043e\u0433\u043e) \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 10,
+    "codename": "view_facadematerialtype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 41,
+  "fields": {
+    "name": "Can add \u0428\u0430\u0431\u043b\u043e\u043d \u043e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u044f \u0444\u0430\u0441\u0430\u0434\u0430",
+    "content_type": 11,
+    "codename": "add_shell"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 42,
+  "fields": {
+    "name": "Can change \u0428\u0430\u0431\u043b\u043e\u043d \u043e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u044f \u0444\u0430\u0441\u0430\u0434\u0430",
+    "content_type": 11,
+    "codename": "change_shell"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 43,
+  "fields": {
+    "name": "Can delete \u0428\u0430\u0431\u043b\u043e\u043d \u043e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u044f \u0444\u0430\u0441\u0430\u0434\u0430",
+    "content_type": 11,
+    "codename": "delete_shell"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 44,
+  "fields": {
+    "name": "Can view \u0428\u0430\u0431\u043b\u043e\u043d \u043e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u044f \u0444\u0430\u0441\u0430\u0434\u0430",
+    "content_type": 11,
+    "codename": "view_shell"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 45,
+  "fields": {
+    "name": "Can add \u0421\u0435\u043a\u0442\u043e\u0440 \u043e\u0442\u0434\u0435\u043b\u043a\u0438 \u0444\u0430\u0441\u0430\u0434\u0430",
+    "content_type": 12,
+    "codename": "add_facadematerial"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 46,
+  "fields": {
+    "name": "Can change \u0421\u0435\u043a\u0442\u043e\u0440 \u043e\u0442\u0434\u0435\u043b\u043a\u0438 \u0444\u0430\u0441\u0430\u0434\u0430",
+    "content_type": 12,
+    "codename": "change_facadematerial"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 47,
+  "fields": {
+    "name": "Can delete \u0421\u0435\u043a\u0442\u043e\u0440 \u043e\u0442\u0434\u0435\u043b\u043a\u0438 \u0444\u0430\u0441\u0430\u0434\u0430",
+    "content_type": 12,
+    "codename": "delete_facadematerial"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 48,
+  "fields": {
+    "name": "Can view \u0421\u0435\u043a\u0442\u043e\u0440 \u043e\u0442\u0434\u0435\u043b\u043a\u0438 \u0444\u0430\u0441\u0430\u0434\u0430",
+    "content_type": 12,
+    "codename": "view_facadematerial"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 49,
+  "fields": {
+    "name": "Can add \u041f\u0435\u0441\u043e\u043a \u0440\u043e\u0441\u0441\u044b\u043f\u044c\u044e \u0432 \u0441\u0430\u043c\u043e\u0441\u0432\u0430\u043b\u0430\u0445",
+    "content_type": 13,
+    "codename": "add_bulksand"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 50,
+  "fields": {
+    "name": "Can change \u041f\u0435\u0441\u043e\u043a \u0440\u043e\u0441\u0441\u044b\u043f\u044c\u044e \u0432 \u0441\u0430\u043c\u043e\u0441\u0432\u0430\u043b\u0430\u0445",
+    "content_type": 13,
+    "codename": "change_bulksand"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 51,
+  "fields": {
+    "name": "Can delete \u041f\u0435\u0441\u043e\u043a \u0440\u043e\u0441\u0441\u044b\u043f\u044c\u044e \u0432 \u0441\u0430\u043c\u043e\u0441\u0432\u0430\u043b\u0430\u0445",
+    "content_type": 13,
+    "codename": "delete_bulksand"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 52,
+  "fields": {
+    "name": "Can view \u041f\u0435\u0441\u043e\u043a \u0440\u043e\u0441\u0441\u044b\u043f\u044c\u044e \u0432 \u0441\u0430\u043c\u043e\u0441\u0432\u0430\u043b\u0430\u0445",
+    "content_type": 13,
+    "codename": "view_bulksand"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 53,
+  "fields": {
+    "name": "Can add \u0415\u0434\u0438\u043d\u0438\u0446\u0430 \u0441\u0442\u0435\u043d\u043e\u0432\u043e\u0433\u043e \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 14,
+    "codename": "add_rockwallmaterialunit"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 54,
+  "fields": {
+    "name": "Can change \u0415\u0434\u0438\u043d\u0438\u0446\u0430 \u0441\u0442\u0435\u043d\u043e\u0432\u043e\u0433\u043e \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 14,
+    "codename": "change_rockwallmaterialunit"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 55,
+  "fields": {
+    "name": "Can delete \u0415\u0434\u0438\u043d\u0438\u0446\u0430 \u0441\u0442\u0435\u043d\u043e\u0432\u043e\u0433\u043e \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 14,
+    "codename": "delete_rockwallmaterialunit"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 56,
+  "fields": {
+    "name": "Can view \u0415\u0434\u0438\u043d\u0438\u0446\u0430 \u0441\u0442\u0435\u043d\u043e\u0432\u043e\u0433\u043e \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 14,
+    "codename": "view_rockwallmaterialunit"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 57,
+  "fields": {
+    "name": "Can add \u0423\u0442\u0435\u043f\u043b\u0438\u0442\u0435\u043b\u044c",
+    "content_type": 15,
+    "codename": "add_insulation"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 58,
+  "fields": {
+    "name": "Can change \u0423\u0442\u0435\u043f\u043b\u0438\u0442\u0435\u043b\u044c",
+    "content_type": 15,
+    "codename": "change_insulation"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 59,
+  "fields": {
+    "name": "Can delete \u0423\u0442\u0435\u043f\u043b\u0438\u0442\u0435\u043b\u044c",
+    "content_type": 15,
+    "codename": "delete_insulation"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 60,
+  "fields": {
+    "name": "Can view \u0423\u0442\u0435\u043f\u043b\u0438\u0442\u0435\u043b\u044c",
+    "content_type": 15,
+    "codename": "view_insulation"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 61,
+  "fields": {
+    "name": "Can add \u041d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 16,
+    "codename": "add_materialuse"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 62,
+  "fields": {
+    "name": "Can change \u041d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 16,
+    "codename": "change_materialuse"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 63,
+  "fields": {
+    "name": "Can delete \u041d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 16,
+    "codename": "delete_materialuse"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 64,
+  "fields": {
+    "name": "Can view \u041d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 16,
+    "codename": "view_materialuse"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 65,
+  "fields": {
+    "name": "Can add \u0422\u0438\u043f \u043a\u0440\u043e\u0432\u0435\u043b\u044c\u043d\u043e\u0433\u043e \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 17,
+    "codename": "add_roofcovertype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 66,
+  "fields": {
+    "name": "Can change \u0422\u0438\u043f \u043a\u0440\u043e\u0432\u0435\u043b\u044c\u043d\u043e\u0433\u043e \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 17,
+    "codename": "change_roofcovertype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 67,
+  "fields": {
+    "name": "Can delete \u0422\u0438\u043f \u043a\u0440\u043e\u0432\u0435\u043b\u044c\u043d\u043e\u0433\u043e \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 17,
+    "codename": "delete_roofcovertype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 68,
+  "fields": {
+    "name": "Can view \u0422\u0438\u043f \u043a\u0440\u043e\u0432\u0435\u043b\u044c\u043d\u043e\u0433\u043e \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 17,
+    "codename": "view_roofcovertype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 69,
+  "fields": {
+    "name": "Can add siding",
+    "content_type": 18,
+    "codename": "add_siding"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 70,
+  "fields": {
+    "name": "Can change siding",
+    "content_type": 18,
+    "codename": "change_siding"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 71,
+  "fields": {
+    "name": "Can delete siding",
+    "content_type": 18,
+    "codename": "delete_siding"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 72,
+  "fields": {
+    "name": "Can view siding",
+    "content_type": 18,
+    "codename": "view_siding"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 73,
+  "fields": {
+    "name": "Can add plaster",
+    "content_type": 19,
+    "codename": "add_plaster"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 74,
+  "fields": {
+    "name": "Can change plaster",
+    "content_type": 19,
+    "codename": "change_plaster"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 75,
+  "fields": {
+    "name": "Can delete plaster",
+    "content_type": 19,
+    "codename": "delete_plaster"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 76,
+  "fields": {
+    "name": "Can view plaster",
+    "content_type": 19,
+    "codename": "view_plaster"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 77,
+  "fields": {
+    "name": "Can add \u041f\u0440\u043e\u0434\u0443\u043a\u0442\u043e\u0432\u0430\u044f \u043b\u0438\u043d\u0435\u0439\u043a\u0430 \u043a\u0438\u0440\u043f\u0438\u0447\u0430 (\u0431\u043b\u043e\u043a\u0430)",
+    "content_type": 20,
+    "codename": "add_stoneproductline"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 78,
+  "fields": {
+    "name": "Can change \u041f\u0440\u043e\u0434\u0443\u043a\u0442\u043e\u0432\u0430\u044f \u043b\u0438\u043d\u0435\u0439\u043a\u0430 \u043a\u0438\u0440\u043f\u0438\u0447\u0430 (\u0431\u043b\u043e\u043a\u0430)",
+    "content_type": 20,
+    "codename": "change_stoneproductline"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 79,
+  "fields": {
+    "name": "Can delete \u041f\u0440\u043e\u0434\u0443\u043a\u0442\u043e\u0432\u0430\u044f \u043b\u0438\u043d\u0435\u0439\u043a\u0430 \u043a\u0438\u0440\u043f\u0438\u0447\u0430 (\u0431\u043b\u043e\u043a\u0430)",
+    "content_type": 20,
+    "codename": "delete_stoneproductline"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 80,
+  "fields": {
+    "name": "Can view \u041f\u0440\u043e\u0434\u0443\u043a\u0442\u043e\u0432\u0430\u044f \u043b\u0438\u043d\u0435\u0439\u043a\u0430 \u043a\u0438\u0440\u043f\u0438\u0447\u0430 (\u0431\u043b\u043e\u043a\u0430)",
+    "content_type": 20,
+    "codename": "view_stoneproductline"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 81,
+  "fields": {
+    "name": "Can add \u042d\u043b\u0435\u043c\u0435\u043d\u0442 \u0438\u0437 \u043f\u0440\u043e\u0434\u0443\u043a\u0442\u043e\u0432\u043e\u0439 \u043b\u0438\u043d\u0435\u0439\u043a\u0438 \u043a\u0438\u0440\u043f\u0438\u0447\u0430 (\u0431\u043b\u043e\u043a\u0430)",
+    "content_type": 21,
+    "codename": "add_stoneunit"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 82,
+  "fields": {
+    "name": "Can change \u042d\u043b\u0435\u043c\u0435\u043d\u0442 \u0438\u0437 \u043f\u0440\u043e\u0434\u0443\u043a\u0442\u043e\u0432\u043e\u0439 \u043b\u0438\u043d\u0435\u0439\u043a\u0438 \u043a\u0438\u0440\u043f\u0438\u0447\u0430 (\u0431\u043b\u043e\u043a\u0430)",
+    "content_type": 21,
+    "codename": "change_stoneunit"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 83,
+  "fields": {
+    "name": "Can delete \u042d\u043b\u0435\u043c\u0435\u043d\u0442 \u0438\u0437 \u043f\u0440\u043e\u0434\u0443\u043a\u0442\u043e\u0432\u043e\u0439 \u043b\u0438\u043d\u0435\u0439\u043a\u0438 \u043a\u0438\u0440\u043f\u0438\u0447\u0430 (\u0431\u043b\u043e\u043a\u0430)",
+    "content_type": 21,
+    "codename": "delete_stoneunit"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 84,
+  "fields": {
+    "name": "Can view \u042d\u043b\u0435\u043c\u0435\u043d\u0442 \u0438\u0437 \u043f\u0440\u043e\u0434\u0443\u043a\u0442\u043e\u0432\u043e\u0439 \u043b\u0438\u043d\u0435\u0439\u043a\u0438 \u043a\u0438\u0440\u043f\u0438\u0447\u0430 (\u0431\u043b\u043e\u043a\u0430)",
+    "content_type": 21,
+    "codename": "view_stoneunit"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 85,
+  "fields": {
+    "name": "Can add \u0413\u0438\u0431\u043a\u0430\u044f \u0447\u0435\u0440\u0435\u043f\u0438\u0446\u0430",
+    "content_type": 22,
+    "codename": "add_flexibletile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 86,
+  "fields": {
+    "name": "Can change \u0413\u0438\u0431\u043a\u0430\u044f \u0447\u0435\u0440\u0435\u043f\u0438\u0446\u0430",
+    "content_type": 22,
+    "codename": "change_flexibletile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 87,
+  "fields": {
+    "name": "Can delete \u0413\u0438\u0431\u043a\u0430\u044f \u0447\u0435\u0440\u0435\u043f\u0438\u0446\u0430",
+    "content_type": 22,
+    "codename": "delete_flexibletile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 88,
+  "fields": {
+    "name": "Can view \u0413\u0438\u0431\u043a\u0430\u044f \u0447\u0435\u0440\u0435\u043f\u0438\u0446\u0430",
+    "content_type": 22,
+    "codename": "view_flexibletile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 89,
+  "fields": {
+    "name": "Can add \u041c\u0435\u0442\u0430\u043b\u043b\u043e\u0447\u0435\u0440\u0435\u043f\u0438\u0446\u0430",
+    "content_type": 23,
+    "codename": "add_metaltile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 90,
+  "fields": {
+    "name": "Can change \u041c\u0435\u0442\u0430\u043b\u043b\u043e\u0447\u0435\u0440\u0435\u043f\u0438\u0446\u0430",
+    "content_type": 23,
+    "codename": "change_metaltile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 91,
+  "fields": {
+    "name": "Can delete \u041c\u0435\u0442\u0430\u043b\u043b\u043e\u0447\u0435\u0440\u0435\u043f\u0438\u0446\u0430",
+    "content_type": 23,
+    "codename": "delete_metaltile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 92,
+  "fields": {
+    "name": "Can view \u041c\u0435\u0442\u0430\u043b\u043b\u043e\u0447\u0435\u0440\u0435\u043f\u0438\u0446\u0430",
+    "content_type": 23,
+    "codename": "view_metaltile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 93,
+  "fields": {
+    "name": "Can add \u0412\u0438\u0434 \u0434\u0435\u044f\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0438",
+    "content_type": 24,
+    "codename": "add_activity"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 94,
+  "fields": {
+    "name": "Can change \u0412\u0438\u0434 \u0434\u0435\u044f\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0438",
+    "content_type": 24,
+    "codename": "change_activity"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 95,
+  "fields": {
+    "name": "Can delete \u0412\u0438\u0434 \u0434\u0435\u044f\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0438",
+    "content_type": 24,
+    "codename": "delete_activity"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 96,
+  "fields": {
+    "name": "Can view \u0412\u0438\u0434 \u0434\u0435\u044f\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0438",
+    "content_type": 24,
+    "codename": "view_activity"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 97,
+  "fields": {
+    "name": "Can add \u041f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a \u0443\u0441\u043b\u0443\u0433/\u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432",
+    "content_type": 25,
+    "codename": "add_provider"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 98,
+  "fields": {
+    "name": "Can change \u041f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a \u0443\u0441\u043b\u0443\u0433/\u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432",
+    "content_type": 25,
+    "codename": "change_provider"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 99,
+  "fields": {
+    "name": "Can delete \u041f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a \u0443\u0441\u043b\u0443\u0433/\u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432",
+    "content_type": 25,
+    "codename": "delete_provider"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 100,
+  "fields": {
+    "name": "Can view \u041f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a \u0443\u0441\u043b\u0443\u0433/\u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432",
+    "content_type": 25,
+    "codename": "view_provider"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 101,
+  "fields": {
+    "name": "Can add \u041f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u044c \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 26,
+    "codename": "add_manufacturer"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 102,
+  "fields": {
+    "name": "Can change \u041f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u044c \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 26,
+    "codename": "change_manufacturer"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 103,
+  "fields": {
+    "name": "Can delete \u041f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u044c \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 26,
+    "codename": "delete_manufacturer"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 104,
+  "fields": {
+    "name": "Can view \u041f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u044c \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+    "content_type": 26,
+    "codename": "view_manufacturer"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 105,
+  "fields": {
+    "name": "Can add \u0421\u0442\u0440\u0430\u043d\u0430",
+    "content_type": 27,
+    "codename": "add_country"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 106,
+  "fields": {
+    "name": "Can change \u0421\u0442\u0440\u0430\u043d\u0430",
+    "content_type": 27,
+    "codename": "change_country"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 107,
+  "fields": {
+    "name": "Can delete \u0421\u0442\u0440\u0430\u043d\u0430",
+    "content_type": 27,
+    "codename": "delete_country"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 108,
+  "fields": {
+    "name": "Can view \u0421\u0442\u0440\u0430\u043d\u0430",
+    "content_type": 27,
+    "codename": "view_country"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 109,
+  "fields": {
+    "name": "Can add \u0420\u0435\u0433\u0438\u043e\u043d",
+    "content_type": 28,
+    "codename": "add_region"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 110,
+  "fields": {
+    "name": "Can change \u0420\u0435\u0433\u0438\u043e\u043d",
+    "content_type": 28,
+    "codename": "change_region"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 111,
+  "fields": {
+    "name": "Can delete \u0420\u0435\u0433\u0438\u043e\u043d",
+    "content_type": 28,
+    "codename": "delete_region"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 112,
+  "fields": {
+    "name": "Can view \u0420\u0435\u0433\u0438\u043e\u043d",
+    "content_type": 28,
+    "codename": "view_region"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 113,
+  "fields": {
+    "name": "Can add \u0413\u043e\u0440\u043e\u0434",
+    "content_type": 29,
+    "codename": "add_city"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 114,
+  "fields": {
+    "name": "Can change \u0413\u043e\u0440\u043e\u0434",
+    "content_type": 29,
+    "codename": "change_city"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 115,
+  "fields": {
+    "name": "Can delete \u0413\u043e\u0440\u043e\u0434",
+    "content_type": 29,
+    "codename": "delete_city"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 116,
+  "fields": {
+    "name": "Can view \u0413\u043e\u0440\u043e\u0434",
+    "content_type": 29,
+    "codename": "view_city"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 117,
+  "fields": {
+    "name": "Can add \u041e\u0441\u043d\u043e\u0432\u043d\u043e\u0439 \u0431\u0440\u0435\u043d\u0434",
+    "content_type": 30,
+    "codename": "add_brand"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 118,
+  "fields": {
+    "name": "Can change \u041e\u0441\u043d\u043e\u0432\u043d\u043e\u0439 \u0431\u0440\u0435\u043d\u0434",
+    "content_type": 30,
+    "codename": "change_brand"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 119,
+  "fields": {
+    "name": "Can delete \u041e\u0441\u043d\u043e\u0432\u043d\u043e\u0439 \u0431\u0440\u0435\u043d\u0434",
+    "content_type": 30,
+    "codename": "delete_brand"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 120,
+  "fields": {
+    "name": "Can view \u041e\u0441\u043d\u043e\u0432\u043d\u043e\u0439 \u0431\u0440\u0435\u043d\u0434",
+    "content_type": 30,
+    "codename": "view_brand"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 121,
+  "fields": {
+    "name": "Can add \u041f\u043e\u0434\u0431\u0440\u0435\u043d\u0434 1)",
+    "content_type": 31,
+    "codename": "add_subbrand_1"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 122,
+  "fields": {
+    "name": "Can change \u041f\u043e\u0434\u0431\u0440\u0435\u043d\u0434 1)",
+    "content_type": 31,
+    "codename": "change_subbrand_1"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 123,
+  "fields": {
+    "name": "Can delete \u041f\u043e\u0434\u0431\u0440\u0435\u043d\u0434 1)",
+    "content_type": 31,
+    "codename": "delete_subbrand_1"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 124,
+  "fields": {
+    "name": "Can view \u041f\u043e\u0434\u0431\u0440\u0435\u043d\u0434 1)",
+    "content_type": 31,
+    "codename": "view_subbrand_1"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 125,
+  "fields": {
+    "name": "Can add \u041f\u043e\u0434\u0431\u0440\u0435\u043d\u0434 2)",
+    "content_type": 32,
+    "codename": "add_subbrand_2"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 126,
+  "fields": {
+    "name": "Can change \u041f\u043e\u0434\u0431\u0440\u0435\u043d\u0434 2)",
+    "content_type": 32,
+    "codename": "change_subbrand_2"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 127,
+  "fields": {
+    "name": "Can delete \u041f\u043e\u0434\u0431\u0440\u0435\u043d\u0434 2)",
+    "content_type": 32,
+    "codename": "delete_subbrand_2"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 128,
+  "fields": {
+    "name": "Can view \u041f\u043e\u0434\u0431\u0440\u0435\u043d\u0434 2)",
+    "content_type": 32,
+    "codename": "view_subbrand_2"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 129,
+  "fields": {
+    "name": "Can add \u041d\u0430\u0437\u0432\u0430\u043d\u0435\u044f \u0434\u0435\u043a\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u0439 \u0433\u0440\u0430\u043d\u0438 \u0440\u044f\u0434\u043e\u0432\u043e\u0433\u043e \u043a\u0438\u0440\u043f\u0438\u0447\u0430",
+    "content_type": 33,
+    "codename": "add_decorativebrickface"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 130,
+  "fields": {
+    "name": "Can change \u041d\u0430\u0437\u0432\u0430\u043d\u0435\u044f \u0434\u0435\u043a\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u0439 \u0433\u0440\u0430\u043d\u0438 \u0440\u044f\u0434\u043e\u0432\u043e\u0433\u043e \u043a\u0438\u0440\u043f\u0438\u0447\u0430",
+    "content_type": 33,
+    "codename": "change_decorativebrickface"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 131,
+  "fields": {
+    "name": "Can delete \u041d\u0430\u0437\u0432\u0430\u043d\u0435\u044f \u0434\u0435\u043a\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u0439 \u0433\u0440\u0430\u043d\u0438 \u0440\u044f\u0434\u043e\u0432\u043e\u0433\u043e \u043a\u0438\u0440\u043f\u0438\u0447\u0430",
+    "content_type": 33,
+    "codename": "delete_decorativebrickface"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 132,
+  "fields": {
+    "name": "Can view \u041d\u0430\u0437\u0432\u0430\u043d\u0435\u044f \u0434\u0435\u043a\u043e\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u0439 \u0433\u0440\u0430\u043d\u0438 \u0440\u044f\u0434\u043e\u0432\u043e\u0433\u043e \u043a\u0438\u0440\u043f\u0438\u0447\u0430",
+    "content_type": 33,
+    "codename": "view_decorativebrickface"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 133,
+  "fields": {
+    "name": "Can add \u041a\u043b\u0430\u0441\u0441 \u0412 \u0431\u0435\u0442\u043e\u043d\u0430",
+    "content_type": 34,
+    "codename": "add_classb"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 134,
+  "fields": {
+    "name": "Can change \u041a\u043b\u0430\u0441\u0441 \u0412 \u0431\u0435\u0442\u043e\u043d\u0430",
+    "content_type": 34,
+    "codename": "change_classb"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 135,
+  "fields": {
+    "name": "Can delete \u041a\u043b\u0430\u0441\u0441 \u0412 \u0431\u0435\u0442\u043e\u043d\u0430",
+    "content_type": 34,
+    "codename": "delete_classb"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 136,
+  "fields": {
+    "name": "Can view \u041a\u043b\u0430\u0441\u0441 \u0412 \u0431\u0435\u0442\u043e\u043d\u0430",
+    "content_type": 34,
+    "codename": "view_classb"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 137,
+  "fields": {
+    "name": "Can add \u041a\u043b\u0430\u0441\u0441 \u0441\u0440\u0435\u0434\u043d\u0435\u0439 \u043f\u043b\u043e\u0442\u043d\u043e\u0441\u0442\u0438",
+    "content_type": 35,
+    "codename": "add_class\u0430veragedensity"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 138,
+  "fields": {
+    "name": "Can change \u041a\u043b\u0430\u0441\u0441 \u0441\u0440\u0435\u0434\u043d\u0435\u0439 \u043f\u043b\u043e\u0442\u043d\u043e\u0441\u0442\u0438",
+    "content_type": 35,
+    "codename": "change_class\u0430veragedensity"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 139,
+  "fields": {
+    "name": "Can delete \u041a\u043b\u0430\u0441\u0441 \u0441\u0440\u0435\u0434\u043d\u0435\u0439 \u043f\u043b\u043e\u0442\u043d\u043e\u0441\u0442\u0438",
+    "content_type": 35,
+    "codename": "delete_class\u0430veragedensity"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 140,
+  "fields": {
+    "name": "Can view \u041a\u043b\u0430\u0441\u0441 \u0441\u0440\u0435\u0434\u043d\u0435\u0439 \u043f\u043b\u043e\u0442\u043d\u043e\u0441\u0442\u0438",
+    "content_type": 35,
+    "codename": "view_class\u0430veragedensity"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 141,
+  "fields": {
+    "name": "Can add \u041c\u0430\u0440\u043a\u0430 D",
+    "content_type": 36,
+    "codename": "add_markd"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 142,
+  "fields": {
+    "name": "Can change \u041c\u0430\u0440\u043a\u0430 D",
+    "content_type": 36,
+    "codename": "change_markd"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 143,
+  "fields": {
+    "name": "Can delete \u041c\u0430\u0440\u043a\u0430 D",
+    "content_type": 36,
+    "codename": "delete_markd"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 144,
+  "fields": {
+    "name": "Can view \u041c\u0430\u0440\u043a\u0430 D",
+    "content_type": 36,
+    "codename": "view_markd"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 145,
+  "fields": {
+    "name": "Can add \u041c\u0430\u0440\u043a\u0430 \u043c\u043e\u0440\u043e\u0437\u043e\u0441\u0442\u043e\u0439\u043a\u043e\u0441\u0442\u0438 F",
+    "content_type": 37,
+    "codename": "add_markf"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 146,
+  "fields": {
+    "name": "Can change \u041c\u0430\u0440\u043a\u0430 \u043c\u043e\u0440\u043e\u0437\u043e\u0441\u0442\u043e\u0439\u043a\u043e\u0441\u0442\u0438 F",
+    "content_type": 37,
+    "codename": "change_markf"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 147,
+  "fields": {
+    "name": "Can delete \u041c\u0430\u0440\u043a\u0430 \u043c\u043e\u0440\u043e\u0437\u043e\u0441\u0442\u043e\u0439\u043a\u043e\u0441\u0442\u0438 F",
+    "content_type": 37,
+    "codename": "delete_markf"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 148,
+  "fields": {
+    "name": "Can view \u041c\u0430\u0440\u043a\u0430 \u043c\u043e\u0440\u043e\u0437\u043e\u0441\u0442\u043e\u0439\u043a\u043e\u0441\u0442\u0438 F",
+    "content_type": 37,
+    "codename": "view_markf"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 149,
+  "fields": {
+    "name": "Can add \u041c\u0430\u0440\u043a\u0430 \u041c",
+    "content_type": 38,
+    "codename": "add_markm"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 150,
+  "fields": {
+    "name": "Can change \u041c\u0430\u0440\u043a\u0430 \u041c",
+    "content_type": 38,
+    "codename": "change_markm"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 151,
+  "fields": {
+    "name": "Can delete \u041c\u0430\u0440\u043a\u0430 \u041c",
+    "content_type": 38,
+    "codename": "delete_markm"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 152,
+  "fields": {
+    "name": "Can view \u041c\u0430\u0440\u043a\u0430 \u041c",
+    "content_type": 38,
+    "codename": "view_markm"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 153,
+  "fields": {
+    "name": "Can add \u0420\u0430\u0437\u043c\u0435\u0440 \u041d\u0424",
+    "content_type": 39,
+    "codename": "add_nfsize"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 154,
+  "fields": {
+    "name": "Can change \u0420\u0430\u0437\u043c\u0435\u0440 \u041d\u0424",
+    "content_type": 39,
+    "codename": "change_nfsize"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 155,
+  "fields": {
+    "name": "Can delete \u0420\u0430\u0437\u043c\u0435\u0440 \u041d\u0424",
+    "content_type": 39,
+    "codename": "delete_nfsize"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 156,
+  "fields": {
+    "name": "Can view \u0420\u0430\u0437\u043c\u0435\u0440 \u041d\u0424",
+    "content_type": 39,
+    "codename": "view_nfsize"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 157,
+  "fields": {
+    "name": "Can add \u0426\u0435\u043d\u044b \u043a\u0430\u043c\u0435\u043d\u043d\u044b\u0435 \u0441\u0442\u0435\u043d\u043e\u0432\u044b\u0435 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b",
+    "content_type": 40,
+    "codename": "add_rockwallmaterialprice"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 158,
+  "fields": {
+    "name": "Can change \u0426\u0435\u043d\u044b \u043a\u0430\u043c\u0435\u043d\u043d\u044b\u0435 \u0441\u0442\u0435\u043d\u043e\u0432\u044b\u0435 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b",
+    "content_type": 40,
+    "codename": "change_rockwallmaterialprice"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 159,
+  "fields": {
+    "name": "Can delete \u0426\u0435\u043d\u044b \u043a\u0430\u043c\u0435\u043d\u043d\u044b\u0435 \u0441\u0442\u0435\u043d\u043e\u0432\u044b\u0435 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b",
+    "content_type": 40,
+    "codename": "delete_rockwallmaterialprice"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 160,
+  "fields": {
+    "name": "Can view \u0426\u0435\u043d\u044b \u043a\u0430\u043c\u0435\u043d\u043d\u044b\u0435 \u0441\u0442\u0435\u043d\u043e\u0432\u044b\u0435 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b",
+    "content_type": 40,
+    "codename": "view_rockwallmaterialprice"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 161,
+  "fields": {
+    "name": "Can add \u0426\u0435\u043d\u044b \u0443\u0442\u0435\u043f\u043b\u0438\u0442\u0435\u043b\u0438",
+    "content_type": 41,
+    "codename": "add_insulationprice"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 162,
+  "fields": {
+    "name": "Can change \u0426\u0435\u043d\u044b \u0443\u0442\u0435\u043f\u043b\u0438\u0442\u0435\u043b\u0438",
+    "content_type": 41,
+    "codename": "change_insulationprice"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 163,
+  "fields": {
+    "name": "Can delete \u0426\u0435\u043d\u044b \u0443\u0442\u0435\u043f\u043b\u0438\u0442\u0435\u043b\u0438",
+    "content_type": 41,
+    "codename": "delete_insulationprice"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 164,
+  "fields": {
+    "name": "Can view \u0426\u0435\u043d\u044b \u0443\u0442\u0435\u043f\u043b\u0438\u0442\u0435\u043b\u0438",
+    "content_type": 41,
+    "codename": "view_insulationprice"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 165,
+  "fields": {
+    "name": "Can add \u0421\u0442\u043e\u0438\u043c\u043e\u0441\u0442\u044c \u0441\u0432\u0430\u0439\u043d\u043e-\u0440\u043e\u0441\u0442\u0432\u0435\u0440\u043a\u043e\u0432\u043e\u0433\u043e \u0444\u0443\u043d\u0434\u0430\u043c\u0435\u043d\u0442\u0430",
+    "content_type": 42,
+    "codename": "add_pilegrillagefoundationworkprices"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 166,
+  "fields": {
+    "name": "Can change \u0421\u0442\u043e\u0438\u043c\u043e\u0441\u0442\u044c \u0441\u0432\u0430\u0439\u043d\u043e-\u0440\u043e\u0441\u0442\u0432\u0435\u0440\u043a\u043e\u0432\u043e\u0433\u043e \u0444\u0443\u043d\u0434\u0430\u043c\u0435\u043d\u0442\u0430",
+    "content_type": 42,
+    "codename": "change_pilegrillagefoundationworkprices"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 167,
+  "fields": {
+    "name": "Can delete \u0421\u0442\u043e\u0438\u043c\u043e\u0441\u0442\u044c \u0441\u0432\u0430\u0439\u043d\u043e-\u0440\u043e\u0441\u0442\u0432\u0435\u0440\u043a\u043e\u0432\u043e\u0433\u043e \u0444\u0443\u043d\u0434\u0430\u043c\u0435\u043d\u0442\u0430",
+    "content_type": 42,
+    "codename": "delete_pilegrillagefoundationworkprices"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 168,
+  "fields": {
+    "name": "Can view \u0421\u0442\u043e\u0438\u043c\u043e\u0441\u0442\u044c \u0441\u0432\u0430\u0439\u043d\u043e-\u0440\u043e\u0441\u0442\u0432\u0435\u0440\u043a\u043e\u0432\u043e\u0433\u043e \u0444\u0443\u043d\u0434\u0430\u043c\u0435\u043d\u0442\u0430",
+    "content_type": 42,
+    "codename": "view_pilegrillagefoundationworkprices"
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$180000$ZLX7lsSYKj79$1FIU1bD4Aumfoph8iNhr5kp7mzCc1xIcaRtVSflPJts=",
+    "last_login": "2020-09-08T03:18:14.144Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "2594501@mail.ru",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2020-08-13T05:28:08.966Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "43xwm6sr565ukh5wxher7t1gqee1vzad",
+  "fields": {
+    "session_data": "ZmJhN2E4N2IyZjU2MDFhNTM1NmQ0YTdkYTA1MjY1ZjhlOTVlYzBkMjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJkMTRlY2Y2MTNlNTI5NjBjZTJkNTBlZDUzZWJjZDNiYTRiY2FjNGMyIn0=",
+    "expire_date": "2020-09-22T03:18:14.161Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "omzf6m7n16xqglazu9euz6vot6zlg3vp",
+  "fields": {
+    "session_data": "ZmJhN2E4N2IyZjU2MDFhNTM1NmQ0YTdkYTA1MjY1ZjhlOTVlYzBkMjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJkMTRlY2Y2MTNlNTI5NjBjZTJkNTBlZDUzZWJjZDNiYTRiY2FjNGMyIn0=",
+    "expire_date": "2020-08-27T05:28:48.708Z"
+  }
+},
+{
+  "model": "catalog.plan",
+  "pk": 1,
+  "fields": {
+    "title": "New plan",
+    "scheme": "{\"elements\":[{\"id\":0,\"ids\":[0],\"type\":\"wall\",\"subType\":\"\",\"level\":\"floor_1\"},{\"id\":1,\"ids\":[1],\"type\":\"wall\",\"subType\":\"\",\"level\":\"floor_1\"},{\"id\":2,\"ids\":[2],\"type\":\"wall\",\"subType\":\"\",\"level\":\"floor_1\"},{\"id\":3,\"ids\":[3],\"type\":\"wall\",\"subType\":\"\",\"level\":\"floor_1\"},{\"id\":4,\"ids\":[4,5,6,7],\"type\":\"roof\"}],\"lines\":[{\"id\":0,\"id0\":0,\"id1\":1,\"distance\":0,\"direction\":\"\"},{\"id\":1,\"id0\":2,\"id1\":3,\"distance\":0,\"direction\":\"\"},{\"id\":2,\"id0\":4,\"id1\":5,\"distance\":0,\"direction\":\"\"},{\"id\":3,\"id0\":6,\"id1\":7,\"distance\":0,\"direction\":\"\"},{\"id\":4,\"id0\":8,\"id1\":9},{\"id\":5,\"id0\":9,\"id1\":10},{\"id\":6,\"id0\":10,\"id1\":11},{\"id\":7,\"id0\":11,\"id1\":8}],\"points\":[{\"id\":8,\"x\":-798,\"y\":-693,\"is_floor_1\":true,\"is_floor_2\":false,\"is_floor_3\":false,\"height\":0},{\"id\":9,\"x\":5376,\"y\":-693,\"is_floor_1\":true,\"is_floor_2\":false,\"is_floor_3\":false,\"height\":0},{\"id\":0,\"x\":0,\"y\":0},{\"id\":2,\"x\":0,\"y\":0},{\"id\":1,\"x\":4305,\"y\":0},{\"id\":7,\"x\":4305,\"y\":0},{\"id\":3,\"x\":0,\"y\":1638},{\"id\":4,\"x\":0,\"y\":1638},{\"id\":5,\"x\":4305,\"y\":1638},{\"id\":6,\"x\":4305,\"y\":1638},{\"id\":11,\"x\":-798,\"y\":2394,\"is_floor_1\":true,\"is_floor_2\":false,\"is_floor_3\":false,\"height\":0},{\"id\":10,\"x\":5376,\"y\":2394,\"is_floor_1\":true,\"is_floor_2\":false,\"is_floor_3\":false,\"height\":0}],\"vents\":[],\"windows\":[],\"doorWindows\":[],\"openings\":[],\"scale\":\"21.0\",\"zeroPointPadding\":{\"x\":4977,\"y\":2226}}",
+    "author": 1,
+    "checked": false
+  }
+},
+{
+  "model": "catalog.plan",
+  "pk": 2,
+  "fields": {
+    "title": "New plan2",
+    "scheme": "{\"elements\":[{\"id\":0,\"ids\":[0],\"type\":\"wall\",\"subType\":\"bearing_living_outdoor\",\"level\":1,\"limitation\":10},{\"id\":1,\"ids\":[1],\"type\":\"wall\",\"subType\":\"bearing_living_outdoor\",\"level\":1,\"limitation\":10},{\"id\":2,\"ids\":[2],\"type\":\"wall\",\"subType\":\"bearing_living_outdoor\",\"level\":1,\"limitation\":10},{\"id\":3,\"ids\":[3],\"type\":\"wall\",\"subType\":\"bearing_living_outdoor\",\"level\":1,\"limitation\":10},{\"id\":4,\"ids\":[4],\"type\":\"wall\",\"subType\":\"bearing_living_indoor\",\"level\":1,\"limitation\":10},{\"id\":5,\"ids\":[5],\"type\":\"wall\",\"subType\":\"partition_living\",\"level\":1,\"limitation\":10},{\"id\":6,\"ids\":[6,7,8,9],\"type\":\"indoor_plate\",\"level\":1},{\"id\":7,\"ids\":[10,11,12,13],\"type\":\"indoor_plate\",\"level\":1}],\"lines\":[{\"id\":0,\"id0\":0,\"id1\":1,\"distance\":0,\"direction\":\"\"},{\"id\":1,\"id0\":2,\"id1\":3,\"distance\":0,\"direction\":\"\"},{\"id\":2,\"id0\":4,\"id1\":5,\"distance\":0,\"direction\":\"\"},{\"id\":3,\"id0\":6,\"id1\":7,\"distance\":0,\"direction\":\"\"},{\"id\":4,\"id0\":8,\"id1\":9,\"distance\":0,\"direction\":\"\"},{\"id\":5,\"id0\":10,\"id1\":11,\"distance\":0,\"direction\":\"\"},{\"id\":6,\"id0\":12,\"id1\":13,\"distance\":0,\"direction\":\"\"},{\"id\":7,\"id0\":13,\"id1\":14,\"distance\":0,\"direction\":\"\"},{\"id\":8,\"id0\":14,\"id1\":15,\"distance\":0,\"direction\":\"right\"},{\"id\":9,\"id0\":15,\"id1\":16,\"distance\":0,\"direction\":\"\"},{\"id\":10,\"id0\":17,\"id1\":18,\"distance\":0,\"direction\":\"\"},{\"id\":11,\"id0\":18,\"id1\":19,\"distance\":0,\"direction\":\"\"},{\"id\":12,\"id0\":19,\"id1\":20,\"distance\":0,\"direction\":\"\"},{\"id\":13,\"id0\":20,\"id1\":21,\"distance\":0,\"direction\":\"\"}],\"points\":[{\"id\":0,\"x\":0,\"y\":0},{\"id\":7,\"x\":0,\"y\":0},{\"id\":12,\"x\":0,\"y\":0},{\"id\":16,\"x\":0,\"y\":0},{\"id\":10,\"x\":2200,\"y\":0},{\"id\":1,\"x\":4275,\"y\":0},{\"id\":2,\"x\":4275,\"y\":0},{\"id\":13,\"x\":4275,\"y\":0},{\"id\":8,\"x\":0,\"y\":1425},{\"id\":15,\"x\":0,\"y\":1425},{\"id\":17,\"x\":0,\"y\":1425},{\"id\":21,\"x\":0,\"y\":1425},{\"id\":11,\"x\":2200,\"y\":1425},{\"id\":9,\"x\":4275,\"y\":1425},{\"id\":14,\"x\":4275,\"y\":1425},{\"id\":18,\"x\":4275,\"y\":1425},{\"id\":5,\"x\":0,\"y\":3400},{\"id\":6,\"x\":0,\"y\":3400},{\"id\":20,\"x\":0,\"y\":3400},{\"id\":3,\"x\":4275,\"y\":3400},{\"id\":4,\"x\":4275,\"y\":3400},{\"id\":19,\"x\":4275,\"y\":3400}],\"vents\":[],\"windows\":[],\"doorWindows\":[],\"openings\":[],\"scale\":\"24.0\",\"zeroPointPadding\":{\"x\":6590,\"y\":2674}}",
+    "author": 1,
+    "checked": false
+  }
+},
+{
+  "model": "catalog.plan",
+  "pk": 3,
+  "fields": {
+    "title": "New plan3",
+    "scheme": "{\"elements\":[{\"id\":0,\"ids\":[0,1,2,3],\"type\":\"entrance_group\",\"level\":1},{\"id\":1,\"ids\":[4],\"type\":\"wall\",\"subType\":\"bearing_living_outdoor\",\"level\":1,\"limitation\":10},{\"id\":2,\"ids\":[5],\"type\":\"wall\",\"subType\":\"bearing_living_outdoor\",\"level\":1,\"limitation\":10}],\"lines\":[{\"id\":0,\"id0\":0,\"id1\":1},{\"id\":1,\"id0\":1,\"id1\":2},{\"id\":2,\"id0\":2,\"id1\":3},{\"id\":3,\"id0\":3,\"id1\":4},{\"id\":4,\"id0\":5,\"id1\":6,\"distance\":0,\"direction\":\"\"},{\"id\":5,\"id0\":7,\"id1\":8,\"distance\":0,\"direction\":\"\"}],\"points\":[{\"id\":8,\"x\":-2747,\"y\":-2356},{\"id\":5,\"x\":-2747,\"y\":-1163},{\"id\":7,\"x\":-2747,\"y\":-1163},{\"id\":6,\"x\":-1247,\"y\":-1163},{\"id\":0,\"x\":0,\"y\":0},{\"id\":4,\"x\":0,\"y\":0},{\"id\":1,\"x\":2300,\"y\":0},{\"id\":3,\"x\":0,\"y\":1675},{\"id\":2,\"x\":2300,\"y\":1675}],\"vents\":[],\"windows\":[],\"doorWindows\":[],\"openings\":[],\"scale\":\"20.0\",\"zeroPointPadding\":{\"x\":7461,\"y\":3976}}",
+    "author": 1,
+    "checked": false
+  }
+},
+{
+  "model": "catalog.plan",
+  "pk": 4,
+  "fields": {
+    "title": "New plan 4",
+    "scheme": "{\"elements\":[{\"id\":0,\"ids\":[0],\"type\":\"wall\",\"subType\":\"\",\"level\":1,\"limitation\":10},{\"id\":1,\"ids\":[1],\"type\":\"wall\",\"subType\":\"\",\"level\":1,\"limitation\":10},{\"id\":2,\"ids\":[2],\"type\":\"wall\",\"subType\":\"\",\"level\":1,\"limitation\":10},{\"id\":3,\"ids\":[3],\"type\":\"wall\",\"subType\":\"\",\"level\":1,\"limitation\":10}],\"lines\":[{\"id\":0,\"id0\":0,\"id1\":1,\"distance\":0,\"direction\":\"\"},{\"id\":1,\"id0\":2,\"id1\":3,\"distance\":0,\"direction\":\"\"},{\"id\":2,\"id0\":4,\"id1\":5,\"distance\":0,\"direction\":\"\"},{\"id\":3,\"id0\":6,\"id1\":7,\"distance\":0,\"direction\":\"\"}],\"points\":[{\"id\":0,\"x\":0,\"y\":0},{\"id\":7,\"x\":0,\"y\":0},{\"id\":1,\"x\":4075,\"y\":0},{\"id\":2,\"x\":4075,\"y\":0},{\"id\":5,\"x\":0,\"y\":2875},{\"id\":6,\"x\":0,\"y\":2875},{\"id\":3,\"x\":4075,\"y\":2875},{\"id\":4,\"x\":4075,\"y\":2875}],\"vents\":[],\"windows\":[],\"doorWindows\":[],\"openings\":[],\"scale\":\"27.0\",\"zeroPointPadding\":{\"x\":9588,\"y\":3646}}",
+    "author": 1,
+    "checked": false
+  }
+}
+]
