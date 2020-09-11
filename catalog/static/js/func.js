@@ -170,7 +170,33 @@ function defineElement(el_type, el_id) {
 
 
             }
-        }
+        } 
+        // else { // если тип элемента не задан
+        //     for (line_id of element.ids.values()) {// перебираем массив id линий, хранящийся в каждом элементе
+
+        //         var line = lines.find(line => line.id == line_id);
+        //         point0 = points.find(point => point.id == line.id0);
+        //         point1 = points.find(point => point.id == line.id1);
+        //         p0 = mmToPix(point0);
+        //         p1 = mmToPix(point1);
+        //         console.log("line.distance  = ", line.distance);
+        //         if (line.distance <= 0) { // если же это не окружность
+        //             if (straightAffiliation(p0, p1, mousePos) == true) { // если курсор лежит на прямой между этими точками, 
+
+        //                 a = element.id;
+        //                 b = line.id;
+        //                 elementType = element.type;
+        //                 rate = D / d;
+        //             }
+
+        //         }
+        //     }
+        // }
+
+
+
+
+
     }
     if (rate > 1) {
         rate = 1;
@@ -560,7 +586,7 @@ $('#polygon_sides').change(function () { // определим, сколько �
 $('#element_selector button').click(function () {
     $(this).addClass('active').siblings().removeClass('active');
     selectedTool = this.id;
-    selectedElements = [];// зачистим массив выделеных элеиентов
+    // selectedElements = [];// зачистим массив выделеных элеиентов
     //////console.log("selectedTool = ", selectedTool);
 });
 
@@ -700,7 +726,7 @@ $(document).keydown(function (eventObject) {// Удаление, если вдр
         }
     }
     if (eventObject.which == 13) { // если нажата клавиша enter
-         console.log("readyForAlignment  = ", readyForAlignment);
+        // console.log("readyForAlignment  = ", readyForAlignment);
         // console.log("(typeof selectedLines[0].alignmentThisSide == undefined)  = ", (typeof selectedLines[0].alignmentThisSide == undefined));
         selectedLines[0].alignmentId = selectedLines[1].id;
         if (readyForAlignment == true) { // если выбраны две линии для выравнивания
@@ -711,16 +737,12 @@ $(document).keydown(function (eventObject) {// Удаление, если вдр
                 selectedLines[0].alignmentOtherSide = 'right';
                 // console.log("selectedLines[0] = ", selectedLines[0]);
             } else if ((selectedLines[0].alignmentThisSide == 'right') && (selectedLines[0].alignmentOtherSide == 'right')) {
-                console.log("111 ");
                 selectedLines[0].alignmentOtherSide = 'left';
             } else if ((selectedLines[0].alignmentThisSide == 'right') && (selectedLines[0].alignmentOtherSide == 'left')) {
-                console.log("222 ");
                 selectedLines[0].alignmentThisSide = 'left';
             } else if ((selectedLines[0].alignmentThisSide == 'left') && (selectedLines[0].alignmentOtherSide == 'left')) {
-                console.log("333 ");
                 selectedLines[0].alignmentOtherSide = 'right';
             } else if ((selectedLines[0].alignmentThisSide == 'left') && (selectedLines[0].alignmentOtherSide == 'right')) {
-                console.log("444 ");
                 selectedLines[0].alignmentThisSide = undefined;
                 selectedLines[0].alignmentOtherSide = undefined;
                 selectedLines[0].alignmentId = undefined;
@@ -730,6 +752,7 @@ $(document).keydown(function (eventObject) {// Удаление, если вдр
         }
     }
     if ((eventObject.which == 46) && (selectedElements.length > 0)) { // если нажата клавиша delete и если есть выделенные элементы
+        console.log("delete");
         for (var sel = 0; sel < selectedElements.length; sel++) {
             for (var i = 0; i < elements.length; i++) { // попробуем использовать for, так как похоже при переборе упрощенными итераторами нельзя удалять
                 if (selectedElements[sel] == elements[i].id) { // и если есть, удаляем все линии этого элемента, точки и сам элемент
@@ -761,12 +784,13 @@ $(document).keydown(function (eventObject) {// Удаление, если вдр
                 }
             }
         }
+        selectedElements = [];
         clear(ctx_0, canvas_0);
         clear(ctx_2, canvas_2);
         clear(ctx_3, canvas_3);
         drawAxeSize();
         drawElements();
-        selectedElements = [];
+        
         schemeChange = true;
     }
 });

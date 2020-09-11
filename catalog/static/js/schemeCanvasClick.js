@@ -26,7 +26,7 @@ canvas_0.addEventListener('click', function (e) {
                         // ////console.log("lines = ", lines);
                         newLinesIds[0] = findMaxId(lines);// занесли в промежуточный массив id единственной линии, которая будет храниться в данном элементе (т.к. это просто ровная стена)
                         newElement = { ids: newLinesIds, type: 'wall', subType: '', level: level, limitation: 10 };
-                        console.log("newElement = ", newElement);
+                        // console.log("newElement = ", newElement);
                         pushElement(newElement); // занесли в массив с элементами id нашей линии стены/ радиус = 0 чтобы отличить стену от радиусного элемента
                         // ////console.log("elements сразу после добавления = ", elements);
                         drawLine(lines[lines.length - 1], ctx_0, drawSettingsDefault);
@@ -170,7 +170,7 @@ canvas_0.addEventListener('click', function (e) {
                     if ((prePointsMM[0].x == mmOfMousePos.x) && (prePointsMM[0].y == mmOfMousePos.y)) { // если точки совпали, значит конец ввода группы
                         pushPoints(prePointsMM);
                         for (var p = prePointsMM.length - 1; p > 0; p--) {
-                            pushLine(findMaxId(points) - p, findMaxId(points) - p + 1); // занесли в массив линий нашу новую линию
+                            pushLine(findMaxId(points) - p, findMaxId(points) - p + 1, 0, ''); // занесли в массив линий нашу новую линию
                             newLinesIds.push(findMaxId(lines));//
                             // //////console.log("lines = ", lines);
                         }
@@ -619,6 +619,7 @@ canvas_0.addEventListener('click', function (e) {
                 break;
         }
     } else if (action == "none") {
+      
         // выделяем элементы кликами:
         switch (selectedTool) {
             case 'wall':// если это стены, то алгоритм такой: клик - выделили, клик на ней же - сняли выделение
@@ -658,9 +659,25 @@ canvas_0.addEventListener('click', function (e) {
                     selectedPoints = [];
                 }
                 drawElements();
-
+                break;
+            case 'entrance_group':
+                // console.log("default = ");
+                var el = defineElement('entrance_group');
+                console.log("el = ", el);
+                if (el.element_id > -1) { // реагируем только на стены
+                    var selectedEl = selectedElements.findIndex(sel => sel == el.element_id); // ищем элемент, на который только что кликнули, в массиве выделенных элементов
+                    if (selectedEl >= 0) {
+                        selectedElements.splice(selectedEl, 1);
+                    } else {
+                        selectedElements.push(el.element_id);
+                    }
+                } else {
+                    selectedElements = []; // если кликнули сбоку, все сбрасываем
+                }
                 break;
         }
+        console.log("selectedElements = ", selectedElements);
+
     } else if (action == "limitation") { // Обрезаем стены на уровне выбранного этажа
         // console.log("action = ", action);
         if (level > 1) { // обрезаем только если это выше первого этажа
@@ -674,16 +691,19 @@ canvas_0.addEventListener('click', function (e) {
         }
     }
     else if (action == "side_alignment") { // выравнивание стороны стены по стороне другой стены
-
-        if (defineElement("wall").element_id > -1) { // если мы попали наа элемент
+        if (defineElement(selectedTool).element_id > -1) { // если мы попали наа элемент
             // console.log("selectedLines = ", selectedLines);
             if (selectedLines.length < 2) {
-                var id = defineElement("wall").line_id;
+                var id = defineElement(selectedTool).line_id;
+                console.log("selectedTool = ", selectedTool);
+                console.log("defineElement(selectedTool) = ", defineElement(selectedTool));
                 var li = lines.find(line => line.id == id);
                 selectedLines.push(li);
-            } else if (selectedLines.length == 2) { // если выбраны две стены
+                console.log("selectedLines = ", selectedLines); 
+            }
+            if (selectedLines.length == 2) { // если выбраны две стены
                 readyForAlignment = true;
-                console.log("selectedLines = ", selectedLines);
+                // console.log("selectedLines = ", selectedLines);
             }
         } else { // если кликнули сбоку, то сброс. 
             selectedLines = [];
@@ -691,7 +711,7 @@ canvas_0.addEventListener('click', function (e) {
             readyForAlignment = false;
         }
 
-
+        console.log("readyForAlignment  = ", readyForAlignment);
     }
 
 
