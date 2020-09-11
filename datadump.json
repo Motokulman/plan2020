@@ -1516,7 +1516,7 @@
   "pk": 1,
   "fields": {
     "password": "pbkdf2_sha256$180000$ZLX7lsSYKj79$1FIU1bD4Aumfoph8iNhr5kp7mzCc1xIcaRtVSflPJts=",
-    "last_login": "2020-09-08T03:18:14.144Z",
+    "last_login": "2020-09-08T10:44:45.828Z",
     "is_superuser": true,
     "username": "admin",
     "first_name": "",
@@ -1530,11 +1530,37 @@
   }
 },
 {
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$180000$1w7im4fv0d48$C4RCs9pCI4RELVb9mLj3hPPwAynN0VHqMgYXOF/DNMI=",
+    "last_login": "2020-09-11T15:25:38.790Z",
+    "is_superuser": false,
+    "username": "test",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2020-09-11T15:22:28.180Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
   "model": "sessions.session",
   "pk": "43xwm6sr565ukh5wxher7t1gqee1vzad",
   "fields": {
     "session_data": "ZmJhN2E4N2IyZjU2MDFhNTM1NmQ0YTdkYTA1MjY1ZjhlOTVlYzBkMjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJkMTRlY2Y2MTNlNTI5NjBjZTJkNTBlZDUzZWJjZDNiYTRiY2FjNGMyIn0=",
     "expire_date": "2020-09-22T03:18:14.161Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "fiudrgvj68inpljuopt2b4oe7iafg6s8",
+  "fields": {
+    "session_data": "NjdiZDYzODM3ZWVlM2ExNDgzYTk0ZWZhZWEwODg0OTliNGJhZjkyOTp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJkY2Y2ZGYzOTBmYmYwYTlmZDYwNGRkMmJhZTc1ZTI4MmRjN2RmODgwIn0=",
+    "expire_date": "2020-09-25T15:25:38.795Z"
   }
 },
 {
@@ -1583,6 +1609,39 @@
     "scheme": "{\"elements\":[{\"id\":0,\"ids\":[0],\"type\":\"wall\",\"subType\":\"\",\"level\":1,\"limitation\":10},{\"id\":1,\"ids\":[1],\"type\":\"wall\",\"subType\":\"\",\"level\":1,\"limitation\":10},{\"id\":2,\"ids\":[2],\"type\":\"wall\",\"subType\":\"\",\"level\":1,\"limitation\":10},{\"id\":3,\"ids\":[3],\"type\":\"wall\",\"subType\":\"\",\"level\":1,\"limitation\":10}],\"lines\":[{\"id\":0,\"id0\":0,\"id1\":1,\"distance\":0,\"direction\":\"\"},{\"id\":1,\"id0\":2,\"id1\":3,\"distance\":0,\"direction\":\"\"},{\"id\":2,\"id0\":4,\"id1\":5,\"distance\":0,\"direction\":\"\"},{\"id\":3,\"id0\":6,\"id1\":7,\"distance\":0,\"direction\":\"\"}],\"points\":[{\"id\":0,\"x\":0,\"y\":0},{\"id\":7,\"x\":0,\"y\":0},{\"id\":1,\"x\":4075,\"y\":0},{\"id\":2,\"x\":4075,\"y\":0},{\"id\":5,\"x\":0,\"y\":2875},{\"id\":6,\"x\":0,\"y\":2875},{\"id\":3,\"x\":4075,\"y\":2875},{\"id\":4,\"x\":4075,\"y\":2875}],\"vents\":[],\"windows\":[],\"doorWindows\":[],\"openings\":[],\"scale\":\"27.0\",\"zeroPointPadding\":{\"x\":9588,\"y\":3646}}",
     "author": 1,
     "checked": false
+  }
+},
+{
+  "model": "catalog.plan",
+  "pk": 5,
+  "fields": {
+    "title": "New plan5",
+    "scheme": "",
+    "author": 1,
+    "checked": false
+  }
+},
+{
+  "model": "catalog.plan",
+  "pk": 6,
+  "fields": {
+    "title": "New plan6",
+    "scheme": "{\"elements\":[{\"id\":0,\"ids\":[0],\"type\":\"wall\",\"subType\":\"bearing_living_outdoor\",\"level\":1,\"limitation\":10},{\"id\":3,\"ids\":[3],\"type\":\"wall\",\"subType\":\"bearing_living_outdoor\",\"level\":1,\"limitation\":10},{\"id\":4,\"ids\":[4],\"type\":\"wall\",\"subType\":\"bearing_living_indoor\",\"level\":1,\"limitation\":10},{\"id\":5,\"ids\":[5],\"type\":\"wall\",\"subType\":\"bearing_living_outdoor\",\"level\":1,\"limitation\":10},{\"id\":6,\"ids\":[6],\"type\":\"wall\",\"subType\":\"bearing_living_outdoor\",\"level\":1,\"limitation\":10},{\"id\":7,\"ids\":[7],\"type\":\"wall\",\"subType\":\"bearing_living_outdoor\",\"level\":1,\"limitation\":10},{\"id\":8,\"ids\":[8],\"type\":\"wall\",\"subType\":\"bearing_living_outdoor\",\"level\":1,\"limitation\":10},{\"id\":9,\"ids\":[9],\"type\":\"wall\",\"subType\":\"bearing_living_outdoor\",\"level\":1,\"limitation\":10},{\"id\":10,\"ids\":[10],\"type\":\"wall\",\"subType\":\"bearing_living_outdoor\",\"level\":1,\"limitation\":10},{\"id\":11,\"ids\":[11,12,13,14],\"type\":\"entrance_group\",\"level\":1}],\"lines\":[{\"id\":0,\"id0\":0,\"id1\":1,\"distance\":0,\"direction\":\"\"},{\"id\":3,\"id0\":6,\"id1\":7,\"distance\":0,\"direction\":\"\"},{\"id\":4,\"id0\":8,\"id1\":9,\"distance\":0,\"direction\":\"\",\"alignmentId\":11,\"alignmentThisSide\":\"right\",\"alignmentOtherSide\":\"right\"},{\"id\":5,\"id0\":10,\"id1\":11,\"distance\":0,\"direction\":\"\"},{\"id\":6,\"id0\":12,\"id1\":13,\"distance\":0,\"direction\":\"\"},{\"id\":7,\"id0\":14,\"id1\":15,\"distance\":0,\"direction\":\"\"},{\"id\":8,\"id0\":16,\"id1\":17,\"distance\":0,\"direction\":\"\"},{\"id\":9,\"id0\":18,\"id1\":19,\"distance\":0,\"direction\":\"\"},{\"id\":10,\"id0\":20,\"id1\":21,\"distance\":0,\"direction\":\"\"},{\"id\":11,\"id0\":22,\"id1\":23,\"distance\":0,\"direction\":\"\",\"alignmentId\":6,\"alignmentThisSide\":\"right\",\"alignmentOtherSide\":\"left\"},{\"id\":12,\"id0\":23,\"id1\":24,\"distance\":0,\"direction\":\"\"},{\"id\":13,\"id0\":24,\"id1\":25,\"distance\":0,\"direction\":\"\"},{\"id\":14,\"id0\":25,\"id1\":26,\"distance\":0,\"direction\":\"\"}],\"points\":[{\"id\":0,\"x\":0,\"y\":-861},{\"id\":7,\"x\":0,\"y\":-861},{\"id\":8,\"x\":6000,\"y\":-861},{\"id\":6,\"x\":11000,\"y\":-861},{\"id\":21,\"x\":11000,\"y\":-861},{\"id\":1,\"x\":0,\"y\":2289},{\"id\":10,\"x\":0,\"y\":2289},{\"id\":25,\"x\":3497,\"y\":2289},{\"id\":9,\"x\":6000,\"y\":2289},{\"id\":11,\"x\":6000,\"y\":2289},{\"id\":12,\"x\":6000,\"y\":2289},{\"id\":22,\"x\":6000,\"y\":2289},{\"id\":26,\"x\":6000,\"y\":2289},{\"id\":17,\"x\":8000,\"y\":2289},{\"id\":18,\"x\":8000,\"y\":2289},{\"id\":19,\"x\":11000,\"y\":2289},{\"id\":20,\"x\":11000,\"y\":2289},{\"id\":13,\"x\":6000,\"y\":4289},{\"id\":14,\"x\":6000,\"y\":4289},{\"id\":15,\"x\":8000,\"y\":4289},{\"id\":16,\"x\":8000,\"y\":4289},{\"id\":24,\"x\":3497,\"y\":6005},{\"id\":23,\"x\":6000,\"y\":6005}],\"vents\":[],\"windows\":[],\"doorWindows\":[],\"openings\":[],\"scale\":\"36.0\",\"zeroPointPadding\":{\"x\":12518,\"y\":5497}}",
+    "author": 1,
+    "checked": false
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2020-09-11T15:22:28.553Z",
+    "user": 1,
+    "content_type": 5,
+    "object_id": "2",
+    "object_repr": "test",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
   }
 }
 ]

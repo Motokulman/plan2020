@@ -22,7 +22,7 @@ function getFundament() {
                     } else {
                         width = bearingIndoorWidth;
                     }
-                    fundament.push({ id: line.id, point0: point0.x, point1: point1, width: width, alignmentThisSide: line.alignmentThisSide, alignmentId: line.alignmentId, alignmentOtherSide: line.alignmentOtherSide, width: width });
+                    fundament.push({ id: line.id, point0: point0, point1: point1, width: width, alignmentThisSide: line.alignmentThisSide, alignmentId: line.alignmentId, alignmentOtherSide: line.alignmentOtherSide, width: width });
                 }
             }
         }
