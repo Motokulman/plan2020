@@ -229,9 +229,20 @@ class StoneUnit(models.Model):
         verbose_name_plural = 'Элементы из продуктовых линеей кирпичей (блоков)'
 
     def __str__(self):
-        """String for representing the Model object."""
         return f' Элмент {self.name}, {self.product_line.name}'
 
+
+class WallType(models.Model): 
+    """Тип стены: несущая наружная, несущая внутренняя, перегородка, для навешивания тяжелого оборудования,  """
+
+    identifyer = models.CharField(
+        max_length=200, help_text='Идентификатор (имя переменной) для использования в коде (не менять впоследствии!)', blank=True)
+
+    name = models.CharField(
+        max_length=200, help_text='Наименование', blank=True)
+
+    def __str__(self):
+        return f' Тип стены {self.name}'
 
 
 class RockWallMaterialUnit(models.Model): 
@@ -265,7 +276,137 @@ class RockWallMaterialUnit(models.Model):
         help_text='Материал изделия',
     )
 
-    # name = models.CharField(
+    manufacturer = models.ForeignKey(
+        Manufacturer, help_text='Выберите завод изготовитель', on_delete=models.SET_NULL, null=True, blank=True)
+
+    greater_size = models.IntegerField(
+        blank=True, null=True, help_text='Больший размер')
+    middle_size = models.IntegerField(
+        blank=True, null=True, help_text='Средний размер')
+    small_size = models.IntegerField(
+        blank=True, null=True, help_text='Меньший размер')
+
+    thermal_conductivity = models.FloatField(
+        blank=True, null=True, help_text='Теплопроводность готовой кладки (лямбда) Вт/(м*К)')
+    
+    one_story_thickness = models.IntegerField(
+        blank=True, null=True, help_text='Толщина кладки для одноэтажного дома (материал + толщина швов)')    
+
+    two_story_thickness = models.IntegerField(
+        blank=True, null=True, help_text='Толщина кладки для двухэтажного дома (материал + толщина швов)')
+
+    wall_type = models.ManyToManyField(WallType, help_text='Типы стен, куда можно применить этот материал')
+
+    YN = (
+        ('no', 'Нет'),
+        ('yes', 'Да'),
+    )
+
+    PURPOSE = (
+        ('wall', 'Рядовой '),
+        ('fasade', 'Лицевой'),
+    )
+
+    purpose = models.CharField(
+        max_length=6,
+        choices=PURPOSE,
+        default='wall',
+        help_text='Назначение: рядовой, лицевой',
+    )
+
+    decorative_face = models.CharField(
+        max_length=3,
+        choices=YN,
+        default='no',
+        help_text='Наличие декоративной грани (для рядового кирпича)',
+    )    
+
+    face = models.ForeignKey(
+        DecorativeBrickFace, help_text='Выберите название рисунка декоратьивной грани', on_delete=models.SET_NULL, null=True, blank=True)
+
+    BODY_TYPE = (
+        ('solid', 'Полнотелый'),
+        ('hollow', 'Имеет незаполняемые пустоты'),
+    )
+
+    body_type = models.CharField(
+        max_length=6,
+        choices=BODY_TYPE,
+        default='solid',
+        help_text='Полнотелый или имеет незаполняемые пустоты',
+    )
+
+    
+    # HOLLOW = (
+    #     ('hollow', 'С пустотами'),
+    #     ('solid', 'Полнотелый'),
+    # )
+    
+    # hollow = models.CharField(
+    #     max_length=6,
+    #     choices=HOLLOW,
+    #     default='solid',
+    #     help_text='Полнотелый или имеет незаполняемые пустоты',
+    # )
+    # tongue_and_groove = models.CharField(
+    #     max_length=3,
+    #     choices=YN,
+    #     default='no',
+    #     help_text='Пазогребневая система',
+    # )
+
+    # polish = models.CharField(
+    #     max_length=3,
+    #     choices=YN,
+    #     default='no',
+    #     help_text='Шлифованный',
+    # )
+    
+    # PARTITION_OR_BEARING = (
+    #     ('partition', 'Перегородочный'),
+    #     ('bearing', 'Несущий'),
+    #     ('any', 'Любой'),
+    # )
+
+    # partition_or_bearing = models.CharField(
+    #     max_length=9,
+    #     choices=PARTITION_OR_BEARING,
+    #     default='bearing',
+    #     help_text='Для несущих стен, для перегородок или для всего',
+    # )
+
+    # blind_hollow = models.CharField(
+    #     max_length=3,
+    #     choices=YN,
+    #     default='no',
+    #     help_text='Несквозные пустоты (для полнотелых кирпичей)',
+    # )
+
+# точные данные хранить только для основных элементов. Доьорные обрабатываются в коде, а здесь они только для цен
+    # PRIMARY_OR_ADDITIONAL = (
+    #     ('primary', 'Основной'),
+    #     ('additional', 'Доборный'),
+    # )
+
+    # primary_or_additional = models.CharField(
+    #     max_length=10,
+    #     choices=PRIMARY_OR_ADDITIONAL,
+    #     default='primary',
+    #     help_text='Тип элемента: основной или доборный',
+    # )
+
+    # THICKNESS_CALC = (
+    #     ('mm', 'Только мм'),
+    #     ('both', 'И мм. и шт.'),
+    # )
+
+    # thickness_calc = models.CharField(
+    #     max_length=4,
+    #     choices=THICKNESS_CALC,
+    #     default='mm',
+    #     help_text='Толщину стены можно считать в мм. и в штуках (н.р. в кирпичах) или строго в мм. (для материалов, которые можно ложить разными сторонами)',
+    # )
+        # name = models.CharField(
     #     max_length=200, help_text='Торговое название, если есть', blank=True)
     # size_grid = models.ForeignKey(
     #     RockWallMaterialSizeGrid, help_text='Группа материалов с одинаковой размерной сеткой', on_delete=models.SET_NULL, null=True, blank=True)
@@ -278,12 +419,12 @@ class RockWallMaterialUnit(models.Model):
     #                                    help_text='Выберите тип тела (полнотелый, пустотелый)', blank=True, null=True)
     # body_type = models.ForeignKey('RockWallMaterialBodyType', on_delete=models.CASCADE,
     #                               help_text='Выберите тип тела (полнотелый, пустотелый)', blank=True, null=True)
-    greater_bed_size = models.IntegerField(
-        blank=True, null=True, help_text='Больший размер постели (длина), мм. (размер А)')
-    minor_bed_size = models.IntegerField(
-        blank=True, null=True, help_text='Меньший размер постели (ширина), мм. (размер В)')
-    height = models.IntegerField(
-        blank=True, null=True, help_text='Высота (толщина), мм. (размер С), или наименьший размер, если постель не очевидна')
+    # greater_bed_size = models.IntegerField(
+    #     blank=True, null=True, help_text='Больший размер постели (длина), мм. (размер А)')
+    # minor_bed_size = models.IntegerField(
+    #     blank=True, null=True, help_text='Меньший размер постели (ширина), мм. (размер В)')
+    # height = models.IntegerField(
+    #     blank=True, null=True, help_text='Высота (толщина), мм. (размер С), или наименьший размер, если постель не очевидна')
 
     # MIN_PICS = (
     #     ('1', '1'),
@@ -377,16 +518,16 @@ class RockWallMaterialUnit(models.Model):
     # quantity_per_pallet = models.IntegerField(
     #     blank=True, null=True, help_text='Количество на поддоне') это пусть каждый продавец пишет
 
-    mark_m = models.ForeignKey(
-        MarkM, help_text='Выберите стандартную марку М для данного материала, если есть', on_delete=models.SET_NULL, null=True, blank=True)
-    mark_d = models.ForeignKey(
-        MarkD, help_text='Выберите стандартную марку D для данного материала, если есть', on_delete=models.SET_NULL, null=True, blank=True)
-    class_b = models.ForeignKey(
-        ClassB, help_text='Выберите стандартный класс В для данного материала, если есть', on_delete=models.SET_NULL, null=True, blank=True)
-    mark_f = models.ForeignKey(
-        MarkF, help_text='Выберите стандартную марку морозостойкости F для данного материала, если есть', on_delete=models.SET_NULL, null=True, blank=True)
-    class_average_density = models.ForeignKey(
-        ClassАverageDensity, help_text='Выберите стандартный класс средней плотности для данного материала, если есть', on_delete=models.SET_NULL, null=True, blank=True)
+    # mark_m = models.ForeignKey(
+    #     MarkM, help_text='Выберите стандартную марку М для данного материала, если есть', on_delete=models.SET_NULL, null=True, blank=True)
+    # mark_d = models.ForeignKey(
+    #     MarkD, help_text='Выберите стандартную марку D для данного материала, если есть', on_delete=models.SET_NULL, null=True, blank=True)
+    # class_b = models.ForeignKey(
+    #     ClassB, help_text='Выберите стандартный класс В для данного материала, если есть', on_delete=models.SET_NULL, null=True, blank=True)
+    # mark_f = models.ForeignKey(
+    #     MarkF, help_text='Выберите стандартную марку морозостойкости F для данного материала, если есть', on_delete=models.SET_NULL, null=True, blank=True)
+    # class_average_density = models.ForeignKey(
+    #     ClassАverageDensity, help_text='Выберите стандартный класс средней плотности для данного материала, если есть', on_delete=models.SET_NULL, null=True, blank=True)
     # masonry_system = models.ForeignKey(
     #     MasonrySystem, help_text='Выберите систему кладки, если есть', on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -397,109 +538,16 @@ class RockWallMaterialUnit(models.Model):
     # bounding = models.ManyToManyField(
     #     MasonryBonding, help_text='Выберите способы скрепления кладки', blank=True)
     # thermal_conductivity = models.FloatField(
-    #     help_text='Введите коэффициент теплопроводности', blank=True, null=True)
-    manufacturer = models.ForeignKey(
-        Manufacturer, help_text='Выберите завод изготовитель', on_delete=models.SET_NULL, null=True, blank=True)
-    brand = models.ForeignKey(
-        Brand, help_text='Выберите главный бренд, например, Wienerberger', on_delete=models.SET_NULL, null=True, blank=True)
-    sub_brand_1 = models.ForeignKey(
-        SubBrand_1, help_text='Выберите наименование внутри бренда (Подбренд 1, если есть), например,  Porotherm', on_delete=models.SET_NULL, null=True, blank=True)
-    sub_brand_2 = models.ForeignKey(
-        SubBrand_2, help_text='Выберите индекс внутри наименования (Подбренд 2, если есть), например, 44 для поротерма', on_delete=models.SET_NULL, null=True, blank=True)
-    algorithm = models.ForeignKey(
-        'catalog.Algorithm', help_text='Выберите алгоритм для расчета', on_delete=models.SET_NULL, null=True, blank=True)
+        # help_text='Введите коэффициент теплопроводности', blank=True, null=True)
 
-    YN = (
-        ('no', 'Нет'),
-        ('yes', 'Да'),
-    )
-
-    tongue_and_groove = models.CharField(
-        max_length=3,
-        choices=YN,
-        default='no',
-        help_text='Пазогребневая система',
-    )
-
-    polish = models.CharField(
-        max_length=3,
-        choices=YN,
-        default='no',
-        help_text='Шлифованный',
-    )
-
-    PURPOSE = (
-        ('wall', 'Рядовой '),
-        ('fasade', 'Лицевой'),
-        ('decor_edge', 'Рядовой с декоративной гранью'),
-    )
-
-    purpose = models.CharField(
-        max_length=10,
-        choices=PURPOSE,
-        default='wall',
-        help_text='Назначение: рядовой, лицевой',
-    )
-
-    face = models.ForeignKey(
-        DecorativeBrickFace, help_text='Выберите название рисунка декоратьивной грани', on_delete=models.SET_NULL, null=True, blank=True)
-
-    PARTITION_OR_BEARING = (
-        ('partition', 'Перегородочный'),
-        ('bearing', 'Несущий'),
-        ('any', 'Любой'),
-    )
-
-    partition_or_bearing = models.CharField(
-        max_length=9,
-        choices=PARTITION_OR_BEARING,
-        default='bearing',
-        help_text='Для несущих стен, для перегородок или для всего',
-    )
-
-    BODY_TYPE = (
-        ('solid', 'Полнотелый'),
-        ('hollow', 'Пустотелый'),
-    )
-
-    body_type = models.CharField(
-        max_length=6,
-        choices=BODY_TYPE,
-        default='solid',
-        help_text='Пустотелый или полнотелый',
-    )
-
-    blind_hollow = models.CharField(
-        max_length=3,
-        choices=YN,
-        default='no',
-        help_text='Несквозные пустоты (для полнотелых кирпичей)',
-    )
-
-# точные данные хранить только для основных элементов. Доьорные обрабатываются в коде, а здесь они только для цен
-    PRIMARY_OR_ADDITIONAL = (
-        ('primary', 'Основной'),
-        ('additional', 'Доборный'),
-    )
-
-    primary_or_additional = models.CharField(
-        max_length=10,
-        choices=PRIMARY_OR_ADDITIONAL,
-        default='primary',
-        help_text='Тип элемента: основной или доборный',
-    )
-
-    # THICKNESS_CALC = (
-    #     ('mm', 'Только мм'),
-    #     ('both', 'И мм. и шт.'),
-    # )
-
-    # thickness_calc = models.CharField(
-    #     max_length=4,
-    #     choices=THICKNESS_CALC,
-    #     default='mm',
-    #     help_text='Толщину стены можно считать в мм. и в штуках (н.р. в кирпичах) или строго в мм. (для материалов, которые можно ложить разными сторонами)',
-    # )
+    # brand = models.ForeignKey(
+    #     Brand, help_text='Выберите главный бренд, например, Wienerberger', on_delete=models.SET_NULL, null=True, blank=True)
+    # sub_brand_1 = models.ForeignKey(
+    #     SubBrand_1, help_text='Выберите наименование внутри бренда (Подбренд 1, если есть), например,  Porotherm', on_delete=models.SET_NULL, null=True, blank=True)
+    # sub_brand_2 = models.ForeignKey(
+    #     SubBrand_2, help_text='Выберите индекс внутри наименования (Подбренд 2, если есть), например, 44 для поротерма', on_delete=models.SET_NULL, null=True, blank=True)
+    # algorithm = models.ForeignKey(
+    #     'catalog.Algorithm', help_text='Выберите алгоритм для расчета', on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Единица стенового материала'
@@ -507,7 +555,7 @@ class RockWallMaterialUnit(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.id}, {self.algorithm.identifier}, {self.manufacturer.name}, {self.name}, {self.material}, {self.greater_bed_size}, {self.minor_bed_size}, {self.height}, {self.purpose}'
+        return f'{self.id}, {self.manufacturer.name}, {self.name}, {self.material}, {self.purpose}'
 
     def get_absolute_url(self):
         """Returns the url to access a detail record for this material."""

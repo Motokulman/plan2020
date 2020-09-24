@@ -34,3 +34,32 @@ class InsulationPrice(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.name}, {self.price}, {self.owner}'
+
+# class MaterialPrice(models.Model):
+#     """Модель, представляющая запись с ценой. Содержит единицу общепринятого товара, но принадлежащую какому-то продавцу"""
+
+#     MATERIAL = (
+#         ('rock_wall', 'Каменный стеновой материал'),
+#         # ('wood', 'Дерево'),
+#         # ('vinyl', 'Винил'),
+#     )
+#     material = models.CharField(
+#         max_length=9,
+#         choices=MATERIAL,
+#         default='rock_wall',
+#         help_text='Тип материала',
+#     )
+
+#     price = models.FloatField()
+#     name = models.IntegerField()
+#     owner = models.ForeignKey(
+#         User, on_delete=models.SET_NULL, null=True, blank=True)
+
+#     class Meta:
+#         ordering = ('name',)
+#         verbose_name = 'Цена материала'
+#         verbose_name_plural = 'Цены на материалы'
+
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return f'{self.name}, {self.price}, {self.owner}'

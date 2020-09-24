@@ -3,18 +3,65 @@
 {% block content %}
 <h1>Калейдоплан</h1>
 <p>Электронные проекты домов</p>
-<h3>Сейчас в системе:</h3>
-<ul>
-  <li><strong>Проектов:</strong> {{ num_plans }}</li>
-  <li><strong>Подрядчиков (бригад):</strong> {{ num_contractors }}</li>
-  <li><strong>Поставщков материалов:</strong> {{ num_sellers }}</li>
-  <li><strong>Архитекторов:</strong> {{ num_architects }}</li>
-</ul>
+
+
+
+
 <p>
-  <label for="living_bearing_material_type">Материал дома:</label>
-  <select id="wall_material" name="wall_material">
-    <option value="">Найти самый дешевый вариант</option>
+  <label for="outdoor">Наружные стены:</label>
+  <select id="outdoor" name="outdoor">
+    <option value="">[вывод самого недорогого, можно пока из принудительно сохреннного]</option>
+  </select>
+  <label for="indoor">Внутренние несущие стены:</label>
+  <select id="indoor" name="indoor">
+    <option value="">[вывод самого недорогого, можно пока из принудительно сохреннного]</option>
+  </select>
+  <label for="partition">Перегородки:</label>
+  <select id="partition" name="partition">
+    <option value="">[вывод самого недорогого, можно пока из принудительно сохреннного]</option>
+  </select>
+  <label for="insulate">Утеплитель:</label>
+  <select id="insulate" name="insulate">
+    <option value="rock">Минеральная вата</option>
+    <option value="xps">XPS</option>
+  </select>
+  <br>
+  <label for="thick">Толщина:
+    <label class="container">По расчету
+      <input type="checkbox" checked="checked">
+      <span class="checkmark"></span>
+
+      <select id="thick" name="thick">
+        <option value="50">50 мм</option>
+        <option value="100">100 мм</option>
+      </select>
+    </label>
+  </label>
+  <label for="fasade">Отделка фасада:</label>
+  <select id="insulate" name="insulate">
+    <option value="plaster">Штукатурка (черновая)</option>
+    <option value=face_brick>Облицовочный кирпич</option>
   </select>
 </p>
+
+{% if plan_list %}
+<ul>
+  {% for plan in plan_list %}
+  <li>
+    <a href="{{ plan.get_absolute_url }}">{{ plan.title }}</a>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>Пока в системе нет ни одного проекта...</p>
+{% endif %}
+
+<h6>Сейчас в системе:</h6>
+<ul>
+  <li>Проектов: {{ num_plans }}</li>
+  <li>Подрядчиков: {{ num_contractors }}</li>
+  <li>Поставщков материалов: {{ num_sellers }}</li>
+  <li>Архитекторов: {{ num_architects }}</li>
+</ul>
 
 {% endblock %}

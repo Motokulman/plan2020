@@ -27,6 +27,7 @@ def index(request):
 
     # # Generate counts of some of the main objects
     num_plans = Plan.objects.all().count()
+    plan_list = Plan.objects.all()
     # num_instances = BookInstance.objects.all().count()
 
     # # Available books (status = 'a')
@@ -37,6 +38,7 @@ def index(request):
 
     context = {
         'num_plans': num_plans,
+        'plan_list': plan_list,
         # 'num_instances': num_instances,
         # 'num_instances_available': num_instances_available,
         # 'num_authors': num_authors,

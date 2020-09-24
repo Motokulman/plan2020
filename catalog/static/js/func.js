@@ -650,6 +650,19 @@ function lengthLine(p0, p1) {
     return length;
 }
 
+// определение площади произвольного треугольника
+function triangleSquare(a, b, c) {
+    // console.log("triangle.p0 = ", triangle.p0);
+    var k = lengthLine(a, b) / 1000; // переводим мм в м
+    var l = lengthLine(b, c) / 1000;
+    var m = lengthLine(c, a) / 1000;
+    var p = (k + l + m)/2;
+    var s = Math.sqrt(p * (p - k) * (p - l) * (p - m));
+    s = parseFloat(s.toFixed(2));
+    // console.log("s = ", s);
+    return s;
+}
+
 // Определение координат точки на прямой по длине от начала вектора
 function coordsFromDist(point0, point1, dist) {
     var x, y;

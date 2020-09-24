@@ -1,2 +1,14 @@
 https://tproger.ru/articles/django-sqlite-to-mysql/
 https://qna.habr.com/q/74604 - ответ от Stoned Shaman 
+
+Заливка базы на сервер
+1) py manage.py dumpdata --indent=2 --exclude=contenttypes > datadump.json   // сделали дамп локальной бд
+2) Загрузили его через файловый менеджер в ../home/admin/prod/plan
+2) открываем putty. Если слетела, скачать тут : https://beget.com/upload/putty.exe
+3) Вводим в ней 87.236.23.29 жмем подключить (порт 22)
+4) во всплывшем терминале: root
+5) cD&%p3zb
+6) cd /home/admin/prod/
+7) . bin/activate
+8) cd plan/
+9) python manage.py loaddata datadump.json

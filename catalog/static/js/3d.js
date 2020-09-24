@@ -295,10 +295,18 @@ function make3d() {
         }
         // console.log("result = ", result);
         return result;
-        
+
     }
 
     function drawWalls() {
+        // сбрасываем массив мтроительных объемов:
+        volumes = { // площади стен и другие строительные объемы для быстрого расчета стоимости
+            walls: {
+                outdoor: 0,
+                indoor_partition: 0,
+                indoor_bearing: 0
+            },
+        };
         for (element of elements.values()) { // отрисуем стены
             if (element.type == "wall") {
                 for (line_id of element.ids.values()) {
@@ -308,7 +316,7 @@ function make3d() {
                     //console.log("vert3D = ", vert3D);
                     if (vert3D.length >= 3) { // если это не колонна 
                         vert2D = get2DFrom3DVertices(vert3D);
-                        //console.log("vert2D = ", vert2D);
+                        // console.log("vert2D = ", vert2D);
                         var geometry = new THREE.Geometry();
                         for (v of vert3D.values()) {
                             var a = new THREE.Vector3(v.x, v.height, v.y);
@@ -318,8 +326,38 @@ function make3d() {
                         for (i = 0; i < triangles.length; i = i + 3) {
                             var a = new THREE.Face3(triangles[i], triangles[i + 1], triangles[i + 2]);
                             geometry.faces.push(a);
+
+                            // в рамках определения площади стен для расчета стоимости:
+                            var z = vert2D[triangles[i]];
+                            var a = {
+                                x: z[0],
+                                y: z[1]
+                            }
+                            z = vert2D[triangles[i + 1]];
+                            var b = {
+                                x: z[0],
+                                y: z[1]
+                            }
+                            z = vert2D[triangles[i + 2]];
+                            var c = {
+                                x: z[0],
+                                y: z[1]
+                            }
+                            var square = triangleSquare(a, b, c);
+                            // теперь заносим вычисленную площадь в массив всех объемов
+                            if (element.subType.indexOf("bearing") >= 0) { // если это несущая стена
+                                if (element.subType.indexOf("outdoor") >= 0) { // наружная стена
+                                    volumes.walls.outdoor = volumes.walls.outdoor + square;
+                                } else if (element.subType.indexOf("indoor") >= 0) {
+                                    volumes.walls.indoor_bearing = volumes.walls.indoor_bearing + square;
+                                }
+                            } else if (element.subType.indexOf("partition") >= 0) {
+
+                            }
+                            console.log("volumes = ", volumes);
                         }
-                        //console.log("geometry = ", geometry);
+
+                        // console.log("triangle = ", triangle);
                         geometry.computeVertexNormals();
                         var material = new THREE.MeshPhongMaterial({ color: 0x44aa88, side: THREE.DoubleSide }); // side: THREE.DoubleSide, // отрисовка обратной стороны. Замедляет, и не всегда нужна
                         var cube = new THREE.Mesh(geometry, material);

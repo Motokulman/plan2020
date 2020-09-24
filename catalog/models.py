@@ -68,6 +68,8 @@ class Plan(models.Model):
         User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Автор')
     # проверен проект или нет. Проверенные доступны к выкладыванию в системе. Расчет происходит при выкладывании
     checked = models.BooleanField(default=False)
+    fasade_wall_area = models.FloatField(null=True, blank=True) # идея в том, что стоимость строительсва дома пропорциональна площади стен. вычислить ее, и по ней ранжировать результ, а стоимость выводить исходя из
+    # материалов, которые выбрал пользователь. Для простоты пока учитываем только площадь фасадных стен.
 
     class Meta:
         verbose_name = 'Проект'

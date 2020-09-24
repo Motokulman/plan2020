@@ -21,7 +21,7 @@ class Manufacturer(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        f'{self.name}, {self.city.name}, {self.brand}'
+        return self.name
 
 
 
@@ -47,10 +47,9 @@ class Provider(models.Model):
     # каждый поставщик может иметь разные юрлица
     name = models.CharField(unique=True, max_length=200,
                             help_text='Введите название постащика, м.б. зарегистрированное или нет')
-    primary_activity = models.ForeignKey('Activity', on_delete=models.SET_NULL,
-                                         null=True, help_text='Выберите основной вид деятельности', related_name='primary_activity')
-    secondary_activity = models.ManyToManyField(
-        Activity, help_text='Выберите дополнительные виды деятельности', related_name='secondary_activity')
+    # primary_activity = models.ForeignKey('Activity', on_delete=models.SET_NULL, help_text='Выберите основной вид деятельности', related_name='primary_activity', null=True, blank=True)
+    # secondary_activity = models.ManyToManyField(
+    #     Activity, help_text='Выберите дополнительные виды деятельности', related_name='secondary_activity', null=True, blank=True)
 
     class Meta:
         ordering = ('name',)
