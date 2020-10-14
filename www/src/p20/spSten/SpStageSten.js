@@ -6,6 +6,9 @@ import { SpDebugPixi } from './SpDebugPixi.js';
 //import { Pol3D } from './Pol3D.js';
 import { SpStage } from './../sp/SpStage.js';
 import {  Calc } from './../Calc.js';
+
+
+import {  SPLineWord } from './SPLineWord.js';
 /**
 * Мир для сращалок дорог
 * @class
@@ -22,6 +25,11 @@ export function SpStageSten (par, pm) {
 	this.fun = null;
 	
 
+	this._color="#47aec8";
+	this._colorP=0x47aec8;
+	this._colorP1=0x47aec8;
+
+	this._alpha=1;
 
 	//this._mashtab = 1;
 	this._amSten=false;
@@ -32,66 +40,52 @@ export function SpStageSten (par, pm) {
 	this._activeSten=-1;
 	this._activePoint=-1;
 	this._activePol=-1;
-
-
 	this._height = 300;
+
+
 
 
 	this.boolText = true;
 	this.content2d = new PIXI.Container();
+	this.content2d1 = new PIXI.Container();
 
 	this.content2dPoint = new PIXI.Container();
 
-	this.debugPixi=new SpDebugPixi();
-	this.spCalc.setDebug(this.debugPixi)
+	
+	this.cont2dLine = new PIXI.Container();
+
+	this.debugPixi = new SpDebugPixi();
+	//this.spCalc.setDebug(this.debugPixi);
 
 	this.cont2dDebug = new PIXI.Container();
 	this.cont2dDebug.addChild(this.debugPixi.content2d);
 
-	/*this.graphics = new PIXI.Graphics();
-    this.content2d.addChild(this.graphics);
-	this.graphics.beginFill(Math.random()*0xffffff, 0.5);
-    this.graphics.drawCircle(0,0,200);*/
-/*
-	this.col3d="null";//сторона стенки
-	this.col3d1="null";//сторона стенки 
-	this.col3d2="null";//полы
 
 
-	for (var i = 0; i < this.pm.objbase.three.length; i++) {
-        if(this.pm.objbase.three[i].keyName=="sten"){
-        	this.col3d=this.pm.objbase.three[i].array[0].id;
-			this.col3d1=this.pm.objbase.three[i].array[0].id;                
-        }
-        if(this.pm.objbase.three[i].keyName=="pol"){
-        	this.col3d2=this.pm.objbase.three[i].array[0].id;
-        }
-    }
+
+	this.lineWord=new SPLineWord(this);
 
 
-	this.visi3D=undefined;
-
-	this.triangulateShape=new TriangulateShape()
-
-	this.content3d = new THREE.Object3D();
-
-	this.content3dPoint = new THREE.Object3D();
-	this.content3d.add(this.content3dPoint)
+	
 
 
-	this.materialVerh = new THREE.MeshLambertMaterial({color: new THREE.Color(150 / 255, 150 / 255, 150 / 255)});
-	this.materialVerh.side = THREE.DoubleSide;
+	this.colorT=new THREE.Color()
+	this.convertC=function(c,a){
+		this.colorT.set(c)
+		if(a!=undefined){
 
-	this.boxGeometry111 = new THREE.BoxGeometry(1, 1, 1);
-	this.cylinderGeometry = new THREE.CylinderGeometry( 1,1,1,22)
+			this.colorT.r*=a[0]
+			this.colorT.g*=a[1]
+			this.colorT.b*=a[2]
+		}
+		trace(this.colorT)
+		return this.colorT.getHex()
+	}
 
-	this.cylinderMaterial = new THREE.MeshPhongMaterial({color:0x79bccc})
-
-	this.materialVerh1 = this.cylinderMaterialActive = new THREE.MeshPhongMaterial({color:0x005a88})
 
 
-	this.materialActivePol  = new THREE.MeshPhongMaterial({color:0x005a88,transparent:true,opacity:0.1})
-	this.materialActivePol.side = THREE.DoubleSide;*/
+
+
 	
 	this.getPoint=function(){ return new SpPointSten(this);}
 	this.getSplice=function(){ 
@@ -104,6 +98,7 @@ export function SpStageSten (par, pm) {
 	this.arrFun=[];
 	this.arrObj=[];
 	
+
 	
 	this.render=function(){
 		//self.pm.visi3D.intRend=1
@@ -128,12 +123,15 @@ export function SpStageSten (par, pm) {
 
 	this.doRender=function(){
 
-		if(self.arrObj.length==0)return false;		
+		if(self.arrObj.length==0)return false;	
+		//this.debugPixi.clearD();
+
 		for (let i = 0; i < self.arrObj.length; i++) {
 			self.arrObj[i].dragPost();
 			
 		}
 		self.arrObj.length=0;
+
 		return true;	
 	}
 
@@ -144,10 +142,17 @@ SpStageSten.prototype.constructor = SpStageSten;
 
 SpStageSten.prototype.getObj = function (_activ) {
 	var o = SpStage.prototype.getObj.call(this, _activ);	
+	o.color=this._color;
+	o.alpha=this._alpha;
+	o.lineWord=this.lineWord.getObj()
+	
 	return o;
 };
 SpStageSten.prototype.setObj = function (o) {	
 	SpStage.prototype.setObj.call(this, o);
+	if(o.color)this.color=o.color
+	if(o.alpha)this.alpha=o.alpha	
+	if(o.lineWord)this.lineWord.setObj(o.lineWord)
 };
 
 
@@ -156,9 +161,7 @@ SpStageSten.prototype.craetSplice1 = function () {
 	var s=SpStage.prototype.craetSplice1.call(this);	
 	s.col3d=this.col3d;//сторона стенки
 	s.col3d1=this.col3d1;//сторона стенки
-
 	s.activMouse=this._amSten;
-
 	s.boolText=this.boolText;
 	return s
 };
@@ -181,6 +184,37 @@ SpStageSten.prototype.craetPol = function () {
 
 
 Object.defineProperties(SpStageSten.prototype, {
+	color: {
+		set: function (value) {	
+				
+			this._color = value;
+			
+			this._colorP=this.convertC(value)
+			this._colorP1=this.convertC(value,[0.8,0.8,0.8])
+			for (var i = 0; i < this.arrSplice.length; i++) {
+				this.arrSplice[i].colorP = this._colorP;
+				this.arrSplice[i].colorP1 = this._colorP1;				
+				this.arrSplice[i].draw1();
+			}
+		},
+		get: function () {
+			
+		 	return this._color;
+		}
+	},
+
+	alpha: {
+		set: function (value) {			
+			this._alpha = value;
+			for (var i = 0; i < this.arrSplice.length; i++) {
+				this.arrSplice[i].alpha = this._alpha;
+				this.arrSplice[i].draw1();
+			}
+		},
+		get: function () { return this._alpha; }
+	},
+
+
 
 
 	height: {
@@ -292,8 +326,6 @@ Object.defineProperties(SpStageSten.prototype, {
 		},
 		get: function () { return this._activePoin; }
 	},
-
-
 	activePol: {
 		set: function (value) {
 			
@@ -308,8 +340,6 @@ Object.defineProperties(SpStageSten.prototype, {
 			}
 		},
 		get: function () { return this._activePol; }
-	},
-
-	
+	},	
 
 });

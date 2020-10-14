@@ -167,14 +167,20 @@ export function SpCalc () {
 					for (var i = 0; i < 6; i++) {
 						sHron.sten.arrPosit[i].set(arrP[5 - i].x, arrP[5 - i].y);
 					}
+					
 				} else {
 					for (var i = 0; i < 6; i++) {
 						sHron.sten.arrPosit[i].set(arrP[i].x, arrP[i].y);
 					}
+					
 				}
 			} else {
 				window.console.warn('непонял как считить  ', sHron.sten.tip);
-			}
+			}			
+		}
+		if(sHron.sten.offset!=0){
+			sHron.sten.arrPosit[2].y=sHron.sten.arrPosit[3].y=0
+			sHron.sten.arrPosit1[2].y=sHron.sten.arrPosit1[3].y=0
 		}
 
 	};
@@ -184,7 +190,7 @@ export function SpCalc () {
 	var r =0// aidPointStatic.angelOtstup;
 
 
-
+	var sHN;
 	var sHron;
 	var sHron1;
 	var sHron2;
@@ -198,37 +204,48 @@ export function SpCalc () {
 
 	// ишем углы почти прямых стен
 
+	var _off
 	this.korektSHObject = function (_aP, num1) {
-		if(debug)debug.clearD();
+		//if(debug)debug.clearD();
 
 		aP = _aP;
 		kol = aP.arrSHron.length;
 		sHron1 = aP.arrSHron[num1];// основная
 		
+		/*sHron1.sten.arrPosit[2].y=0;
+		sHron1.sten.arrPosit[3].y=0;
 
-		if (kol == 1) {
+		sHron1.sten.arrPosit1[2].y=0;
+		sHron1.sten.arrPosit1[3].y=0;*/
+
+		if (kol == 1) {//финал стены
+			sHron1.sten.korectOffset()
 			if (sHron1.sten.tip == 0) {
+				
+				if(debug){
+					//debug.dLine(sHron1.sten.position,sHron1.sten.position1,0x00ff00,20)
+				}
+				_off=sHron1.sten.offset;				
+
 				if (sHron1.storona == true) {
 					sHron1.sten.bolPosit = false;
-					sHron1.sten.arrPosit[0].set(0, sHron1.sten.delph / 2);
-					sHron1.sten.arrPosit[1].set(0, sHron1.sten.delph / 2);
-					sHron1.sten.arrPosit[2].set(0, 0);
-					sHron1.sten.arrPosit[3].set(0, 0);
-					sHron1.sten.arrPosit[4].set(0, -sHron1.sten.delph / 2);
-					sHron1.sten.arrPosit[5].set(0, -sHron1.sten.delph / 2);
+					sHron1.sten.arrPosit[0].set(0, sHron1.sten.delph / 2+_off);
+					sHron1.sten.arrPosit[1].set(0, sHron1.sten.delph / 2+_off);
+					sHron1.sten.arrPosit[2].set(0, _off);
+					sHron1.sten.arrPosit[3].set(0, _off);
+					sHron1.sten.arrPosit[4].set(0, -sHron1.sten.delph / 2+_off);
+					sHron1.sten.arrPosit[5].set(0, -sHron1.sten.delph / 2+_off);
 
 				} else {
 					sHron1.sten.bolPosit1 = false;
-					sHron1.sten.arrPosit1[0].set(0, -sHron1.sten.delph / 2);
-					sHron1.sten.arrPosit1[1].set(0, -sHron1.sten.delph / 2);
-					sHron1.sten.arrPosit1[2].set(0, 0);
-					sHron1.sten.arrPosit1[3].set(0, 0);
-					sHron1.sten.arrPosit1[4].set(0, sHron1.sten.delph / 2);
-					sHron1.sten.arrPosit1[5].set(0, sHron1.sten.delph / 2);
-
+					sHron1.sten.arrPosit1[0].set(0, -sHron1.sten.delph / 2+_off);
+					sHron1.sten.arrPosit1[1].set(0, -sHron1.sten.delph / 2+_off);
+					sHron1.sten.arrPosit1[2].set(0, _off);
+					sHron1.sten.arrPosit1[3].set(0, _off);
+					sHron1.sten.arrPosit1[4].set(0, sHron1.sten.delph / 2+_off);
+					sHron1.sten.arrPosit1[5].set(0, sHron1.sten.delph / 2+_off);
 				}
 			} else if (sHron1.sten.tip == 1) {
-
 				if (sHron1.storona == true) {
 					sHron1.sten.bolPosit = true;
 					sHron1.sten.arrPosit[0].setPoint(sHron1.sten.lineRange.p);
@@ -264,6 +281,10 @@ export function SpCalc () {
 			sHron1 = aP.arrSHron[num1];// основная
 			sHron2 = aP.arrSHron[num2];// основная
 
+			sHron.sten.korectOffset()
+			sHron1.sten.korectOffset()
+			sHron2.sten.korectOffset()
+
 			var nB = false;
 			if (kol > 2) {
 				sHron2 = aP.arrSHron[num];// основная
@@ -280,20 +301,29 @@ export function SpCalc () {
 			lP2 = this.getLineStan2(sHron1, sHron2, nB);
 			this.creatGrani2(sHron1, lP, lP2);
 
-			trace(sHron1)
+			
 
 
 			if(debug){
-				debug.dLine(lP.p,lP.p1,0xff0000,22)
+				/*debug.dLine(lP.p,lP.p1,0xff0000,22)
 				debug.dLine(lP.p1,lP.p2,0xff5500,22)
 
 				debug.dLine(lP2.p,lP2.p1,0x0000ff,22)
-				debug.dLine(lP2.p1,lP2.p2,0x5500ff,22)
+				debug.dLine(lP2.p1,lP2.p2,0x5500ff,22)*/
 			}
 
 			if (num1 == 0) {
 				// return;
 			}
+		}
+
+		for (var i = 0; i > aP.arrSHron.length; i++) {
+			sHN=aP.arrSHron[i]
+			sHN.sten.arrPosit[2].y=0;
+			sHN.sten.arrPosit[3].y=0;
+			sHN.sten.arrPosit1[2].y=0;
+			sHN.sten.arrPosit1[3].y=0;
+
 		}
 	};
 
@@ -345,6 +375,7 @@ export function SpCalc () {
 		return null;
 	};
 
+	var ob	
 	this.getLineStan2 = function (sHron, sHron1, bool, offset, offset1) {
 		bXZva.delph = sHron.sten.delph + (offset || 0);
 		bXZva1.delph = sHron1.sten.delph + (offset1 || 0);
@@ -354,6 +385,10 @@ export function SpCalc () {
 
 		if (bXZva.delph / 2 + 1 > r)r = bXZva.delph + 1;
 		if (bXZva1.delph / 2 + 1 > r)r = bXZva1.delph + 1;
+
+
+		
+
 
 
 		b1 = 1;
@@ -370,13 +405,20 @@ export function SpCalc () {
 				arrP[1].x = arrP[1 + 2].x = arrP[1 + 4].x = sHron.sten.position.x;
 				arrP[1].y = arrP[1 + 2].y = arrP[1 + 4].y = sHron.sten.position.y;
 			}
+
 			calc.korektToLine(arrP[0], arrP[1], 0, -bXZva.delph / 2 * b1);
-			bXZva.restertTip(0, arrP[0], arrP[1], arrP[2 + 1]);
+			
+			bXZva.restertTip(0, arrP[0], arrP[1], arrP[2 + 1], sHron.sten);
 
 			if(debug){
-				debug.dLine(arrP[0],arrP[1],0x0000ff,7)
-			}	
-			trace("arrP[0 + 6]")
+				if(sHron.sten.offset!=0){
+					debug.clearD();
+					bXZva.drawDebag(debug)
+				}
+				
+
+			}
+			
 		} else if (sHron.sten.tip == 1) {
 			if (bool == true) {
 				if (sHron.storona == true) {
@@ -426,13 +468,13 @@ export function SpCalc () {
 				arrP[1 + 6].y = arrP[1 + 8].y = arrP[1 + 10].y = sHron1.sten.position.y;
 			}
 			calc.korektToLine(arrP[0 + 6], arrP[1 + 6], 0, bXZva1.delph / 2 * b1);
-			trace(arrP[0 + 6])
+			
 
 			if(debug){
-				debug.dLine(arrP[0 + 6],arrP[1 + 6],0x00ff00,22)
+				//debug.dLine(arrP[0 + 6],arrP[1 + 6],0x00ff00,22)
 			}
 
-			bXZva1.restertTip(0, arrP[0 + 6], arrP[1 + 6], arrP[1 + 2 + 6]);
+			bXZva1.restertTip(0, arrP[0 + 6], arrP[1 + 6], arrP[1 + 2 + 6], sHron1.sten);
 		} else if (sHron1.sten.tip == 1) {
 
 			if (bool == true) {
@@ -470,7 +512,7 @@ export function SpCalc () {
 
 		lPRet = this.korektPoint.getPeresek(bXZva, bXZva1);
 
-		
+		//trace(bXZva, bXZva1);
 
 
 		return lPRet;

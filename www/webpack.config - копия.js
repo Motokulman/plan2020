@@ -5,7 +5,7 @@ const webpack = require('webpack');
   	entry: './src/index.js',
   	output: {
     	path: path.resolve(__dirname, 'build'),
-		filename: 'p20.min.js',
+		filename: 'p20.js',
 		publicPath: 'build/'
   	},
   	devServer: {

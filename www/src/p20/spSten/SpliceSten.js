@@ -20,20 +20,38 @@ export function SpliceSten (_stage) {
 	this._active = false;
 	this.idUi=Math.round(Math.random()*1000);
 	this.sUi = -1;
+	this._offset=0;
+	this._bChaz=false;
+	this._bChaz1=false;
 
 	this._height = this.stage._height;
+	
 	this.content2d = new PIXI.Container();
 	_stage.content2d.addChild(this.content2d);
-
 	
 	this.graphics = new PIXI.Graphics();
     this.content2d.addChild(this.graphics);
     this.graphics.interactive = true;
-    
 
-    this.graphics.beginFill(Math.random()*0xffffff, 0.5);
-    this.graphics.drawCircle(0,0,150);
 
+    this.content2d1 = new PIXI.Container();
+	_stage.content2d1.addChild(this.content2d1);
+	
+	this.graphics1 = new PIXI.Graphics();
+    this.content2d1.addChild(this.graphics1);
+
+   /* this.ddd=function(){
+    	if(self._offset!=0){
+    		console.warn("====",self.arrPosit1[2].y)
+    		
+    	}
+    }
+
+    this.arrPosit1[2]=new PositionFun(0,0,this.ddd)*/
+
+    var sahh=0
+    this.aVKol
+    this.arrVorur = [new Position(), new Position(), new Position(), new Position(), new Position(), new Position(), new Position(), new Position()];
 
     this.onDragStart=function(e){
     	if(_stage.par.sobSP!=undefined)_stage.par.sobSP("downSten",self,e)
@@ -43,38 +61,70 @@ export function SpliceSten (_stage) {
     this.graphics.on('mousedown', this.onDragStart);
 
 
-    var alpha = 0.2+Math.random()*0.6
+
+
+    this.alpha=_stage._alpha;    
+    this.colorP=_stage._colorP;
+    this.colorP1=_stage._colorP1;
+
 
 	this.draw1 = function () {
+		sahh=0
+		this.plusVor(-this.arrPosit[2].x,this.arrPosit[2].y)
+		this.plusVor(-this.arrPosit[1].x,this.arrPosit[1].y)
+		this.plusVor(-this.arrPosit[0].x,this.arrPosit[0].y)
 
+		this.plusVor(this.arrPosit1[5].x+this._distans,this.arrPosit1[5].y)
+		this.plusVor(this.arrPosit1[4].x+this._distans,this.arrPosit1[4].y)
+		this.plusVor(this.arrPosit1[3].x+this._distans,this.arrPosit1[3].y)
+
+		this.plusVor(this.arrPosit1[2].x+this._distans,this.arrPosit1[2].y)		
+		this.plusVor(this.arrPosit1[1].x+this._distans,this.arrPosit1[1].y)
+		this.plusVor(this.arrPosit1[0].x+this._distans,this.arrPosit1[0].y)
+
+		this.plusVor(-this.arrPosit[5].x,this.arrPosit[5].y)
+		this.plusVor(-this.arrPosit[4].x,this.arrPosit[4].y)
+		this.plusVor(-this.arrPosit[3].x,this.arrPosit[3].y)
+
+	
 		this.graphics.clear();
-		this.graphics.lineStyle(10, 0x555555, 0.8);
-		this.graphics.moveTo(0,0);
-		this.graphics.lineTo(this._distans,0);
+		this.graphics.beginFill(this._offset ==0 ? this.colorP : this.colorP1, this.alpha);
+		this.graphics.moveTo(this.arrVorur[0].x,this.arrVorur[0].y);
+		for (var i = 0; i < this.aVKol; i++) {
+			this.graphics.lineTo(this.arrVorur[i].x,this.arrVorur[i].y);
+		}
+		this.graphics.lineTo(this.arrVorur[0].x,this.arrVorur[0].y);
 
 
-		this.graphics.lineStyle(0.1, Math.random()*0xffffff, 0.18);
-		this.graphics.beginFill(0x47aec8, alpha);
-
-		this.graphics.moveTo(-this.arrPosit[2].x,this.arrPosit[2].y);
-		this.graphics.lineTo(-this.arrPosit[1].x,this.arrPosit[1].y);
-		this.graphics.lineTo(-this.arrPosit[0].x,this.arrPosit[0].y);
-
-		
-		this.graphics.lineTo(this.arrPosit1[5].x+this._distans,this.arrPosit1[5].y);
-		this.graphics.lineTo(this.arrPosit1[4].x+this._distans,this.arrPosit1[4].y);
-		this.graphics.lineTo(this.arrPosit1[3].x+this._distans,this.arrPosit1[3].y);
-
-		this.graphics.lineTo(this.arrPosit1[2].x+this._distans,this.arrPosit1[2].y);
-		this.graphics.lineTo(this.arrPosit1[1].x+this._distans,this.arrPosit1[1].y);
-		this.graphics.lineTo(this.arrPosit1[0].x+this._distans,this.arrPosit1[0].y);
-
-
-		this.graphics.lineTo(-this.arrPosit[5].x,this.arrPosit[5].y);
-		this.graphics.lineTo(-this.arrPosit[4].x,this.arrPosit[4].y);
-		this.graphics.lineTo(-this.arrPosit[3].x,this.arrPosit[3].y);
-
+		this.graphics1.clear();				
+		for (var i = 0; i < this.aVKol; i++) {	
+			this.graphics1.lineStyle(20, 0x000000, 1);
+			this.graphics1.moveTo(this.arrVorur[i].x,this.arrVorur[i].y);
+			if(i!=this.aVKol-1)this.graphics1.lineTo(this.arrVorur[i+1].x,this.arrVorur[i+1].y);
+			else this.graphics1.lineTo(this.arrVorur[0].x,this.arrVorur[0].y);
+		}
 	}
+
+
+	this.plusVor = function (_x,_y) {		
+		if(sahh==0){
+			this.arrVorur[sahh].set(_x,_y)
+			
+			sahh++;
+		}else{
+			//if(this.idArr==16)trace(sahh+"==",_x,_y,"::",this.arrVorur[sahh-1].x,this.arrVorur[sahh-1].y)
+			if(this.arrVorur[sahh-1].x!=_x||this.arrVorur[sahh-1].y!=_y){			
+				if(this.arrVorur[0].x!=_x||this.arrVorur[0].y!=_y)
+				if(sahh<this.arrVorur.length){
+					this.arrVorur[sahh].set(_x,_y)					
+					sahh++;
+					this.aVKol=sahh
+				}
+
+			}
+		}
+	}
+
 
 
 
@@ -83,10 +133,51 @@ export function SpliceSten (_stage) {
 		this.content2d.y=this.position.y;
 		this.content2d.rotation=this._rotation;
 
+		this.content2d1.x=this.position.x;
+		this.content2d1.y=this.position.y;
+		this.content2d1.rotation=this._rotation;
+
 		this.draw1();
 
 
 		this.stage.render();
+	}
+
+
+	var bb;
+	var sten;
+	var pp,pp1
+	this.korectOffset=function(){
+		if(this.sUi!=-1){
+			bb=false;
+			this.offset=0
+			if(sten!=undefined)if(sten.idUi==this.sUi)if(sten.life==true){				
+				bb=true;
+			}
+			if(bb==false){
+				if(sten==undefined){
+					for (var i = 0; i < _stage.arrSplice.length; i++) {
+						if(_stage.arrSplice[i].life==false)continue;
+
+						if(_stage.arrSplice[i].idUi==this.sUi){
+							sten=_stage.arrSplice[i]
+							bb=true;
+						}
+					}
+				}
+			}
+
+			if(bb==true){
+				pp=this.delph/2-sten.delph/2
+				//pp1=sten.delph/2
+
+				this.offset+=this._bChaz ? pp : -pp
+				//this.offset+=this._bChaz1 ? pp1 : -pp1
+
+				
+			}
+		
+		}
 	}
 
 }
@@ -99,8 +190,9 @@ SpliceSten.prototype.getObj = function () {
 	//o.windows = this.windows.getObj();
 	o.colorSten = this.colorSten;
 	o.height = this.height;
-	o.sUi=this.sUi	
-	o.idUi=this.idUi	
+	o.sUi=this.sUi;	
+	o.offset=this.offset;
+	o.bChaz=this.bChaz;
 	return o;
 };
 SpliceSten.prototype.setObj = function (o) {
@@ -111,6 +203,8 @@ SpliceSten.prototype.setObj = function (o) {
 	if (o.col3d!== undefined ) this.col3d=o.col3d;
 	if (o.idUi!== undefined ) this.idUi=o.idUi;
 	if (o.sUi!== undefined ) this.sUi=o.sUi;	
+	if (o.offset!== undefined ) this.offset=o.offset;
+	if (o.bChaz!== undefined ) this.bChaz=o.bChaz;	
 	
 };
 SpliceSten.prototype.compare = function (_sten) {
@@ -131,7 +225,7 @@ SpliceSten.prototype.restart = function () {
 SpliceSten.prototype.drag = function () {
 	Splice.prototype.drag.call(this);
 	this.stage.addObjFun(this);
-	//trace(">>>>",this);
+	
 };
 Object.defineProperties(SpliceSten.prototype, {
 
@@ -185,6 +279,9 @@ Object.defineProperties(SpliceSten.prototype, {
 			}
 			if(this._life==true)this.stage.content2d.addChild(this.content2d);
 			else if(this.content2d.parent!=undefined)this.content2d.parent.removeChild(this.content2d);
+
+			if(this._life==true)this.stage.content2d1.addChild(this.content2d1);
+			else if(this.content2d1.parent!=undefined)this.content2d1.parent.removeChild(this.content2d1);
 		},
 		get: function () { return this._life; }
 	},
@@ -218,6 +315,33 @@ Object.defineProperties(SpliceSten.prototype, {
 		get: function () { return this._col3d1; }
 	},
 
+	offset: {
+		set: function (value) {
+			if (this._offset === value) return;
+			this._offset = value;	
+		
+			this._setAllParam('offset', this._offset);
+			if(this.funDragMenu!=undefined)this.funDragMenu();
+			this.stage.render()
+		},
+		get: function () { return this._offset; }
+	},
+	
+	bChaz: {
+		set: function (value) {
+			if (this._bChaz === value) return;
+			this._bChaz = value;	
+		
+			this._setAllParam('bChaz', this._bChaz);
+			if(this.funDragMenu!=undefined)this.funDragMenu();
+			this.stage.render()
+		},
+		get: function () { return this._bChaz; }
+	},
+
+	
+	
+
 });
 
 
@@ -240,7 +364,6 @@ function SpliceStenSquare (_arr) {
 
 		this._dist0 = 0;
 		this._dist1 = 0;
-
 		for (var i = 0; i < this.array.length; i++) {
 			this._dist0 += this.array[i].distans0;
 			this._dist1 += this.array[i].distans1;
@@ -299,8 +422,7 @@ function SpliceStenSquare (_arr) {
 	};
 
 
-	this.setArr = function (_arr) {
-		
+	this.setArr = function (_arr) {		
 		this.array = _arr;
 		this.delph = this.array[0].delph;
 	};
