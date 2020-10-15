@@ -37,6 +37,7 @@ export class Main  {
             this.localStorage = new LocalStorage(null, "localStorage"); 
 
             if(self.localStorage.object.debug==undefined)self.localStorage.object.debug=false            
+       
             this.debug=self.localStorage.object.debug;           
             this.fina();
 		};
@@ -47,7 +48,7 @@ export class Main  {
 
 		//стартуем дальше
         this.fina = function () { 
-
+        	self.localStorage.object.debug=true
 			self.glaf=new Glaf(self)		
 			sizeWindow()
 			fun("init");

@@ -308,7 +308,14 @@ export function SpPoint (_stage) {
 			arrSten[i].drag();
 		}
 	};
+
+	this.doFunRend==undefined
 	this.drawposit = function () {
+		trace("drawposit");
+		if(self.doFunRend!=undefined){
+			self.doFunRend()
+			//return;	
+		}
 		if (self.calculate) return;
 		self.drag();
 	};

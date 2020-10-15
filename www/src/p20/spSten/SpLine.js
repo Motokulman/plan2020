@@ -47,13 +47,14 @@ export class SPLine  {
 
         var a,d
         this.drag = function () {
+
             a=calc.getAngle(this.position, this.position1);
             d=calc.getDistance(this.position, this.position1);
 
 
             this.content2d.x=this.position.x;
             this.content2d.y=this.position.y;
-            this.content2d.rotation=a
+            this.content2d.rotation=this._rotation
 
      
             

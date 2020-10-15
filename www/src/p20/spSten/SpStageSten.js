@@ -14,22 +14,22 @@ import {  SPLineWord } from './SPLineWord.js';
 * @class
 * @extends SpStage
 */
-export function SpStageSten (par, pm) {
+export function SpStageSten (par,  fun) {
 	SpStage.call(this);
 	var self = this;
 	this.type = 'SpStageSten';
-	this.pm=par.pm;
+	
 	this.par=par;
 	this.tipSplice = 'SpliceSten';
 	this.tipPoint = 'SpPointSten';
-	this.fun = null;
+	this.fun = fun;
 	
 
 	this._color="#47aec8";
 	this._colorP=0x47aec8;
 	this._colorP1=0x47aec8;
 
-	this._alpha=1;
+	this._mashtab=par._mashtab;
 
 	//this._mashtab = 1;
 	this._amSten=false;
@@ -42,23 +42,33 @@ export function SpStageSten (par, pm) {
 	this._activePol=-1;
 	this._height = 300;
 
+	this._alpha=1;
+
+	this._status=2;
+	
+
 
 
 
 	this.boolText = true;
 	this.content2d = new PIXI.Container();
+
 	this.content2d1 = new PIXI.Container();
-
-	this.content2dPoint = new PIXI.Container();
-
-	
+	this.content2d2 = new PIXI.Container();
+	this.content2dPoint = new PIXI.Container();	
 	this.cont2dLine = new PIXI.Container();
 
-	this.debugPixi = new SpDebugPixi();
-	//this.spCalc.setDebug(this.debugPixi);
 
-	this.cont2dDebug = new PIXI.Container();
-	this.cont2dDebug.addChild(this.debugPixi.content2d);
+	this.content2d.addChild(this.content2d1);
+    this.content2d.addChild(this.content2d2);
+    this.content2d.addChild(this.content2dPoint);
+    this.content2d.addChild(this.cont2dLine);
+
+
+
+	/*this.debugPixi = new SpDebugPixi();
+	this.spCalc.setDebug(this.debugPixi);
+	this.content2d.addChild(this.debugPixi.content2d);*/
 
 
 
@@ -109,7 +119,19 @@ export function SpStageSten (par, pm) {
 		
 
 
+	this.bigDrag=function(){
+		trace("bigDrag")
+		for (var i = 0; i < this.arrSplice.length; i++) {
+			if (!this.arrSplice[i].life==false) continue;				
+			this.arrSplice[i].dragPost();
+		}
 
+		for (var i = 0; i < this.arrPoint.length; i++) {
+			if (!this.arrPoint[i].life==false) continue;					
+			this.arrPoint[i].dragPost();
+			trace(i+" "+this.arrPoint[i])								
+		}
+	}
 
 
 	this.addObjFun=function(o){
@@ -122,7 +144,6 @@ export function SpStageSten (par, pm) {
 	}
 
 	this.doRender=function(){
-
 		if(self.arrObj.length==0)return false;	
 		//this.debugPixi.clearD();
 
@@ -145,6 +166,7 @@ SpStageSten.prototype.getObj = function (_activ) {
 	o.color=this._color;
 	o.alpha=this._alpha;
 	o.lineWord=this.lineWord.getObj()
+
 	
 	return o;
 };
@@ -153,6 +175,7 @@ SpStageSten.prototype.setObj = function (o) {
 	if(o.color)this.color=o.color
 	if(o.alpha)this.alpha=o.alpha	
 	if(o.lineWord)this.lineWord.setObj(o.lineWord)
+	this.bigDrag()		
 };
 
 
@@ -184,6 +207,43 @@ SpStageSten.prototype.craetPol = function () {
 
 
 Object.defineProperties(SpStageSten.prototype, {
+	
+	status: {
+		set: function (value) {	
+			if(this._status!=value)	{
+				this._status = value;
+				if(this.content2d.parent!=undefined)this.content2d.parent.removeChild(this.content2d)	
+				if(this._status==2){//не видем - не активный
+					
+				}
+				if(this._status==1){//видный-неактивный 
+					this.fun("addChild","c2dSloi",this.content2d);
+				}
+				if(this._status==0){//видный-неактивный 
+					this.fun("addChild","c2dSloi2",this.content2d);
+				}
+			}			
+		},
+		get: function () {			
+		 	return this._status;
+		}
+	},
+
+	mashtab: {
+		set: function (value) {	
+			if(this._mashtab!=value)	{
+				this._mashtab = value;
+				
+			}			
+		},
+		get: function () {			
+		 	return this._mashtab;
+		}
+	},
+	
+
+
+
 	color: {
 		set: function (value) {	
 				
@@ -202,6 +262,7 @@ Object.defineProperties(SpStageSten.prototype, {
 		 	return this._color;
 		}
 	},
+
 
 	alpha: {
 		set: function (value) {			

@@ -28,8 +28,7 @@ export class SobIndex0  extends SobIndex {
         }
 
 
-        this.sobSP=function(s,p,e){          
-
+        this.sobSP=function(s,p,e){
             if(s=="downSten"){
                 self.par.par.mObject.setObject(p)
             }
@@ -41,7 +40,7 @@ export class SobIndex0  extends SobIndex {
                     sp.y=p.position.y;
                     sp.x1 = e.data.originalEvent.clientX
                     sp.y1 = e.data.originalEvent.clientY; 
-                    sp.s= self.cont.scale.x;
+                    sp.s= self.sp._mashtab;
                     sp.o=p
                     document.addEventListener("mouseup", self.mouseup);
                     document.addEventListener("mousemove", self.mousemove); 

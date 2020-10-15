@@ -14,6 +14,7 @@ export function SpPointSten (_stage) {
 	this.type = 'SpPointSten';
 	this.tipe = 'SpPointSten';
 	this.stage = _stage;
+	this.par = _stage;
 	this._height = 300;
 
 	this._active=false
@@ -42,25 +43,34 @@ export function SpPointSten (_stage) {
 
 
 
-    this.dragPost=function(){
-    	
+    this.dragPost=function(){  
+    	trace(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",this.arrSHron.length)
+    	this.drag(); 
+    	//this.dragVokrug(); 	
 		this.content2d.x=this.position.x;
 		this.content2d.y=this.position.y;
+
+
+		for (var i = 0; i < this.arrSHron.length; i++) {
+			this.arrSHron[i].sten.drag();
+			this.arrSHron[i].sten.dragPost();
+		}
+
+
 		if(this.funDragMenu!=undefined)this.funDragMenu();
-		this.stage.render();
+		
 	}
 
 
 
-/*
-	this.restart = function () {
-		SpPointSten.prototype.restart(this);
-		this.mashtab = this.stage.mashtab;
-		this.pointVisi = this.stage.pointVisi;
-	};*/
+	this.doFunRend=function(){ 
+		this.par.addObjFun(this)
+	}
 
-	// получить типы обектов с которыми эта точка соедена
-	// @return {Array<string>}
+
+
+
+
 	this.getTypeConnect = function () {
 		var res = ['AidPoint'];
 		if (this.arrIdSten.length > 0) {

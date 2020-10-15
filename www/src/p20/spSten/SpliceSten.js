@@ -27,7 +27,7 @@ export function SpliceSten (_stage) {
 	this._height = this.stage._height;
 	
 	this.content2d = new PIXI.Container();
-	_stage.content2d.addChild(this.content2d);
+	_stage.content2d1.addChild(this.content2d);
 	
 	this.graphics = new PIXI.Graphics();
     this.content2d.addChild(this.graphics);
@@ -35,7 +35,7 @@ export function SpliceSten (_stage) {
 
 
     this.content2d1 = new PIXI.Container();
-	_stage.content2d1.addChild(this.content2d1);
+	_stage.content2d2.addChild(this.content2d1);
 	
 	this.graphics1 = new PIXI.Graphics();
     this.content2d1.addChild(this.graphics1);
@@ -86,7 +86,7 @@ export function SpliceSten (_stage) {
 		this.plusVor(-this.arrPosit[4].x,this.arrPosit[4].y)
 		this.plusVor(-this.arrPosit[3].x,this.arrPosit[3].y)
 
-	
+		this.colorP=Math.random()*0xffffff
 		this.graphics.clear();
 		this.graphics.beginFill(this._offset ==0 ? this.colorP : this.colorP1, this.alpha);
 		this.graphics.moveTo(this.arrVorur[0].x,this.arrVorur[0].y);
@@ -132,6 +132,7 @@ export function SpliceSten (_stage) {
 		this.content2d.x=this.position.x;
 		this.content2d.y=this.position.y;
 		this.content2d.rotation=this._rotation;
+		trace("!!!!!2",this._rotation, this.position, this.position1)
 
 		this.content2d1.x=this.position.x;
 		this.content2d1.y=this.position.y;
@@ -277,10 +278,10 @@ Object.defineProperties(SpliceSten.prototype, {
 			for (var ii = 0; ii < this.arrayClass.length; ii++) {
 				if ('activMouse' in this.arrayClass[ii]) this.arrayClass[ii].life = this._life;
 			}
-			if(this._life==true)this.stage.content2d.addChild(this.content2d);
+			if(this._life==true)this.stage.content2d1.addChild(this.content2d);
 			else if(this.content2d.parent!=undefined)this.content2d.parent.removeChild(this.content2d);
 
-			if(this._life==true)this.stage.content2d1.addChild(this.content2d1);
+			if(this._life==true)this.stage.content2d2.addChild(this.content2d1);
 			else if(this.content2d1.parent!=undefined)this.content2d1.parent.removeChild(this.content2d1);
 		},
 		get: function () { return this._life; }

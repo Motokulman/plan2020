@@ -37,8 +37,7 @@ export class MDragScane  {
            
 
 
-        this.sobSP=function(s,p,e){ 
-                      
+        this.sobSP=function(s,p,e){                       
             if(self.actAI!=undefined){                  
                 self.actAI.sobSP(s,p,e)
             }   
@@ -55,7 +54,7 @@ export class MDragScane  {
 
 
         this.klikGoem=function(e){
-            self.sobSP("downFont",null,e);
+            //self.sobSP("downFont",null,e);
         }
 
         this.setP20=function(p20){
@@ -64,24 +63,17 @@ export class MDragScane  {
             this.cont1=p20.c2dNiz;
             this.p20=p20;
             this.p20.sobSP=this.sobSP;
-
-
-
             for (var i = 0; i < this.sobIndex.length; i++) {
                 this.sobIndex[i].setP20(p20)
             }
-                
-
-
-            /*this.graphics = new PIXI.Graphics();
-            p20.c2dNiz.addChild(this.graphics);
-            this.graphics.name="xz";
-            var r=20000;
-            this.graphics.beginFill(0xdcf1fa, 1.5);
-            this.graphics.drawRect(-r,-r,r*2,r*2);
-            this.graphics.interactive = true;            
-            this.graphics.on('mousedown', this.klikGoem)*/
-        }  
+        } 
+        this.sp=undefined
+        this.setSP=function(sp){
+            this.sp=sp
+            for (var i = 0; i < this.sobIndex.length; i++) {
+                this.sobIndex[i].setSP(sp)
+            }      
+        } 
 
         this.redrag  = function(){  
             this.p20.creatRect()

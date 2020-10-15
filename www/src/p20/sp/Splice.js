@@ -562,7 +562,7 @@ Splice.prototype = {
 		
 		this._rotation = this.stage.spCalc.getAngle(this.position, this.position1);
 		this._distans = this.stage.spCalc.getDistance(this.position, this.position1);
-
+		
 		
 		if (this.tip == 1) {
 

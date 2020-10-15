@@ -18,13 +18,14 @@ export class SobIndex1  extends SobIndex {
 
         var pos={x:0,y:0,o:null}
         var sp={x:0,y:0,x1:0,y1:0,s:0,o:null}
-        var point,activSten
+        var point,point1,activSten;
         this.mousemove=function(e){           
             pos.x=sp.x+(e.clientX-sp.x1)/sp.s
             pos.y=sp.y+(e.clientY-sp.y1)/sp.s            
             self.korektAP(pos,sp.o);
             sp.o.position.x=pos.x;
             sp.o.position.y=pos.y;
+            //trace(pos)
             self.p20.sp.addObjFun(sp.o);       
         } 
 
@@ -55,12 +56,42 @@ export class SobIndex1  extends SobIndex {
                 return;
             }
 
+            
+
+            if(s=="downFont"){
+                point=self.p20.sp.craetPoint();
+                point.position.setPoint(p.position);
+
+                point1=self.p20.sp.craetPoint();                
+                point1.position.setPoint(p.position);
+
+                activSten=self.p20.sp.craetSplice1();                    
+                point.addSplice(activSten, true);
+                point1.addSplice(activSten, false);
+
+
+                activSten.delph=500; 
+
+                self.par.par.mObject.setObject(point)      
+                
+                sp.x=p.position.x;
+                sp.y=p.position.y;
+
+                sp.x1 = e.data.originalEvent.clientX//+self.cont.x;
+                sp.y1 = e.data.originalEvent.clientY; 
+                sp.s = self.sp._mashtab;
+                
+                sp.o = point;
+                document.addEventListener("mouseup", self.mouseup);
+                document.addEventListener("mousemove", self.mousemove); 
+            }
 
             if(s=="downSten"){
                 self.par.par.mObject.setObject(p)
             }
 
             if(s=="downPoint"){
+
                 point=self.p20.sp.craetPoint();
                 point.position.setPoint(p.position);
                 activSten=self.p20.sp.craetSplice1();                    
@@ -75,7 +106,7 @@ export class SobIndex1  extends SobIndex {
 
                 sp.x1 = e.data.originalEvent.clientX//+self.cont.x;
                 sp.y1 = e.data.originalEvent.clientY; 
-                sp.s = self.cont.scale.x;
+                sp.s = self.sp._mashtab;
                 sp.o = point;
                 document.addEventListener("mouseup", self.mouseup);
                 document.addEventListener("mousemove", self.mousemove);                    

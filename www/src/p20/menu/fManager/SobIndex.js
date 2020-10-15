@@ -136,19 +136,6 @@ export class SobIndex  {
             return rezult
         }
 
-/*
-        this.getDistSten=function(_sten, _point){
-            var rezult=-1;
-            po1.x=_point.x;
-            po1.y=_point.z;
-
-            po=calc.isPointInLin(_sten.position,_sten.position1,po1,11111,11111)
-            rezult=calc.getDistance(_sten.position,po)
-            
-
-            return rezult
-        }*/
-
 
 
 
@@ -198,58 +185,9 @@ export class SobIndex  {
                 }                
                 if(b==true)arrPSt.push(this.par.floor.sp.arrSplice[i])
             }
-            
-
-
-            //arrSplice=this.par.floor.sp.arrSplice
         }
         var ot=10;
-        /*this.korektAP=function(point){
-            point.x=Math.round(point.x*10)/10;
-            point.y=Math.round(point.y*10)/10;
 
-            if(positionOld.x-ot<point.x && positionOld.x+ot>point.x){                
-                point.x=positionOld.x
-            }
-            if(positionOld.y-ot<point.y && positionOld.y+ot>point.y){                
-                point.y=positionOld.y
-            }
-            point.obj=undefined
-
-
-            
-
-
-
-            for (var i = 0; i < arrPPos.length; i++) {                
-                if(calc.getDistance(point,arrPPos[i].position)<ot*1.01){
-                    point.x=arrPPos[i].position.x;
-                    point.y=arrPPos[i].position.y;
-                    point.obj=arrPPos[i]                    
-                    return
-                }
-                if(arrPPos[i].position.x-ot<point.x && arrPPos[i].position.x+ot>point.x){                
-                    point.x=arrPPos[i].position.x
-                }
-                if(arrPPos[i].position.y-ot<point.y && arrPPos[i].position.y+ot>point.y){                
-                    point.y=arrPPos[i].position.y
-                }
-            }
-
-            for (var i = 0; i < arrPSt.length; i++) {
-                
-                po=calc.isPointInLin(arrPSt[i].position,arrPSt[i].position1,point,ot,ot)
-                if(po!=null){
-                    point.x= po.x;
-                    point.y= po.y;
-                    point.obj=arrPSt[i]
-                    return
-                }
-                
-                
-                
-            }
-        }*/
 
 
 
@@ -324,6 +262,13 @@ export class SobIndex  {
             self.cont=p20.cont2d
             self.p20=p20
         }
+
+        this.sp=undefined
+        this.setSP=function(sp){
+            this.sp=sp                 
+        } 
+
+
 
 
         this.sobSP=function(s,p,e){ 
