@@ -39,9 +39,9 @@ export class MGridDrag  {
 
 
 
-       /* this.debugPixi = new SpDebugPixi();
+        this.debugPixi = new SpDebugPixi();
         this.par.par.cont2d.addChild(this.debugPixi.content2d);
-        this.debugPixi.content2d.scale.set(0.2,0.2);*/
+        this.debugPixi.content2d.scale.set(0.1,0.1);
  
         this.grid = new PGrid(this.par.par.c2dSloi1,this.sizeMax, 20);
 
@@ -103,14 +103,19 @@ export class MGridDrag  {
         var point={x:0,y:0}
         var point1={x:0,y:0}
 
-        this.getPositPlan  = function(){
+        this.getPositPlan  = function(poz){
+
             rect = self.panel.div.getBoundingClientRect();
             point.x=((dcmParam.globXY.x-rect.x)/scal/self.width)*2-1
             point.y=((dcmParam.globXY.y-rect.y)/scal/self.height)*2-1
             let xx =(self.width/2*point.x)/self._mashtab-self.cont.x/self._mashtab
             let yy =(self.height/2*point.y)/self._mashtab-self.cont.y/self._mashtab   
 
-     
+            if(poz!=undefined){
+                poz.x=xx
+                poz.y=yy
+                return poz 
+            }
             return {x:xx,y:yy}
         }
 
@@ -155,6 +160,42 @@ export class MGridDrag  {
             this.mKrai.set(pp,pp1)
             this.fun("render")
         }
+        
+        //////////////////////////
+
+
+        this.setRect = function (r,ot,b) {  
+            if(ot==undefined)ot=0
+            
+          
+            /*this.debugPixi.clear()
+            this.debugPixi.dRect(r,0x0000ff)
+            this.debugPixi.dRect(pp,0xff0000)
+            this.debugPixi.dRect(pp1,0x00ff00)*/
+
+            var s=pp.w/(r.w+ot*2)
+            if(s>pp.h/(r.h+ot*2))s=pp.h/(r.h+ot*2)
+            this.mashtab=s
+
+
+
+            self.korestPosit();
+         
+
+            self.cont.x=-r.x*this._mashtab -r.w*this._mashtab/2
+            self.cont.y=-r.y*this._mashtab -r.h*this._mashtab/2
+            
+            if(b==true){
+                this.setRect(r,ot/this._mashtab)
+            }
+            self.fun("mashtab",self._mashtab) 
+        }
+
+
+
+        ///////////////////////////
+
+
         
 
         var _point=null

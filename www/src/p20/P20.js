@@ -37,7 +37,7 @@ export class P20  {
 
 
 
-        this.rectXX1 = {x:0,x1:0,y:0,y1:0,s:1,xs:0,ys:0}
+
         this.setArrObj=function(a){
             this.sp.clear();
             
@@ -45,7 +45,7 @@ export class P20  {
                 this.setObj(a)
                 return
             }
-           
+            
             
 
             var o={};
@@ -84,64 +84,17 @@ export class P20  {
                 if(max.y1<a[i].point0.y)max.y1=a[i].point0.y                
             }
 
-            var mm=150
-            max.x-=mm;            
-            max.y-=mm;                        
-            max.x1+=mm*2;                        
-            max.y1+=mm*2;
-            var sss=document.documentElement.clientHeight/(max.y1- max.y);
-            
-            this.rectXX1.x=max.x;
-            this.rectXX1.x1=max.x1;
-            this.rectXX1.y=max.y;
-            this.rectXX1.y1=max.y1;
-            this.rectXX1.s=document.documentElement.clientHeight/(max.y1- max.y);
-            this.rectXX1.xs=(document.documentElement.clientWidth-this.rectXX1.s*(max.x1- max.x))/2-max.x*this.rectXX1.s;
-            this.rectXX1.ys=(document.documentElement.clientHeight-this.rectXX1.s*(max.y1- max.y))/2-max.y*this.rectXX1.s;  
-            
-
-
-
 
             
 
-            this.setObj(o)    
-           
-
-
-
+            this.setObj(o)          
         } 
 
-
-
-        this.creatRect=function(){           
-            var max={x:99999,y:99999,x1:-999999,y1:-99999}
-            for (var i = 0; i < this.sp.arrPoint.length; i++) { 
-                if(max.x>this.sp.arrPoint[i].position.x)max.x=this.sp.arrPoint[i].position.x
-                if(max.y>this.sp.arrPoint[i].position.y)max.y=this.sp.arrPoint[i].position.y
-                
-                if(max.x1<this.sp.arrPoint[i].position.x)max.x1=this.sp.arrPoint[i].position.x
-                if(max.y1<this.sp.arrPoint[i].position.y)max.y1=this.sp.arrPoint[i].position.y                
-            }
-
-
-            var mm=150;
-            max.x-=mm;            
-            max.y-=mm;                        
-            max.x1+=mm*2;                        
-            max.y1+=mm*2;
-            var sss=document.documentElement.clientHeight/(max.y1- max.y);
-
-            
-            
-            this.rectXX1.x=max.x;
-            this.rectXX1.x1=max.x1;
-            this.rectXX1.y=max.y;
-            this.rectXX1.y1=max.y1;
-            this.rectXX1.s=document.documentElement.clientHeight/(max.y1- max.y);
-            this.rectXX1.xs=(document.documentElement.clientWidth-this.rectXX1.s*(max.x1- max.x))/2-max.x*this.rectXX1.s;
-            this.rectXX1.ys=(document.documentElement.clientHeight-this.rectXX1.s*(max.y1- max.y))/2-max.y*this.rectXX1.s;
+        this.renderDebag=function(){
+            this.fun("render",-1)
         }
+
+
 
             
         this.upDate=function(){
@@ -152,22 +105,24 @@ export class P20  {
             return false;
         }
 
-        this.sizeWindow=function(w,h,s){
 
-            
-        }
 
         this.getObj=function(){
-            var o=this.sp.getObj();
-            
+            var o=this.sp.getObj();            
             return o;
         }
 
-        this.setObj=function(o){ 
-            trace("@@@@@setObj@@@@@@@@@",o)
+        this.setObj=function(o){           
             this.sp.setObj(o);                                  
         }
-
+        this.getRect=function(num){ 
+            let s=this.sp
+            if(num!=undefined){
+                if(this.array[num]==undefined)return null
+                s= this.array[num];   
+            }
+            return s.getRect()
+        }
 
 
         this.fun("complit")

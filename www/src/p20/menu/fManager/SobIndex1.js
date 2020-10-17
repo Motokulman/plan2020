@@ -60,15 +60,18 @@ export class SobIndex1  extends SobIndex {
 
             if(s=="downFont"){
                 point=self.p20.sp.craetPoint();
-                point.position.setPoint(p.position);
+                
 
                 point1=self.p20.sp.craetPoint();                
-                point1.position.setPoint(p.position);
+                
 
                 activSten=self.p20.sp.craetSplice1();                    
                 point.addSplice(activSten, true);
                 point1.addSplice(activSten, false);
-
+                
+                point.position.set(p.position.x,p.position.y);
+                point1.position.set(p.position.x,p.position.y);
+                point1.dragPost()
 
                 activSten.delph=500; 
 
@@ -87,7 +90,53 @@ export class SobIndex1  extends SobIndex {
             }
 
             if(s=="downSten"){
-                self.par.par.mObject.setObject(p)
+
+                
+
+
+                //self.par.par.mObject.setObject(p);
+                let po1=this.getPositPlan();
+                trace(po1)
+                let pppo=calc.isPointInLin( p.position, p.position1, po1, 11111,0);  
+                if(pppo==null)return
+
+                trace(s,p,e)
+                //self.korektAP(pos,sp.o);
+                
+                point=self.p20.sp.craetPoint();
+                point1=self.p20.sp.craetPoint();
+                point1.position.set(pppo.x,pppo.y);
+                trace(">>>>>>>",pppo) 
+
+                p.dividedSten(point1)
+                trace(point1)                
+                
+
+                activSten=self.p20.sp.craetSplice1();                    
+                point.addSplice(activSten, true);
+                point1.addSplice(activSten, false);
+                
+                point.position.set(pppo.x,pppo.y);
+                point1.position.set(pppo.x,pppo.y);
+                point1.dragPost()
+
+                activSten.delph=500; 
+
+                self.par.par.mObject.setObject(point)      
+                
+                sp.x=pppo.x;
+                sp.y=pppo.y;
+
+                sp.x1 = e.data.originalEvent.clientX//+self.cont.x;
+                sp.y1 = e.data.originalEvent.clientY; 
+                sp.s = self.sp._mashtab;
+                
+                sp.o = point;
+                document.addEventListener("mouseup", self.mouseup);
+                document.addEventListener("mousemove", self.mousemove);
+
+
+
             }
 
             if(s=="downPoint"){

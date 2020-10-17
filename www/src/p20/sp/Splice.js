@@ -96,17 +96,19 @@ export function Splice (_stage) {
 		if (this.addPoint) {
 			this.addPoint.removeSplice(this);
 			this.addPoint.clearFree();
+			
 		}
 		if (this.addPoint1) {
 			this.addPoint1.removeSplice(this);
 			this.addPoint1.clearFree();
+
 		}
 
 		this.addPoint = undefined;
 		this.addPoint1 = undefined;
 		_callAllFun('clear');
 		this.life = false;
-		this.stage.render()
+		this.stage.render();
 	};
 
 

@@ -14,6 +14,8 @@ export class SobIndex  {
         this.funActive=undefined;
 
         this._sah=0
+        this.color=0xff0000
+        this.activColor=0x00ff00
 
         var calc = new Calc()
 
@@ -209,7 +211,7 @@ export class SobIndex  {
             _p.x=Math.round(_p.x/100)*100;
             _p.y=Math.round(_p.y/100)*100;
             _p.o=null;
-
+            
            /* for (var i = 0; i < self.p20.sp.arrSplice.length; i++) {
                 if (!self.p20.sp.arrSplice[i].life) continue;
                 r=this.getDistSten(self.p20.sp.arrSplice[i],_p)
@@ -239,7 +241,8 @@ export class SobIndex  {
                 
                 r=this.getDistSten(self.p20.sp.arrSplice[i], _p)
                 
-                if(r!=-1&&r<600){
+                if(po&&r!=-1&&r<600){
+                    
                     _p.x=po.x;
                     _p.y=po.y;
                     _p.o=self.p20.sp.arrSplice[i];
@@ -250,7 +253,9 @@ export class SobIndex  {
         }
 
 
-
+        this.getPositPlan=function(pos){
+            return self.par.par.mGridDrag.getPositPlan(pos)
+        }
 
 
 
@@ -265,11 +270,17 @@ export class SobIndex  {
 
         this.sp=undefined
         this.setSP=function(sp){
-            this.sp=sp                 
+            this.sp=sp
+            this.color=this.sp.convertC(dcmParam.color)
+            this.activColor=this.sp.convertC(dcmParam.activButton)               
         } 
 
 
 
+
+        this.render=function(){            
+            self.par.par.fun("render")
+        }
 
         this.sobSP=function(s,p,e){ 
             trace(this.type+" sobSP >>",s,p,e)    

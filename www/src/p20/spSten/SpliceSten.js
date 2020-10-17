@@ -27,15 +27,17 @@ export function SpliceSten (_stage) {
 	this._height = this.stage._height;
 	
 	this.content2d = new PIXI.Container();
-	_stage.content2d1.addChild(this.content2d);
+	_stage.content2d2.addChild(this.content2d);
 	
 	this.graphics = new PIXI.Graphics();
     this.content2d.addChild(this.graphics);
     this.graphics.interactive = true;
 
 
+
+
     this.content2d1 = new PIXI.Container();
-	_stage.content2d2.addChild(this.content2d1);
+	_stage.content2d1.addChild(this.content2d1);
 	
 	this.graphics1 = new PIXI.Graphics();
     this.content2d1.addChild(this.graphics1);
@@ -86,7 +88,7 @@ export function SpliceSten (_stage) {
 		this.plusVor(-this.arrPosit[4].x,this.arrPosit[4].y)
 		this.plusVor(-this.arrPosit[3].x,this.arrPosit[3].y)
 
-		this.colorP=Math.random()*0xffffff
+		//this.colorP=Math.random()*0xffffff
 		this.graphics.clear();
 		this.graphics.beginFill(this._offset ==0 ? this.colorP : this.colorP1, this.alpha);
 		this.graphics.moveTo(this.arrVorur[0].x,this.arrVorur[0].y);
@@ -94,6 +96,11 @@ export function SpliceSten (_stage) {
 			this.graphics.lineTo(this.arrVorur[i].x,this.arrVorur[i].y);
 		}
 		this.graphics.lineTo(this.arrVorur[0].x,this.arrVorur[0].y);
+
+
+		this.graphics.beginFill(0xffffff, 0.8);
+		this.graphics.drawCircle(200,0,30)
+
 
 
 		this.graphics1.clear();				
@@ -108,11 +115,9 @@ export function SpliceSten (_stage) {
 
 	this.plusVor = function (_x,_y) {		
 		if(sahh==0){
-			this.arrVorur[sahh].set(_x,_y)
-			
+			this.arrVorur[sahh].set(_x,_y)			
 			sahh++;
-		}else{
-			//if(this.idArr==16)trace(sahh+"==",_x,_y,"::",this.arrVorur[sahh-1].x,this.arrVorur[sahh-1].y)
+		}else{	
 			if(this.arrVorur[sahh-1].x!=_x||this.arrVorur[sahh-1].y!=_y){			
 				if(this.arrVorur[0].x!=_x||this.arrVorur[0].y!=_y)
 				if(sahh<this.arrVorur.length){
@@ -132,7 +137,7 @@ export function SpliceSten (_stage) {
 		this.content2d.x=this.position.x;
 		this.content2d.y=this.position.y;
 		this.content2d.rotation=this._rotation;
-		trace("!!!!!2",this._rotation, this.position, this.position1)
+	
 
 		this.content2d1.x=this.position.x;
 		this.content2d1.y=this.position.y;
@@ -144,7 +149,62 @@ export function SpliceSten (_stage) {
 		this.stage.render();
 	}
 
+	////////////////////////////////
+	var a1,d1,a
+	var pNull=new Position()
+	this.arrGran = [new Position(), new Position(), new Position(), new Position()];
+	this.poiskGran=function(){
+		a=calc.getAngle(this.position, this.position1);
+		
+		this.arrGran[0].set(this.arrPosit[0].x,this.arrPosit[0].y);
+		a1=calc.getAngle(pNull, this.arrGran[0]);
+        d1=calc.getDistance(pNull, this.arrGran[0]);
+        calc.getVector(d1,a-a1-Math.PI,this.arrGran[0])
+        this.arrGran[0].x+=this.position.x;
+        this.arrGran[0].y+=this.position.y;
 
+        if(this.idArr==10){
+
+        	trace(a,a1,this.arrPosit[0])
+        	for (var i = 0; i < this.arrPosit.length; i++) {
+        		trace(i+"   ",this.arrPosit[i])
+        	}
+
+        	trace("a,a1,this.arrPosit[0]")
+        	for (var i = 0; i < this.arrPosit.length; i++) {
+        		trace(i+"   ",this.arrPosit1[i])
+        	}	
+        }
+
+
+        this.arrGran[1].set(this.arrPosit1[5].x,this.arrPosit1[5].y);
+		a1=calc.getAngle(pNull, this.arrGran[1]);
+        d1=calc.getDistance(pNull, this.arrGran[1]);
+        calc.getVector(d1,a+a1,this.arrGran[1])
+
+        this.arrGran[1].x+=this.position1.x;
+        this.arrGran[1].y+=this.position1.y;
+
+
+
+
+        this.arrGran[2].set(-this.arrPosit1[0].x,this.arrPosit1[0].y);
+		a1=calc.getAngle(pNull, this.arrGran[2]);
+        d1=calc.getDistance(pNull, this.arrGran[2]);
+        calc.getVector(d1,a-a1+Math.PI,this.arrGran[2])
+        this.arrGran[2].x+=this.position1.x;
+        this.arrGran[2].y+=this.position1.y;
+
+
+        this.arrGran[3].set(-this.arrPosit[5].x,this.arrPosit[5].y);
+		a1=calc.getAngle(pNull, this.arrGran[3]);
+        d1=calc.getDistance(pNull, this.arrGran[3]);
+        calc.getVector(d1,a+a1,this.arrGran[3])
+        this.arrGran[3].x+=this.position.x;
+        this.arrGran[3].y+=this.position.y;
+	}
+
+	//////////////////////////////
 	var bb;
 	var sten;
 	var pp,pp1
@@ -278,11 +338,14 @@ Object.defineProperties(SpliceSten.prototype, {
 			for (var ii = 0; ii < this.arrayClass.length; ii++) {
 				if ('activMouse' in this.arrayClass[ii]) this.arrayClass[ii].life = this._life;
 			}
-			if(this._life==true)this.stage.content2d1.addChild(this.content2d);
+			if(this._life==true)this.stage.content2d2.addChild(this.content2d);
 			else if(this.content2d.parent!=undefined)this.content2d.parent.removeChild(this.content2d);
 
-			if(this._life==true)this.stage.content2d2.addChild(this.content2d1);
+			if(this._life==true)this.stage.content2d1.addChild(this.content2d1);
 			else if(this.content2d1.parent!=undefined)this.content2d1.parent.removeChild(this.content2d1);
+
+
+
 		},
 		get: function () { return this._life; }
 	},

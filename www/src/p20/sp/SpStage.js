@@ -102,6 +102,8 @@ export function SpStage () {
 	this.getPoint=function(){ return new SpPoint(this);}
 	this.getSplice=function(){ return new Splice(this);}
 	this.getPol=function(){ return new SpPol(this);}
+
+	this.render=function(){}
 	
 
 

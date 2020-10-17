@@ -25,9 +25,9 @@ export function SpStageSten (par,  fun) {
 	this.fun = fun;
 	
 
-	this._color="#47aec8";
-	this._colorP=0x47aec8;
-	this._colorP1=0x47aec8;
+	this._color="#c5d6e0";
+	this._colorP=0xc5d6e0;
+	this._colorP1=0xc5d6e0;
 
 	this._mashtab=par._mashtab;
 
@@ -88,7 +88,7 @@ export function SpStageSten (par,  fun) {
 			this.colorT.g*=a[1]
 			this.colorT.b*=a[2]
 		}
-		trace(this.colorT)
+		
 		return this.colorT.getHex()
 	}
 
@@ -111,26 +111,70 @@ export function SpStageSten (par,  fun) {
 
 	
 	this.render=function(){
-		//self.pm.visi3D.intRend=1
-		if(this.par.renderDebag)this.par.renderDebag()		
+		
+		
+		if(this.par.renderDebag)this.par.renderDebag()
+
 	}
 
-	
+	//возврощает габаритный контейнер
+	this.getRect=function(aPoint, aSten){ 
+
+		if(aPoint==undefined){
+			aPoint=[];
+			for (var i = 0; i < this.arrPoint.length; i++) {			
+				if (this.arrPoint[i].life==false) continue;					
+				aPoint.push(this.arrPoint[i])											
+			}
+		}
+		if(aSten==undefined){
+			aSten=[];
+			for (var i = 0; i < this.arrSplice.length; i++) {
+				if (this.arrSplice[i].life == false) continue;				
+				aSten.push(this.arrSplice[i])
+
+			}
+		}
+
+		var r={x:9999999,y:999999,x1:-9999999,y1:-9999999,w:0,h:0}
+		for (var i = 0; i < aPoint.length; i++) {
+			korRect(r,aPoint[i].position)	
+		}
+		for (var i = 0; i < aSten.length; i++) {
+			aSten[i].poiskGran()
+			korRect(r,aSten[i].arrGran[0])
+			korRect(r,aSten[i].arrGran[1])
+			korRect(r,aSten[i].arrGran[2])
+			korRect(r,aSten[i].arrGran[3])
+
+		}
+
+
+		r.w=r.x1-r.x
+		r.h=r.y1-r.y
+		return r;
+	}
+	function korRect(r,p){
+		if(r.x>p.x)r.x=p.x;
+		if(r.y>p.y)r.y=p.y;
+		if(r.x1<p.x)r.x1=p.x;
+		if(r.y1<p.y)r.y1=p.y;	
+	}
 		
 
 
-	this.bigDrag=function(){
-		trace("bigDrag")
+	this.bigDrag=function(){		
 		for (var i = 0; i < this.arrSplice.length; i++) {
-			if (!this.arrSplice[i].life==false) continue;				
+			if (this.arrSplice[i].life==false) continue;				
 			this.arrSplice[i].dragPost();
 		}
 
-		for (var i = 0; i < this.arrPoint.length; i++) {
-			if (!this.arrPoint[i].life==false) continue;					
-			this.arrPoint[i].dragPost();
-			trace(i+" "+this.arrPoint[i])								
+		for (var i = 0; i < this.arrPoint.length; i++) {			
+			if (this.arrPoint[i].life==false) continue;					
+			this.arrPoint[i].dragPost();											
 		}
+
+
 	}
 
 

@@ -96,7 +96,7 @@ export class SpDebugPixi  {
 				console.warn('Большой круг рисовать не буду', r);
 				return;
 			}
-			if (color == undefined)color = 0xFF0000;
+			if (color == undefined)color = 0xFFFFFF*Math.random();
 			wL = wL || 10;
 			let ww=r.w  ==undefined ? r.width : r.w
 			let hh=r.h  ==undefined ? r.height : r.h

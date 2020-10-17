@@ -63,7 +63,8 @@ export function SpPoint (_stage) {
 			this.life = true;
 			this.drag();
 		}
-		this.stage.render()	
+		this.stage.render();
+		if(self.doFunRend!=undefined)self.doFunRend();
 	};
 
 	/**
@@ -86,7 +87,8 @@ export function SpPoint (_stage) {
 			this.drag();
 			return rez;
 		}
-		this.stage.render()	
+		this.stage.render();
+		if(self.doFunRend!=undefined)self.doFunRend();
 		return null;
 	};
 
@@ -293,7 +295,7 @@ export function SpPoint (_stage) {
 		filterUuid(arrSten);
 		return arrSten;
 	};
-
+	this.funDragVokrug
 	this.dragVokrug = function () {
 
 		var arrPoint = this.getConectedPoint();
@@ -307,15 +309,14 @@ export function SpPoint (_stage) {
 		for (var i = 0; i < arrSten.length; i++) {
 			arrSten[i].drag();
 		}
+		if(this.funDragVokrug)this.funDragVokrug(arrPoint,arrSten)
 	};
 
 	this.doFunRend==undefined
 	this.drawposit = function () {
-		trace("drawposit");
-		if(self.doFunRend!=undefined){
-			self.doFunRend()
-			//return;	
-		}
+	
+		if(self.doFunRend!=undefined)self.doFunRend()
+			
 		if (self.calculate) return;
 		self.drag();
 	};
@@ -392,6 +393,7 @@ export function SpPoint (_stage) {
 		if (this.arrSHron.length == 0 && this.arrPol.length==0) {
 			this.clear();
 		}
+
 	};
 
 

@@ -42,19 +42,27 @@ export function SpPointSten (_stage) {
     this.graphics.on('mousedown', this.onDragStart);
 
 
+    this.funDragVokrug=function(a,a1){   
+   
+    	for (var i = 0; i < a1.length; i++) {
+    	
+    		a1[i].dragPost();
+    	}
+    }
 
-    this.dragPost=function(){  
-    	trace(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",this.arrSHron.length)
-    	this.drag(); 
-    	//this.dragVokrug(); 	
+
+
+    this.dragPost=function(){   	
+    	//this.drag(); 
+    	this.dragVokrug();    	 	
 		this.content2d.x=this.position.x;
 		this.content2d.y=this.position.y;
 
 
-		for (var i = 0; i < this.arrSHron.length; i++) {
+		/*for (var i = 0; i < this.arrSHron.length; i++) {
 			this.arrSHron[i].sten.drag();
 			this.arrSHron[i].sten.dragPost();
-		}
+		}*/
 
 
 		if(this.funDragMenu!=undefined)this.funDragMenu();

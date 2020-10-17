@@ -23,6 +23,20 @@ export class SobIndex0  extends SobIndex {
 
 
         this.mouseup=function(e){
+            pos.x=sp.o.position.x;
+            pos.y=sp.o.position.y;
+            self.korektAP(pos,sp.o);
+            
+            if(pos.o!=null&&pos.o.type!=undefined){
+                if(pos.o.type=="SpPointSten"){
+                    sp.o.slitie(pos.o)
+                    sp.o.dragVokrug();
+                }                   
+                if(pos.o.type=="SpliceSten"){
+                    pos.o.dividedSten(sp.o,true)
+                    sp.o.dragVokrug();                        
+                }                     
+            }
             document.removeEventListener("mouseup", self.mouseup);
             document.removeEventListener("mousemove", self.mousemove); 
         }
