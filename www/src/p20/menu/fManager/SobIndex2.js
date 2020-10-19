@@ -66,7 +66,7 @@ export class SobIndex2  extends SobIndex {
 
 
         this.mouseup=function(e){
-            self.debug.clearD();
+            //self.debug.clearD();
             if(arrDrah.length==1){
                 self.clearSob();
             }
@@ -127,7 +127,7 @@ export class SobIndex2  extends SobIndex {
         this.korektAP=function(_p,_o,_p1){           
             _p.o=null;
 
-            this.debug.clearD();
+           // this.debug.clearD();
             p.o=null
             p1.o=null
             dd=999999999999999999
@@ -146,7 +146,7 @@ export class SobIndex2  extends SobIndex {
                 p2.x+=_p1.x;
                 p2.y+=_p1.y;
 
-                self.debug.dLine(_p1,p2,0x00ff00,10); 
+               // self.debug.dLine(_p1,p2,0x00ff00,10); 
             }
 
 
@@ -205,7 +205,7 @@ export class SobIndex2  extends SobIndex {
                         p2)
 
                     if(po){                    
-                        trace(po)
+                        
                         cc=calc.getDistance(_p,po)
                         if(cc>100&&cc1>cc){
                             cc1=cc;
@@ -250,11 +250,11 @@ export class SobIndex2  extends SobIndex {
                 if(cc1<dd){
                     _p.x=po.x;
                     _p.y=po.y;
-                    //self.debug.dPoint(self.sp.arrSplice[num].arrGran[num1],20,self.color,20); 
+                    
                     _p.o=self.sp.arrSplice[c] 
                     return 
                 }
-                self.debug.dPoint(po,20,0xff0000,20); 
+                //self.debug.dPoint(po,20,0xff0000,20); 
             }
             
 
@@ -269,7 +269,7 @@ export class SobIndex2  extends SobIndex {
                     _p.x=po.x;
                     _p.y=po.y; 
                     _p.o=self.sp.arrSplice[ee]
-                    self.debug.dLine(self.sp.arrSplice[ee].arrGran[e*2+0],self.sp.arrSplice[ee].arrGran[e*2+1],self.color,20); 
+                    //self.debug.dLine(self.sp.arrSplice[ee].arrGran[e*2+0],self.sp.arrSplice[ee].arrGran[e*2+1],self.color,20); 
                 }
             }            
         }
@@ -289,17 +289,17 @@ export class SobIndex2  extends SobIndex {
                 self.sp.getRect();//не рект а драгим позиции стен
 
                 //this.oP=self.p20.sp.lineWord.getPositionS();
-                this.debug=self.sp.lineWord.debugPixi
-                this.debug.clearD();
+                this.debug=self.sp.lineWord.debugPixi;
+                //this.debug.clearD();
 
                 
-                for (var i = 0; i < self.sp.arrSplice.length; i++) {
+               /* for (var i = 0; i < self.sp.arrSplice.length; i++) {
                     if (!self.sp.arrSplice[i].life) continue;
                     self.debug.dLine(self.sp.arrSplice[i].arrGran[0],self.sp.arrSplice[i].arrGran[1],0xff0000,20);
                     self.debug.dPoint(self.sp.arrSplice[i].arrGran[2],33)
                     self.debug.dPoint(self.sp.arrSplice[i].arrGran[3],63)
                     self.debug.dLine(self.sp.arrSplice[i].arrGran[2],self.sp.arrSplice[i].arrGran[3],self.color,20); 
-                }
+                }*/
                 self.sp.render()
           
                

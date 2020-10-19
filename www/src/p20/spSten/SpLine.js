@@ -9,6 +9,7 @@ export class SPLine  {
         this.par=par;
         this.fun=fun;
         this._life=true;
+        this._visible=true;
 
         this._otstup=0;
         this.sah=100;
@@ -71,7 +72,7 @@ export class SPLine  {
         //this.content2d.addChild(this.g2);
 
 
-
+        this.render=this.par.render;
         
 
         this.activeMouse = this.par.activeMouse
@@ -80,7 +81,7 @@ export class SPLine  {
             
             this.life = false
             this._otstup=0;
-            this.par.par.render()
+            if(this.render)this.render()
 
         }
 
@@ -166,14 +167,14 @@ export class SPLine  {
                 this.text.rotation=Math.PI
             }            
             
-            this.par.par.render()
+            if(this.render)this.render();
 
         };
 
         var po
         this.poiskOt=function(o){
             po=calc.isPointInLin(this.position1,this.position,o,111111111,111111111);
-            if(po)this.otstup=po.z
+            if(po)this.otstup=po.z;
             
 
         }
@@ -200,7 +201,7 @@ export class SPLine  {
     set activeMouse(value) {      
         if(this._activeMouse!=value){
             this._activeMouse= value;
-            trace(this.idArr,">>>>>>>>>>>>>>>",this._activeMouse)
+        
             if(value){
                 this.content2d.addChild(this.g2);
                 this.content2d.addChild(this.g);       
@@ -227,7 +228,15 @@ export class SPLine  {
     }    
     get activeMouse() { return  this._activeMouse;}
 
-   
+
+
+    set visible(value) {      
+        if(this._visible!=value){
+            this._visible= value;
+            this.content2d.visible=value;
+        }
+    }    
+    get visible() { return  this._visible;} 
 
     set otstup(value) {      
         if(this._otstup!=value){

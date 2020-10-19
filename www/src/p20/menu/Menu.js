@@ -70,6 +70,7 @@ export class Menu  {
 
 		this.setSP=function(sp){
 			this.mDragScane.setSP(sp)
+			this.mGridDrag.setSP(sp)
 		}
 
 
@@ -137,6 +138,7 @@ export class Menu  {
             this._menuIndex= value;
             this.mLeft.index=value;
             this.mDragScane.menuIndex= value;
+            this.mGridDrag.menuIndex= value;
         }
     }    
     get menuIndex() { return  this._menuIndex;}

@@ -4,7 +4,7 @@
 import { SpDebugPixi } from './SpDebugPixi.js';
 import {  SPLine } from './SPLine.js';
 
-
+import { VisiLine  } from './VisiLine.js';   
 
 export class SPLineWord  {
   	constructor(par,fun) {  		
@@ -22,6 +22,11 @@ export class SPLineWord  {
         this.debugPixi = new SpDebugPixi();
         this.content2d.addChild(this.debugPixi.content2d);
 
+
+        this.visiLine=new VisiLine(this,function(s,p,p1){
+
+        });
+        this.par.cont2dLine.addChild(this.visiLine.content2d);
 
         this.sobSP=function(s,p,p1){            
             self.par.par.sobSP(s,p,p1);
@@ -52,23 +57,7 @@ export class SPLineWord  {
 
             for (var i = 0; i < this.array.length; i++) {
                 if(this.array[i].life==false)continue
-                if(sLine && this.array[i].idArr==sLine.idArr)continue  
-                
-               /* dd=calc.getDistance(p,this.array[i].position)
-                if(d>dd){
-                    or.x=this.array[i].position.x;
-                    or.y=this.array[i].position.y;
-                    d=dd;
-                    num=i
-                }
-                
-                dd=calc.getDistance(p,this.array[i].position1)
-                if(d>dd){
-                    or.x=this.array[i].position1.x;
-                    or.y=this.array[i].position1.y;
-                    d=dd;
-                    num=i
-                }*/
+                if(sLine && this.array[i].idArr==sLine.idArr)continue 
 
                 dd=calc.getDistance(p,this.array[i].p1)
                 if(d>dd){
@@ -98,8 +87,13 @@ export class SPLineWord  {
 
 
 
-        this.setObj=function(o){
-           
+        
+        this.render=function(){  
+            this.par.render()
+        }
+
+
+        this.setObj=function(o){           
             for (var i = 0; i < o.array.length; i++) {
                 let line=this.craetLine();
                 line.setObj(o.array[i])
@@ -112,7 +106,7 @@ export class SPLineWord  {
                 if (this.array[i].life==false) continue;
                 o.array.push(this.array[i].getObj())
             }
-            trace("<<<<<<<<<<<<<<<<<<<",o.array)
+            
             return  o
         }
 

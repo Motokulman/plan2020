@@ -43,9 +43,11 @@ export class SobIndex0  extends SobIndex {
 
 
         this.sobSP=function(s,p,e){
-            if(s=="downSten"){
-                self.par.par.mObject.setObject(p)
-            }
+            if(p)self.par.par.mObject.setObject(p)
+
+          /* if(s=="downSten"){
+                
+            }*/
 
             if(s=="downPoint"){
                 self.par.par.mObject.setObject(p) 

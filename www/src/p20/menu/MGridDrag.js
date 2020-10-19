@@ -24,6 +24,7 @@ export class MGridDrag  {
         this.height=100;
 
         this._mashtab=1;
+        this._menuIndex=-1;
 
         this.sizeMax=par.sizeMax;
 
@@ -90,6 +91,9 @@ export class MGridDrag  {
             sp.s= self.cont.scale.x;          
             document.addEventListener("mouseup", mUp);
             document.addEventListener("mousemove", mMove); 
+
+            trace(">>",self.getPositPlan(),self.rectScane)
+
         }
         this.klikGoem=function(e){ 
             let o={position:self.getPositPlan()}
@@ -106,10 +110,10 @@ export class MGridDrag  {
         this.getPositPlan  = function(poz){
 
             rect = self.panel.div.getBoundingClientRect();
-            point.x=((dcmParam.globXY.x-rect.x)/scal/self.width)*2-1
-            point.y=((dcmParam.globXY.y-rect.y)/scal/self.height)*2-1
-            let xx =(self.width/2*point.x)/self._mashtab-self.cont.x/self._mashtab
-            let yy =(self.height/2*point.y)/self._mashtab-self.cont.y/self._mashtab   
+            point.x=((dcmParam.globXY.x-rect.x)/scal/self.width)*2-1;
+            point.y=((dcmParam.globXY.y-rect.y)/scal/self.height)*2-1;
+            let xx =(self.width/2*point.x)/self._mashtab-self.cont.x/self._mashtab;
+            let yy =(self.height/2*point.y)/self._mashtab-self.cont.y/self._mashtab;   
 
             if(poz!=undefined){
                 poz.x=xx
@@ -126,6 +130,7 @@ export class MGridDrag  {
 
         var pp={x:0,y:0,w:0,h:0}
         var pp1={x:0,y:0,w:this.sizeMax,h:this.sizeMax}
+        this.rectScane={x:0,y:0,x1:0,y1:0,w:100,h:100};
 
         this.korestPosit  = function(){
             let s=this.sizeMax*this._mashtab;
@@ -136,10 +141,6 @@ export class MGridDrag  {
                 let s=this.sizeMax*this._mashtab;
                 return;
             }
-
-
-
-            
 
 
             pp1.h=pp1.w=s;          
@@ -159,6 +160,18 @@ export class MGridDrag  {
             pp1.y=self.cont.y-pp1.w/2          
             this.mKrai.set(pp,pp1)
             this.fun("render")
+
+
+
+            this.rectScane.w=pp.w/this._mashtab;
+            this.rectScane.h=pp.h/this._mashtab;
+
+            this.rectScane.x=-self.cont.x/this._mashtab-this.rectScane.w/2;
+            this.rectScane.x1=-self.cont.x/this._mashtab+this.rectScane.w/2;
+
+            this.rectScane.y=-self.cont.y/this._mashtab-this.rectScane.h/2;
+            this.rectScane.y1=-self.cont.y/this._mashtab+this.rectScane.h/2;
+           
         }
         
         //////////////////////////
@@ -180,7 +193,7 @@ export class MGridDrag  {
 
 
             self.korestPosit();
-         
+            
 
             self.cont.x=-r.x*this._mashtab -r.w*this._mashtab/2
             self.cont.y=-r.y*this._mashtab -r.h*this._mashtab/2
@@ -240,6 +253,13 @@ export class MGridDrag  {
         //////////////////////////////////
 
         
+
+        this.setSP=function(sp){
+            
+            this.mKrai.setSP(sp)
+        }
+
+
         this.graphics.name="xz";
         var r=this.sizeMax;
         this.graphics.beginFill(0xdcf1fa, 0.1);
@@ -273,6 +293,8 @@ export class MGridDrag  {
             this.mKrai.sizeWindow(this.width,this.height,s)
             self.korestPosit();
         }
+
+
     }
 
     set mashtab(value) {      
@@ -283,5 +305,13 @@ export class MGridDrag  {
         }
     }    
     get mashtab() { return  this._mashtab;}
+
+    set menuIndex(value) {      
+        if(this._menuIndex!=value){
+            this._menuIndex= value;
+            this.mKrai.menuIndex= value;
+        }
+    }    
+    get menuIndex() { return  this._menuIndex;}
     
 }
