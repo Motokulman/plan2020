@@ -212,8 +212,8 @@ export function Splice (_stage) {
 		}
 	}
 	function _setAllParam (nameParam, value) {
-		
-		for (var ii = 0; ii < self.arrayClass.length; ii++) {
+		//console.warn(nameParam, value,self.arrayClass)
+		for (var ii = 0; ii < self.arrayClass.length; ii++) {			
 			if (nameParam in self.arrayClass[ii]) self.arrayClass[ii][nameParam] = value;
 		}
 	}
@@ -646,7 +646,7 @@ Splice.prototype = {
 	set delph (v) {
 		if (this._delph == v) return;
 		this._delph = v;
-		this._delph = (Math.min((Math.max(this.delphMin, this._delph) || this._delph), this.delphMax) || (Math.max(this.delphMin, this._delph) || this._delph));
+		//this._delph = (Math.min((Math.max(this.delphMin, this._delph) || this._delph), this.delphMax) || (Math.max(this.delphMin, this._delph) || this._delph));
 		this._setAllParam('delph', this._delph);
 		if (this._addPoint != undefined) this._addPoint.drag();
 		if (this._addPoint1 != undefined) this._addPoint1.drag();

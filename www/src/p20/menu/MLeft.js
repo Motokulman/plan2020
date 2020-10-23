@@ -38,7 +38,12 @@ export class MLeft  {
         var aa=[
             {src:"resources/image/p1_100.png",array:[]},
             {src:"resources/image/p2_100.png",array:[]},
-            {src:"resources/image/size.png",array:[]}
+            {src:"resources/image/size.png",array:[]},
+            {src:"resources/image/w.png",array:[
+                {src:"resources/image/w0.png",array:[],id:0},
+                {src:"resources/image/w1.png",array:[],id:1},
+                {src:"resources/image/w2.png",array:[],id:2}
+            ]},
         ]
 
         this.objZ={}
@@ -69,28 +74,28 @@ export class MLeft  {
         }
 
         this.drag=function(s,p){
+            trace(s,p)
             if(s=="gallery"){
-                self.korektGallery(s,p)
-                return
+
+                //self.korektGallery(s,p)
+               // return
             }            
             self.fun(s,p);    
-        } 
-
-        this.korektGallery=function(s,p){            
-            if(p.idArr==0) {//Стрелка 2д/3д
-                self.fun("tipVisi",p.index); 
-            } 
-            if(p.idArr==1) {//Стрелка 2д/3д
-                self.fun("tipDrav",p.index); 
-            } 
         }
+        
 
         this.init(this.objZ); 
 
-    
+        this.sobMenu=function(s,p,e){
+            
+        }
+
+
   		this.sizeWindow = function(w,h,s){ 
       				
   		}
+
+
   	}
 
     set index(value) {
@@ -148,16 +153,12 @@ export class MLButGal  {
         this.button=new DButton(this.dCont,0,idArr*(this.wh+this.otstup),"",function(){
             self.fun("index",self.idArr);
         },obj.src)//,"resources/data/"+obj.id+"/100.png");
-        this.button.width=this.button.height=this.wh;
-
-
-
-        trace(this.button.y)
+        this.button.width=this.button.height=this.wh;        
 
         this.dCGal=new DCont(this.dCont);  
-        this.dCGal.x=(this.wh+this.otstup)
+        this.dCGal.x=(this.wh+this.otstup);
 
-        trace(this.dCGal.x)
+        
         this.init=function(o){ 
             if(this.gallery!=undefined)return
 
@@ -165,17 +166,18 @@ export class MLButGal  {
 
                 if(this.idArr==2) {
                     this.gallery=new DGalObj(this.dCGal,0,0,function(s,p){
-                            
+                        
+                        
                     },this)
                 }    
 
-                if(this.idArr==0||this.idArr==1) {
+                if(this.idArr==0||this.idArr==1||this.idArr==3) {
                     this.gallery=new DGallery(this.dCGal,0,0,function(){
                         var o={}
                         o.idArr=self.idArr;
                         o.index=this.index;
                         o.obj=this.obj;
-                        self.fun("gallery", o);
+                        self.fun("gIndex", o);
                     })                    
                 }            
                 this.gallery.kolII=3;

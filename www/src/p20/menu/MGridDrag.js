@@ -92,7 +92,7 @@ export class MGridDrag  {
             document.addEventListener("mouseup", mUp);
             document.addEventListener("mousemove", mMove); 
 
-            trace(">>",self.getPositPlan(),self.rectScane)
+           
 
         }
         this.klikGoem=function(e){ 

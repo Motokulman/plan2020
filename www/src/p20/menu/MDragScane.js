@@ -4,7 +4,7 @@ import { SobIndex } from './fManager/SobIndex.js';
 import { SobIndex0 } from './fManager/SobIndex0.js';
 import { SobIndex1 } from './fManager/SobIndex1.js';
 import { SobIndex2 } from './fManager/SobIndex2.js';
-
+import { SobIndex3 } from './fManager/SobIndex3.js';
 export class MDragScane  {
   	constructor(par,fun) {  		
   		this.type="MDragScane";
@@ -26,11 +26,11 @@ export class MDragScane  {
 
 
         this.actAI=undefined;
-        this.sobIndex=[]
+        this.sobIndex=[];
         this.sobIndex[0]=new SobIndex0(this);
         this.sobIndex[1]=new SobIndex1(this);
         this.sobIndex[2]=new SobIndex2(this);
- 
+        this.sobIndex[3]=new SobIndex3(this);
 
 
 
@@ -43,6 +43,11 @@ export class MDragScane  {
             }   
         }
 
+        this.sobMenu=function(s,p,p1){            
+            if(self.actAI!=undefined){                  
+                self.actAI.sobMenu(s,p,p1)
+            }  
+        }
 
        /* this.deb=new DebbugPixi(); 
         this.div.appendChild(this.deb.div);
@@ -64,7 +69,7 @@ export class MDragScane  {
             this.p20=p20;
             this.p20.sobSP=this.sobSP;
             for (var i = 0; i < this.sobIndex.length; i++) {
-                this.sobIndex[i].setP20(p20)
+                this.sobIndex[i].setP20(p20);
             }
         } 
         this.sp=undefined

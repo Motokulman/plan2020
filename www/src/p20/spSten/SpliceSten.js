@@ -5,6 +5,7 @@ import { Windows } from './Windows.js';
 import { Sten3D } from './Sten3D.js';
 */
 import { Splice } from './../sp/Splice.js';
+import { SPLWindow } from './SPLWindow.js';
 /**
 * Стена(линия)
 * @class
@@ -16,13 +17,16 @@ export function SpliceSten (_stage) {
 	this.type = 'SpliceSten';
 	this.tipe = 'SpliceSten';
 	this.stage = _stage;
+	this.par = _stage;
 	this._boolText = true;
 	this._active = false;
 	this.idUi=Math.round(Math.random()*1000);
 	this.sUi = -1;
 	this._offset=0;
 	this._bChaz=false;
-	this._bChaz1=false;
+	this._delph = 500;// толщина линии
+	
+	this._uuid=calc.generateRendom(2);
 
 	this._height = this.stage._height;
 	
@@ -42,14 +46,25 @@ export function SpliceSten (_stage) {
 	this.graphics1 = new PIXI.Graphics();
     this.content2d1.addChild(this.graphics1);
 
-   /* this.ddd=function(){
-    	if(self._offset!=0){
-    		console.warn("====",self.arrPosit1[2].y)
-    		
-    	}
+
+    this.windows=new SPLWindow(this);
+
+    this.arrayClass.push(this.windows);
+
+
+
+    this.addBlok = function(blok){    	
+    	if(blok==undefined)return -1;
+    	return this.windows.addBlok(blok);   	
     }
 
-    this.arrPosit1[2]=new PositionFun(0,0,this.ddd)*/
+    this.removeBlok = function(blok){
+    	if(blok==undefined)return -1;
+    	return this.windows.removeBlok(blok);   	
+    }
+
+
+
 
     var sahh=0
     this.aVKol
@@ -142,10 +157,7 @@ export function SpliceSten (_stage) {
 		this.content2d1.x=this.position.x;
 		this.content2d1.y=this.position.y;
 		this.content2d1.rotation=this._rotation;
-
 		this.draw1();
-
-
 		this.stage.render();
 	}
 
@@ -163,7 +175,7 @@ export function SpliceSten (_stage) {
         this.arrGran[0].x+=this.position.x;
         this.arrGran[0].y+=this.position.y;
 
-        if(this.idArr==10){
+      /*  if(this.idArr==10){
 
         	trace(a,a1,this.arrPosit[0])
         	for (var i = 0; i < this.arrPosit.length; i++) {
@@ -174,7 +186,7 @@ export function SpliceSten (_stage) {
         	for (var i = 0; i < this.arrPosit.length; i++) {
         		trace(i+"   ",this.arrPosit1[i])
         	}	
-        }
+        }*/
 
 
         this.arrGran[1].set(this.arrPosit1[5].x,this.arrPosit1[5].y);
@@ -204,23 +216,43 @@ export function SpliceSten (_stage) {
         this.arrGran[3].y+=this.position.y;
 	}
 
+	///////////////////////////////
+	
+	
+    
+	this.animat=function(time){
+		if(this.tween==undefined){
+			this.tween = new TWEEN.Tween(this.graphics);
+			this.tween.onUpdate(function(){
+				
+				self.par.render();
+			})
+		}
+		this.graphics.alpha=0;
+		this.tween.to({alpha:1},time).start();
+	}
+
+
 	//////////////////////////////
-	var bb;
+	var p,p1,p2
+	var bb,a,pr;
 	var sten;
-	var pp,pp1
+	var pp,pp1,pp2
 	this.korectOffset=function(){
 		if(this.sUi!=-1){
 			bb=false;
 			this.offset=0
-			if(sten!=undefined)if(sten.idUi==this.sUi)if(sten.life==true){				
+			if(sten!=undefined)if(sten.uuid==this.sUi)if(sten.life==true){//уже нашли и она ок				
 				bb=true;
 			}
-			if(bb==false){
+			if(this._addPoint==undefined)return
+			if(this._addPoint1==undefined)return	
+
+			if(bb==false){//ищем стенку к, если есть в списке
 				if(sten==undefined){
 					for (var i = 0; i < _stage.arrSplice.length; i++) {
 						if(_stage.arrSplice[i].life==false)continue;
-
-						if(_stage.arrSplice[i].idUi==this.sUi){
+						if(_stage.arrSplice[i].uuid==this.sUi){
 							sten=_stage.arrSplice[i]
 							bb=true;
 						}
@@ -229,15 +261,61 @@ export function SpliceSten (_stage) {
 			}
 
 			if(bb==true){
-				pp=this.delph/2-sten.delph/2
-				//pp1=sten.delph/2
-
-				this.offset+=this._bChaz ? pp : -pp
-				//this.offset+=this._bChaz1 ? pp1 : -pp1
-
 				
-			}
-		
+				p=null;
+				p1=null;
+				p2=null;
+				
+				if(this._addPoint._uuid==sten._addPoint._uuid){//0=0
+					p=this._addPoint1
+					p1=this._addPoint
+					p2=sten._addPoint1
+				}
+
+				if(this._addPoint1._uuid==sten._addPoint._uuid){//1=0
+					p=this._addPoint
+					p1=this._addPoint1
+					p2=sten._addPoint1
+				}
+
+				if(this._addPoint._uuid==sten._addPoint1._uuid){//0=0
+					p=this._addPoint1
+					p1=this._addPoint
+					p2=sten._addPoint
+				}
+
+				if(this._addPoint1._uuid==sten._addPoint1._uuid){//1=0
+					p=this._addPoint
+					p1=this._addPoint1
+					p2=sten._addPoint
+				}
+
+
+				if(p!=null){
+					a=calc.getTreeAngel(p.position,p1.position,p2.position,true)
+					pr=(a-Math.PI)/Math.PI;				
+					
+					if(this._bChaz==false){
+						if(pr==1)pr=-1
+						pp=this.delph/2-sten.delph/2;//центр
+						pp1=sten.delph//лево
+										
+						if(pr<=0){
+							this.offset=pp-pr*pp1
+						}else{
+							this.offset=pp//-pr*pp2
+						}
+					}else{
+						pp=-(this.delph/2-sten.delph/2);//центр
+						pp1=sten.delph//лево									
+						if(pr>=0){
+							this.offset=pp-pr*pp1
+						}else{
+							this.offset=pp//-pr*pp2
+						}
+					}
+				}				
+			}		
 		}
 	}
 
@@ -248,22 +326,23 @@ SpliceSten.prototype.constructor = SpliceSten;
 SpliceSten.prototype.getObj = function () {
 	var o = Splice.prototype.getObj.call(this);
 	o.type = this.type;
-	//o.windows = this.windows.getObj();
+	o.windows = this.windows.getObj();
 	o.colorSten = this.colorSten;
 	o.height = this.height;
-	o.sUi=this.sUi;	
+	o.sUi=this.sUi;
+	o.idUi=this.idUi;	
 	o.offset=this.offset;
 	o.bChaz=this.bChaz;
 	return o;
 };
 SpliceSten.prototype.setObj = function (o) {
 	Splice.prototype.setObj.call(this, o);
-	//if (o.windows !== undefined) this.windows.setObj(o.windows);
+	if (o.windows !== undefined) this.windows.setObj(o.windows);
 	if (o.boolText!== undefined)  this.boolText=o.boolText;
 	if (o.height!== undefined)  this.height=o.height;
 	if (o.col3d!== undefined ) this.col3d=o.col3d;
 	if (o.idUi!== undefined ) this.idUi=o.idUi;
-	if (o.sUi!== undefined ) this.sUi=o.sUi;	
+	if (o.sUi!== undefined ) this.sUi=o.sUi;		
 	if (o.offset!== undefined ) this.offset=o.offset;
 	if (o.bChaz!== undefined ) this.bChaz=o.bChaz;	
 	
@@ -413,7 +492,7 @@ Object.defineProperties(SpliceSten.prototype, {
 * Стена(квадрат) с 4 стен(линий)
 * Нужен для изменения внутренней и внешней дистанции
 * @class
-*/
+
 function SpliceStenSquare (_arr) {
 	var self = this;
 	this.type = 'SpliceStenSquare';
@@ -515,3 +594,4 @@ SpliceStenSquare.prototype = {
 		return this._dist1;
 	}
 };
+*/

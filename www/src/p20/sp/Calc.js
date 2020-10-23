@@ -690,6 +690,27 @@ export function Calc () {
 		};
 	}());
 
+	this.generateRendom =  function (n){
+		if(n==undefined)n=2;		
+		let s='';
+		let s1='';
+		let d0;
+		for (var i = 0; i < n; i++) {			
+			d0=Math.random() * 0xffffffff | 0;
+			s1=(d0 & 0xff).toString(16) + (d0 >> 8 & 0xff).toString(16)+ (d0 >> 16 & 0xff).toString(16)+ (d0 >> 24 & 0xff).toString(16)			
+			if(s1.length<8){
+				for (var j = 0; j < 8-s1.length+1; j++) {
+					s1+="Z";
+				}
+			}
+			s+= s1 
+			if(i!=n-1)s+="-";
+		}
+		
+		return s
+
+	}
+
 	this.diffNum = function (a, b) { // разница между числами diffNum(-1, 1) == 2
 		if (a >= 0 && b >= 0) return Math.abs(a - b);
 		if (a <= 0 && b <= 0) return Math.abs(Math.abs(a) - Math.abs(b));

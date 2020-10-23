@@ -9,6 +9,7 @@ import {  Calc } from './../Calc.js';
 
 
 import {  SPLineWord } from './SPLineWord.js';
+import {  WorldBlok } from './worldBlok/WorldBlok.js';
 /**
 * Мир для сращалок дорог
 * @class
@@ -23,6 +24,9 @@ export function SpStageSten (par,  fun) {
 	this.tipSplice = 'SpliceSten';
 	this.tipPoint = 'SpPointSten';
 	this.fun = fun;
+	this.uuid=calc.generateRendom(2);
+
+	this._delph = 500;
 	
 
 	this._color="#c5d6e0";
@@ -41,9 +45,7 @@ export function SpStageSten (par,  fun) {
 	this._activePoint=-1;
 	this._activePol=-1;
 	this._height = 300;
-
 	this._alpha=1;
-
 	this._status=2;
 	
 
@@ -57,24 +59,24 @@ export function SpStageSten (par,  fun) {
 	this.content2d2 = new PIXI.Container();
 	this.content2dPoint = new PIXI.Container();	
 	this.cont2dLine = new PIXI.Container();
+	this.cont2dBlok = new PIXI.Container();
 
 
 	this.content2d.addChild(this.content2d1);
     this.content2d.addChild(this.content2d2);
     this.content2d.addChild(this.content2dPoint);
+    this.content2d.addChild(this.cont2dBlok);
     this.content2d.addChild(this.cont2dLine);
 
 
 
-	/*this.debugPixi = new SpDebugPixi();
-	this.spCalc.setDebug(this.debugPixi);
-	this.content2d.addChild(this.debugPixi.content2d);*/
+
 
 
 
 
 	this.lineWord=new SPLineWord(this);
-
+	this.worldBlok=new WorldBlok(this);
 
 	
 
@@ -210,6 +212,7 @@ SpStageSten.prototype.getObj = function (_activ) {
 	o.color=this._color;
 	o.alpha=this._alpha;
 	o.lineWord=this.lineWord.getObj()
+	o.worldBlok=this.lineWord.getObj()
 
 	
 	return o;
@@ -218,7 +221,8 @@ SpStageSten.prototype.setObj = function (o) {
 	SpStage.prototype.setObj.call(this, o);
 	if(o.color)this.color=o.color
 	if(o.alpha)this.alpha=o.alpha	
-	if(o.lineWord)this.lineWord.setObj(o.lineWord)
+	if(o.lineWord)this.lineWord.setObj(o.lineWord);
+	if(o.worldBlok)this.lineWord.setObj(o.worldBlok);	
 	this.bigDrag()		
 };
 

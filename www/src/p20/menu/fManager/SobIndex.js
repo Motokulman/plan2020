@@ -285,6 +285,10 @@ export class SobIndex  {
         this.sobSP=function(s,p,e){ 
             trace(this.type+" sobSP >>",s,p,e)    
         }
+        
+        this.sobMenu=function(s,p,e){
+            trace(this.type+" sobMenu >>",s,p,e)    
+        }
                 
     }
 

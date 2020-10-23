@@ -25,7 +25,7 @@ export class MObject  {
         this.dCont.y=this.wh+this.otstup*4;
         
 
-
+        this.perehvat
 
         this.array=[];
 
@@ -47,7 +47,14 @@ export class MObject  {
         }
 
         this.setObject=function(obj){
-            trace(obj)            
+            trace("setObject=======",obj,this.perehvat)
+            if(this.perehvat!=undefined){
+                this.perehvat(obj)
+                this.perehvat=undefined
+                return
+            }
+
+
             this.clear();
             if(obj){                
                 for (var i = 0; i < this.array.length; i++) {

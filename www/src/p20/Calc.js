@@ -134,7 +134,7 @@ export function Calc () {
 		return false;
 	};
 
-
+	//угол с 3х точек
 	this.getTreeAngel = function (p, p1, p2, bool) {
 		a = this.getAngle(p1, p);
 		a1 = this.getAngle(p1, p2);
@@ -668,7 +668,8 @@ export function Calc () {
 		}
 		return (a * 0.5) || 0;
 	};
-
+	//C530830F-FB8C-4993-BA54-93A1CD501055
+	//42293BEF-1586-440D-A1C1-5D33266573AD
 	// возвращает уникальный id
 	this.generateUUID = (function () {
 		// http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/21963136#21963136
@@ -677,6 +678,8 @@ export function Calc () {
 			lut[ i ] = (i < 16 ? '0' : '') + (i).toString(16);
 		}
 		return function generateUUID () {
+			
+
 			var d0 = Math.random() * 0xffffffff | 0;
 			var d1 = Math.random() * 0xffffffff | 0;
 			var d2 = Math.random() * 0xffffffff | 0;
@@ -689,6 +692,26 @@ export function Calc () {
 			return uuid.toUpperCase();
 		};
 	}());
+
+	this.generateRendom =  function (n){
+		if(n==undefined)n=2;		
+		let s='';
+		let s1='';
+		let d0;
+		for (var i = 0; i < n; i++) {			
+			d0=Math.random() * 0xffffffff | 0;
+			s1=(d0 & 0xff).toString(16) + (d0 >> 8 & 0xff).toString(16)+ (d0 >> 16 & 0xff).toString(16)+ (d0 >> 24 & 0xff).toString(16)			
+			if(s1.length<8){
+				for (var j = 0; j < 8-s1.length+1; j++) {
+					s1+="Z";
+				}
+			}
+			s+= s1 
+			if(i!=n-1)s+="-";
+		}		
+		return s
+	}
+
 
 	this.diffNum = function (a, b) { // разница между числами diffNum(-1, 1) == 2
 		if (a >= 0 && b >= 0) return Math.abs(a - b);

@@ -9,17 +9,20 @@ export class MOSten extends MOBaza {
         this.typeNa="SpliceSten";
   		var self=this;
 
-        
+        this.par=par
        
   
         this.dCont=new DCont(par.dCont);        
         this.button=undefined;
         this.slid
         this.slid1
+
+
+        this.msUi=undefined
         this.postIn=function(){
            
             this.window.title="Sten";
-
+            
             var yy=this.otstup1;
 
 
@@ -43,6 +46,11 @@ export class MOSten extends MOBaza {
 
             yy+=(this.otstup1+this.wh)
 
+
+
+
+
+
             this.slid=new DSliderBig(this.window.content, this.otstup1,yy, function(s){ 
                 self.object.delph=self.slid.value 
                 self.object._addPoint.dragGG(); 
@@ -51,9 +59,15 @@ export class MOSten extends MOBaza {
             this.slid.width=this.width-this.otstup1*2;
             this.slid.okrug=1;
 
-            yy+=(this.otstup1+this.wh)
+            yy+=(this.otstup1+70)
 
-            new DLabel(this.window.content, 2,yy,"bChaz").fontSize=10
+            this.msUi=new MsUi(this,this.dCont,this.otstup1,yy)
+
+            yy+=(this.otstup1+this.msUi.height)
+
+
+           
+           /* new DLabel(this.window.content, 2,yy,"bChaz").fontSize=10
             new DLabel(this.window.content, 42,yy,"bChaz1").fontSize=10
             new DLabel(this.window.content, 92,yy,"idUi").fontSize=10
             new DLabel(this.window.content, 158,yy,"sUi").fontSize=10
@@ -94,68 +108,22 @@ export class MOSten extends MOBaza {
                             
             }, "offset", -1000, 1000);
             this.slid1.width=this.width-this.otstup1*2;
-            this.slid1.okrug=1;           
+            this.slid1.okrug=1;  */         
+            trace(yy,this.msUi.height)
+            this.window.height=yy+32;
 
-            this.window.height=this.slid1.y+50+32;
-
-
-
-
-
-/*
-            
-            
-             this.gallery=new DGSten(this.window.content,this.otstup1,120+(this.otstup1+this.wh),function(s,p){
-                
-                if(s=="index"){
-                    self.object.col3d=this.obj.id
-                    self.object.stage.col3d=this.obj.id
-                    return
-                }
-                if(s=="index1"){
-                    self.object.col3d1=this.obj.id
-                    self.object.stage.col3d1=this.obj.id
-                    return
-                }
-                if(s=="indexBig"){
-                    self.object.col3d=this.obj.id
-                    self.object.col3d1=this.obj.id
-
-                    self.object.stage.col3d=this.obj.id
-                    self.object.stage.col3d1=this.obj.id
-                    return
-                }
-            },this) 
-            this.gallery.kolII=3;
-            this.gallery.widthPic=64;
-            this.gallery.heightPic=64;
-            this.gallery.width=66*this.gallery.kolII+2;
-
-
-           for (var i = 0; i < this.arrayGal.length; i++) {
-                this.arrayGal[i].typeThree="Sten3D"
-                this.arrayGal[i].title=""
-                this.arrayGal[i].src="resources/data/"+this.arrayGal[i].id+"/128.png"
-            }
-            this.gallery.start(this.arrayGal);
-            this.gallery.height=Math.ceil(this.arrayGal.length/this.gallery.kolII)*66+2
-            this.window.height=this.gallery.height+this.gallery.y+this.otstup1+32;*/
         }        
         
         this.drag=function(){
-            self.slid.value=self.object.delph; 
+            self.slid.value=self.object.delph;
+            /* 
             self.input.value=self.object.idUi; 
             self.input1.value=self.object.sUi; 
             self.slid1.value=self.object._offset;
             self.chek.value=self.object.bChaz; 
-            self.chek1.value=self.object.bChaz1; 
-            trace("self.object._bChaz",self.object._bChaz)
-            //self.slid1.value=self.object.height;           
-           /* for (var i = 0; i < self.arrayGal.length; i++) {
-                if(self.arrayGal[i].id==self.object.col3d)self.gallery.index=i;
-                if(self.arrayGal[i].id==self.object.col3d1)self.gallery.index1=i;
-            }*/
-
+            self.chek1.value=self.object.bChaz1;*/
+          
+            self.msUi.drag();    
             
             if(!self.object.boolText)self.button1.alpha=1;
             else self.button1.alpha=0.5;
@@ -167,7 +135,8 @@ export class MOSten extends MOBaza {
 
         this.postSO=function(){ 
             this.object.funDragMenu=this.drag
-            this.window.title="Sten "+this.object.idArr+" : "+ this.object.idUi;
+            this.window.title="Sten "+this.object.idArr+" : "+ this.object.uuid;
+
             this.drag();
         }
         this.clear=function(){
@@ -189,60 +158,168 @@ export class MOSten extends MOBaza {
 
 
 
-export class DGSten extends DGallery {
-    constructor(dCont, _x, _y, _fun, par) {  
-        super(dCont, _x, _y, _fun);
+export class MsUi  {
+    constructor(par, dCont, _x, _y) {
         this.par=par
-    
+        var self=this 
+        this.otstup1=this.par.otstup1
+        this.wh=this.par.wh
 
-        this._index=-1;
-        this._index1=-1;
-        this.par=par
-        var self=this
+        this.height=this.par.wh+this.par.otstup1*2+20;
+        this.dCont=new DCont(par.dCont); 
 
-        // Функция клика по иконке
-        this.downBtn = function (s,p) {
-            if(s=="index")self.index = this.idArr; 
-            if(s=="index1")self.index1 = this.idArr; 
+        this.dCont.x=_x;
+        this.dCont.y=_y;
+        this.panel=new DPanel(this.dCont,0,0)
+        this.panel.height=this.height
+        this.panel.width=this.par.window.width-this.par.otstup1*2
 
-            if(s=="indexBig"){
-                self.index = this.idArr;
-                self.index1 = this.idArr;
-            } 
-            
-            self.obj = self.array[this.idArr].object;
-            if (self.fun) self.fun(s,p);
-        };
+        this.lebel=new DLabel(this.panel, this.otstup1,this.otstup1,"bChafghfghfhz")
+        this.lebel.fontSize=10;
+        this.lebel.width=this.panel.width
 
 
-        this.createZamen=function(){ 
-            var r=new DGBox(this.content, 0, 0, this.downBtn,  this);                 
-            return r;
-        }
 
-        var aa=0.3
-        this.dragIndex=function(){ 
-            for (var i = 0; i < this.array.length; i++) {
-                if(this._index1 == i||this._index == i){
-                    if (this._index == i) {
-                        this.array[i].activ = true;
-                        this.array[i].setAct(0,true)                      
-                        if (this._index1 != i)this.array[i].setAct(1,false)
-                    }
-                    if (this._index1 == i) {
-                        this.array[i].activ = true;
-                        this.array[i].setAct(1,true)  
-                        if (this._index != i)this.array[i].setAct(0,false)
-                    }
+        this.aS
 
-                }else {
-                    this.array[i].activ = false;
-                    this.array[i].setAct(0,false)
-                    this.array[i].setAct(1,false)                   
+        this.down=function(){
+            if(this.idArr==2||this.idArr==3){
+                self.par.object.bChaz=!self.par.object.bChaz;
+                self.par.object._addPoint.dragVokrug(); 
+                self.par.object._addPoint1.dragVokrug();
+                self.drag()
+            }
+            if(this.idArr==1){
+                self.par.object.sUi=-1
+                self.par.object.offset=0
+                self.par.object._addPoint.dragVokrug(); 
+                self.par.object._addPoint1.dragVokrug();
+                self.drag() 
+            }
+
+            if(this.idArr==0){
+                let a=[];
+                let a1=[];
+                for (var i = 0; i < self.par.object._addPoint.arrSHron.length; i++) {
+                    trace(i+"  "+self.par.object._addPoint.arrSHron[i])
+                    a.push(self.par.object._addPoint.arrSHron[i].sten)
                 }
-            } 
+                for (var i = 0; i < self.par.object._addPoint1.arrSHron.length; i++) {
+                    trace(i+"  : "+self.par.object._addPoint1.arrSHron[i])
+                    a.push(self.par.object._addPoint1.arrSHron[i].sten)
+                }
+                for (var i = 0; i < a.length; i++) {
+                    if(a[i].uuid==self.par.object.uuid)continue
+                    if(a[i].sUi!=-1)continue    
+                    let b=true;
+                    for (var j = 0; j < a1.length; j++) {
+                        if(a1[j].uuid==a[i].uuid)b=false;
+                    } 
+                    if(b)a1.push(a[i])   
+                      
+                }
+                self.aS =  a1//стены вокруг
 
+                if(a1.length==0){
+                    global.mInfo.setFun("Отсутствуют стены.","Необходимо что бы стенка привязывалась к стене с какой либо стороны от себя. Так же не отработает со стенами уже имеющими привязки")
+                }else{
+                    for (var i = 0; i < a1.length; i++) {
+                        a1[i].animat(1000)
+                    }
+                    self.help();
+                    
+                    self.par.par.perehvat=self.perehvat
+                }
+            }
         }
+        this.lh
+        this.th
+        var kol=5;
+        this.help=function(){
+            if(this.lh==undefined){
+                this.lh = new DLabel(this.panel, -100,30,"Нажмите по подсвеченым стенкам");
+                this.th=new TWEEN.Tween(this.lh);
+                this.lh.div.style.pointerEvents="none";    
+            }
+            if(kol>0){
+                this.lh.alpha=1
+                //this.lh.visible=1;
+                this.th.to({alpha:0},3000).start(); 
+                kol--
+            }
+        }
+
+
+        this.perehvat=function(o){
+            if(o && o.type&& o.type=="SpliceSten"){
+                let b=false;
+                for (var i = 0; i < self.aS.length; i++) {
+                    if(self.aS[i].uuid==o.uuid)b=true
+                }
+                if(b){
+                    self.par.object.sUi=o.uuid;
+                    self.par.object._addPoint.dragVokrug(); 
+                    self.par.object._addPoint1.dragVokrug();
+                    self.drag()
+                }else{
+                    global.mInfo.setFun("Не та стена","нажать на стены прилегающие к выбранной")    
+                }
+            }else{
+                global.mInfo.setFun("Небыла нажата стена","надо тыкнуть по стенам который были анимированы в прозрачный цвет")
+            }
+        }
+
+
+        this.arrBut=[];
+        for (var i = 0; i < 4; i++) {
+            let x=this.otstup1
+            if(i>=2)x=this.otstup1+this.otstup1+this.wh
+            let b=new DButton(this.dCont,x,this.otstup1+20,"",this.down,"resources/image/sUi_"+i+".png");
+            b.width=b.height=this.wh;
+            b.idArr=i;
+            this.arrBut[i]=b;
+        }
+
+        let xx=this.otstup1+this.otstup1+this.wh
+        this.slid=new DSliderBig(this.dCont, xx,20+this.otstup1, function(s){ 
+            self.par.object.offset=this.value;  
+            self.par.object._addPoint.dragVokrug(); 
+            self.par.object._addPoint1.dragVokrug();             
+                        
+        }, "offset", -1000, 1000);
+        this.slid.width=this.panel.width-this.slid.x-this.otstup1;
+        this.slid.okrug=1;
+        
+        xx=this.otstup1+(this.otstup1+this.wh)*2
+        this.input=new DInput(this.dCont, xx,20+this.otstup1,"" ,function(s){ 
+            self.par.object.sUi=this.value
+            self.par.object._addPoint.dragVokrug(); 
+            self.par.object._addPoint1.dragVokrug();
+            self.drag() 
+        })
+        this.input.width=this.panel.width-xx-this.otstup1;
+
+
+        this.drag=function(){
+            this.lebel.text="uuid :"+this.par.object.uuid;            
+            if(this.par.object.sUi==-1){
+                this.slid.visible=true;
+                this.arrBut[0].visible=true;
+                this.arrBut[1].visible=this.arrBut[2].visible=this.arrBut[3].visible=false;
+                this.input.visible=false;
+            }else{
+                this.slid.visible=false;
+                this.input.visible=true;
+                this.input.value=this.par.object.sUi;
+                this.arrBut[0].visible=false;
+                this.arrBut[1].visible=true; 
+                this.arrBut[2].visible=this.par.object.bChaz;
+                this.arrBut[3].visible=!this.par.object.bChaz;
+            }
+        }
+
+
+
     }
 
     set index(value) {   
@@ -253,83 +330,9 @@ export class DGSten extends DGallery {
 
 
 
-    set index1(value) {      
-        this._index1 = value;
-        this.dragIndex()
-    }    
-    get index1() { return  this._index1;}
 
 
     
 }
-export class DGBox extends DBox {
-    constructor(_cont, _x, _y, _fun,par) {  
-        super(_cont, _x, _y, _fun);
-        this.par=par
-        this.dragPic=this.par.par.par.dragPic
-        trace("adfs",this.dragPic)
-        var self=this
-        var otstup=2
-        var wh=12
-        var ab=[]
-        ab[0]=new DButton(this.content,otstup,otstup,"",function(){
-            self.fun("index");
-        });
-        ab[0].width=ab[0].height=wh;
-        ab[0].borderRadius=wh;
 
-        ab[1]=new DButton(this.content,44+otstup,otstup,"",function(){
-            self.fun("index1");
-        });
-        ab[1].width=ab[1].height=wh;
-        ab[1].borderRadius=wh;
-        
-        this.setAct=function(p,a){
-            if(a==true){
-                ab[p].alpha=1;
-                ab[p].color=dcmParam.activButton;
-            }else{
-                ab[p].alpha=0.2;
-                ab[p].color=dcmParam.color;
-            }
-        }
-
-
-        this.down = function (e) {  
-            
-            if (self.fun) self.fun("indexBig");
-        }
-        this.drag = function (e) {
-            
-            var o=self.object;
-            var l="resources/data/"+self.object.id+"/original.png";            
-            self.dragPic.start(32, l, o); 
-        }
-
-        this.mouseDownNew = function (e) {
-            self.dragPic.testDrag(5, self.down, self.drag);           
-        };
-
-
-        if(dcmParam.mobile==false){
-            this.image.image.removeEventListener("mousedown", this.mouseDown)
-            this.panel.div.removeEventListener("mousedown", this.mouseDown)
-            }else{
-            this.image.image.removeEventListener("touchstart", this.mouseDown)
-            this.panel.div.removeEventListener("touchstart", this.mouseDown)
-        }
-
-        
-
-
-
-        if(dcmParam.mobile==false){
-            this.image.image.addEventListener("mousedown", this.mouseDownNew)
-            this.panel.div.addEventListener("mousedown", this.mouseDownNew)
-            }else{
-            this.image.image.addEventListener("touchstart", this.mouseDownNew)
-            this.panel.div.addEventListener("touchstart", this.mouseDownNew)
-        }
-    }
-}
 

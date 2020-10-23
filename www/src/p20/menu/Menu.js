@@ -6,6 +6,7 @@ import { MGridDrag } from './MGridDrag.js';
 
 import { MStart} from './MStart.js';
 
+import { MInfo} from './MInfo.js';
 
 import { LocalStorage } from './LocalStorageE6.js';
 
@@ -50,8 +51,9 @@ export class Menu  {
         
 
 
-	    this.array[this.array.length]=this.mLeft=new MLeft(this, function(s,p){             
+	    this.array[this.array.length]=this.mLeft=new MLeft(this, function(s,p,p1){             
            	if(s=="index")self.menuIndex=p;
+           	if(s=="gIndex")self.mDragScane.sobMenu(s,p,p1);
         });
 
 		this.array[this.array.length]=this.mDragScane=new MDragScane(this, function(s,p){             
@@ -62,6 +64,11 @@ export class Menu  {
            // self.fun(s,p)
         });
 
+        this.array[this.array.length]=global.mInfo=this.mInfo = new MInfo(this.par.dCont);
+
+
+        this.array[this.array.length]=global.dragPic=this.dragPic = new DDragPic(this.par.dCont);
+        global.dragPic.whBase=this.wh
 
 		this.setP20=function(p20){
 			this.p20=p20;

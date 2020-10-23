@@ -73,7 +73,7 @@ export class SobIndex1  extends SobIndex {
                 point1.position.set(p.position.x,p.position.y);
                 point1.dragPost()
 
-                activSten.delph=500; 
+                //activSten.delph=500; 
 
                 self.par.par.mObject.setObject(point)      
                 

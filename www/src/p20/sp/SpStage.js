@@ -76,7 +76,7 @@ export function SpStage () {
 	*/
 	this.spCalc = new SpCalc();
 
-	trace(window)
+
 	window.calc=new Calc()
 	window.PositionFun =PositionFun
 	window.Position =Position
