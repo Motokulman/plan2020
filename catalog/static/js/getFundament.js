@@ -1,5 +1,3 @@
-
-
 function getFundament() {
     var fundament = [];
     if (elements.length > 0) {
@@ -23,11 +21,13 @@ function getFundament() {
                         width = bearingIndoorWidth;
                     }
                     fundament.push({ id: line.id, point0: point0, point1: point1, width: width, alignmentThisSide: line.alignmentThisSide, alignmentId: line.alignmentId, alignmentOtherSide: line.alignmentOtherSide, width: width });
+                    // if (get_ribbon_fundament_cost)
                 }
             }
         }
     }
     jsonFundament(fundament);
+    return fundament;
 }
 
 function jsonFundament(fundament) {
@@ -41,28 +41,4 @@ function jsonFundament(fundament) {
     console.log("после JSON = ", data);
     var elem1 = document.getElementById('elem');
     elem1.innerHTML = d;
-    // $.ajax({
-    //     url: 'get_response',
-    //     type: 'POST',
-    //     data: data,
-    //     cache: false,
-    //     async: false,
-    //     success: function (data) {
-    //         schemeChange = false;
-    //         console.log("Схема сохранена = ", data);
-    //     },
-    //     error: function () {
-    //         console.log("Ошибка сохранения схемы");
-    //     }
-    // });
 }
-
-
-// // я не знаю, нужен ли id каждой фундаментной линии, но пусть будет, вдруг понадобится
-// function pushFundementLine(fundamentLine) { 
-//     if (fundament.length == 0) {
-//         fundament.push({ id: 0, p0: point0, p1: point1, subType: el.subType, level: el.level, limitation: el.limitation });
-//     } else {
-//         fundament.push({ id: findMaxId(fundament) + 1, ids: el.ids, type: el.type, subType: el.subType, level: el.level, limitation: el.limitation });
-//     }
-// }

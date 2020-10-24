@@ -20,8 +20,9 @@ var lines = []; // Массив связей между точками.
 var elements = []; // Фигура, содержит массив элементов и закон их взаимодействия
 var vents = []; // Вентканалы
 var windows = []; // Содержит окна в стенах
-var doorWindows = []; // Выход на балкон: окно(а) с дверью
+var balconyGroups = []; // Выход на балкон: окно(а) с дверью 
 var openings = []; // Проходные проемы, либо с дверью, либо без
+var doors = []; // Дверные проемы
 var scale = 25; // Сделать получение из настроек и сохранение в них
 var empty_scheme = true;// Правда, если еще нет ни одного элемента в схеме
 var sizeTextSettings = { topPadding: 10, bottomPadding: 5, leftPadding: 5, rightPadding: 30 }; // массив с настройками для отображения размеров на  экране
@@ -126,6 +127,7 @@ var drawSettingsWindow = {
     blur: false,
     width: 1500,
     height: 1500,
+    top: 220, // следует решить, как именно будет вычисляться окно, ведь расстояние от черного потолка до верхнего края окна зависит от толщины перемычки, а она зависит от ширины окна. Если речь идет о стандартных перемычках конечно
     bottom: 800 // расстояние от пола до подоконника
 }
 
@@ -133,6 +135,14 @@ var drawSettingsVent = {
     strokeStyle: 'black',
     lineWidth: 2,
     fillStyle: "lime",
+    globalAlpha: 1,
+    blur: false,
+}
+
+var drawSettingsDoor = {
+    strokeStyle: 'black',
+    lineWidth: 2,
+    fillStyle: "Brown",
     globalAlpha: 1,
     blur: false,
 }
@@ -162,22 +172,25 @@ var drawSettingsDefaultRoof = {
 }
 drawSettingsRoof = Object.assign({}, drawSettingsDefaultRoof);
 
-// var windowDefault = {
-//     width: 1500,
-//     height: 1500
-// }
+var doorDefault = {
+    width: 900,
+    height: 2100
+}
 
 var openingDefault = {
     width: 1500,
-    height: 1500,
-    empty: false
+    top: 220 // высота от черного потолка
 }
 
-var doorWindowDefault = {
-    firstWindowWidth: 1500, // первое окно считается от первой точки линии p0
+var balconyGroupDefault = {
+    firstWindowWidth: 1500, // первое окно считается от первой точки линии p0   
+    firstWindowBottom: 800, // расстояние до чистого пола
     secondWindowWidth: 1500, // второе окно через дверь от первого окна
-    windowHeight: 1500, // высота окон обоих одинаковая
-    doorHeight: 2000
+    secondWindowBottom: 800, // расстояние до чистого пола
+    doorWidth: 900,
+    doorBottom: 100,// высота порога двери от беловой стяжки
+    top: 220, // высота от чистого потолка
+    doorHeight: 2100
 }
 
 var ventDefault = {
@@ -257,13 +270,6 @@ function drawShape(element, context, drawSettings) {
             // ////console.log("lineTo= ", point1);
         }
     }
-
-
-    // ////console.log("context.fillStyle= ", context.fillStyle);
-    // S.closePath();
-    // context.fillStyle = "red";
-    // context.strokeStyle = "blue";
-    // context.closePath();
     context.fill();
     context.stroke();
     for (line_id of element.ids.values()) {
@@ -333,95 +339,128 @@ function drawLine(line, context, drawSettings) {
     context.stroke();
 
     // отрисуем окна на этой линии
-    for (item of windows.values()) {
-        // ////console.log("item = ", item);
-        if (item.line_id == line.id) {
-            var x, y;
-            var L = lengthLine(point0, point1);
-            var rate = item.distance / scale;
-            rate = rate / L;
-            x = Math.abs((point0.x - point1.x)) * rate;
-            y = Math.abs((point0.y - point1.y)) * rate;
-            if (point0.x <= point1.x) {
-                x = x + point0.x;
-            } else {
-                x = point0.x - x;
+    if (typeof windows != "undefined") {
+        for (item of windows.values()) {
+            // ////console.log("item = ", item);
+            if (item.line_id == line.id) {
+                var x, y;
+                var L = lengthLine(point0, point1);
+                var rate = item.distance / scale;
+                rate = rate / L;
+                x = Math.abs((point0.x - point1.x)) * rate;
+                y = Math.abs((point0.y - point1.y)) * rate;
+                if (point0.x <= point1.x) {
+                    x = x + point0.x;
+                } else {
+                    x = point0.x - x;
+                }
+                if (point0.y <= point1.y) {
+                    y = y + point0.y;
+                } else {
+                    y = point0.y - y;
+                }
+                drawWindow(x, y, ctx_0, drawSettingsWindow);
             }
-            if (point0.y <= point1.y) {
-                y = y + point0.y;
-            } else {
-                y = point0.y - y;
-            }
-            drawWindow(x, y, ctx_0, drawSettingsWindow);
         }
     }
     // отрисуем doow windows на этой линии
-    for (item of doorWindows.values()) {
-        // ////console.log("item = ", item);
-        if (item.line_id == line.id) {
-            var x, y;
-            var L = lengthLine(point0, point1);
-            var rate = item.distance / scale;
-            rate = rate / L;
-            x = Math.abs((point0.x - point1.x)) * rate;
-            y = Math.abs((point0.y - point1.y)) * rate;
-            if (point0.x <= point1.x) {
-                x = x + point0.x;
-            } else {
-                x = point0.x - x;
+    if (typeof balconyGroups != "undefined") {
+        for (item of balconyGroups.values()) {
+            // ////console.log("item = ", item);
+            if (item.line_id == line.id) {
+                var x, y;
+                var L = lengthLine(point0, point1);
+                var rate = item.distance / scale;
+                rate = rate / L;
+                x = Math.abs((point0.x - point1.x)) * rate;
+                y = Math.abs((point0.y - point1.y)) * rate;
+                if (point0.x <= point1.x) {
+                    x = x + point0.x;
+                } else {
+                    x = point0.x - x;
+                }
+                if (point0.y <= point1.y) {
+                    y = y + point0.y;
+                } else {
+                    y = point0.y - y;
+                }
+                drawBalconyGroup(x, y, ctx_0, drawSettingsWindow);
             }
-            if (point0.y <= point1.y) {
-                y = y + point0.y;
-            } else {
-                y = point0.y - y;
-            }
-            drawDoorWindow(x, y, ctx_0, drawSettingsWindow);
         }
     }
     // отрисуем vent на этой линии
-    for (item of vents.values()) {
-        // ////console.log("item = ", item);
-        if (item.line_id == line.id) {
-            var x, y;
-            var L = lengthLine(point0, point1);
-            var rate = item.distance / scale;
-            rate = rate / L;
-            x = Math.abs((point0.x - point1.x)) * rate;
-            y = Math.abs((point0.y - point1.y)) * rate;
-            if (point0.x <= point1.x) {
-                x = x + point0.x;
-            } else {
-                x = point0.x - x;
+    if (typeof vents != "undefined") {
+        for (item of vents.values()) {
+            // ////console.log("item = ", item);
+            if (item.line_id == line.id) {
+                var x, y;
+                var L = lengthLine(point0, point1);
+                var rate = item.distance / scale;
+                rate = rate / L;
+                x = Math.abs((point0.x - point1.x)) * rate;
+                y = Math.abs((point0.y - point1.y)) * rate;
+                if (point0.x <= point1.x) {
+                    x = x + point0.x;
+                } else {
+                    x = point0.x - x;
+                }
+                if (point0.y <= point1.y) {
+                    y = y + point0.y;
+                } else {
+                    y = point0.y - y;
+                }
+                drawVent(x, y, ctx_0, drawSettingsVent);
             }
-            if (point0.y <= point1.y) {
-                y = y + point0.y;
-            } else {
-                y = point0.y - y;
-            }
-            drawVent(x, y, ctx_0, drawSettingsVent);
         }
     }
     // отрисуем openings на этой линии
-    for (item of openings.values()) {
-        // ////console.log("item = ", item);
-        if (item.line_id == line.id) {
-            var x, y;
-            var L = lengthLine(point0, point1);
-            var rate = item.distance / scale;
-            rate = rate / L;
-            x = Math.abs((point0.x - point1.x)) * rate;
-            y = Math.abs((point0.y - point1.y)) * rate;
-            if (point0.x <= point1.x) {
-                x = x + point0.x;
-            } else {
-                x = point0.x - x;
+    if (typeof openings != "undefined") {
+        for (item of openings.values()) {
+            // ////console.log("item = ", item);
+            if (item.line_id == line.id) {
+                var x, y;
+                var L = lengthLine(point0, point1);
+                var rate = item.distance / scale;
+                rate = rate / L;
+                x = Math.abs((point0.x - point1.x)) * rate;
+                y = Math.abs((point0.y - point1.y)) * rate;
+                if (point0.x <= point1.x) {
+                    x = x + point0.x;
+                } else {
+                    x = point0.x - x;
+                }
+                if (point0.y <= point1.y) {
+                    y = y + point0.y;
+                } else {
+                    y = point0.y - y;
+                }
+                drawOpening(x, y, ctx_0, drawSettingsOpening);
             }
-            if (point0.y <= point1.y) {
-                y = y + point0.y;
-            } else {
-                y = point0.y - y;
+        }
+    }
+    // отрисуем doors на этой линии
+    if (typeof doors != "undefined") {
+        for (item of doors.values()) {
+            // ////console.log("item = ", item);
+            if (item.line_id == line.id) {
+                var x, y;
+                var L = lengthLine(point0, point1);
+                var rate = item.distance / scale;
+                rate = rate / L;
+                x = Math.abs((point0.x - point1.x)) * rate;
+                y = Math.abs((point0.y - point1.y)) * rate;
+                if (point0.x <= point1.x) {
+                    x = x + point0.x;
+                } else {
+                    x = point0.x - x;
+                }
+                if (point0.y <= point1.y) {
+                    y = y + point0.y;
+                } else {
+                    y = point0.y - y;
+                }
+                drawDoor(x, y, ctx_0, drawSettingsDoor);
             }
-            drawOpening(x, y, ctx_0, drawSettingsOpening);
         }
     }
 }
@@ -472,8 +511,31 @@ function drawOpening(x, y, context, drawSettings) {
     context.fill();
 }
 
-function drawDoorWindow(x, y, context, drawSettings) {
-    // ////console.log("drawShape element = ", element);
+function drawDoor(x, y, context, drawSettings) {
+    context.strokeStyle = drawSettings.strokeStyle;
+    context.lineWidth = drawSettings.lineWidth;
+    context.globalAlpha = drawSettings.globalAlpha;
+    if (drawSettings.empty == true) {
+        context.fillStyle = drawSettings.fillStyleEmpty;
+    } else {
+        context.fillStyle = drawSettings.fillStyleDoor;
+    }
+    if (drawSettings.blur == true) {
+        context.shadowBlur = 5;
+        context.shadowColor = "blue";
+    }
+
+    context.beginPath();
+    context.moveTo(x - 5, y - 10);
+    context.lineTo(x + 5, y - 10);
+    context.lineTo(x + 5, y + 10);
+    context.lineTo(x - 5, y + 10);
+    context.closePath();
+    context.stroke();
+    context.fill();
+}
+function drawBalconyGroup(x, y, context, drawSettings) {
+    // ////console.log("drawShape element = ", element); drawBalconyGroup
     context.strokeStyle = drawSettings.strokeStyle;
     context.lineWidth = drawSettings.lineWidth;
     context.fillStyle = drawSettings.fillStyle;
