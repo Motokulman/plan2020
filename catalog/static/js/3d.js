@@ -49,14 +49,14 @@ function make3d() {
         for (roof_element of elements.values()) {
             if (roof_element.type == "roof") {
                 for (lin_id of roof_element.ids.values()) {
-                    //console.log("**************** new roof line ************");
+                    ////console.log("**************** new roof line ************");
                     var roof_line = lines.find(l => l.id == lin_id);
-                    //console.log("roof_line = ", roof_line);
+                    ////console.log("roof_line = ", roof_line);
                     var roof_point0 = points.find(point => point.id == roof_line.id0);
                     var roof_point1 = points.find(point => point.id == roof_line.id1);
                     var roof_line_points = [];
                     roof_line_points.push(roof_point0, roof_point1);
-                    // //console.log("roof_line_points до добавления высоты = ", roof_line_points);
+                    // ////console.log("roof_line_points до добавления высоты = ", roof_line_points);
                     // определим высоту кровельных точек
                     for (k = 0; k < 2; k++) {
                         var roof_point_height = roof_line_points[k].height;
@@ -64,6 +64,7 @@ function make3d() {
                         if (roof_line_points[k].is_floor_2 == true) roof_point_height = roof_point_height + levels.get('floor_2').height;
                         if (roof_line_points[k].is_floor_3 == true) roof_point_height = roof_point_height + levels.get('floor_3').height;
                         roof_line_points[k].total_height = roof_point_height;
+                        console.log("total_height = ", roof_line_points);
                     }
                     // //console.log("roof_line_points после добавления высоты = ", roof_line_points);
                     // далее находим пересечения линии стены с данной гранью
@@ -86,7 +87,7 @@ function make3d() {
                             common_p.x = (b_roof - b_wall) / (k_wall - k_roof);
                             common_p.y = k_wall * common_p.x + b_wall;
                         }
-                        //console.log("common_p = ", common_p);
+                        ////console.log("common_p = ", common_p);
                         // проверяем, лежит ли найденная точка на прямой линии стены и на лиии кровли
                         if ((typeof common_p.x != "undefined") && straightAffiliation(wall_point0, wall_point1, common_p) && straightAffiliation(roof_point0, roof_point1, common_p)) {
                             // если да, то продолжаем только если найденная общая точка не сопадает ни с первой точкой линии чтены, ни с последней
@@ -98,18 +99,15 @@ function make3d() {
 
                                     } else {
                                         common_p.height = roof_line_points[0].total_height + Math.abs(roof_line_points[1].total_height - roof_line_points[0].total_height) * (Math.abs(common_p.y - roof_point0.y)) / Math.abs((roof_point1.y - roof_point0.y));
-
                                     }
                                 } else {// то определяем пропорцию по координатам x
                                     if (roof_line_points[0].total_height > roof_line_points[1].total_height) {
                                         common_p.height = roof_line_points[0].total_height - Math.abs(roof_line_points[1].total_height - roof_line_points[0].total_height) * (Math.abs(common_p.x - roof_point0.x)) / Math.abs((roof_point1.x - roof_point0.x));
                                     } else {
                                         common_p.height = roof_line_points[0].total_height + Math.abs(roof_line_points[1].total_height - roof_line_points[0].total_height) * (Math.abs(common_p.x - roof_point0.x)) / Math.abs((roof_point1.x - roof_point0.x));
-
                                     }
                                 }
                                 line3dPoints.push(common_p);
-
                             }
                         }
 
@@ -118,30 +116,22 @@ function make3d() {
                     for (d = 0; d < 2; d++) {
                         // найдем коэффициенты произвольной прямой, которую будем использовать для поиска пересечений с гранями для определения ската, внутри которого лежит точка стены
                         //найдем коээфициенты уравнения прямой линии стены
-                        //console.log("wall_points[d] = ", wall_points[d]);
+                        ////console.log("wall_points[d] = ", wall_points[d]);
                         var plus_x = 11;
                         var plus_y = 465;
-                        // var new_point_x = wall_points[d].x + plus_x;
-                        // var new_point_y = wall_points[d].y + plus_y;
                         k_x = plus_y / plus_x;
                         b_x = ((wall_points[d].x + plus_x) * wall_points[d].y - wall_points[d].x * (wall_points[d].y + plus_y)) / plus_x;
-                        //console.log("k_x = ", k_x);
-                        //console.log("b_x = ", b_x);
                         var common_x = [];
 
                         common_x.x = (b_roof - b_x) / (k_x - k_roof);
                         common_x.y = k_x * common_x.x + b_x;
-                        // ctx_0.beginPath();
-                        // ctx_0.moveTo(point0.x, point0.y);
-                        // ctx_0.lineTo(point1.x, point1.y);
-                        // ctx_0.stroke();
                         var pp = {
                             x: common_x.x,
                             y: common_x.y
                         }
                         pp = mmToPix(pp);
                         drawPoint(pp, "red", 3);
-                        //console.log("common_x = ", common_x);
+                        ////console.log("common_x = ", common_x);
                         // проверяем, лежит ли найденный х на прямой линии кровельного ребра а еще и смотрим только в одну сторону
                         if ((typeof common_x.x != "undefined") && straightAffiliation(roof_point0, roof_point1, common_x) && (common_x.x > wall_points[d].x) && (common_x.y > wall_points[d].y)) {
                             if (d == 0) {
@@ -164,11 +154,6 @@ function make3d() {
                             }
                         }
                     }
-
-
-
-
-
                 }
             }
         } // конец перебора roof  
@@ -177,38 +162,26 @@ function make3d() {
         var id_roof_wall_points = [];
         var roof_0_id, roof_1_id;
         for (item of intersection_0) {
-            //console.log("item of intersection_0 = ", item);
+            ////console.log("item of intersection_0 = ", item);
             if (Math.abs(item[1] % 2) == 1) {
                 roof_0_id = item[0];
             }
         }
         for (item of intersection_1) {
-            //console.log("item of intersection_1 = ", item);
+            ////console.log("item of intersection_1 = ", item);
             if (Math.abs(item[1] % 2) == 1) {
                 roof_1_id = item[0];
             }
         }
         id_roof_wall_points.push(roof_0_id, roof_1_id);
 
-        //console.log("id_roof_wall_points = ", id_roof_wall_points);
-        // var dis_to_intersec = [];
-        // dis_to_intersec.push(distance_to_intersection_0);
-        // dis_to_intersec.push(distance_to_intersection_1);
-        // //console.log("dis_to_intersec = ", dis_to_intersec);
+        ////console.log("id_roof_wall_points = ", id_roof_wall_points);
+
         // разберемся с координатами точек над точками линии стены
 
         for (i = 0; i < 2; i++) {
             // теперь определим, внутри каких скатов находятся точки данной линии стен
             var min, id_roof_wall_point = id_roof_wall_points[i];
-
-            // var arr = dis_to_intersec[i];
-            // for (item of dis_to_intersec[i].values()) { }
-            // if ((typeof min == "undefined") || (item.dist < min)) {
-            //     min = item.dist;
-            //     id_roof_wall_point = item.roof_id;
-            // }
-
-            //console.log("id_roof_wall_point = ", id_roof_wall_point);
 
             // Зная, в какие скаты попадают наши крайние точки, определяем их высоту
             // сначала, зная id ската, найдем его три любые точки для составления уравнения плоскости
@@ -237,7 +210,7 @@ function make3d() {
                 flat_points.push(flat_point);
             }
 
-            //console.log("flat_points  = ", flat_points);
+            ////console.log("flat_points  = ", flat_points);
             // определим третью координату наших точек плоскости - высоту
 
             var a, b, c, f, h, m, o, s;
@@ -249,15 +222,6 @@ function make3d() {
             m = flat_points[2].x - flat_points[0].x;
             o = flat_points[2].y - flat_points[0].y;
             s = flat_points[2].height - flat_points[0].height;
-
-            // a = wall_points[i].x - flat_point1.x;
-            // b = wall_points[i].y - flat_point1.y;
-            // c = flat_point2.x - flat_point1.x;
-            // f = flat_point2.y - flat_point1.y;
-            // h = flat_point2.height - flat_point1.height;
-            // m = flat_point3.x - flat_point1.x;
-            // o = flat_point3.y - flat_point1.y;
-            // s = flat_point3.height - flat_point1.height;
 
             var searched_height = (c * b * s + a * h * o - a * f * s - b * h * m) / (c * o - m * f) + flat_points[0].height;
             var common_p = {
@@ -273,8 +237,8 @@ function make3d() {
             };
             line3dPoints.push(common_p);
         }
-        //console.log("points = ", points);
-        //console.log("line3dPoints = ", line3dPoints);
+        ////console.log("points = ", points);
+        ////console.log("line3dPoints = ", line3dPoints);
         // если есть грань, общая для двух скатов, то там  будут дубликаты точек. Удалим их.
         var result = [];
         result.push({
@@ -293,12 +257,15 @@ function make3d() {
                 result.push(line3dPoints[i]);
             }
         }
-        // console.log("result = ", result);
+        //console.log("result = ", result);
         return result;
 
     }
 
     function drawWalls() {
+        console.log("elements = ", elements);
+        console.log("lines = ", lines);
+        console.log("points = ", points);
         // сбрасываем массив мтроительных объемов:
         volumes = { // площади стен и другие строительные объемы для быстрого расчета стоимости
             walls: {
@@ -308,22 +275,21 @@ function make3d() {
             },
         };
         for (element of elements.values()) { // отрисуем стены
-            if (element.type == "wall") {
-                for (line_id of element.ids.values()) {
-                    //console.log("line_id = ", line_id);
+            if (element.type == "wall") {  // перебираем элементы
+                var element_square = 0;
+                for (line_id of element.ids.values()) {  // перебираем линии в элементе
                     var wall_line = lines.find(li => li.id == line_id);
                     var vert3D = getWallLine3dCoords(wall_line);
                     //console.log("vert3D = ", vert3D);
                     if (vert3D.length >= 3) { // если это не колонна 
                         vert2D = get2DFrom3DVertices(vert3D);
-                        // console.log("vert2D = ", vert2D);
                         var geometry = new THREE.Geometry();
                         for (v of vert3D.values()) {
                             var a = new THREE.Vector3(v.x, v.height, v.y);
                             geometry.vertices.push(a);
                         }
                         var triangles = Delaunay.triangulate(vert2D);
-                        for (i = 0; i < triangles.length; i = i + 3) {
+                        for (i = 0; i < triangles.length; i = i + 3) {  // перебираем все треугольники этой линии
                             var a = new THREE.Face3(triangles[i], triangles[i + 1], triangles[i + 2]);
                             geometry.faces.push(a);
 
@@ -343,21 +309,10 @@ function make3d() {
                                 x: z[0],
                                 y: z[1]
                             }
-                            var square = triangleSquare(a, b, c);
-                            // теперь заносим вычисленную площадь в массив всех объемов
-                            if (element.subType.indexOf("bearing") >= 0) { // если это несущая стена
-                                if (element.subType.indexOf("outdoor") >= 0) { // наружная стена
-                                    volumes.walls.outdoor = volumes.walls.outdoor + square;
-                                } else if (element.subType.indexOf("indoor") >= 0) {
-                                    volumes.walls.indoor_bearing = volumes.walls.indoor_bearing + square;
-                                }
-                            } else if (element.subType.indexOf("partition") >= 0) {
-
-                            }
-                            console.log("volumes = ", volumes);
+                            element_square = element_square + triangleSquare(a, b, c);
                         }
 
-                        // console.log("triangle = ", triangle);
+                        //console.log("triangles = ", triangles);
                         geometry.computeVertexNormals();
                         var material = new THREE.MeshPhongMaterial({ color: 0x44aa88, side: THREE.DoubleSide }); // side: THREE.DoubleSide, // отрисовка обратной стороны. Замедляет, и не всегда нужна
                         var cube = new THREE.Mesh(geometry, material);
@@ -373,14 +328,124 @@ function make3d() {
                     } else { // если это колонна, то есть всего две координаты, то делаем из нее объемную фигуру и рисуем
 
                     }
+                } // конец перебора линий в элементе
+                // вычтем из полученной площади элемента площадь всех проемов в нем
+                element_square = element_square - getElementApertures(element);
+                // console.log("element_square  = ", element_square);
+                // теперь заносим вычисленную площадь в массив всех объемов
+                if (element.subType.indexOf("bearing") >= 0) { // если это несущая стена
+                    if (element.subType.indexOf("outdoor") >= 0) { // наружная стена
+                        volumes.walls.outdoor = volumes.walls.outdoor + element_square;
+                    } else if (element.subType.indexOf("indoor") >= 0) {
+                        volumes.walls.indoor_bearing = volumes.walls.indoor_bearing + element_square;
+                    }
+                } else if (element.subType.indexOf("partition") >= 0) {
+                    volumes.walls.partition = volumes.walls.partition + element_square;
                 }
-            }
+                // console.log("volumes = ", volumes);
+            } // конец перебора элементов
         }
     }
 
     drawWalls();
 
+    function getLineApertures(line, level) { // функция, находящая все виды проемов на линии и возвращает их площадь level - строка
+        var aperturesSquares = {
+            windows: 0,
+            balconyGroups: 0,
+            openings: 0,
+            doors: 0
+        };
+        if (typeof windows != "undefined") {
+            for (item of windows.values()) {
+                // //////console.log("item = ", item);
+                if (item.line_id == line.id) {
+                    var pure_height = parseInt(levels.get(level).height);
+                    // var ceiling = parseInt(levels.get(level).ceiling);
+                    // var screed = parseInt(levels.get(level).screed);
+                    var top = item.top;
+                    var bottom = item.bottom;
+                    var width = item.width;
+                    var height = pure_height - top - bottom;
+                    var square = height * width;
+                    aperturesSquares.windows = aperturesSquares.windows + square;
+                }
+            }
+        }
+        if (typeof openings != "undefined") {
+            for (item of openings.values()) {
+                // //////console.log("item = ", item);
+                if (item.line_id == line.id) {
+                    var pure_height = parseInt(levels.get(level).height);
+                    // var ceiling = parseInt(levels.get(level).ceiling);
+                    // var screed = parseInt(levels.get(level).screed);
+                    var top = item.top;
+                    var bottom = item.bottom;
+                    var width = item.width;
+                    var height = pure_height - top - bottom;
+                    var square = height * width;
+                    aperturesSquares.openings = aperturesSquares.openings + square;
+                }
+            }
+        }
+        if (typeof doors != "undefined") {
+            for (item of doors.values()) {
+                // //////console.log("item = ", item);
+                if (item.line_id == line.id) {
+                    var pure_height = parseInt(levels.get(level).height);
+                    // var ceiling = parseInt(levels.get(level).ceiling);
+                    // var screed = parseInt(levels.get(level).screed);
+                    var height = item.height;
+                    var width = item.width;
+                    var square = height * width;
+                    aperturesSquares.doors = aperturesSquares.doors + square;
+                }
+            }
+        }
+        if (typeof balconyGroups != "undefined") {
+            for (item of balconyGroups.values()) {
+                // //////console.log("item = ", item);
+                if (item.line_id == line.id) {
+                    var pure_height = parseInt(levels.get(level).height);
+                    // var ceiling = parseInt(levels.get(level).ceiling);
+                    // var screed = parseInt(levels.get(level).screed);
+                    var top = item.top;
+                    var first_window_width = item.firstWindowWidth;
+                    var second_window_width = item.secondWindowWidth;
+                    var first_window_bottom = item.firstWindowBottom;
+                    var second_window_bottom = item.secondWindowBottom;
+                    var door_bottom = item.doorBottom;
+                    var door_width = item.doorWidth;
 
+                    var first_window_height = pure_height - top - first_window_bottom;
+                    var second_window_height = pure_height - top - second_window_bottom;
+                    var door_height = pure_height - top - door_bottom;
+                    var balconyGroup_square = first_window_height * first_window_width + second_window_height * second_window_width + door_height * door_width;
+                    aperturesSquares.balconyGroups = aperturesSquares.balconyGroups + balconyGroup_square;
+                }
+            }
+        }
+        return aperturesSquares;
+    }
+
+    // функция вычисляющая площади всех проемов на элементе
+    function getElementApertures(element) {
+        var squares = {
+            windows: 0,
+            balconyGroups: 0,
+            openings: 0,
+            doors: 0
+        };
+        for (line_id of element.ids.values()) {
+            var line = lines.find(li => li.id == line_id);
+            squares.windows = squares.windows + getLineApertures(line, element.level).windows;
+            squares.balconyGroups = squares.balconyGroups + getLineApertures(line, element.level).balconyGroups;
+            squares.openings = squares.openings + getLineApertures(line, element.level).openings;
+            squares.doors = squares.doors + getLineApertures(line, element.level).doors;
+        }
+        var total = squares.windows + squares.balconyGroups + squares.openings + squares.doors;
+        return total;
+    }
 
 
     function drawRoof() {// отрисуем кровлю
@@ -415,7 +480,7 @@ function make3d() {
         }
     }
     drawRoof();
-    // ////console.log("geometry delete transparent= ", geometry);
+    // //////console.log("geometry delete transparent= ", geometry);
 
     // geometry.vertices.push(
     //     new THREE.Vector3(-1, -1, 1),  // 0
@@ -456,7 +521,7 @@ function make3d() {
     // const saturation = 1;
     // const luminance = .5;
     // material.color.setHSL(hue, saturation, luminance);
-    // ////console.log('material = ', material);
+    // //////console.log('material = ', material);
 
     // 
 
@@ -475,7 +540,7 @@ function make3d() {
     // requestAnimationFrame(render);
     function render() {
         // time *= 0.001;  // конвертировать время в секунды
-        // ////console.log('mousePos3d = ', mousePos3d);
+        // //////console.log('mousePos3d = ', mousePos3d);
         // cube.rotation.y = - mousePos3d.x / 100;
         // cube.rotation.x = mousePos3d.y / 100;   
         // camera.position.x = mousePos3d.y;
@@ -487,7 +552,7 @@ function make3d() {
 
 
         requestAnimationFrame(render);
-        // ////console.log("camera.position = ", camera.position);
+        // //////console.log("camera.position = ", camera.position);
         controls.update();
         renderer.render(scene, camera);
     }

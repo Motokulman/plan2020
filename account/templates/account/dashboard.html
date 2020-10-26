@@ -1,9 +1,23 @@
 {% extends "base_generic.html" %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-<h1>Dashboard</h1>
-<p>Welcome to your dashboard.
-    You can <a href="{% url 'edit' %}">edit your profile</a> or
-    <a href="{% url 'password_change' %}">change your password</a>.
+<h1>Личный кабинет</h1>
+<p><a href="{% url 'edit' %}">Редактировать профиль</a> или
+    <a href="{% url 'password_change' %}">Сменить пароль</a>.
 </p>
+<h1>Мои проекты</h1>
+
+<a href="{% url 'plan_create' %}">Создать проект</a>
+{% if my_plans_list %}
+<ul>
+    {% for plan in my_plans_list %}
+    <li>
+        <a href="{{ plan.get_absolute_url }}">{{ plan.title }}, (id: {{ plan.id }})</a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Пока у вас нет ни одного проекта...</p>
+{% endif %}
+
 {% endblock %}

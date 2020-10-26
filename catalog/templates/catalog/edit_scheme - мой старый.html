@@ -1,0 +1,315 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<!-- стили для модальных окон-->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/sunny/jquery-ui.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+
+<h3>Проект: {{ plan_title }}</h3>
+<h4>Тест: {{ test }}</h4>
+
+<div class="container-fluid">
+  <div class="row">
+
+
+    <div class="col-sm-10" id="edit-field">
+      <div id="stage">
+        <canvas id="canvas_0" style="border: 1px solid; left: 50px; top: 20px;" width="800" height="700"></canvas>
+        <canvas id="canvas_1" style="border: 1px solid;  left: 50px; top: 20px;" width="800" height="700"></canvas>
+        <canvas id="canvas_2" style="border: 1px solid; " width="900" height="740"></canvas>
+        <canvas id="canvas_3" style="border: 1px solid; " width="900" height="740"></canvas>
+      </div>
+    </div>
+    <div class="col-sm-2">
+      <div id="line_type_selector" class="btn-group">
+        <button id="straight" type="button" class="btn btn-light">Прямая</button>
+        <!-- <button id="curve" type="button" class="btn btn-light">Кривая</button> -->
+        <button id="polygon" type="button" class="btn btn-light">Многоугольник</button>
+        <select id="polygon_sides" name="">
+          <option value="2">2</option>
+          <option value="3" selected>3</option>
+          <option value="4">4</option>
+        </select>
+      </div>
+
+      <div id="level_selector">
+        <div class="btn-group">
+          <button id="floor_1" type="button" class="btn btn-light">1 эт</button>
+          <button id="floor_2" type="button" class="btn btn-light">2 эт</button>
+          <button id="floor_3" type="button" class="btn btn-light">3 эт</button>
+        </div>
+      </div>
+
+      <div id="action_selector">
+        <div class="btn-group">
+          <button id="none" type="button" class="btn btn-light">Выбирать</button>
+          <button id="draw" type="button" class="btn btn-light">Рисовать</button>
+          <button id="limitation" type="button" class="btn btn-light">Ограничить</button>
+          <button id="side_alignment" type="button" class="btn btn-light">Подровнять</button>
+          <!-- <button id="define_fasade" type="button" class="btn btn-light">Офасадить</button> -->
+        </div>
+      </div>
+
+      <div id="element_selector">
+        <div class="btn-group">
+          <p>
+            <button id="wall" type="button" class="btn btn-light">Стена</button>
+            <button id="entrance_group" type="button" class="btn btn-light">Входная группа</button>
+            <button id="stairwell" type="button" class="btn btn-light">Лестничный пролёт</button>
+            <button id="plate_garage" type="button" class="btn btn-light">Пол гаража</button>
+            <button id="roof" type="button" class="btn btn-light">Кровля</button>
+            <!-- <label>Перекрытия:</label> -->
+            <button id="indoor_plate" type="button" class="btn btn-light">Внутреннее перекрытие</button>
+            <button id="outdoor_plate" type="button" class="btn btn-light">Открытое перекрытие</button>
+            <button id="steps" type="button" class="btn btn-light">Ступени</button>
+            <button id="window" type="button" class="btn btn-light">Окно</button>
+            <!-- <button id="balcony_group" type="button" class="btn btn-light">Дверь + окно</button> -->
+            <button id="balcony_group" type="button" class="btn btn-light">Балконная группа</button>
+            <!-- Проем и двери решено разделить, так как у них разные зависимомти высот  -->
+            <button id="opening" type="button" class="btn btn-light">Проем</button>
+            <button id="door" type="button" class="btn btn-light">Дверь</button> 
+            <button id="vent" type="button" class="btn btn-light">Вентканал</button>
+            <!-- <button id="plate_contour" type="button" class="btn btn-light">Контур перекрытия</button> -->
+          </p>
+        </div>
+      </div>
+
+
+
+      <!-- <a href="{% url 'get_response'  plan_id  %}">Расчет</a>  -->
+      <div id="" class="btn-group">
+        <button id="save" type="button" class="btn btn-light">Сохранить</button>
+        <button id="check" type="button" class="btn btn-light">Проверить</button>
+        <button id="post" type="button" class="btn btn-light">Выложить</button>
+        <button id="restore" type="button" class="btn btn-light">Получить</button>
+      </div>
+
+      <div id="test_buttons" class="btn-group">
+        <button id="3d" type="button" class="btn btn-light">3D</button>
+        <button id="get_fundament" type="button" class="btn btn-light">Получить фундамент</button>
+      </div>
+
+
+      <form id="canvas_form" class="canvas-field" action="" name="{{ plan_id}}" method="POST">
+        {% csrf_token %}
+      </form>
+
+
+      <label for="roof_material_type">Материал кровли:</label>
+      <select id="roof_material_type">
+        {% for t in test %}
+        <option value="{{ t.identifier }}">{{ t.name }}, {{ t.material_type.name }}</option>
+        {% endfor %}
+      </select>
+
+      <label for="fasade_material">Облицовка фасада</label>
+
+      <input type="radio" id="brick" name="fasade_material" value="brick">
+      <label for="brick">Лицевой кирпич</label>
+
+      <label for="face_wall_brick">Стены:</label>
+      <select id="face_wall_brick">
+        {% for t in test %}
+        <option value="{{ t.identifier }}">{{ t.name }}, {{ t.material_type.name }}</option>
+        {% endfor %}
+      </select>
+      <label for="face_socle_brick">Цоколь:</label>
+      <select id="face_socle_brick">
+        {% for t in test %}
+        <option value="{{ t.identifier }}">{{ t.name }}, {{ t.material_type.name }}</option>
+        {% endfor %}
+      </select>
+
+
+      <input type="radio" id="plaster" name="fasade_material" value="plaster">
+      <label for="plaster">Штукатурка</label>
+
+      <label for="face_wall_brick">Цвет стен:</label>
+      <select id="face_wall_brick">
+        {% for t in test %}
+        <option value="{{ t.identifier }}">{{ t.name }}, {{ t.material_type.name }}</option>
+        {% endfor %}
+      </select>
+      <label for="face_socle_brick">Цвет цоколя:</label>
+      <select id="face_socle_brick">
+        {% for t in test %}
+        <option value="{{ t.identifier }}">{{ t.name }}, {{ t.material_type.name }}</option>
+        {% endfor %}
+      </select>
+
+
+      <script>
+
+        // $("#sender").click(function () {
+        //   var input = $('#user-input').val();
+
+
+        //   $.ajax({
+        //     url: "{% url 'get_response'  plan_id  %}",
+        //     data: {
+        //       'inputValue': input
+        //     },
+        //     dataType: 'json',
+        //     success: function (data) {
+        //       console.log("data = ", data)
+        //       // dataX = data["respond"];
+
+        //     }
+        //   });
+        // });
+
+      </script>
+
+
+    </div>
+  </div>
+
+
+
+</div>
+<div class="container">
+  <br>
+  <div id="elem">
+    <div id="elem-content">JSON</div>
+  </div>
+  <br>
+</div>
+
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-10" id="edit-field">
+      <canvas id="canvas" style="border: 1px solid;  top: 100px;" width="800" height="700"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="container-fluid" >
+  <div class="row">
+    <div class="col-sm-10" id="edit-field">
+      <svg shape-rendering="geometricPrecision">
+        <defs></defs>
+        <g id="main"></g>
+      </svg>
+      <h2>Click to add new point, click reset to start new canvas.</h2>
+      <a href="#">Reset</a>
+    </div>
+  </div>
+</div> -->
+
+
+<!-- Диалоговое окно для стен-->
+<div id="wall_dialog" title="Стены" class="ui-widget">
+  <div><label for="wall_type">Тип стены: </label>
+    <p><input type="radio" value="bearing" id="wall_type" name="wall_type" />Несущая</p>
+    <p><input type="radio" value="partition" id="wall_type" name="wall_type" />Перегородка</p>
+    <!-- <p><input type="radio" value="not_set" checked id="wall_type" name="wall_type" />Не задано</p> -->
+  </div>
+  <div><label for="living">Смежная с жилым помещением:</label>
+    <p><input type="radio" value="living" id="living" name="living" />Да</p>
+    <p><input type="radio" value="uninhabited" id="living" name="living" />Нет</p>
+    <!-- <p><input type="radio" value="not_set" checked id="living" name="living" />Не задано</p> -->
+  </div>
+  <div><label for="outdoor">Наружная: </label>
+    <p><input type="radio" value="outdoor" id="outdoor" name="outdoor" />Да</p>
+    <p><input type="radio" value="indoor" id="outdoor" name="outdoor" />Нет</p>
+    <!-- <p><input type="radio" value="not_set" checked id="outdoor" name="outdoor" />Не задано</p> -->
+  </div>
+</div>
+
+<!-- Диалоговое окно для кровли-->
+<div id="roof_dialog" title="Кровля" class="ui-widget">
+  <!-- <div><label for="high_side">Высота точек этой линии: </label>
+    <p><label><input type="checkbox" value="floor_1" id="floor_1" checked name="floor_1" />Высота 1 этажа</label></p>
+    <p><label><input type="checkbox" value="floor_2" id="floor_2" name="floor_2" />Высота 2 этажа</label></p>
+    <p><label><input type="checkbox" value="floor_3" id="floor_3" name="floor_3" />Высота 3 этажа</label></p>
+    <p><label><input type="number" id="ridge_height" name="ridge_height" min="-3000" max="8000" value="0">Добавочная высота</label></p>
+  </div> -->
+</div>
+
+
+
+<!-- <div id="roof_dialog" title="Кровля" class="ui-widget">
+  <div><label for="high_side">Верхняя часть: </label>
+    <p><input type="radio" value="point" id="high_side" checked name="high_side" />Точка</p>
+    <p><input type="radio" value="line" id="high_side" name="high_side" />Линия</p>
+  </div>
+  <label for="roof_slope">Определять наклон кровли:</label>
+  <p><input type="radio" value="two_heights" id="roof_slope" checked name="roof_slope" />По высоте мауэрлата и конька
+  </p>
+  <p><input type="radio" value="mauerlat" id="roof_slope" name="roof_slope" />По высоте мауэрлата и углу</p>
+  <p><input type="radio" value="ridge" id="roof_slope" name="roof_slope" />По высоте конька и углу</p>
+  <div><label for="angle">Угол (0 - горизонтально):</label>
+    <p><input type="number" id="angle" name="angle" min="3" max="80" value="20"></p>
+  </div>
+  <div><label for="ridge_height">Высота конька (от ближайшего пола): </label>
+    <p><input type="number" id="ridge_height" name="ridge_height" min="1000" max="8000" value="3000"></p>
+  </div>
+  <div><label for="mauerlat_height">Высота мауэрлата (от ближайшего пола): </label>
+    <p><input type="number" id="mauerlat_height" name="mauerlat_height" min="0" max="2000" value="0"></p>
+  </div>
+</div> -->
+
+
+{% load static %}
+<script type="text/javascript" src="{% static 'js/three.module.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/OrbitControls.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/delaunay.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/canvas.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/func.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/schemeCanvasClick.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/calc.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/3d.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/getFundament.js' %}"></script>
+
+
+{% endblock %}
+
+
+<!-- <div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h3>Фильтры</h3>
+      <h5>Несущие стены, смежные с жилыми помещениями</h5>
+      
+      <p>
+        <label for="living_bearing_material_type">Тип материала:</label>
+        <input type="checkbox" checked name="living_bearing_material_type" />
+        <select id="living_bearing_material_type" name="living_bearing_material_type">
+          <option value="">Нажмите кнопку поиска внизу</option>
+        </select>
+      </p>
+      <p>
+        <label for="living_bearing_material_unit">Материал:</label>
+        <input type="checkbox" checked name="living_bearing_material_unit" />
+        <select id="living_bearing_material_unit" name="living_bearing_material_unit">
+          <option value="">Нажмите кнопку поиска внизу</option>
+        </select>
+      </p>
+
+      <h5>Несущие стены в нежилых помещениях</h5>
+      <p>
+        <p><input type="checkbox" checked name="uninhabited_bearing_same_material" />Как и в жилых</p>
+        <label for="uninhabited_bearing_material_type">Тип материала:</label>
+        <input type="checkbox" checked name="uninhabited_bearing_material_type" />
+        <select id="uninhabited_bearing_material_type" name="uninhabited_bearing_material_type">
+          <option value="">Нажмите кнопку поиска внизу</option>
+        </select>
+      </p>
+      <p>
+        <label for="living_bearing_material_unit">Материал:</label>
+        <input type="checkbox" checked name="living_bearing_material_unit" />
+        <select id="living_bearing_material_unit" name="living_bearing_material_unit">
+          <option value="">Нажмите кнопку поиска внизу</option>
+        </select>
+      </p>
+
+      <button type="button" id="calculate">Показать самый дешевый вариант</button>
+    </div>
+  </div>
+</div> -->

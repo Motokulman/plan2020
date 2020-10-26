@@ -861,7 +861,7 @@ function getScheme() {
                 scale = d.scale;
                 vents = d.vents;
                 windows = d.windows;
-                doorWindows = d.doorWindows;
+                balconyGroups = d.balconyGroups;
                 openings = d.openings;
                 zeroPointPadding = d.zeroPointPadding;
                 checked = p.checked;
@@ -911,7 +911,7 @@ function saveScheme() {
     d.points = points;
     d.vents = vents;
     d.windows = windows;
-    d.doorWindows = doorWindows;
+    d.balconyGroups = balconyGroups;
     d.openings = openings;
     d.scale = scale;
     d.zeroPointPadding = zeroPointPadding;

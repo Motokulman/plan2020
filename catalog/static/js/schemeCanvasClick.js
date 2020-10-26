@@ -348,14 +348,11 @@ canvas_0.addEventListener('click', function (e) {
                 var l;
                 var point0;
                 var point1;
-                // var line;
                 var newWindow = [];
                 newLinesIds = [];
                 var elem = elements.find(element => element.id == set.element_id);
                 var line = lines.find(line => line.id == set.line_id);
                 // ////console.log("set = ", set);
-                // ////console.log("elem.id = ", elem.id);
-                // ////console.log("line.id = ", line.id);
                 if ((typeof line != "undefined") && (elem.type == "wall")) {
                     for (line_id of elem.ids.values()) {
                         newLinesIds.push(line_id);
@@ -364,18 +361,17 @@ canvas_0.addEventListener('click', function (e) {
                         point0 = points.find(point => point.id == line.id0);
                         point1 = points.find(point => point.id == line.id1);
                         l = lengthLine(point0, point1) / 2;
-                        newWindow = { id: windows.length, line_id: line.id, distance: l, height: drawSettingsWindow.height, width: drawSettingsWindow.width, bottom: drawSettingsWindow.bottom };
+                        newWindow = { id: windows.length, line_id: line.id, distance: l, height: drawSettingsWindow.height, width: drawSettingsWindow.width, top: drawSettingsWindow.top };
                         windows.push(newWindow);
                         var middlePoint = lineMiddle(point0, point1);
                         middlePoint = mmToPix(middlePoint);
                         drawWindow(middlePoint.x, middlePoint.y, ctx_0, drawSettingsWindow);
-                        // }
                     } else { // если этот элемент состоит из одной линии, тогда вставляем окно туда, куда ткнул пользователь
                         line = lines.find(line => line.id == newLinesIds[0]);
                         point0 = points.find(point => point.id == line.id0);
                         l = lengthLine(point0, mmOfMousePos); // пока такой вариант: не доли и не проценты, а точное расстояние, т.к. если пользователь точно введет это расстояние, оно должно сохраниться как миллиметры
                         // ////console.log("item = ", item);
-                        newWindow = { id: windows.length, line_id: line.id, distance: l, height: drawSettingsWindow.height, width: drawSettingsWindow.width, bottom: drawSettingsWindow.bottom };
+                        newWindow = { id: windows.length, line_id: line.id, distance: l, height: drawSettingsWindow.height, width: drawSettingsWindow.width, top: drawSettingsWindow.top };
                         windows.push(newWindow);
                         drawWindow(mousePos.x, mousePos.y, ctx_0, drawSettingsWindow);
                     }
@@ -386,7 +382,7 @@ canvas_0.addEventListener('click', function (e) {
                     newWindow = [];
                 }
                 break;
-            case 'door_window':
+            case 'balcony_group':
                 var set = defineElement("wall");
                 var l;
                 var point0;
@@ -399,12 +395,12 @@ canvas_0.addEventListener('click', function (e) {
                     point0 = points.find(point => point.id == line.id0);
                     l = lengthLine(point0, mmOfMousePos); // пока такой вариант: не доли и не проценты, а точное расстояние, т.к. если пользователь точно введет это расстояние, оно должно сохраниться как миллиметры
                     // ////console.log("item = ", item);
-                    newDoorWindow = { line_id: line.id, distance: l, settings: doorWindowDefault };
-                    doorWindows.push(newDoorWindow);
-                    drawDoorWindow(mousePos.x, mousePos.y, ctx_0, drawSettingsWindow);
+                    newDoorWindow = { line_id: line.id, distance: l, settings: balconyGroupDefault };
+                    balconyGroups.push(newDoorWindow);
+                    drawBalconyGroup(mousePos.x, mousePos.y, ctx_0, drawSettingsWindow);
                 }
                 break;
-            case 'opening': // автоматически определять тип двери исходя из типа стены
+            case 'opening':
                 var set = defineElement("wall");
                 var l;
                 var point0;
@@ -420,6 +416,24 @@ canvas_0.addEventListener('click', function (e) {
                     newOpening = { line_id: line.id, distance: l, settings: openingDefault };
                     openings.push(newOpening);
                     drawOpening(mousePos.x, mousePos.y, ctx_0, drawSettingsOpening);
+                }
+                break;
+            case 'door': // автоматически определять тип двери исходя из типа стены
+                var set = defineElement("wall");
+                var l;
+                var point0;
+                var point1;
+                var line;
+                var newDoor = [];
+                var elem = elements.find(element => element.id == set.element_id);
+                var line = lines.find(line => line.id == set.line_id);
+                if ((typeof line != "undefined") && (elem.type == "wall")) {
+                    point0 = points.find(point => point.id == line.id0);
+                    l = lengthLine(point0, mmOfMousePos); // пока такой вариант: не доли и не проценты, а точное расстояние, т.к. если пользователь точно введет это расстояние, оно должно сохраниться как миллиметры
+                    // ////console.log("item = ", item);
+                    newDoor = { line_id: line.id, distance: l, settings: doorDefault };
+                    doors.push(newDoor);
+                    drawDoor(mousePos.x, mousePos.y, ctx_0, drawSettingsDoor);
                 }
                 break;
             case 'indoor_plate': // внутреннее перекрытие. Рисоватьтак, чтобы первая линия была опорной
@@ -619,7 +633,7 @@ canvas_0.addEventListener('click', function (e) {
                 break;
         }
     } else if (action == "none") {
-      
+
         // выделяем элементы кликами:
         switch (selectedTool) {
             case 'wall':// если это стены, то алгоритм такой: клик - выделили, клик на ней же - сняли выделение
@@ -699,7 +713,7 @@ canvas_0.addEventListener('click', function (e) {
                 console.log("defineElement(selectedTool) = ", defineElement(selectedTool));
                 var li = lines.find(line => line.id == id);
                 selectedLines.push(li);
-                console.log("selectedLines = ", selectedLines); 
+                console.log("selectedLines = ", selectedLines);
             }
             if (selectedLines.length == 2) { // если выбраны две стены
                 readyForAlignment = true;

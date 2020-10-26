@@ -82,6 +82,7 @@ class Plan(models.Model):
     def get_absolute_url(self):
         """Returns the url to access a detail record for this Plan."""
         return reverse('plan-detail', args=[str(self.id)])
+        # return reverse('plan-detail', args=[self.id])
 
 
 
