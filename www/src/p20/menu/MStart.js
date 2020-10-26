@@ -177,6 +177,48 @@ export class MStart  {
 
 
 
+    	
+
+    	function getURLParameters(paramName){
+	        var sURL = window.document.URL.toString();
+			var arrParams = sURL.split("/");  			    		
+	        if (sURL.indexOf("?") > 0) {
+				var arrParams = sURL.split("?");
+	        	var arrURLParams = arrParams[1].split("&");
+	       	 	var arrParamNames = new Array(arrURLParams.length);
+	        	var arrParamValues = new Array(arrURLParams.length);
+	            arrParams = sURL.split("?");
+	            arrURLParams = arrParams[1].split("&");
+	            arrParamNames = new Array(arrURLParams.length);
+	            arrParamValues = new Array(arrURLParams.length);
+	            var i = 0;
+	            for (i = 0; i < arrURLParams.length; i++) {
+
+	                var sParam =  arrURLParams[i].split("=");
+	                arrParamNames[i] = sParam[0];
+	                if (sParam[1] != "")
+	                    arrParamValues[i] = unescape(sParam[1]);
+	                else
+	                    arrParamValues[i] = null;
+	            }
+	            for (i=0; i<arrURLParams.length; i++) {
+	                if (arrParamNames[i] == paramName) {
+	                    return arrParamValues[i];
+	                }
+	            }
+	            return null;
+	        }
+	    }
+
+	    var infoDlaVorodis2=getURLParameters("infoDlaVorodis2");
+	    trace("####################################",infoDlaVorodis2);
+	    if(infoDlaVorodis2!=null){
+	    	let l =new DLabel(this.w, 500,20,"infoDlaVorodis2=  "+infoDlaVorodis2)
+	    	l.fontSize=32
+	    }
+
+
+
 
 	    if(self.localStorage.object.debug&& self.localStorage.object.debug==true){	    	
 	    	this.init();

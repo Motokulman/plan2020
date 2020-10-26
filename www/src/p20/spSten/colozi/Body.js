@@ -7,7 +7,7 @@ export class Body  {
   		this.type="Body";
   		var self=this;
         this.drag=undefined;
-
+        this.target
         this.rect = {
             x:0,
             y:0,
@@ -42,7 +42,7 @@ export class Body  {
             shape.parent=this;
             this.korekt()
         }
-        this.removeShape=function(shape) {
+        this.removeShape=function(shape){
             
         }
 
