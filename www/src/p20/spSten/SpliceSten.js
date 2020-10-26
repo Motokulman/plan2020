@@ -84,9 +84,10 @@ export function SpliceSten (_stage) {
     this.colorP=_stage._colorP;
     this.colorP1=_stage._colorP1;
 
-
-	this.draw1 = function () {
-		sahh=0
+    var numBlok
+	this.draw1 = function (b) {
+		if(b==undefined)this.windows.draw()
+		sahh=0;
 		this.plusVor(-this.arrPosit[2].x,this.arrPosit[2].y)
 		this.plusVor(-this.arrPosit[1].x,this.arrPosit[1].y)
 		this.plusVor(-this.arrPosit[0].x,this.arrPosit[0].y)
@@ -104,28 +105,148 @@ export function SpliceSten (_stage) {
 		this.plusVor(-this.arrPosit[3].x,this.arrPosit[3].y)
 
 		//this.colorP=Math.random()*0xffffff
+
+		numBlok=this.windows.getNumBlok();
+		
 		this.graphics.clear();
 		this.graphics.beginFill(this._offset ==0 ? this.colorP : this.colorP1, this.alpha);
-		this.graphics.moveTo(this.arrVorur[0].x,this.arrVorur[0].y);
-		for (var i = 0; i < this.aVKol; i++) {
-			this.graphics.lineTo(this.arrVorur[i].x,this.arrVorur[i].y);
+
+
+
+		if(numBlok.length==0){
+
+			this.graphics.moveTo(this.arrVorur[0].x,this.arrVorur[0].y);
+			for (var i = 0; i < this.aVKol; i++) {
+				this.graphics.lineTo(this.arrVorur[i].x,this.arrVorur[i].y);
+			}
+			this.graphics.lineTo(this.arrVorur[0].x,this.arrVorur[0].y);
+
+
+		}else{
+			this.graphics.moveTo(-this.arrPosit[2].x,this.arrPosit[2].y);
+			this.graphics.lineTo(-this.arrPosit[1].x,this.arrPosit[1].y);
+			this.graphics.lineTo(-this.arrPosit[0].x,this.arrPosit[0].y);
+			
+
+			this.graphics.lineTo(numBlok[0],this.arrPosit[0].y);
+			this.graphics.lineTo(numBlok[0],this.arrPosit[5].y);
+
+			this.graphics.lineTo(-this.arrPosit[5].x,this.arrPosit[5].y);
+			this.graphics.lineTo(-this.arrPosit[4].x,this.arrPosit[4].y);
+			this.graphics.lineTo(-this.arrPosit[3].x,this.arrPosit[3].y);
+
+			for (var i = 0; i < numBlok.length; i+=2) {
+				if(i!=numBlok.length-2){
+					this.graphics.moveTo(numBlok[i+1],this.arrPosit[0].y);
+					this.graphics.lineTo(numBlok[i+1],this.arrPosit[5].y);
+
+					this.graphics.lineTo(numBlok[i+2],this.arrPosit[5].y);
+					this.graphics.lineTo(numBlok[i+2],this.arrPosit[0].y);
+
+					this.graphics.lineTo(numBlok[i+1],this.arrPosit[0].y);
+
+				}else{
+					this.graphics.moveTo(this.arrPosit1[5].x+this._distans,this.arrPosit1[5].y);
+					this.graphics.lineTo(this.arrPosit1[4].x+this._distans,this.arrPosit1[4].y);
+					this.graphics.lineTo(this.arrPosit1[3].x+this._distans,this.arrPosit1[3].y);
+
+					this.graphics.lineTo(this.arrPosit1[2].x+this._distans,this.arrPosit1[2].y);
+					this.graphics.lineTo(this.arrPosit1[1].x+this._distans,this.arrPosit1[1].y);
+					this.graphics.lineTo(this.arrPosit1[0].x+this._distans,this.arrPosit1[0].y);
+
+					this.graphics.lineTo(numBlok[i+1],this.arrPosit1[0].y);
+					this.graphics.lineTo(numBlok[i+1],this.arrPosit1[5].y);					
+				}
+			}
+
+			
 		}
-		this.graphics.lineTo(this.arrVorur[0].x,this.arrVorur[0].y);
-
-
-		this.graphics.beginFill(0xffffff, 0.8);
-		this.graphics.drawCircle(200,0,30)
+		
 
 
 
-		this.graphics1.clear();				
-		for (var i = 0; i < this.aVKol; i++) {	
-			this.graphics1.lineStyle(20, 0x000000, 1);
-			this.graphics1.moveTo(this.arrVorur[i].x,this.arrVorur[i].y);
-			if(i!=this.aVKol-1)this.graphics1.lineTo(this.arrVorur[i+1].x,this.arrVorur[i+1].y);
-			else this.graphics1.lineTo(this.arrVorur[0].x,this.arrVorur[0].y);
+
+
+		this.graphics.beginFill(0x0000ff, 0.8);
+		this.graphics.drawCircle(200,0,50)
+
+		this.graphics1.clear();	
+		this.graphics1.lineStyle(20, 0x000000, 1);
+		if(numBlok==0){
+			for (var i = 0; i < this.aVKol; i++) {			
+				this.graphics1.moveTo(this.arrVorur[i].x,this.arrVorur[i].y);
+				if(i!=this.aVKol-1)this.graphics1.lineTo(this.arrVorur[i+1].x,this.arrVorur[i+1].y);
+				else this.graphics1.lineTo(this.arrVorur[0].x,this.arrVorur[0].y);
+			}
+		}else{
+
+
+
+
+
+
+			this.drawGrah(this.graphics1,-this.arrPosit[2].x,this.arrPosit[2].y,true)
+			this.drawGrah(this.graphics1,-this.arrPosit[1].x,this.arrPosit[1].y,false)
+			this.drawGrah(this.graphics1,-this.arrPosit[0].x,this.arrPosit[0].y,false)
+
+
+			this.drawGrah(this.graphics1,numBlok[0],this.arrPosit[0].y,false)
+			this.drawGrah(this.graphics1,numBlok[0],this.arrPosit[5].y,false)
+
+			this.drawGrah(this.graphics1,-this.arrPosit[5].x,this.arrPosit[5].y,false)
+			this.drawGrah(this.graphics1,-this.arrPosit[4].x,this.arrPosit[4].y,false)
+			this.drawGrah(this.graphics1,-this.arrPosit[3].x,this.arrPosit[3].y,false)
+			this.drawGrah(this.graphics1,-this.arrPosit[2].x,this.arrPosit[2].y,false)
+
+			for (var i = 0; i < numBlok.length; i+=2) {
+				if(i!=numBlok.length-2){
+
+					this.drawGrah(this.graphics1,numBlok[i+1],this.arrPosit[0].y,true)
+					this.drawGrah(this.graphics1,numBlok[i+1],this.arrPosit[5].y,false)
+					this.drawGrah(this.graphics1,numBlok[i+2],this.arrPosit[5].y,false)
+					this.drawGrah(this.graphics1,numBlok[i+2],this.arrPosit[0].y,false)
+					this.drawGrah(this.graphics1,numBlok[i+1],this.arrPosit[0].y,false)
+		
+
+
+				}else{
+
+
+
+					this.drawGrah(this.graphics1,this.arrPosit1[5].x+this._distans,this.arrPosit1[5].y,true);
+					this.drawGrah(this.graphics1,this.arrPosit1[4].x+this._distans,this.arrPosit1[4].y,false);
+					this.drawGrah(this.graphics1,this.arrPosit1[3].x+this._distans,this.arrPosit1[3].y,false);
+
+					this.drawGrah(this.graphics1,this.arrPosit1[2].x+this._distans,this.arrPosit1[2].y,false);
+					this.drawGrah(this.graphics1,this.arrPosit1[1].x+this._distans,this.arrPosit1[1].y,false);
+					this.drawGrah(this.graphics1,this.arrPosit1[0].x+this._distans,this.arrPosit1[0].y,false);
+
+					this.drawGrah(this.graphics1,numBlok[i+1],this.arrPosit1[0].y,false);
+					this.drawGrah(this.graphics1,numBlok[i+1],this.arrPosit1[5].y,false);
+					this.drawGrah(this.graphics1,this.arrPosit1[5].x+this._distans,this.arrPosit1[5].y,false);					
+				}
+			}
 		}
 	}
+
+	var pOld={x:0,y:0}
+	this.drawGrah = function (_g, _x,_y, _b) {
+		if(_b){
+			pOld.x=_x
+			pOld.y=_y
+			_g.moveTo(_x,_y)
+		}else{
+			if(_x!=pOld.x ||  _y!=pOld.y){
+				pOld.x=_x
+				pOld.y=_y
+				_g.lineTo(_x,_y)
+			}
+			
+		}
+
+	}
+
+
 
 
 	this.plusVor = function (_x,_y) {		

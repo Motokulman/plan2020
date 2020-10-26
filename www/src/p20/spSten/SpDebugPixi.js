@@ -7,7 +7,7 @@ export class SpDebugPixi  {
     	this.content2d = new PIXI.Container();
 
 
-
+    	this.al=1
 
     	this.contentDebag = new PIXI.Container();
 		this.content2d.addChild(this.contentDebag);
@@ -15,6 +15,7 @@ export class SpDebugPixi  {
 
 		var g = new PIXI.Graphics();
 		this.content2d.addChild(g);
+
 
     	this.debagLine = function (p, p1, color, wL) {
 			//if (this.debagOk(aP) == false) return;
@@ -53,7 +54,7 @@ export class SpDebugPixi  {
 			if (color == undefined)color = 0xFF0000;
 			if (wL == undefined)wL = 10;
 			g.endFill();
-			g.lineStyle(wL, color, wL);
+			g.lineStyle(wL, color, this.al);
 			g.moveTo(p.x, p.y);
 			g.lineTo(p1.x, p1.y);
 			g.endFill();
@@ -67,7 +68,7 @@ export class SpDebugPixi  {
 			}
 			if (color == undefined)color = 0xFF0000;
 			wL = wL || 10;
-			g.lineStyle(10, color, wL);
+			g.lineStyle(10, color, this.al);
 			g.drawCircle(p.x, p.y, r);
 			g.endFill();
 		};
@@ -75,7 +76,7 @@ export class SpDebugPixi  {
 
 		this.dLinePosition = function (p, color) {
 			var rr = 20.5;
-			g.lineStyle(rr, color, rr);
+			g.lineStyle(rr, color, this.al);
 
 			g.moveTo(p.p.x, p.p.y);
 			g.lineTo(p.p1.x, p.p1.y);

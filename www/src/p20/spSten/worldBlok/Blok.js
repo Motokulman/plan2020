@@ -1,6 +1,6 @@
 
-import { Body } from './colozi/Body.js';
-import { Shape } from './colozi/Shape.js';
+import { Body } from '../colozi/Body.js';
+import { Shape } from '../colozi/Shape.js';
 
 export class Blok  {
     constructor(par,obj,fun) {          
@@ -32,18 +32,22 @@ export class Blok  {
         this.content2d = new PIXI.Container();
 
         
-
+        this.funInit=undefined
         this.body=undefined;
         this.shape=undefined;
         this.init = function(){            
             this.body=new Body();
+            this.body.target=this
+            this.body.drag=this.drag;
             this.shape=new Shape();
             this.shape.setRect(obj.rect);
-            this.body.addShape(this.shape)
-            this._width=obj.rect[3]
-            this._height=obj.rect[5]
-            this._delph=obj.rect[4]
+            this.body.addShape(this.shape);
+            this._width=obj.rect[3];
+            this._height=obj.rect[5];
+            this._delph=obj.rect[4];
             this.dragWHD();
+
+            if(this.funInit!=undefined)this.funInit()
         }
 
 
@@ -68,10 +72,14 @@ export class Blok  {
             this._x=x;
             this._y=y;
             this._z=z;
-            this.content2d.x=this._x;
-            this.content2d.y=this._z;
+            this.body.position.set(x,0);
+            if(this._parent)this._parent.drawDeb();            
         }
 
+        this.drag=function(){            
+            self.content2d.x=self.body.position.x;
+            self.content2d.y=0;
+        }
 
         
         this.render=function(){  
@@ -89,8 +97,7 @@ export class Blok  {
 
             this._width=o.w;
             this._height=o.h;
-            this._delph=o.d;
-            trace(o)
+            this._delph=o.d;    
 
 
             this.setReal(o.x,o.y,o.z);

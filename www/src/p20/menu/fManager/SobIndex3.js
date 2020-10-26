@@ -29,8 +29,11 @@ export class SobIndex3  extends SobIndex {
 
                 if(blok.parent==undefined){
                     if(pos.o && pos.o.type&&pos.o.type=="SpliceSten"){
-                        pos.o.addBlok(blok);
-                        global.dragPic.stop()                        
+                        if(pos.o.windows.isBlokPlace(blok)==true){                            
+                            pos.o.addBlok(blok);
+                            global.dragPic.stop()  
+                        }
+                                              
                     }
 
                 }else{
@@ -43,11 +46,7 @@ export class SobIndex3  extends SobIndex {
                             pos.o.addBlok(blok);
                         }
                     }
-
                 }
-
-
-
                 if(blok.parent!=undefined){
                     blok.setPosition(pos.x, pos.y, 0);
                 }
