@@ -22,7 +22,7 @@ export class WorldBlok  {
         this.arrObj={};
         this.arrBD.push({id:0,icon:"resources/image/w0.png",rect:[-300,-300,-20,600,600,40], str:["BInSten",'Window','','','','']})
         this.arrBD.push({id:1,icon:"resources/image/w0.png",rect:[-300,-300,-20,600,600,40], str:["BInSten",'Door','','','','']})
-        this.arrBD.push({id:2,icon:"resources/image/w0.png",rect:[-300,-300,-20,600,600,40], str:["BWord",'xz','','','','']})
+        this.arrBD.push({id:2,icon:"resources/image/w0.png",rect:[-300,-300,-20,600,600,40], str:["BInSten",'xz','','','','']})
 
         for (var i = 0; i < this.arrBD.length; i++) {
             this.arrObj[this.arrBD[i].id]=this.arrBD[i]

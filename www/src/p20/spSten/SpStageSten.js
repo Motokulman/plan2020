@@ -33,6 +33,19 @@ export function SpStageSten (par,  fun) {
 	this._colorP=0xc5d6e0;
 	this._colorP1=0xc5d6e0;
 
+
+	this.carrier = true;// несущия
+	this.out = true;// несущия
+	this.adjacent = true;// несущия
+
+    this._colorC0 = "#222222";
+    this._colorC1 = "#222222";
+    this._colorC0_ = 0x222222;
+    this._colorC1_ = 0x222222;
+
+    this._delphC0 = 100;
+    this._delphC1 = 100;
+
 	this._mashtab=par._mashtab;
 
 	//this._mashtab = 1;
@@ -112,11 +125,8 @@ export function SpStageSten (par,  fun) {
 	
 
 	
-	this.render=function(){
-		
-		
+	this.render=function(){	
 		if(this.par.renderDebag)this.par.renderDebag()
-
 	}
 
 	//возврощает габаритный контейнер
@@ -143,11 +153,11 @@ export function SpStageSten (par,  fun) {
 			korRect(r,aPoint[i].position)	
 		}
 		for (var i = 0; i < aSten.length; i++) {
-			aSten[i].poiskGran()
-			korRect(r,aSten[i].arrGran[0])
-			korRect(r,aSten[i].arrGran[1])
-			korRect(r,aSten[i].arrGran[2])
-			korRect(r,aSten[i].arrGran[3])
+			aSten[i].poiskGran();
+			korRect(r,aSten[i].arrGran[0]);
+			korRect(r,aSten[i].arrGran[1]);
+			korRect(r,aSten[i].arrGran[2]);
+			korRect(r,aSten[i].arrGran[3]);
 
 		}
 
@@ -161,6 +171,15 @@ export function SpStageSten (par,  fun) {
 		if(r.y>p.y)r.y=p.y;
 		if(r.x1<p.x)r.x1=p.x;
 		if(r.y1<p.y)r.y1=p.y;	
+	}
+
+	this.dragStyleObj=function(o){	
+		
+		for (var s in o) {
+			if(this[s]!=undefined)this[s]=o[s]
+		}
+		this.bigDrag()
+
 	}
 		
 
@@ -198,7 +217,6 @@ export function SpStageSten (par,  fun) {
 			
 		}
 		self.arrObj.length=0;
-
 		return true;	
 	}
 
@@ -288,8 +306,72 @@ Object.defineProperties(SpStageSten.prototype, {
 		 	return this._mashtab;
 		}
 	},
-	
 
+
+	colorC0: {
+		set: function (value) {	
+			if(this._colorC0 == value)	return			
+			this._colorC0 = value;			
+			this._colorC0_ =this.convertC(value)			
+			for (var i = 0; i < this.arrSplice.length; i++) {								
+				this.arrSplice[i].draw1();
+			}
+		},
+		get: function () {			
+		 	return this._colorC0;
+		}
+	},
+
+	colorC1: {
+		set: function (value) {
+			if(this._colorC1 == value)	return							
+			this._colorC1 = value;
+			
+			this._colorC1_ =this.convertC(value)			
+			for (var i = 0; i < this.arrSplice.length; i++) {								
+				this.arrSplice[i].draw1();
+			}
+		},
+		get: function () {			
+		 	return this._colorC1;
+		}
+	},
+
+	delphC0: {
+		set: function (value) {	
+			if(this._delphC0 == value)	return					
+			this._delphC0 = value;			
+						
+			for (var i = 0; i < this.arrSplice.length; i++) {								
+				if(this.arrSplice[i].carrier==false){
+					this.arrSplice[i].delph=this._delphC0					
+				}
+				
+			}
+		},
+		get: function () {			
+		 	return this._delphC0;
+		}
+	},
+
+	delphC1: {
+		set: function (value) {	
+			if(this._delphC1 == value)	return					
+			this._delphC1 = value;			
+						
+			for (var i = 0; i < this.arrSplice.length; i++) {								
+				if(this.arrSplice[i].carrier==true){
+					this.arrSplice[i].delph=this._delphC1;					
+				}
+				
+			}
+		},
+		get: function () {			
+		 	return this._delphC1;
+		}
+	},
+
+	
 
 
 	color: {
@@ -297,8 +379,8 @@ Object.defineProperties(SpStageSten.prototype, {
 				
 			this._color = value;
 			
-			this._colorP=this.convertC(value)
-			this._colorP1=this.convertC(value,[0.8,0.8,0.8])
+			this._colorP =this.convertC(value)
+			this._colorP1 = this.convertC(value,[0.8,0.8,0.8])
 			for (var i = 0; i < this.arrSplice.length; i++) {
 				this.arrSplice[i].colorP = this._colorP;
 				this.arrSplice[i].colorP1 = this._colorP1;				

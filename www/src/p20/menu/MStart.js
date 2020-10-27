@@ -9,7 +9,8 @@ export class MStart  {
 		this.idArr=idArr
 
 		this.dCont=new DCont(par.dCont);	
-		
+		this.otstup=this.par.otstup
+		this.wh=this.par.wh
 
 		this.w=new DPanel(this.dCont, this.par.otstup, this.par.otstup);
     	this.w.height=par.wh+2*this.par.otstup;
@@ -130,7 +131,7 @@ export class MStart  {
 
 
 		    this.par.array[this.par.array.length]=this.sStyle=new MStyle(this, function(s,p){             
-           		
+           		self.par.fun(s,p);
         	});
 
 

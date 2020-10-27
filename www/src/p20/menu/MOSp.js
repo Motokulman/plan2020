@@ -23,11 +23,11 @@ export class MOSp extends MOBaza {
         this.postIn=function(){           
             this.window.title="SP";
             var yy=this.otstup1
-            this.col=new DColor(this.window.content,this.otstup1,yy,"",function(){
+            /*this.col=new DColor(this.window.content,this.otstup1,yy,"",function(){
                 self.object.color=this.value;            
             })
             this.col.width=this.width-this.otstup1*2
-            yy+=36
+            yy+=36*/
 
             this.slid=new DSliderBig(this.window.content, this.otstup1,yy, function(s){ 
                 self.bool=false

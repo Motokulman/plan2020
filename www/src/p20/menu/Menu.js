@@ -19,7 +19,7 @@ export class Menu  {
 		this.fun=fun;
 
 		this.wh=48;
-		this.otstup=12;
+		this.otstup=5;
 		this.otstup1=10;
 		this.sizeMax=100000;
 

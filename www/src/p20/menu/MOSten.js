@@ -17,7 +17,7 @@ export class MOSten extends MOBaza {
         this.slid
         this.slid1
 
-
+        var oM
         this.msUi=undefined
         this.postIn=function(){
            
@@ -25,24 +25,42 @@ export class MOSten extends MOBaza {
             
             var yy=this.otstup1;
 
+            var xx=this.otstup1;
+            var a=["carrier","adjacent","out"]
 
-            this.button=new DButton(this.window.content,this.otstup1,yy,"",function(){
+            oM={}
+            for (var i = 0; i < a.length; i++) {                
+                oM[a[i]]={}
+                oM[a[i]][0]=new DButton(this.window.content,xx,yy,"",function(){
+                    self.object[this.name]=this.param  
+                    self.object._addPoint.dragGG(); 
+                    self.object._addPoint1.dragGG();                  
+                    self.drag();
+                },"resources/image/sten_"+a[i]+"0.png"); 
+                oM[a[i]][0].width=oM[a[i]][0].height=this.wh;
+                oM[a[i]][0].name=a[i]
+                oM[a[i]][0].param=false
+
+               
+                oM[a[i]][1]=new DButton(this.window.content,xx,yy,"",function(){
+                    self.object[this.name]=this.param
+                    self.drag();
+                },"resources/image/sten_"+a[i]+"1.png"); 
+                oM[a[i]][1].width=oM[a[i]][1].height=this.wh;              
+                oM[a[i]][1].name=a[i]
+                oM[a[i]][1].param=true    
+                xx+=this.otstup1+this.wh
+            }
+
+
+
+            this.button=new DButton(this.window.content,xx,yy,"",function(){
                 self.object.clear()
             },"resources/image/p0.png");
             this.button.width=this.button.height=this.wh;
 
-            this.button1=new DButton(this.window.content,this.otstup1*2+this.wh,yy,"",function(){
-                if(this.alpha==1){
-                    self.object.stage.boolText=self.object.boolText=true; 
-                    this.alpha=0.5
-                    return
-                }else{
-                    self.object.stage.boolText=self.object.boolText=false; 
-                    this.alpha=1
-                    return
-                }                
-            },"resources/image/w6.png");
-            this.button1.width=this.button1.height=this.wh;
+
+
 
             yy+=(this.otstup1+this.wh)
 
@@ -64,69 +82,18 @@ export class MOSten extends MOBaza {
             this.msUi=new MsUi(this,this.dCont,this.otstup1,yy)
 
             yy+=(this.otstup1+this.msUi.height)
-
-
-           
-           /* new DLabel(this.window.content, 2,yy,"bChaz").fontSize=10
-            new DLabel(this.window.content, 42,yy,"bChaz1").fontSize=10
-            new DLabel(this.window.content, 92,yy,"idUi").fontSize=10
-            new DLabel(this.window.content, 158,yy,"sUi").fontSize=10
-
-
-            yy+=12
-            this.input=new DInput(this.window.content, 92,yy,"" ,function(s){ 
-                self.object.idUi=this.value*1
-            })
-            this.input.width=60;  
-
-            this.input1=new DInput(this.window.content, 158,yy,"" ,function(s){ 
-                self.object.sUi=this.value*1
-                self.object._addPoint.dragVokrug(); 
-                self.object._addPoint1.dragVokrug(); 
-            })
-            this.input1.width=60; 
-
-
-            this.chek=new DCheckBox(this.window.content, 2,yy+5," " ,function(s){ 
-                self.object.bChaz=this.value*1;
-                self.object._addPoint.dragVokrug(); 
-                self.object._addPoint1.dragVokrug(); 
-            })
-            this.chek1=new DCheckBox(this.window.content, 42,yy+5," " ,function(s){ 
-                self.object.bChaz1=this.value*1;
-                self.object._addPoint.dragVokrug(); 
-                self.object._addPoint1.dragVokrug(); 
-            }) 
-            yy+=36;
-         
-
-
-            this.slid1=new DSliderBig(this.window.content, this.otstup1,yy, function(s){ 
-                self.object.offset=self.slid1.value;  
-                self.object._addPoint.dragVokrug(); 
-                self.object._addPoint1.dragVokrug();              
-                            
-            }, "offset", -1000, 1000);
-            this.slid1.width=this.width-this.otstup1*2;
-            this.slid1.okrug=1;  */         
-            trace(yy,this.msUi.height)
             this.window.height=yy+32;
-
         }        
         
         this.drag=function(){
             self.slid.value=self.object.delph;
-            /* 
-            self.input.value=self.object.idUi; 
-            self.input1.value=self.object.sUi; 
-            self.slid1.value=self.object._offset;
-            self.chek.value=self.object.bChaz; 
-            self.chek1.value=self.object.bChaz1;*/
-          
-            self.msUi.drag();    
-            
-            if(!self.object.boolText)self.button1.alpha=1;
-            else self.button1.alpha=0.5;
+
+            self.msUi.drag(); 
+            for (var s in oM) {
+                oM[s][0].visible=self.object[s]
+                oM[s][1].visible=!self.object[s]                
+            }   
+
         }
 
 
@@ -135,7 +102,7 @@ export class MOSten extends MOBaza {
 
         this.postSO=function(){ 
             this.object.funDragMenu=this.drag
-            this.window.title="Sten "+this.object.idArr+" : "+ this.object.uuid;
+            this.window.title="Sten "+this.object.idArr//+" : "+ this.object.uuid;
 
             this.drag();
         }

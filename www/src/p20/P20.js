@@ -12,7 +12,7 @@ export class P20  {
 
         this.sobSP=undefined;
 
-
+        this.startStyle='{"colorC0":"#ff0000","colorC1":"#00ff00","delphC0":217.07,"delphC1":500}'
         
         this._activObject=undefined;
         this.div= document.createElement('div');
@@ -89,6 +89,14 @@ export class P20  {
 
             this.setObj(o)          
         } 
+
+        this.dragStyleObj=function(o){
+            for (var i = 0; i < this.array.length; i++) {
+                this.array[i].dragStyleObj(o);
+            }
+        }
+
+        this.dragStyleObj(JSON.parse(this.startStyle))
 
         this.renderDebag=function(){
             this.fun("render",-1)

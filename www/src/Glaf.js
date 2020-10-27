@@ -60,7 +60,9 @@ export class Glaf  {
             if(s=="render"){}
             if(s=="setObjSP"){
                 self.p20.setObj(p)
-            }    
+            }  
+            if(s=="dragStyleObj") self.p20.dragStyleObj(p) 
+            
             self.render()
         });
         this.menu.setP20(this.p20);

@@ -25,8 +25,23 @@ export function SpliceSten (_stage) {
 	this._offset=0;
 	this._bChaz=false;
 	this._delph = 500;// толщина линии
-	
+
 	this._uuid=calc.generateRendom(2);
+
+	this._carrier = _stage.carrier;// несущия
+	this._out = _stage.out;// несущия
+	this._adjacent = _stage.adjacent;// несущия
+
+	if(this._carrier==true)this._delph =_stage._delphC1;
+	else this._delph =_stage._delphC0;
+    
+    this.alpha =_stage._alpha;    
+    this.colorP = _stage._colorP;
+    this.colorP1 = _stage._colorP1;
+
+  
+
+	
 
 	this._height = this.stage._height;
 	
@@ -80,9 +95,7 @@ export function SpliceSten (_stage) {
 
 
 
-    this.alpha=_stage._alpha;    
-    this.colorP=_stage._colorP;
-    this.colorP1=_stage._colorP1;
+
 
     var numBlok
 	this.draw1 = function (b) {
@@ -107,9 +120,9 @@ export function SpliceSten (_stage) {
 		//this.colorP=Math.random()*0xffffff
 
 		numBlok=this.windows.getNumBlok();
-		
+	
 		this.graphics.clear();
-		this.graphics.beginFill(this._offset ==0 ? this.colorP : this.colorP1, this.alpha);
+		this.graphics.beginFill(this._carrier == false ? this.par._colorC0_ : this.par._colorC1_, this.alpha);
 
 
 
@@ -454,6 +467,11 @@ SpliceSten.prototype.getObj = function () {
 	o.idUi=this.idUi;	
 	o.offset=this.offset;
 	o.bChaz=this.bChaz;
+
+
+	o.carrier=this.carrier;
+	o.out=this.out;
+	o.adjacent=this.adjacent;
 	return o;
 };
 SpliceSten.prototype.setObj = function (o) {
@@ -466,6 +484,10 @@ SpliceSten.prototype.setObj = function (o) {
 	if (o.sUi!== undefined ) this.sUi=o.sUi;		
 	if (o.offset!== undefined ) this.offset=o.offset;
 	if (o.bChaz!== undefined ) this.bChaz=o.bChaz;	
+
+	if (o.carrier!== undefined ) this.carrier=o.carrier;
+	if (o.out!== undefined ) this.out=o.out;
+	if (o.adjacent!== undefined ) this.adjacent=o.adjacent;	
 	
 };
 SpliceSten.prototype.compare = function (_sten) {
@@ -550,7 +572,46 @@ Object.defineProperties(SpliceSten.prototype, {
 		get: function () { return this._life; }
 	},
 
+/////////////////////////////////////////////
+//	
+/*this._carrier = true;// несущия
+	this._out = true;// несущия
+	this._adjacent = true;// несущия
+*/
+	carrier: {
+		set: function (value) {			
+			if (this._carrier === value) return;			
+			this._carrier = value;
+			if(this._carrier==true)this.delph =this.stage._delphC1;
+			else this.delph =this.stage._delphC0;
+			//this.draw1();
+			//this.stage.addObjFun(this)
+		},
+		get: function () { return this._carrier; }
+	},
 
+	out: {
+		set: function (value) {			
+			if (this._out === value) return;			
+			this._out = value;
+			this.draw1();
+			
+		},
+		get: function () { return this._out; }
+	},
+
+	adjacent: {
+		set: function (value) {			
+			if (this._adjacent === value) return;			
+			this._adjacent = value;
+			this.draw1();
+			
+		},
+		get: function () { return this._adjacent; }
+	},
+
+
+//////////////////////////
 	// ---
 	col3d: {
 		set: function (value) {
