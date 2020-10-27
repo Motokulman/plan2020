@@ -8,6 +8,7 @@ import { MStart} from './MStart.js';
 
 import { MInfo} from './MInfo.js';
 
+
 import { LocalStorage } from './LocalStorageE6.js';
 
 export class Menu  {
@@ -48,6 +49,7 @@ export class Menu  {
            	if(s=="index")self.menuIndex=p;
         });
 
+      
         
 
 
