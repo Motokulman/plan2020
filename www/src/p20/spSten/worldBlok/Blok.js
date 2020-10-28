@@ -51,7 +51,10 @@ export class Blok  {
         }
 
 
-
+        this.clear= function(){ 
+            if(this._parent!=undefined)this._parent.removeBlok(this);
+            this.life=false
+        }
         
         this.vector;
         this.setPosition=function(x,y,z){   
