@@ -1,0 +1,57 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+{% load static %}
+<h3>Проект: {{ plan_title }}</h3>
+<p>id проекта: {{ plan_id }}</p>
+<p>id пользователя: {{ request.user.id }}</p>
+
+<script>
+  //разработчик vorodis2@gmail.com
+
+
+var iframe;	
+  var objectJson    
+function sizeWindow () {
+  var w = document.documentElement.clientWidth;
+  var h = document.documentElement.clientHeight;
+  if(window.innerWidth!=undefined)w = window.innerWidth;
+  if(window.innerHeight!=undefined)h = window.innerHeight;
+  iframe.style.width=w+"px";
+  iframe.style.height=h+"px";
+}
+
+function init () {
+
+      var linkIframe = "https://motokulman.github.io/plan2020/www/"   +     "?infoDlaVorodis2= tut moshno peredan danui!!!!!!!!!!!!!!!!!!!!!";
+      //передаюм куда    + пердавать параметры в данном случии infoDlaVorodis2 в дальнешем можно конект повесить но это сложнее
+  
+  iframe = document.createElement("IFRAME");        
+      iframe.style.position = 'fixed';
+      iframe.style.top = '0px';
+      iframe.style.left = '0px';
+      iframe.style.width="500px";
+      iframe.style.height="300px";
+      iframe.style.border= '0px solid';
+      document.body.appendChild(iframe);
+
+      iframe.src=linkIframe;
+
+      
+      window.onresize = sizeWindow;
+  sizeWindow();
+
+}
+              
+
+</script>
+
+<style type="text/css">
+#stats { position: absolute; top:0; left: 200px; }
+</style>
+
+</head>
+<meta name="viewport" content="width=device-width,height=device-height,user-scalable=no user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+<body onload="init()">
+
+{% endblock %}
