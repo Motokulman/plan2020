@@ -48,29 +48,41 @@ export class SobIndex0  extends SobIndex {
         var rect={x:0,y:0,x1:0,y1:0,w:0,h:0,o:null}
         this.mousemove1=function(e){           
             self.getPositPlan(pos1); 
-            if(pos.x<pos1.x){
-                rect.x=pos.x
-                rect.w=pos1.x-pos.x
-            }else{
-                rect.x=pos1.x
-                rect.w=pos.x-pos1.x 
-            } 
+            
+            if(tip1==0){
+                if(pos.x<pos1.x){
+                    rect.x=pos.x
+                    rect.w=pos1.x-pos.x
+                }else{
+                    rect.x=pos1.x
+                    rect.w=pos.x-pos1.x 
+                } 
 
-            if(pos.y<pos1.y){
-                rect.y=pos.y
-                rect.h=pos1.y-pos.y
-            }else{
-                rect.y=pos1.y
-                rect.h=pos.y-pos1.y 
-            } 
-            self.sp.group.setRect(rect);
+                if(pos.y<pos1.y){
+                    rect.y=pos.y
+                    rect.h=pos1.y-pos.y
+                }else{
+                    rect.y=pos1.y
+                    rect.h=pos.y-pos1.y 
+                } 
+                self.sp.group.setRect(rect);
+                return
+            }
+            if(tip1==1){
+                self.sp.group.setPosOffset(pos1.x-pos.x,pos1.y-pos.y)
+                pos.x=pos1.x;
+                pos.y=pos1.y;
+            }
+
         } 
 
 
         this.mouseup1=function(e){
-            self.mousemove1()
-            self.sp.group.addRect(rect);
-            self.sp.group.setRect(); 
+            if(tip1==0){
+                self.mousemove1()
+                self.sp.group.addRect(rect);
+                self.sp.group.setRect(); 
+            }
 
                      
             document.removeEventListener("mouseup", self.mouseup1);
@@ -80,7 +92,7 @@ export class SobIndex0  extends SobIndex {
 
 
 
-
+        var tip1=0
         this.sobSP=function(s,p,e){
             if(e.data.originalEvent.button==2){                 
                 if(self.boolCTRL==false)self.sp.group.active=false;
@@ -88,18 +100,24 @@ export class SobIndex0  extends SobIndex {
                     self.sp.group.active = true;
                     self.par.par.mObject.setObject(self.sp.group) 
                 }
-              
+                tip1=0
                 self.getPositPlan(pos);  
 
                 document.addEventListener("mouseup", self.mouseup1);
                 document.addEventListener("mousemove", self.mousemove1); 
                 return;
+            }else{
+                if(s=="downGroup"){                    
+                    tip1=1                    
+                    self.getPositPlan(pos)
+                    document.addEventListener("mouseup", self.mouseup1);
+                    document.addEventListener("mousemove", self.mousemove1); 
+                    return;
+                }
             }
            
             if(self.boolCTRL==true){
-               
-            
-                if(s=="downPoint"||s=="downSten"){
+                if(s=="downPoint"||s=="downSten"||s=="downBlok"){
                     if(self.sp.group.active == false){
                         self.sp.group.active = true;
                         self.par.par.mObject.setObject(self.sp.group) 
@@ -110,6 +128,7 @@ export class SobIndex0  extends SobIndex {
                     return;
                 }
             }
+
             self.sp.group.active = false
 
             if(p)self.par.par.mObject.setObject(p) 

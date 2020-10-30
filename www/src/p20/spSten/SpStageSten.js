@@ -73,7 +73,8 @@ export function SpStageSten (par,  fun) {
 
 	this.boolText = true;
 	this.content2d = new PIXI.Container();
-
+	
+	this.contNiz = new PIXI.Container();
 	this.content2d1 = new PIXI.Container();
 	this.content2d2 = new PIXI.Container();
 	this.content2dPoint = new PIXI.Container();	
@@ -81,6 +82,8 @@ export function SpStageSten (par,  fun) {
 	this.cont2dBlok = new PIXI.Container();
 	this.cont2dGroup = new PIXI.Container();
 
+
+	this.content2d.addChild(this.contNiz);
 	this.content2d.addChild(this.content2d1);
     this.content2d.addChild(this.content2d2);
     this.content2d.addChild(this.content2dPoint);

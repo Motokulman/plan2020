@@ -94,12 +94,15 @@ export class MOGObj{
         this.height=0;
         this.otstup=this.par.otstup1  
         this.otstup1=this.par.otstup1  
+        this.whSize=5555555
         this.width=this.par.window.width-this.otstup*2;
              
         this.wh=(this.width-this.otstup)/4-this.otstup;
 
-        this.arrSt=[]        
-
+        this.arrSt=[];  
+        this.arrWin=[];
+        this.arrPoint=[];       
+        var oM={}
         var aButton
 
         this.dCont=new DCont(this.par.window.content); 
@@ -124,7 +127,7 @@ export class MOGObj{
             var xx=this.otstup1;
             aButton=["carrier","out","adjacent"]
 
-            var oM={}
+            
             for (var i = 0; i < aButton.length; i++) {                
                 oM[aButton[i]]={}
                 oM[aButton[i]][0]=new DButton(this.panelSt,xx,20,"",function(){
@@ -166,6 +169,80 @@ export class MOGObj{
             },"resources/image/p0.png");
             this.butClearSt.width=this.butClearSt.height=this.wh;
             //////////////////////////////////
+
+            //окна
+            this.panelWin=new DPanel(this.dCont,this.otstup,0);
+            this.panelWin.width=this.par.window.width-this.otstup*2;
+
+            this.panelWin.height=this.wh+this.otstup+20
+
+            this.labelWin = new DLabel(this.panelWin,this.otstup,this.otstup,"")
+            this.labelWin.fontSize=12;
+            this.labelWin.width=this.width;
+
+            this.butClearWin=new DButton(this.panelWin,this.panelSt.width-this.otstup1-this.wh,20,"",function(){
+                
+                self.clearSim("BInSten")
+            },"resources/image/p0.png");
+            this.butClearWin.width=this.butClearWin.height=this.wh;
+            //////////////////////////////////
+
+            //точки
+
+            this.panelPoint=new DPanel(this.dCont,this.otstup,0);
+            this.panelPoint.width=this.par.window.width-this.otstup*2;
+
+            this.panelPoint.height=this.wh+this.otstup+20
+
+            this.labelPoint = new DLabel(this.panelPoint,this.otstup,this.otstup,"")
+            this.labelPoint.fontSize=12;
+            this.labelPoint.width=this.width;
+
+            this.butClearPoint=new DButton(this.panelPoint,this.panelSt.width-this.otstup1-this.wh,20,"",function(){
+                
+                self.clearSim("SpPointSten")
+            },"resources/image/p0.png");
+            this.butClearPoint.width=this.butClearPoint.height=this.wh;
+
+
+
+            this.slid=new DSliderBig(this.panelPoint, this.otstup1,20, function(s){ 
+                self.par.bool=false              
+                for (var i = 0; i < self.arrPoint.length; i++) {
+                    self.arrPoint[i].position.x=this.value
+                    self.arrPoint[i].doFunRend()
+                }
+                self.par.object.korektRect(true)
+            }, "x",  -this.whSize/2, this.whSize/2)
+            this.slid.width=this.width-this.otstup1*3-this.wh
+            this.slid.okrug=1
+
+            this.slid.funChange=function(){
+                self.par.bool=true
+                self.par.drag()
+            }
+
+            this.slid1=new DSliderBig(this.panelPoint, this.otstup1,70, function(s){ 
+                /*self.par.bool=false
+                self.object.position.y=self.slid1.value*/
+                self.par.bool=false              
+                for (var i = 0; i < self.arrPoint.length; i++) {
+                    self.arrPoint[i].position.y=this.value
+                    self.arrPoint[i].doFunRend()
+                }
+                self.par.object.korektRect(true)
+            }, "y",  -this.whSize/2, this.whSize/2)
+            this.slid1.width=this.width-this.otstup1*3-this.wh
+          
+            this.slid1.okrug=1;
+
+            this.slid1.funChange=function(){
+                self.par.bool=true
+                self.par.drag()
+            }
+
+
+
         }
 
         
@@ -176,22 +253,20 @@ export class MOGObj{
                     self.par.object.array.splice(i,1)
                 }
             }
+            self.par.drag(); 
+            self.par.object.korektRect(true)
         }
 
 
 
 
-
-
-
-
-
-
-        var bool,bool1
+        var bool,bool1, param,param1
         this.drag=function(){
             var yy=0
-            this.init()
+            this.init();
+            /////////////////////////////
             this.arrSt.length=0;
+
             for (var i = 0; i < this.par.object.array.length; i++) {
                 if(this.par.object.array[i].type=="SpliceSten"){                    
                     this.arrSt.push(this.par.object.array[i]);
@@ -208,28 +283,121 @@ export class MOGObj{
 
                 
                 for (var i = 0; i < aButton.length; i++) {
-                    bool1=this.arrSt[0][aButton[0]]
+                    
+                    bool1=this.arrSt[0][aButton[i]]
                     bool=true;
                     for (var j= 0; j < this.arrSt.length; j++) {
-                        if(this.arrSt[j][aButton[0]]!=bool1)bool=false;
-
+                        if(this.arrSt[j][aButton[i]]!=bool1)bool=false;
                     }
 
-                    if(bool==true){
+                    if(bool==false){
                         oM[aButton[i]][0].alpha=0.5;
                         oM[aButton[i]][1].alpha=0.5;
+                    }else{
+                        oM[aButton[i]][0].alpha=1;
+                        oM[aButton[i]][1].alpha=1;
                     }
-
-
+                    oM[aButton[i]][0].visible=bool1
+                    oM[aButton[i]][1].visible=!bool1 
                 }
-                
+            }
+            ////////////////////////////
 
-               
+
+            this.arrWin.length=0;
+
+            for (var i = 0; i < this.par.object.array.length; i++) {
+                if(this.par.object.array[i].type=="BInSten"){                    
+                    this.arrWin.push(this.par.object.array[i]);
+                }
+            }
+
+            if(this.arrWin.length == 0){
+                this.panelWin.visible=false;
+            }else{
+                this.panelWin.visible=true;
+                this.labelWin.text="Object: "+this.arrWin.length;
+                this.panelWin.y=yy
+                yy+=this.panelWin.height+this.otstup
+            }
+
+
+
+
+
+
+            ////////////////////////////
+
+
+            this.arrPoint.length=0;
+
+            for (var i = 0; i < this.par.object.array.length; i++) {
+                if(this.par.object.array[i].type=="SpPointSten"){                    
+                    this.arrPoint.push(this.par.object.array[i]);
+                }
+            }
+
+            if(this.arrPoint.length == 0){
+                this.panelPoint.visible=false;
+            }else{
+                this.panelPoint.visible=true;
+                this.labelPoint.text="Point: "+this.arrPoint.length;
+                this.panelPoint.y=yy
+
+                param=Math.round(this.arrPoint[0].position.x);
+                param1=Math.round(this.arrPoint[0].position.y);                
+                bool=true;
+                bool1=true;
+                for (var i = 1; i < this.arrPoint.length; i++) {
+                    if(param!=Math.round(this.arrPoint[i].position.x))bool=false;
+                    if(param1!=Math.round(this.arrPoint[i].position.y))bool1=false;
+                }
+
+                if(bool==false&&bool1==false){
+                    this.slid.visible=false;
+                    this.slid1.visible=false;
+                    this.panelPoint.height=this.wh+this.otstup+20
+                }else{
+
+                    this.slid.visible=true;
+                    this.slid1.visible=true;
+
+                    this.slid.activMouse=bool;
+                    this.slid1.activMouse=bool1;
+                    this.panelPoint.height=this.slid1.y+50
+
+                    self.slid.min=Math.round(param-1000)
+                    self.slid.max=Math.round(param+1000)
+                    self.slid.value=Math.round(param)
+
+                    self.slid1.min=Math.round(param1-1000)
+                    self.slid1.max=Math.round(param1+1000)
+                    self.slid1.value=Math.round(param1)
+                     
+                }
+                    
+                    
+
+                trace(this.arrPoint.length,this.arrWin.length,this.arrSt.length,this.par.object)
+                if(this.arrPoint.length==0&&this.arrWin.length==0&&this.arrSt.length==0)this.par.object.active=false
+
+
+                yy+=this.panelPoint.height+this.otstup
+
 
             }
 
-            this.height=yy;
 
+
+
+
+
+
+
+
+
+
+            this.height=yy;
         }
 
 
