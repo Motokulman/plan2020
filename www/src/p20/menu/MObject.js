@@ -7,6 +7,9 @@ import { MOSp } from './MOSp.js';
 import { MOLine } from './MOLine.js';
 import { MOP20 } from './MOP20.js';
 
+import { MOWindow } from './MOWindow.js';
+import { MOGroup } from './MOGroup.js';
+
 export class MObject  {
     constructor(par,fun) {          
         this.type="MObject";
@@ -39,6 +42,8 @@ export class MObject  {
         this.array[3]=this.moLine=new MOLine(this, function(s,p){});
         this.array[4]=this.moP20=new MOP20(this, function(s,p){});
 
+        this.array[5]=this.moWindow=new MOWindow(this, function(s,p){});
+        this.array[6]=this.moGroup=new MOGroup(this, function(s,p){});
 
         this.clear=function(){
             for (var i = 0; i < this.array.length; i++) {

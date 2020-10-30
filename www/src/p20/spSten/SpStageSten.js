@@ -34,9 +34,9 @@ export function SpStageSten (par,  fun) {
 	this._colorP1=0xc5d6e0;
 
 
-	this.carrier = true;// несущия
-	this.out = true;// несущия
-	this.adjacent = true;// несущия
+	this._carrier = true;// несущия
+	this._out = true;// несущия
+	this._adjacent = true;// несущия
 
     this._colorC0 = "#222222";
     this._colorC1 = "#222222";
@@ -45,6 +45,7 @@ export function SpStageSten (par,  fun) {
 
     this._delphC0 = 100;
     this._delphC1 = 100;
+    this._delphPlus=0
 
 	this._mashtab=par._mashtab;
 
@@ -181,6 +182,15 @@ export function SpStageSten (par,  fun) {
 		this.bigDrag()
 
 	}
+
+	this.getDelphToBoolS=function(b,b1,b2){	
+		let r=this._delphC0;
+		if(b==true){
+			r=this._delphC1;
+		}
+		if(b1==true && b==true)r+=this._delphPlus;
+		return r;
+	}
 		
 
 
@@ -219,6 +229,8 @@ export function SpStageSten (par,  fun) {
 		self.arrObj.length=0;
 		return true;	
 	}
+
+
 
 	
 }
@@ -308,6 +320,37 @@ Object.defineProperties(SpStageSten.prototype, {
 	},
 
 
+	carrier: {
+		set: function (value) {			
+			if (this._carrier === value) return;			
+			this._carrier = value;
+			this._delph =this.getDelphToBoolS(this._carrier,this._out,this._adjacent);
+			
+		},
+		get: function () { return this._carrier; }
+	},
+
+	out: {
+		set: function (value) {			
+			if (this._out === value) return;			
+			this._out = value;
+			this._delph =this.getDelphToBoolS(this._carrier,this._out,this._adjacent);
+			
+		},
+		get: function () { return this._out; }
+	},
+
+	adjacent: {
+		set: function (value) {			
+			if (this._adjacent === value) return;			
+			this._adjacent = value;
+			this._delph =this.getDelphToBoolS(this._carrier,this._out,this._adjacent);
+			
+		},
+		get: function () { return this._adjacent; }
+	},
+
+
 	colorC0: {
 		set: function (value) {	
 			if(this._colorC0 == value)	return			
@@ -342,11 +385,8 @@ Object.defineProperties(SpStageSten.prototype, {
 			if(this._delphC0 == value)	return					
 			this._delphC0 = value;			
 						
-			for (var i = 0; i < this.arrSplice.length; i++) {								
-				if(this.arrSplice[i].carrier==false){
-					this.arrSplice[i].delph=this._delphC0					
-				}
-				
+			for (var i = 0; i < this.arrSplice.length; i++) {
+				this.arrSplice[i].delph =this.getDelphToBoolS(this.arrSplice[i].carrier,this.arrSplice[i].out,this.arrSplice[i].adjacent)					
 			}
 		},
 		get: function () {			
@@ -359,17 +399,32 @@ Object.defineProperties(SpStageSten.prototype, {
 			if(this._delphC1 == value)	return					
 			this._delphC1 = value;			
 						
-			for (var i = 0; i < this.arrSplice.length; i++) {								
-				if(this.arrSplice[i].carrier==true){
-					this.arrSplice[i].delph=this._delphC1;					
-				}
-				
+			for (var i = 0; i < this.arrSplice.length; i++) {
+				this.arrSplice[i].delph =this.getDelphToBoolS(this.arrSplice[i].carrier,this.arrSplice[i].out,this.arrSplice[i].adjacent)					
 			}
 		},
 		get: function () {			
 		 	return this._delphC1;
 		}
 	},
+
+	delphPlus: {
+		set: function (value) {	
+			if(this._delphPlus == value)	return					
+			this._delphPlus = value;			
+						
+			for (var i = 0; i < this.arrSplice.length; i++) {								
+				if(this.arrSplice[i].carrier==true){
+					this.arrSplice[i].delph =this.getDelphToBoolS(this.arrSplice[i].carrier,this.arrSplice[i].out,this.arrSplice[i].adjacent)					
+				}				
+			}
+		},
+		get: function () {			
+		 	return this._delphPlus;
+		}
+	},
+
+	
 
 	
 

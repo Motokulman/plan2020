@@ -25,7 +25,7 @@
 			help:"Создаюм план, в ответ обьект планна. типа {id:234,url:'путь к json файлу',info:'asdhjf'...}, id-иди проекта, url-путь к моделе, по умолчанию сущесествует пустой, типа: '{}'",//пояснения
 			
 			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'http://87.236.23.29/catalog/plan/20/edit_scheme/get_response',
+				url: 'http://87.236.23.29/catalog/plan/22/edit_scheme/',
 		        type: 'GET',
 		        data: {
 		        	d:JSON.stringify({test:10}),
@@ -45,7 +45,7 @@
 			help:"Возврощает обьект плана типа: {id:234,url:'путь к j....",//пояснения
 			
 			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'http://87.236.23.29/catalog/plan/20/edit_scheme/get_response',
+				url: 'http://87.236.23.29/catalog/plan/22/edit_scheme/',
 		        type: 'POST',
 		        data: {
 		        	d:JSON.stringify({test:10}),
@@ -66,7 +66,7 @@
 			help:"По идишнику записывает json пална по ",//пояснения
 			
 			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'http://87.236.23.29/catalog/plan/20/edit_scheme/get_response',
+				url: 'http://87.236.23.29/catalog/plan/22/edit_scheme/',
 		        type: 'POST',
 		        data: {
 		        	d:JSON.stringify({test:10}),
@@ -97,24 +97,20 @@
 		creatArrApi();
 		initInterfes();
 
-		openObj(array[0])	
-
-
+		openObj(array[0])		
 	}
 
 
 	function successMy (e){//удачиный ответ
 		ta1.colorText1="#007700";
-		var s=JSON.stringify(e,null,4);
-		ta1.text=s;
-		console.log("success");
+		var s=JSON.stringify(e,null,4)	
+		ta1.text=s
 	}
 	function errorMy (e){//не удачиный ответ
-		trace(e);
+		trace(e)
 		ta1.colorText1="#ff0000";
-		var s=JSON.stringify(e,null,4);
-		ta1.text=s;
-		console.log("error");
+		var s=JSON.stringify(e,null,4)	
+		ta1.text=s
 	}
 
 	

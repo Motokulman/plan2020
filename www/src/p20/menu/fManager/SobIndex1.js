@@ -75,7 +75,8 @@ export class SobIndex1  extends SobIndex {
 
                 //activSten.delph=500; 
 
-                self.par.par.mObject.setObject(point)      
+                self.par.par.mObject.setObject(activSten); 
+
                 
                 sp.x=p.position.x;
                 sp.y=p.position.y;
@@ -120,9 +121,9 @@ export class SobIndex1  extends SobIndex {
                 point1.position.set(pppo.x,pppo.y);
                 point1.dragPost()
 
-                activSten.delph=500; 
 
-                self.par.par.mObject.setObject(point)      
+
+                self.par.par.mObject.setObject(activSten)      
                 
                 sp.x=pppo.x;
                 sp.y=pppo.y;
@@ -135,8 +136,6 @@ export class SobIndex1  extends SobIndex {
                 document.addEventListener("mouseup", self.mouseup);
                 document.addEventListener("mousemove", self.mousemove);
 
-
-
             }
 
             if(s=="downPoint"){
@@ -146,9 +145,9 @@ export class SobIndex1  extends SobIndex {
                 activSten=self.p20.sp.craetSplice1();                    
                 point.addSplice(activSten, true);
                 p.addSplice(activSten, false);
-                activSten.delph=500;   
+   
 
-                self.par.par.mObject.setObject(point)      
+                self.par.par.mObject.setObject(activSten)      
                 
                 sp.x=p.position.x;
                 sp.y=p.position.y;

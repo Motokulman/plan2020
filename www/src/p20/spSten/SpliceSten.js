@@ -24,13 +24,15 @@ export function SpliceSten (_stage) {
 	this.sUi = -1;
 	this._offset=0;
 	this._bChaz=false;
-	this._delph = 500;// толщина линии
+	this._delph = _stage._delph;// толщина линии
 
 	this._uuid=calc.generateRendom(2);
 
 	this._carrier = _stage.carrier;// несущия
 	this._out = _stage.out;// несущия
 	this._adjacent = _stage.adjacent;// несущия
+
+	if(this._carrier)
 
 	if(this._carrier==true)this._delph =_stage._delphC1;
 	else this._delph =_stage._delphC0;
@@ -122,7 +124,7 @@ export function SpliceSten (_stage) {
 		numBlok=this.windows.getNumBlok();
 	
 		this.graphics.clear();
-		this.graphics.beginFill(this._carrier == false ? this.par._colorC0_ : this.par._colorC1_, this.alpha);
+		this.graphics.beginFill(this._adjacent == false ? this.par._colorC0_ : this.par._colorC1_, this.alpha);
 
 
 
@@ -240,6 +242,7 @@ export function SpliceSten (_stage) {
 				}
 			}
 		}
+		this.par.render()
 	}
 
 	var pOld={x:0,y:0}
@@ -309,18 +312,7 @@ export function SpliceSten (_stage) {
         this.arrGran[0].x+=this.position.x;
         this.arrGran[0].y+=this.position.y;
 
-      /*  if(this.idArr==10){
-
-        	trace(a,a1,this.arrPosit[0])
-        	for (var i = 0; i < this.arrPosit.length; i++) {
-        		trace(i+"   ",this.arrPosit[i])
-        	}
-
-        	trace("a,a1,this.arrPosit[0]")
-        	for (var i = 0; i < this.arrPosit.length; i++) {
-        		trace(i+"   ",this.arrPosit1[i])
-        	}	
-        }*/
+    
 
 
         this.arrGran[1].set(this.arrPosit1[5].x,this.arrPosit1[5].y);
@@ -453,6 +445,8 @@ export function SpliceSten (_stage) {
 		}
 	}
 
+
+
 }
 SpliceSten.prototype = Object.create(Splice.prototype);
 SpliceSten.prototype.constructor = SpliceSten;
@@ -581,11 +575,10 @@ Object.defineProperties(SpliceSten.prototype, {
 	carrier: {
 		set: function (value) {			
 			if (this._carrier === value) return;			
-			this._carrier = value;
-			if(this._carrier==true)this.delph =this.stage._delphC1;
-			else this.delph =this.stage._delphC0;
-			//this.draw1();
-			//this.stage.addObjFun(this)
+			this._carrier = value;			
+			this.delph=this.par.getDelphToBoolS(this._carrier,this._out,this._adjacent)	
+			this.draw1();				
+			
 		},
 		get: function () { return this._carrier; }
 	},
@@ -594,6 +587,7 @@ Object.defineProperties(SpliceSten.prototype, {
 		set: function (value) {			
 			if (this._out === value) return;			
 			this._out = value;
+			this.delph=this.par.getDelphToBoolS(this._carrier,this._out,this._adjacent)	
 			this.draw1();
 			
 		},
@@ -604,6 +598,7 @@ Object.defineProperties(SpliceSten.prototype, {
 		set: function (value) {			
 			if (this._adjacent === value) return;			
 			this._adjacent = value;
+			this.delph=this.par.getDelphToBoolS(this._carrier,this._out,this._adjacent)	
 			this.draw1();
 			
 		},

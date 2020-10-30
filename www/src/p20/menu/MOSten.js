@@ -26,7 +26,7 @@ export class MOSten extends MOBaza {
             var yy=this.otstup1;
 
             var xx=this.otstup1;
-            var a=["carrier","adjacent","out"]
+            var a=["carrier","out","adjacent"]
 
             oM={}
             for (var i = 0; i < a.length; i++) {                
@@ -36,6 +36,8 @@ export class MOSten extends MOBaza {
                     self.object._addPoint.dragGG(); 
                     self.object._addPoint1.dragGG();                  
                     self.drag();
+                    self.object.par[this.name]=this.param; 
+
                 },"resources/image/sten_"+a[i]+"0.png"); 
                 oM[a[i]][0].width=oM[a[i]][0].height=this.wh;
                 oM[a[i]][0].name=a[i]
@@ -44,7 +46,11 @@ export class MOSten extends MOBaza {
                
                 oM[a[i]][1]=new DButton(this.window.content,xx,yy,"",function(){
                     self.object[this.name]=this.param
+                    self.object._addPoint.dragGG(); 
+                    self.object._addPoint1.dragGG(); 
                     self.drag();
+                    self.object.par[this.name]=this.param;
+
                 },"resources/image/sten_"+a[i]+"1.png"); 
                 oM[a[i]][1].width=oM[a[i]][1].height=this.wh;              
                 oM[a[i]][1].name=a[i]
