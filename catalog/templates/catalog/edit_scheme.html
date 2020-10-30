@@ -1,57 +1,46 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-{% load static %}
+
+<!-- стили для модальных окон-->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/sunny/jquery-ui.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+
 <h3>Проект: {{ plan_title }}</h3>
-<p>id проекта: {{ plan_id }}</p>
-<p>id пользователя: {{ request.user.id }}</p>
+<p id="p1"></p>
+<form id="canvas_form" class="canvas-field" action="" name="{{ plan_id}}" method="POST">
+  {% csrf_token %}
+</form>
+<h4>Тест: {% csrf_token %}</h4>
+<!-- <div class="container-fluid">
+  <div class="row">
 
-<script>
-  //разработчик vorodis2@gmail.com
+  </div>
+</div>  -->
+<script>$(document).ready(function () {
+    // var csrf_token = $('#canvas_form [name="csrfmiddlewaretoken"]').val();
+    // document.getElementById("p1").innerHTML=csrf_token;
+    init();
+  });</script>
 
 
-var iframe;	
-  var objectJson    
-function sizeWindow () {
-  var w = document.documentElement.clientWidth;
-  var h = document.documentElement.clientHeight;
-  if(window.innerWidth!=undefined)w = window.innerWidth;
-  if(window.innerHeight!=undefined)h = window.innerHeight;
-  iframe.style.width=w+"px";
-  iframe.style.height=h+"px";
-}
+{% load static %}
 
-function init () {
-
-      var linkIframe = "https://motokulman.github.io/plan2020/www/"   +     "?infoDlaVorodis2= tut moshno peredan danui!!!!!!!!!!!!!!!!!!!!!";
-      //передаюм куда    + пердавать параметры в данном случии infoDlaVorodis2 в дальнешем можно конект повесить но это сложнее
-  
-  iframe = document.createElement("IFRAME");        
-      iframe.style.position = 'fixed';
-      iframe.style.top = '0px';
-      iframe.style.left = '0px';
-      iframe.style.width="500px";
-      iframe.style.height="300px";
-      iframe.style.border= '0px solid';
-      document.body.appendChild(iframe);
-
-      iframe.src=linkIframe;
-
-      
-      window.onresize = sizeWindow;
-  sizeWindow();
-
-}
-              
-
-</script>
+<script type="text/javascript" src="{% static 'js/api/divLib.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/api/jquery-1.11.3.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/api/api.js' %}"></script>
 
 <style type="text/css">
-#stats { position: absolute; top:0; left: 200px; }
+  #stats {
+    position: absolute;
+    top: 0;
+    left: 200px;
+  }
 </style>
-
-</head>
-<meta name="viewport" content="width=device-width,height=device-height,user-scalable=no user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-<body onload="init()">
+<meta name="viewport"
+  content="width=device-width,height=device-height,user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
 {% endblock %}
