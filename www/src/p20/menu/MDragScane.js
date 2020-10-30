@@ -22,8 +22,19 @@ export class MDragScane  {
         this.wh=this.par.wh;
 
 
-
-
+       /* function disablecontext(e) {
+            trace(e)
+            var clickedEl = (e==null) ? event.srcElement.tagName : e.target.tagName;
+            if (clickedEl == "IMG") {
+                alert(errorMsg);
+                return false;
+            }
+        }
+        var errorMsg = "Вы не можете сохранять изображения с этого сайта.";
+        document.oncontextmenu = disablecontext;*/
+        $(document).bind('contextmenu', function(e) {
+            return false;
+        });
 
         this.actAI=undefined;
         this.sobIndex=[];
@@ -95,6 +106,18 @@ export class MDragScane  {
                 this.cont.y=h/2;  
             }      		            	
   		} 
+
+        this.keydown=function(e){
+            for (var i = this.sobIndex.length - 1; i >= 0; i--) {
+                if(this.sobIndex[i].keydown)this.sobIndex[i].keydown(e);
+            } 
+            
+        }
+        this.keyup=function(e){
+            for (var i = this.sobIndex.length - 1; i >= 0; i--) {
+                if(this.sobIndex[i].keyup)this.sobIndex[i].keyup(e);
+            } 
+        }
   	}
 
     set menuIndex(value) {      

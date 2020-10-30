@@ -107,7 +107,7 @@ export class SPLWindow  {
 	    			//}
 	    		}
 	    	}
-	    	trace(arrNum)
+	    	
 	    	return arrNum;
 	    }
 

@@ -289,6 +289,21 @@ export class SobIndex  {
         this.sobMenu=function(s,p,e){
             trace(this.type+" sobMenu >>",s,p,e)    
         }
+
+
+
+        this.boolCTRL=false
+        this.keydown=function(e){
+            if(event.keyCode==17)self.boolCTRL=true
+            /*if(event.keyCode==81&&self.boolCTRL)  {
+                
+            }*/
+            
+        }
+
+        this.keyup=function(e){
+            if(event.keyCode==17)self.boolCTRL=false
+        }
                 
     }
 

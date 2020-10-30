@@ -46,6 +46,12 @@ export function SpliceSten (_stage) {
 	
 
 	this._height = this.stage._height;
+
+	this.cont2dDeb = new PIXI.Container();
+	_stage.content2d2.addChild(this.cont2dDeb);
+	this.graphDeb = new PIXI.Graphics();
+	this.cont2dDeb.addChild(this.graphDeb);
+
 	
 	this.content2d = new PIXI.Container();
 	_stage.content2d2.addChild(this.content2d);
@@ -242,6 +248,11 @@ export function SpliceSten (_stage) {
 				}
 			}
 		}
+
+		this.graphDeb.clear();	
+		this.graphDeb.lineStyle(5, 0xff0000, 1);
+		this.graphDeb.drawRect(this.rectBig.x,this.rectBig.y,this.rectBig.w,this.rectBig.h)
+
 		this.par.render()
 	}
 
@@ -296,12 +307,15 @@ export function SpliceSten (_stage) {
 		this.content2d1.rotation=this._rotation;
 		this.draw1();
 		this.stage.render();
+		this.poiskGran();
 	}
 
 	////////////////////////////////
 	var a1,d1,a
 	var pNull=new Position()
+
 	this.arrGran = [new Position(), new Position(), new Position(), new Position()];
+	this.rectBig={x:0,y:0,x1:0,y1:0,w:0,h:0,o:null}
 	this.poiskGran=function(){
 		a=calc.getAngle(this.position, this.position1);
 		
@@ -340,7 +354,61 @@ export function SpliceSten (_stage) {
         calc.getVector(d1,a+a1,this.arrGran[3])
         this.arrGran[3].x+=this.position.x;
         this.arrGran[3].y+=this.position.y;
+
+        this.rectBig.x=99999999999
+        this.rectBig.y=99999999999
+        this.rectBig.x1=-29999999999
+        this.rectBig.y1=-29999999999
+        for (var i = 0; i < this.arrGran.length; i++) {
+        	if(this.rectBig.x>this.arrGran[i].x)this.rectBig.x=this.arrGran[i].x
+        	if(this.rectBig.x1<this.arrGran[i].x)this.rectBig.x1=this.arrGran[i].x
+        	if(this.rectBig.y>this.arrGran[i].y)this.rectBig.y=this.arrGran[i].y
+        	if(this.rectBig.y1<this.arrGran[i].y)this.rectBig.y1=this.arrGran[i].y	
+        }
+    	this.rectBig.w=this.rectBig.x1-this.rectBig.x
+        this.rectBig.h=this.rectBig.y1-this.rectBig.y
+        //this.rectBig.y-=this.rectBig.h;
+     
+
+
 	}
+	var rez,bp,bp1,res
+	var arrayCol=[]
+	this.isRect=function(r,b){
+		if(b==undefined)this.poiskGran();	
+		if(calc.isRectS(r,this.rectBig)==true){
+			arrayCol.length=0
+			bp=calc.isRectPoint(r, this.position);
+			bp1=calc.isRectPoint(r, this.position1);
+			if(bp==true||bp1==true){
+				if(bp==true)arrayCol.push(this.addPoint);
+				if(bp1==true)arrayCol.push(this.addPoint1);	
+			}
+
+
+			if(arrayCol.length!=0&&arrayCol[0].uuid!=this.uuid)arrayCol.unshift(this);
+
+			if(arrayCol.length==0){//Ищем по массиву линий краюв
+				for (var i = 0; i < this.arrGran.length; i+=2) {
+					res=calc.isRectLine(r, this.arrGran[i], this.arrGran[i+1]);
+					if(res==true){
+						arrayCol.unshift(this);
+						break;
+					}
+				}
+			}
+
+			
+			if(arrayCol.length!=0){
+				for (var i = 0; i < this.windows.array.length; i++) {
+					arrayCol.push(this.windows.array[i])
+				}
+				return arrayCol;
+			}
+		}
+		return null;
+	}
+
 
 	///////////////////////////////
 	
@@ -444,6 +512,8 @@ export function SpliceSten (_stage) {
 			}		
 		}
 	}
+
+	
 
 
 
@@ -554,6 +624,11 @@ Object.defineProperties(SpliceSten.prototype, {
 			for (var ii = 0; ii < this.arrayClass.length; ii++) {
 				if ('activMouse' in this.arrayClass[ii]) this.arrayClass[ii].life = this._life;
 			}
+
+
+			if(this._life==true)this.stage.content2d2.addChild(this.cont2dDeb);
+			else if(this.cont2dDeb.parent!=undefined)this.cont2dDeb.parent.removeChild(this.cont2dDeb);
+
 			if(this._life==true)this.stage.content2d2.addChild(this.content2d);
 			else if(this.content2d.parent!=undefined)this.content2d.parent.removeChild(this.content2d);
 

@@ -139,6 +139,20 @@ export class Menu  {
 	    		if(this.array[i].sizeWindow)this.array[i].sizeWindow(w,h,s);
 	    	}
 	    }
+
+	    this.keydown=function(e){
+	    	for (var i = this.array.length - 1; i >= 0; i--) {
+	    		if(this.array[i].keydown)this.array[i].keydown(e);
+	    	} 
+            
+        }
+        this.keyup=function(e){
+            for (var i = this.array.length - 1; i >= 0; i--) {
+	    		if(this.array[i].keyup)this.array[i].keyup(e);
+	    	} 
+        }
+
+
 	    this.menuIndex=0;
 	}
 

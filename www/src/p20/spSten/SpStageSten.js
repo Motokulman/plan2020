@@ -10,6 +10,8 @@ import {  Calc } from './../Calc.js';
 
 import {  SPLineWord } from './SPLineWord.js';
 import {  WorldBlok } from './worldBlok/WorldBlok.js';
+
+import { SPGroup} from './SPGroup.js';
 /**
 * Мир для сращалок дорог
 * @class
@@ -28,6 +30,9 @@ export function SpStageSten (par,  fun) {
 
 	this._delph = 500;
 	
+	this._colorUI=0x008cba;
+	this._colorUIActive=0xf28044;
+
 
 	this._color="#c5d6e0";
 	this._colorP=0xc5d6e0;
@@ -74,13 +79,14 @@ export function SpStageSten (par,  fun) {
 	this.content2dPoint = new PIXI.Container();	
 	this.cont2dLine = new PIXI.Container();
 	this.cont2dBlok = new PIXI.Container();
-
+	this.cont2dGroup = new PIXI.Container();
 
 	this.content2d.addChild(this.content2d1);
     this.content2d.addChild(this.content2d2);
     this.content2d.addChild(this.content2dPoint);
     this.content2d.addChild(this.cont2dBlok);
     this.content2d.addChild(this.cont2dLine);
+    this.content2d.addChild(this.cont2dGroup);
 
 
 
@@ -91,6 +97,7 @@ export function SpStageSten (par,  fun) {
 
 	this.lineWord=new SPLineWord(this);
 	this.worldBlok=new WorldBlok(this);
+	this.group=new SPGroup(this);
 
 	
 
@@ -145,7 +152,6 @@ export function SpStageSten (par,  fun) {
 			for (var i = 0; i < this.arrSplice.length; i++) {
 				if (this.arrSplice[i].life == false) continue;				
 				aSten.push(this.arrSplice[i])
-
 			}
 		}
 

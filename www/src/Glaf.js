@@ -90,6 +90,13 @@ export class Glaf  {
                   
         }
 
+        this.keydown=function(e){ 
+            this.menu.keydown(e)
+        }
+        this.keyup=function(e){
+            this.menu.keyup(e)  
+        }
+
   
   	}
 }

@@ -406,7 +406,6 @@ export function Calc () {
 	var mArrPoint = [new Position(), new Position(), new Position(), new Position()];
 	// проверка на пересечение прямоугольников
 	this.isIntersectionRect = function (r, rect) { //   true - перечение false - непересекаются
-
 		arrPoint[0].set(r.x, r.y);
 		arrPoint[1].set(r.x + r.width, r.y);
 		arrPoint[2].set(r.x + r.width, r.y + r.height);
@@ -416,9 +415,69 @@ export function Calc () {
 		mArrPoint[1].set(rect.x + rect.width, rect.y);
 		mArrPoint[2].set(rect.x + rect.width, rect.y + rect.height);
 		mArrPoint[3].set(rect.x, rect.y + rect.height);
-
 		return this.isIntersectionFromPoint(arrPoint, mArrPoint);
 	};
+
+
+	//Сравнение прямоугольников
+	//0- прямоугольники на поподают
+	this.isRectS = function (r, r1) {
+		if(this.colisiLine2D(r.x,r.x+(r.w==undefined?r.width : r.w), r1.x,r1.x+(r1.w==undefined?r1.width : r1.w))==true){
+			if(this.colisiLine2D(r.y,r.y+(r.h==undefined?r.height : r.h), r1.y,r1.y+(r1.h==undefined?r1.height : r1.h))==true){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	//сверяем две полосы
+    this.colisiLine2D=function(ps,pf,ps1,pf1){            
+        if(ps1>=ps &&ps1<=pf)return true;
+        if(ps>=ps1 &&ps<=pf1)return true;
+        return false;
+    }
+    //чтока в ректе?
+    this.isRectPoint= function (rect, point) {
+    	if(point.x>=rect.x && point.y>=rect.y){
+    		if(point.x<=rect.x+(rect.w==undefined?rect.width : rect.w) && point.y<=rect.y+(rect.h==undefined?rect.height : rect.h)){
+    			return true;
+    		}
+    	}
+    	return false;	
+    }
+
+    //Линия в или пересекает рект
+    var ppS=new Position()
+    var ppS1=new Position()
+    this.isRectLine= function (rect, point,point1) {
+    	if(this.isRectPoint(rect,point)==true)return true;	
+    	if(this.isRectPoint(rect,point1)==true)return true;
+
+    	//0
+    	ppS.set(rect.x,rect.y)
+    	ppS1.set(rect.x+(rect.w==undefined?rect.width : rect.w),rect.y)
+    	if(this.getPointOfIntersection(ppS,ppS1,point,point1)!=null)return true;	
+
+    	//1   	
+    	ppS.set(rect.x+(rect.w==undefined?rect.width : rect.w),rect.y)
+    	ppS1.set(rect.x+(rect.w==undefined?rect.width : rect.w),rect.y+(rect.h==undefined?rect.height : rect.h))
+    	if(this.getPointOfIntersection(ppS,ppS1,point,point1)!=null)return true;
+
+    	//2  	
+    	
+    	ppS.set(rect.x+(rect.w==undefined?rect.width : rect.w),rect.y+(rect.h==undefined?rect.height : rect.h))
+		ppS1.set(rect.x,rect.y+(rect.h==undefined?rect.height : rect.h))
+    	if(this.getPointOfIntersection(ppS,ppS1,point,point1)!=null)return true;
+
+    	ppS.set(rect.x,rect.y+(rect.h==undefined?rect.height : rect.h))
+    	ppS1.set(rect.x,rect.y)
+    	if(this.getPointOfIntersection(ppS,ppS1,point,point1)!=null)return true;  
+       	return false;	
+    }
+
+
+
+
 
 	// пересечение полигонов
 	// arrPoint - обход ректа по часовой стрелки
