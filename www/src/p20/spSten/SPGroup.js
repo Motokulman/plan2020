@@ -38,7 +38,7 @@ export class SPGroup  {
             this.korektRect()
             this.drawRect()
             if(this.funDragMenu!=undefined)this.funDragMenu()
-           
+
             return true
            
         }
@@ -84,8 +84,8 @@ export class SPGroup  {
 
         this.drawRect= function(){            
             this.graphicsBig.clear()    
-            this.graphicsBig.lineStyle(10, this._colorUI, 0.5);
-            this.graphicsBig.beginFill(this._colorUI, 0.05);
+            this.graphicsBig.lineStyle(10, this._colorUI, 0.75);
+            this.graphicsBig.beginFill(this._colorUI, 0.1);
             this.graphicsBig.drawRect(this.rectBig.x,this.rectBig.y,this.rectBig.w,this.rectBig.h)
             this.par.render() 
         }

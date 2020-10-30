@@ -18,13 +18,16 @@ export class MOGroup extends MOBaza {
             this.window.title="GROUP";
             var yy=this.otstup1;
             
-            this.button=new DButton(this.window.content,this.otstup1,this.otstup1,"",function(){
+            this.button=new DButton(this.window.content,this.window.width-this.otstup1-this.wh,this.otstup1,"",function(){
                 self.bool=false
                 self.object.clear(); 
                 self.active=false              
             },"resources/image/p0.png");
             this.button.width=this.button.height=this.wh;
             this.window.height=210;
+
+
+
 
 
             this.mogObj=new MOGObj(this,function(s,p){
@@ -97,83 +100,100 @@ export class MOGObj{
 
         this.arrSt=[]        
 
-
+        var aButton
 
         this.dCont=new DCont(this.par.window.content); 
         this.dCont.y=this.otstup*2+this.par.wh;
 
+        this.panelSt=undefined
+        this.init=function(){
+            if(this.panelSt!=undefined)return
+            //стены            
+            this.panelSt=new DPanel(this.dCont,this.otstup,0);
+            this.panelSt.width=this.par.window.width-this.otstup*2;
 
+            this.panelSt.height=this.wh+this.otstup+20
 
-        //стены
-        this.panelSt=new DPanel(this.dCont,this.otstup,0);
-        this.panelSt.width=this.par.window.width-this.otstup*2;
+            this.labelSt = new DLabel(this.panelSt,this.otstup,this.otstup,"")
+            this.labelSt.fontSize=12;
+            this.labelSt.width=this.width;
 
-        this.panelSt.height=this.wh+this.otstup+20
+            var ooo
+            var yy=this.otstup1;
 
-        this.labelSt = new DLabel(this.panelSt,this.otstup,this.otstup,"")
-        this.labelSt.fontSize=12;
-        this.labelSt.width=this.width;
+            var xx=this.otstup1;
+            aButton=["carrier","out","adjacent"]
 
+            var oM={}
+            for (var i = 0; i < aButton.length; i++) {                
+                oM[aButton[i]]={}
+                oM[aButton[i]][0]=new DButton(this.panelSt,xx,20,"",function(){
+                    trace(this.name,this.param,self.arrSt.length)
+                    for (var i = 0; i < self.arrSt.length; i++) {
+                        ooo=self.arrSt[i]
+                        ooo[this.name]=this.param;
+                        ooo._addPoint.dragGG(); 
+                        ooo._addPoint1.dragGG(); 
+                        self.drag();                        
+                    }
+                    ooo.par[this.name]=this.param;
+                },"resources/image/sten_"+aButton[i]+"0.png"); 
+                oM[aButton[i]][0].width=oM[aButton[i]][0].height=this.wh;
+                oM[aButton[i]][0].name=aButton[i];
+                oM[aButton[i]][0].param=false;
 
-        var yy=this.otstup1;
+               
+                oM[aButton[i]][1]=new DButton(this.panelSt,xx,20,"",function(){
 
-        var xx=this.otstup1;
-        var aButton=["carrier","out","adjacent"]
-
-        var oM={}
-        for (var i = 0; i < aButton.length; i++) {                
-            oM[aButton[i]]={}
-            oM[aButton[i]][0]=new DButton(this.panelSt,xx,20,"",function(){
-              /*  self.object[this.name]=this.param  
-                self.object._addPoint.dragGG(); 
-                self.object._addPoint1.dragGG();                  
-                self.drag();
-                self.object.par[this.name]=this.param; 
-*/
-            },"resources/image/sten_"+aButton[i]+"0.png"); 
-            oM[aButton[i]][0].width=oM[aButton[i]][0].height=this.wh;
-            oM[aButton[i]][0].name=aButton[i];
-            oM[aButton[i]][0].param=false;
-
-           
-            oM[aButton[i]][1]=new DButton(this.panelSt,xx,20,"",function(){
-              /*self.object[this.name]=this.param;
-                self.object._addPoint.dragGG(); 
-                self.object._addPoint1.dragGG(); 
-                self.drag();
-                self.object.par[this.name]=this.param;
-*/
-            },"resources/image/sten_"+aButton[i]+"1.png"); 
-            oM[aButton[i]][1].width=oM[aButton[i]][1].height=this.wh;              
-            oM[aButton[i]][1].name=aButton[i]
-            oM[aButton[i]][1].param=true    
-            xx+=this.otstup1+this.wh
+                    for (var i = 0; i < self.arrSt.length; i++) {
+                        ooo=self.arrSt[i]
+                        ooo[this.name]=this.param;
+                        ooo._addPoint.dragGG(); 
+                        ooo._addPoint1.dragGG(); 
+                        self.drag();                        
+                    }
+                    ooo.par[this.name]=this.param;        
+                },"resources/image/sten_"+aButton[i]+"1.png"); 
+                oM[aButton[i]][1].width=oM[aButton[i]][1].height=this.wh;              
+                oM[aButton[i]][1].name=aButton[i]
+                oM[aButton[i]][1].param=true    
+                xx+=this.otstup1+this.wh
+            }
+            var sten
+            this.butClearSt=new DButton(this.panelSt,this.panelSt.width-this.otstup1-this.wh,20,"",function(){
+                
+                self.clearSim("SpliceSten")
+            },"resources/image/p0.png");
+            this.butClearSt.width=this.butClearSt.height=this.wh;
+            //////////////////////////////////
         }
 
-        this.butClearSt=new DButton(this.window.content,this.otstup1,this.otstup1,"",function(){
-           /* self.bool=false
-            self.object.clear(); 
-            self.active=false  */            
-        },"resources/image/p0.png");
-        this.butClearSt.width=this.button.height=this.wh;
-        this.butClearSt.height=210;
-
-
-        //////////////////////////////////
-
-
         
+        this.clearSim=function(s){
+            for (var i = self.par.object.array.length-1; i >=0; i--) {
+                if(self.par.object.array[i].type==s){//"SpliceSten"){
+                    self.par.object.array[i].clear()
+                    self.par.object.array.splice(i,1)
+                }
+            }
+        }
 
 
 
 
+
+
+
+
+
+
+        var bool,bool1
         this.drag=function(){
             var yy=0
-            
+            this.init()
             this.arrSt.length=0;
             for (var i = 0; i < this.par.object.array.length; i++) {
-                if(this.par.object.array[i].type=="SpliceSten"){
-                    trace(i+"###",this.par.object.array[i].type);
+                if(this.par.object.array[i].type=="SpliceSten"){                    
                     this.arrSt.push(this.par.object.array[i]);
                 }
             }
@@ -185,7 +205,26 @@ export class MOGObj{
                 this.labelSt.text="Sten: "+this.arrSt.length;
                 
                 yy+=this.panelSt.height+this.otstup
-                trace(this.panelSt.height,this.otstup,yy)
+
+                
+                for (var i = 0; i < aButton.length; i++) {
+                    bool1=this.arrSt[0][aButton[0]]
+                    bool=true;
+                    for (var j= 0; j < this.arrSt.length; j++) {
+                        if(this.arrSt[j][aButton[0]]!=bool1)bool=false;
+
+                    }
+
+                    if(bool==true){
+                        oM[aButton[i]][0].alpha=0.5;
+                        oM[aButton[i]][1].alpha=0.5;
+                    }
+
+
+                }
+                
+
+               
 
             }
 
