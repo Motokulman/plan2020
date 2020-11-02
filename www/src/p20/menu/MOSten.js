@@ -19,12 +19,9 @@ export class MOSten extends MOBaza {
 
         var oM
         this.msUi=undefined
-        this.postIn=function(){
-           
-            this.window.title="Sten";
-            
+        this.postIn=function(){           
+            this.window.title="Sten";            
             var yy=this.otstup1;
-
             var xx=this.otstup1;
             var a=["carrier","out","adjacent"]
 
@@ -40,12 +37,12 @@ export class MOSten extends MOBaza {
 
                 },"resources/image/sten_"+a[i]+"0.png"); 
                 oM[a[i]][0].width=oM[a[i]][0].height=this.wh;
-                oM[a[i]][0].name=a[i]
-                oM[a[i]][0].param=false
+                oM[a[i]][0].name=a[i];
+                oM[a[i]][0].param=false;
 
                
                 oM[a[i]][1]=new DButton(this.window.content,xx,yy,"",function(){
-                    self.object[this.name]=this.param
+                    self.object[this.name]=this.param;
                     self.object._addPoint.dragGG(); 
                     self.object._addPoint1.dragGG(); 
                     self.drag();
@@ -57,8 +54,6 @@ export class MOSten extends MOBaza {
                 oM[a[i]][1].param=true    
                 xx+=this.otstup1+this.wh
             }
-
-
 
             this.button=new DButton(this.window.content,xx,yy,"",function(){
                 self.object.clear()
@@ -109,6 +104,8 @@ export class MOSten extends MOBaza {
         this.postSO=function(){ 
             this.object.funDragMenu=this.drag
             this.window.title="Sten "+this.object.idArr//+" : "+ this.object.uuid;
+            this.object.par.setActive(this.object);
+            //this.object.active=true
 
             this.drag();
         }

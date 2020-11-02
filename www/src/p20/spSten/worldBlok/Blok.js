@@ -18,6 +18,8 @@ export class Blok  {
 
         this.idArr=-1;
 
+        this._active=false;
+
         this._width=100;
         this._height=100;
         this._delph=100;
@@ -123,9 +125,15 @@ export class Blok  {
         //trace("===========================================================================",this.type);
         //if(this.type=="Blok")this.init(); 
             
-
+        this.drawActive=undefined
     }
-
+    set active(value) {
+        if(this._active!=value){
+            this._active= value;                   
+            if(this.drawActive!=undefined)this.drawActive();                   
+        }
+    }    
+    get active() { return  this._active;}   
 
 
     set width(value) {

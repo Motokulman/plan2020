@@ -6,6 +6,7 @@ import { Sten3D } from './Sten3D.js';
 */
 import { Splice } from './../sp/Splice.js';
 import { SPLWindow } from './SPLWindow.js';
+
 /**
 * Стена(линия)
 * @class
@@ -61,6 +62,8 @@ export function SpliceSten (_stage) {
     this.graphics.interactive = true;
 
 
+    this.stAct=new STAct(this)
+
 
 
     this.content2d1 = new PIXI.Container();
@@ -101,10 +104,18 @@ export function SpliceSten (_stage) {
     this.graphics.on('mousedown', this.onDragStart);
 
 
+    this.graphics.on('mouseover', function(e){    	
+    	self.stAct.sahPlus=10;    	
+    });
+    this.graphics.on('mouseout', function(e){    	
+    	self.stAct.sahPlus=0;    
+    });
 
 
 
 
+
+    this.numBlok=0
     var numBlok
 	this.draw1 = function (b) {
 		if(b==undefined)this.windows.draw()
@@ -188,7 +199,7 @@ export function SpliceSten (_stage) {
 
 
 
-		this.graphics.beginFill(0x0000ff, 0.8);
+		this.graphics.beginFill(0x0000ff, 0.1);
 		this.graphics.drawCircle(200,0,50)
 
 		this.graphics1.clear();	
@@ -201,15 +212,9 @@ export function SpliceSten (_stage) {
 			}
 		}else{
 
-
-
-
-
-
 			this.drawGrah(this.graphics1,-this.arrPosit[2].x,this.arrPosit[2].y,true)
 			this.drawGrah(this.graphics1,-this.arrPosit[1].x,this.arrPosit[1].y,false)
 			this.drawGrah(this.graphics1,-this.arrPosit[0].x,this.arrPosit[0].y,false)
-
 
 			this.drawGrah(this.graphics1,numBlok[0],this.arrPosit[0].y,false)
 			this.drawGrah(this.graphics1,numBlok[0],this.arrPosit[5].y,false)
@@ -249,9 +254,11 @@ export function SpliceSten (_stage) {
 			}
 		}
 
-		this.graphDeb.clear();	
+		/*this.graphDeb.clear();	
 		this.graphDeb.lineStyle(5, 0xff0000, 1);
-		this.graphDeb.drawRect(this.rectBig.x,this.rectBig.y,this.rectBig.w,this.rectBig.h)
+		this.graphDeb.drawRect(this.rectBig.x,this.rectBig.y,this.rectBig.w,this.rectBig.h)*/
+
+		this.stAct.draw1()
 
 		this.par.render()
 	}
@@ -575,8 +582,6 @@ SpliceSten.prototype.drag = function () {
 	
 };
 Object.defineProperties(SpliceSten.prototype, {
-
-
 	height: {
 		set: function (value) {
 			if (this._height === value) return;			
@@ -600,6 +605,8 @@ Object.defineProperties(SpliceSten.prototype, {
 		set: function (value) {
 			if (this._active === value) return;			
 			this._active = value;
+			this.stAct.sahAct=value ? 40: 0;
+
 			this._setAllParam('active', this._active);
 		},
 		get: function () { return this._active; }
@@ -847,3 +854,68 @@ SpliceStenSquare.prototype = {
 	}
 };
 */
+
+
+
+export function STAct (par) {
+
+	var self = this;
+	this.type = 'STAct';
+	this.par = par;
+	this._sahAct=0;
+
+	this._sahPlus=0;
+
+	this.arrVorur=this.par.arrVorur;	
+	this.graphics = new PIXI.Graphics();
+    this.par.content2d.addChild(this.graphics);
+    this.graphics.alpha=this._sahAct/100;
+
+    this.draw1=function(){
+		this.graphics.clear();
+
+
+	
+		
+		
+		this.graphics.beginFill(par.par.colorUI);		
+		this.graphics.moveTo(this.par.arrVorur[0].x,this.par.arrVorur[0].y);
+		for (var i = 1; i < this.par.aVKol; i++) {
+			this.graphics.lineTo(this.par.arrVorur[i].x,this.par.arrVorur[i].y);				
+		}
+		this.graphics.lineTo(this.par.arrVorur[0].x,this.par.arrVorur[0].y);
+		
+
+    }
+
+    this.corektSetGet=function(){
+
+		this.graphics.alpha = (this._sahAct+this._sahPlus)/100;	
+		this.par.par.render()
+
+    }
+
+}
+STAct.prototype = {
+
+
+	set sahAct (v) {
+		if (this._sahAct === v) return;			
+		this._sahAct = v;
+		this.corektSetGet()
+	},
+	get sahAct () {
+
+		return this._sahAct;
+	},
+
+	set sahPlus (v) {
+		if (this._sahPlus === v) return;		
+		this._sahPlus = v;
+		this.corektSetGet()
+	},
+	get sahPlus () {
+
+		return this._sahPlus;
+	},
+}

@@ -12,7 +12,7 @@ export class P20  {
 
         this.sobSP=undefined;
 
-        this.startStyle='{"colorC0":"#ff0000","colorC1":"#00ff00","delphC0":217.07,"delphC1":500}'
+        this.startStyle='{"colorC0":"#ffe4d4","colorC1":"#f0f0f0","delphC0":200,"delphC1":500,"delphPlus":100}'
         
         this._activObject=undefined;
         this.div= document.createElement('div');

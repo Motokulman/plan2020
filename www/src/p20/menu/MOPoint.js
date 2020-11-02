@@ -73,6 +73,7 @@ export class MOPoint extends MOBaza {
         this.postSO=function(){ 
             this.bool=true           
             this.object.funDragMenu=this.drag
+            this.object.par.setActive(this.object);
             this.drag()
         }
         this.clear=function(){

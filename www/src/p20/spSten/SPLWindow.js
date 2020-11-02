@@ -36,7 +36,7 @@ export class SPLWindow  {
   				}
   			}
   		});
-  		this.world.deb=this.deb
+  		//this.world.deb=this.deb
 
 
   		this.array=[];

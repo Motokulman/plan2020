@@ -21,7 +21,7 @@ export class MOWindow extends MOBaza {
         this.slid1
         this.bool=true
         this.postIn=function(){           
-            this.window.title="SP";
+            this.window.title="Blok";
             var yy=this.otstup1
             /*this.col=new DColor(this.window.content,this.otstup1,yy,"",function(){
                 self.object.color=this.value;            
@@ -74,6 +74,11 @@ export class MOWindow extends MOBaza {
         this.postSO=function(){ 
             this.bool=true;        
             this.drag()
+            this.window.title="Blok: "+this.object.idArr;
+            trace(this.object._parent.par.par)
+            if(this.object._parent)this.object._parent.par.par.setActive(this.object);
+            
+            //this.object.par.par.setActive(this.object);
         }
         this.clear=function(){
             if(this.object!=undefined){
