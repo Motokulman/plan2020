@@ -16,6 +16,7 @@ export class MDragScane  {
         this.cont1=undefined;
         this.stage=undefined;
         this._menuIndex=-1
+        this._mashtab=1;
 
         this.otstup=this.par.otstup;
         this.otstup1=this.par.otstup1;
@@ -136,4 +137,16 @@ export class MDragScane  {
         }
     }    
     get menuIndex() { return  this._menuIndex;}
+
+    set mashtab(value) {  
+        if(this._mashtab!= value) {
+            this._mashtab= value;
+            trace(this._mashtab)
+            for (var i = 0; i < this.sobIndex.length; i++) {           
+                this.sobIndex[i].mashtab= value;
+            }
+        }    
+              
+    }    
+    get mashtab() { return  this._mashtab;}
 }

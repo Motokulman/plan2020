@@ -59,7 +59,8 @@ export class Line  {
             this.maxP=0
             for (i = 0; i < this.array.length; i++) {
                 if(this.array[i][this.p1]>this.maxP)this.maxP=this.array[i][this.p1];
-            }           
+            }
+                      
         }
 
 

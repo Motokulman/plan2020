@@ -204,6 +204,7 @@ export function SpliceSten (_stage) {
 
 		this.graphics1.clear();	
 		this.graphics1.lineStyle(20, 0x000000, 1);
+	
 		if(numBlok==0){
 			for (var i = 0; i < this.aVKol; i++) {			
 				this.graphics1.moveTo(this.arrVorur[i].x,this.arrVorur[i].y);
@@ -223,6 +224,7 @@ export function SpliceSten (_stage) {
 			this.drawGrah(this.graphics1,-this.arrPosit[4].x,this.arrPosit[4].y,false)
 			this.drawGrah(this.graphics1,-this.arrPosit[3].x,this.arrPosit[3].y,false)
 			this.drawGrah(this.graphics1,-this.arrPosit[2].x,this.arrPosit[2].y,false)
+
 
 			for (var i = 0; i < numBlok.length; i+=2) {
 				if(i!=numBlok.length-2){

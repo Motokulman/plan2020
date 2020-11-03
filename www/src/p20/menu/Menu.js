@@ -17,7 +17,7 @@ export class Menu  {
 		var self=this;
 		this.par=par;
 		this.fun=fun;
-
+		this._mashtab=1;
 		this.wh=48;
 		this.otstup=5;
 		this.otstup1=10;
@@ -165,5 +165,17 @@ export class Menu  {
         }
     }    
     get menuIndex() { return  this._menuIndex;}
+
+
+    set mashtab(value) {  
+        if(this._mashtab!= value) {
+            this._mashtab= value;
+            for (var i = this.array.length - 1; i >= 0; i--) {
+	    		if(this.array[i]._mashtab!=undefined)this.array[i].mashtab=value;
+	    	}
+        }    
+              
+    }    
+    get mashtab() { return  this._mashtab;}
 } 
 

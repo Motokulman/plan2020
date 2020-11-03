@@ -13,7 +13,9 @@ export class P20  {
         this.sobSP=undefined;
 
         this.startStyle='{"colorC0":"#ffe4d4","colorC1":"#f0f0f0","delphC0":200,"delphC1":500,"delphPlus":100}'
-        
+
+        this.startStyle='{"colorC0":"#ffe4d4","colorC1":"#aaaaaa","delphC0":200,"delphC1":500,"delphPlus":100}'
+
         this._activObject=undefined;
         this.div= document.createElement('div');
         this.div.style.position = 'fixed';
