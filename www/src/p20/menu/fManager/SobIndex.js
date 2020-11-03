@@ -209,11 +209,13 @@ export class SobIndex  {
 
         var pos={x:0,y:0,o:null}
         var r
-        var mX,mXI,mY,mYI,b,pp;
+        var mX,mXI,mY,mYI,b,pp,mXY,mYX;
         this.korektAP=function(_p,_o){
             _p.x=Math.round(_p.x/100)*100;
             _p.y=Math.round(_p.y/100)*100;
             _p.o=null;
+            _p.oy=null;
+            _p.ox=null;
 
             this._otstup=25;
             if(self.pointOld!=undefined){
@@ -239,18 +241,26 @@ export class SobIndex  {
                     if(pp<mX){
                         mX=pp;
                         mXI=self.p20.sp.arrPoint[i].position.x
+                        mXY=self.p20.sp.arrPoint[i].position.y
                     }
 
                     pp=Math.abs(_p.y-self.p20.sp.arrPoint[i].position.y)
                     if(pp<mY){
                         mY=pp;
                         mYI=self.p20.sp.arrPoint[i].position.y
+                        mYX=self.p20.sp.arrPoint[i].position.x
                     }
                     
                 } 
                 
-                if(mXI!=null)_p.x=mXI;
-                if(mYI!=null)_p.y=mYI;
+                if(mXI!=null){
+                    _p.x=mXI;
+                    _p.oy=mXY
+                }
+                if(mYI!=null){
+                    _p.y=mYI;
+                    _p.ox=mYX;
+                }
                     
             }
             
@@ -304,10 +314,12 @@ export class SobIndex  {
         this.downFont=function(e){
             self.par.par.mGridDrag.downFont(e);
         }
-
+        this.helpDP=undefined
         this.setP20=function(p20){
             self.cont=p20.cont2d
             self.p20=p20
+            self.helpDP=self.par.par.mCont2dHelp.helpDP
+
         }
 
         this.sp=undefined
@@ -353,7 +365,7 @@ export class SobIndex  {
         if(this._active!=v){
             this._active = v;            
             if(this.funActive!=undefined)this.funActive();
-           
+            if(this.helpDP)this.helpDP.clear()
             
         }       
     }   

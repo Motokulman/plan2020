@@ -6,8 +6,11 @@ export class SpDebugPixi  {
     	var self=this;
     	this.content2d = new PIXI.Container();
 
-
+    	this.color=0xaaaaaa
+    	this.colorActiv=0xFF0000
+    	this.wL=10;
     	this.al=1
+    	this._alpha=1
 
     	this.contentDebag = new PIXI.Container();
 		this.content2d.addChild(this.contentDebag);
@@ -21,8 +24,8 @@ export class SpDebugPixi  {
 			//if (this.debagOk(aP) == false) return;
 			this.graphics = new PIXI.Graphics();
 			this.contentDebag.addChild(this.graphics);
-			if (color == undefined)color = 0xFF0000;
-			if (wL == undefined)wL = 10;
+			if (color == undefined)color = this.color;
+			if (wL == undefined)wL = this.wL;
 			this.graphics.lineStyle(wL, color, wL);
 			this.graphics.moveTo(p.x, p.y);
 			this.graphics.lineTo(p1.x, p1.y);
@@ -33,10 +36,10 @@ export class SpDebugPixi  {
 			this.graphics = new PIXI.Graphics();
 			this.contentDebag.addChild(this.graphics);
 			r = r || 50;
-			if (color == undefined)color = 0xFF0000;
-			wL = wL || 10;
+			if (color == undefined)color = this.color;
+			wL = wL || this.wL;
 
-			this.graphics.lineStyle(10, color, wL);
+			this.graphics.lineStyle(this.wL, color, wL);
 			this.graphics.beginFill(color, a==undefined ? 1: a);
 			this.graphics.drawCircle(p.x, p.y, r);
 		};
@@ -49,10 +52,17 @@ export class SpDebugPixi  {
 			g.clear();
 		};
 
+		var oo={x:0,y:0}
+		var oo1={x:0,y:0}
+		this.dLineParam = function (x,y, x1,y1, color, wL) {
+			oo.x=x;oo.y=y;oo1.x=x1;oo1.y=y1;
+			this.dLine(oo, oo1, color, wL); 
+		};
+
 		this.dLine = function (p, p1, color, wL) {
 			//if (this.debagOk(aP) == false) return;
-			if (color == undefined)color = 0xFF0000;
-			if (wL == undefined)wL = 10;
+			if (color == undefined)color = this.color;
+			if (wL == undefined)wL = this.wL;
 			g.endFill();
 			g.lineStyle(wL, color, this.al);
 			g.moveTo(p.x, p.y);
@@ -66,9 +76,9 @@ export class SpDebugPixi  {
 				console.warn('Большой круг рисовать не буду', r);
 				return;
 			}
-			if (color == undefined)color = 0xFF0000;
-			wL = wL || 10;
-			g.lineStyle(10, color, this.al);
+			if (color == undefined)color = this.color;
+			wL = wL || this.wL;
+			g.lineStyle(this.wL, color, this.al);
 			g.drawCircle(p.x, p.y, r);
 			g.endFill();
 		};
@@ -98,7 +108,7 @@ export class SpDebugPixi  {
 				return;
 			}
 			if (color == undefined)color = 0xFFFFFF*Math.random();
-			wL = wL || 10;
+			wL = wL || this.wL;
 			let ww=r.w  ==undefined ? r.width : r.w
 			let hh=r.h  ==undefined ? r.height : r.h
 
@@ -114,6 +124,18 @@ export class SpDebugPixi  {
 		};
 
     }
+
+
+    set alpha(value) {  
+        if(this._alpha!= value) {
+            this._alpha= value;
+            this.content2d.alpha= value;
+        }    
+              
+    }    
+    get alpha() { return  this._alpha;}
+
+
 }
 
 

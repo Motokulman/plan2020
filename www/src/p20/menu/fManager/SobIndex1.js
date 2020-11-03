@@ -17,7 +17,7 @@ export class SobIndex1  extends SobIndex {
         this.fun=fun;
 
         var pos={x:0,y:0,o:null}
-        var sp={x:0,y:0,x1:0,y1:0,s:0,o:null}
+        var sp={x:0,y:0,x1:0,y1:0,s:0,o:null,oy:null,ox:null}
         var point,point1,activSten;
         this.mousemove=function(e){           
             pos.x=sp.x+(e.clientX-sp.x1)/sp.s;
@@ -25,7 +25,12 @@ export class SobIndex1  extends SobIndex {
             self.korektAP(pos,sp.o);
             sp.o.position.x=pos.x;
             sp.o.position.y=pos.y;           
-            self.p20.sp.addObjFun(sp.o);       
+            self.p20.sp.addObjFun(sp.o);
+
+
+            self.helpDP.clear()
+            if(pos.oy!=null)self.helpDP.dLineParam(sp.o.position.x,sp.o.position.y, sp.o.position.x, pos.oy)
+            if(pos.ox!=null)self.helpDP.dLineParam(sp.o.position.x,sp.o.position.y, pos.ox, sp.o.position.y)
         } 
 
 
@@ -45,6 +50,7 @@ export class SobIndex1  extends SobIndex {
                 }                     
             }
             self.pointOld=undefined
+            self.helpDP.clear()
             document.removeEventListener("mouseup", self.mouseup);
             document.removeEventListener("mousemove", self.mousemove); 
         }

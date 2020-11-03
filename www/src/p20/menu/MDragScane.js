@@ -5,6 +5,9 @@ import { SobIndex0 } from './fManager/SobIndex0.js';
 import { SobIndex1 } from './fManager/SobIndex1.js';
 import { SobIndex2 } from './fManager/SobIndex2.js';
 import { SobIndex3 } from './fManager/SobIndex3.js';
+
+import { SpDebugPixi } from '../spSten/SpDebugPixi.js';
+
 export class MDragScane  {
   	constructor(par,fun) {  		
   		this.type="MDragScane";
@@ -46,6 +49,9 @@ export class MDragScane  {
 
 
 
+
+
+
            
 
 
@@ -61,11 +67,12 @@ export class MDragScane  {
             }  
         }
 
-       /* this.deb=new DebbugPixi(); 
+        /*this.deb=new DebbugPixi(); 
         this.div.appendChild(this.deb.div);
         this.content2d = new PIXI.Container();*/
       
        
+        this.helpDP=new SpDebugPixi(); 
 
 
 
@@ -86,7 +93,8 @@ export class MDragScane  {
         } 
         this.sp=undefined
         this.setSP=function(sp){
-            this.sp=sp
+            this.sp=sp;
+
             for (var i = 0; i < this.sobIndex.length; i++) {
                 this.sobIndex[i].setSP(sp)
             }      
@@ -140,8 +148,7 @@ export class MDragScane  {
 
     set mashtab(value) {  
         if(this._mashtab!= value) {
-            this._mashtab= value;
-            trace(this._mashtab)
+            this._mashtab= value;            
             for (var i = 0; i < this.sobIndex.length; i++) {           
                 this.sobIndex[i].mashtab= value;
             }

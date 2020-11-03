@@ -4,6 +4,8 @@ import { MDragScane } from './MDragScane.js';
 import { MObject } from './MObject.js';
 import { MGridDrag } from './MGridDrag.js';
 
+import { MCont2dHelp } from './MCont2dHelp.js';
+
 import { MStart} from './MStart.js';
 
 import { MInfo} from './MInfo.js';
@@ -66,11 +68,18 @@ export class Menu  {
            // self.fun(s,p)
         });
 
+		this.array[this.array.length]=this.mCont2dHelp = new MCont2dHelp(this,function(s,p){
+           // self.fun(s,p)
+        });
+
+
         this.array[this.array.length]=global.mInfo=this.mInfo = new MInfo(this.par.dCont);
 
 
         this.array[this.array.length]=global.dragPic=this.dragPic = new DDragPic(this.par.dCont);
-        global.dragPic.whBase=this.wh
+        global.dragPic.whBase=this.wh;
+
+
 
 		this.setP20=function(p20){
 			this.p20=p20;
@@ -80,6 +89,7 @@ export class Menu  {
 		this.setSP=function(sp){
 			this.mDragScane.setSP(sp)
 			this.mGridDrag.setSP(sp)
+			this.mCont2dHelp.setSP(sp)
 		}
 
 
