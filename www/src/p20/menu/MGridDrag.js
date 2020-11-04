@@ -1,12 +1,11 @@
 
 
+//драгер сцены и расчеты максимумов, тут функция позиции к плану
 
 
-
-import { PGrid } from '../plus/PGrid.js';
-import { MKrai } from './MKrai.js';
-
-import { SpDebugPixi } from '../spSten/SpDebugPixi.js';
+import { PGrid } from '../plus/PGrid.js';//сетка
+import { MKrai } from './MKrai.js';//полосочки
+import { SpDebugPixi } from '../spSten/SpDebugPixi.js';//пикси отрисовка
 
 
 export class MGridDrag  {
@@ -34,7 +33,7 @@ export class MGridDrag  {
         this.visiPixi = this.par.par.visiPixi;
 
 
-        this.mKrai = new MKrai(this, function(s,p){             
+        this.mKrai = new MKrai(this, function(s,p){ //полосочки            
             
         });
 
@@ -42,28 +41,13 @@ export class MGridDrag  {
 
         this.debugPixi = new SpDebugPixi();
         this.par.par.cont2d.addChild(this.debugPixi.content2d);
-        this.debugPixi.content2d.scale.set(0.1,0.1);
- 
+        this.debugPixi.content2d.scale.set(0.1,0.1); 
         this.grid = new PGrid(this.par.par.c2dSloi1,this.sizeMax, 20);
-
         this.graphics = new PIXI.Graphics();
         this.par.par.c2dSloi1.addChild(this.graphics);
 
-
-
-
-
-
-
-
-
         this.panel = new DPanel(this.dCont,this.otstup,this.otstup*4+this.wh);
         this.panel.div.appendChild(this.visiPixi.div);
-
-
-
-
-
 
         //////////////////////////////
         var sp={x:0,y:0,x1:0,y1:0,s:0,o:null}
@@ -71,11 +55,9 @@ export class MGridDrag  {
         this.cont=this.par.par.content2d;
         this.p20
         function mMove(e){
-
             self.cont.x=sp.x+(e.clientX-sp.x1);
             self.cont.y=sp.y+(e.clientY-sp.y1);
             self.korestPosit()
-
         }
 
         function mUp(e){           
@@ -254,8 +236,7 @@ export class MGridDrag  {
 
         
 
-        this.setSP=function(sp){
-            
+        this.setSP=function(sp){            
             this.mKrai.setSP(sp)
         }
 
@@ -300,7 +281,8 @@ export class MGridDrag  {
     set mashtab(value) {      
         if(this._mashtab!=value){
             this._mashtab= value;
-            this.cont.scale.x=this.cont.scale.y=value  
+            this.cont.scale.x=this.cont.scale.y=value 
+            this.mKrai.mashtab= value;
             this.korestPosit();
         }
     }    

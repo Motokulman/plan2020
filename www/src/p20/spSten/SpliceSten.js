@@ -28,6 +28,7 @@ export function SpliceSten (_stage) {
 	this._delph = _stage._delph;// толщина линии
 
 	this._uuid=calc.generateRendom(2);
+	this._mashtabText=8;
 
 	this._carrier = _stage.carrier;// несущия
 	this._out = _stage.out;// несущия
@@ -111,8 +112,19 @@ export function SpliceSten (_stage) {
     	self.stAct.sahPlus=0;    
     });
 
+    this.c2dt= new PIXI.Container();
+    this.text = new PIXI.Text('345634634',{ fontFamily : 'Arial' })//,{ font: 'bold 200px Arial', fontFamily : 'Arial', fontSize: 24, fill : 0xff1010 }); 
+    this.c2dt.addChild(this.text);
+    this.text.scale.x=this.text.scale.y=this._mashtabText;
+    this.content2d.addChild(this.c2dt)
+    this.c2dt.visible=false
 
-
+    this.c2dt1= new PIXI.Container();
+    this.text1 = new PIXI.Text('345634634',{ fontFamily : 'Arial' })//,{ font: 'bold 200px Arial', fontFamily : 'Arial', fontSize: 24, fill : 0xff1010 }); 
+    this.c2dt1.addChild(this.text1);
+    this.text1.scale.x=this.text1.scale.y=this._mashtabText;
+    this.content2d.addChild(this.c2dt1)
+    this.c2dt1.visible=false
 
 
     this.numBlok=0
@@ -189,13 +201,8 @@ export function SpliceSten (_stage) {
 					this.graphics.lineTo(numBlok[i+1],this.arrPosit1[0].y);
 					this.graphics.lineTo(numBlok[i+1],this.arrPosit1[5].y);					
 				}
-			}
-
-			
+			}			
 		}
-		
-
-
 
 
 
@@ -259,6 +266,65 @@ export function SpliceSten (_stage) {
 		/*this.graphDeb.clear();	
 		this.graphDeb.lineStyle(5, 0xff0000, 1);
 		this.graphDeb.drawRect(this.rectBig.x,this.rectBig.y,this.rectBig.w,this.rectBig.h)*/
+
+
+
+
+		////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////
+		//if(this.idArr==0){
+			/*trace(this.arrPosit)
+			for (var i = 0; i < this.arrPosit.length; i++) {
+				trace(i+" "+this.arrPosit[i].x)
+			}
+			trace(this.arrPosit1)
+			for (var i = 0; i < this.arrPosit1.length; i++) {
+				trace(i+" "+this.arrPosit1[i].x)
+			}*/
+			var bb=true;
+			if(this._rotation>-Math.PI/2&&this._rotation<Math.PI/2)bb=false;
+
+
+			var xx=this._distans-this.arrPosit[0].x+this.arrPosit1[5].x
+			if(xx<1000){
+				this.c2dt.visible=false				
+			}else{
+				this.c2dt.visible=true
+				this.text.text=Math.round(xx)+""				
+				if(bb==false){
+					this.c2dt.x=(xx-this.text.width)/2;
+					this.c2dt.y=this._delph/2
+					this.c2dt.rotation=0
+				}else{
+					this.c2dt.x=(xx)/2+this.text.width/2;
+					this.c2dt.y=this._delph/2+32*this._mashtabText
+					this.c2dt.rotation=Math.PI
+				}				
+			}
+			xx=this._distans-this.arrPosit[5].x+this.arrPosit1[0].x;
+			if(xx<1000){
+				this.c2dt1.visible=false;				
+			}else{
+				this.c2dt1.visible=true;
+				this.text1.text=Math.round(xx)+"";
+				if(bb==false){
+					this.c2dt1.x=(xx-this.text1.width)/2;
+					this.c2dt1.y=-this._delph/2-32*this._mashtabText;
+					this.c2dt1.rotation=0;
+				}else{
+					this.c2dt1.x=(xx)/2+this.text1.width/2;
+					this.c2dt1.y=-this._delph/2;//-32*this._mashtabText
+					this.c2dt1.rotation=Math.PI;
+				}
+			}
+			
+		//}
+
+
+
+		////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////
+
 
 		this.stAct.draw1()
 

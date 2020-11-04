@@ -49,7 +49,7 @@ export class SpDebugPixi  {
 			g.clear();
 		};
 		this.clear = function () {
-			g.clear();
+			g.clear();			
 		};
 
 		var oo={x:0,y:0}
@@ -78,7 +78,7 @@ export class SpDebugPixi  {
 			}
 			if (color == undefined)color = this.color;
 			wL = wL || this.wL;
-			g.lineStyle(this.wL, color, this.al);
+			g.lineStyle(wL, color, this.al);
 			g.drawCircle(p.x, p.y, r);
 			g.endFill();
 		};

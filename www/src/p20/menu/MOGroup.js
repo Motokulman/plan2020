@@ -26,10 +26,6 @@ export class MOGroup extends MOBaza {
             this.button.width=this.button.height=this.wh;
             this.window.height=210;
 
-
-
-
-
             this.mogObj=new MOGObj(this,function(s,p){
 
             })

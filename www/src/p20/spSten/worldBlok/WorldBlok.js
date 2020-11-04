@@ -21,7 +21,7 @@ export class WorldBlok  {
         this.arrBD=[];
         this.arrObj={};
         this.arrBD.push({id:0,icon:"resources/image/w0.png",rect:[-1000,-1000,-100,2000,2000,200], str:["BInSten",'Window','','','','']})
-        this.arrBD.push({id:1,icon:"resources/image/w0.png",rect:[-1500,-1500,-100,3000,3000,200],rect1:[-1300,-1500,-100,2600,3000,200], str:["BInSten",'Door','','','','']})
+        this.arrBD.push({id:1,icon:"resources/image/w0.png",rect:[-1500,-1500,-100,3000,3000,200], rect1:[-1300,-1500,-100,2600,3000,200], str:["BInSten",'Door','','','','']})
         this.arrBD.push({id:2,icon:"resources/image/w0.png",rect:[-1000,-1000,-100,2000,2000,200], str:["BInSten",'Not','','','','']})
         this.arrBD.push({id:3,icon:"resources/image/w0.png",rect:[-3000,-3000,-200,6000,6000,400], str:["BWord",'xz','','','','']})
 

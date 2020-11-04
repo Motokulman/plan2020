@@ -19,11 +19,8 @@ export class SPLWindow  {
   		this.content2d = new PIXI.Container();
   		this.par.content2d.addChild(this.content2d);
 
-  		this.deb=new SpDebugPixi()
-  		this.content2d.addChild(this.deb.content2d);
-  		this.deb.al=0.3
-  		//this.deb.content2d.alpha=0.15;
-  		//this.deb.content2d.visible=false
+  		
+
 
   		this.world=new World(function(s,p){
   			if(s=="korektPosition"){
@@ -36,7 +33,11 @@ export class SPLWindow  {
   				}
   			}
   		});
-  		this.world.deb=this.deb
+
+		this.deb=new SpDebugPixi()
+  		this.content2d.addChild(this.deb.content2d);
+  		this.deb.al=0.3
+  		//this.world.deb=this.deb
 
 
   		this.array=[];
