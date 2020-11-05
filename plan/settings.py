@@ -42,11 +42,13 @@ INSTALLED_APPS = [
     'materials.apps.MaterialsConfig',
     'suppliers.apps.SuppliersConfig',
     'geography.apps.GeographyConfig',
+    'legal.apps.LegalConfig',
     'brands.apps.BrandsConfig',
     'names.apps.NamesConfig',
     'standards.apps.StandardsConfig',
     'materialprices.apps.MaterialpricesConfig',
     'workprices.apps.WorkpricesConfig',
+    'land.apps.LandConfig',
     'django.contrib.postgres',
 
 

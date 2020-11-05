@@ -186,7 +186,6 @@ def set_scheme(request, pk):
     e = get_object_or_404(Plan, pk=pk)
     e.scheme = data.get("d")
     e.save()
-    # если проект имеет статус завершенного, сразу вычисляем его стоимость для всех городов и всех поставщиков
 
     return JsonResponse(return_dict)
 

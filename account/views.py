@@ -4,7 +4,8 @@ from django.contrib.auth import authenticate, login
 from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm, ProfileRegistrationForm
 from django.contrib.auth.decorators import login_required
 from .models import Profile
-from  catalog.models import Plan
+from catalog.models import Plan
+from land.models import Land, GeologicalSurvey
 from django.contrib.auth.models import User
 
 
@@ -34,10 +35,13 @@ def dashboard(request):
     # user = User.objects.filter(username=request.user.username)
     # user = request.user
     my_plans_list = Plan.objects.filter(author=request.user)
+    my_lands_list = Land.objects.filter(owner=request.user)
+    my_geologicalsurveys_list = GeologicalSurvey.objects.filter(contractor=request.user)
 
     context = {
         'my_plans_list': my_plans_list,
-        # 'author': my_plan_list,
+        'my_lands_list': my_lands_list,
+        'my_geologicalsurveys_list': my_geologicalsurveys_list,
     }
     return render(request, 'account/dashboard.html', context)
 

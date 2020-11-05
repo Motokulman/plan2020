@@ -18,20 +18,22 @@
 // зададим дефолтные настройки конструкции ростверков. 
 var grillageConstructionDefaultSettings = {
     reinforcing: [
-        { width: 250, topReinforcing: 2, bottomReinforcing: 2 },// id зоны фасада, площадь зоны фасада. 
-        { width: 400, topReinforcing: 3, bottomReinforcing: 3 },
-        { width: 500, topReinforcing: 4, bottomReinforcing: 4 },
-        { width: 650, topReinforcing: 4, bottomReinforcing: 4 }
+        { width: 400, reinforcingCount: 3, reinforcingDiameter: 12, As: 3.39 }, // подразумевается, что и сверху и снизу одинаковое количество прутков
+        { width: 500, reinforcingCount: 4, reinforcingDiameter: 12, As: 4.52 },
+        { width: 650, reinforcingCount: 4, reinforcingDiameter: 12, As: 4.52 }
     ],
-    concreteMark: 300,
-    reinforcingClass: 'A400'
+    concreteClass: '20', // классы бетона В, а не марки, так как именно для классов указаны нормативные данные
+    Rb: 10.4, // формула 2.1 или сразу таблица 2.2 , умноженный на коэффициент 0.9 - при действии только постоянных и длительных нагрузок
+    reinforcingClass: 'A400',
+    Rs: 355, // табл. 2.6
+    h0: 350 // черт. 3.3.
 }
 
 // создадим пользовательские настройки конструкции ростверков
-var grillageConstructionMySettings = [];
+var grillageConstructionUserSettings = [];
 
 // пока пользовательские настройки равны дефолтным
-grillageConstructionMySettings = grillageConstructionDefaultSettings;
+grillageConstructionUserSettings = grillageConstructionDefaultSettings;
 
 // Посчитаем массу дома
 // Чтобы быстро считать массу (а также цену!) дома, целесообразно хранить в схеме проекта что то типа "материального" образа дома, который представляет собой раскладку по кол-ву материалов дома
@@ -136,9 +138,25 @@ grillageReinforcing = {
     bottomReinforcing: 3,
 }
 
-function grillageStrength(weight, grillageReinforcing) {
+function grillageStrength(houseWeight, grillageConstructionUserSettings) {
     // посчитаем минимальное расстояние между сваями
-    var q = weigh / tplanVolumes.grillageLength;  // найдем равномерно распределенную нагрузку
+    var q = houseWeight / planVolumes.grillageLength;  // найдем равномерно распределенную нагрузку
+    // для расчета по-минимуму будем считать, что все ростверки равны минимальному ростверку шириной 400мм.
+    var minimalConstructionReinforcement = grillageConstructionUserSettings.find(item => item.width == 400);
+    var As = grillageConstructionUserSettings.As;
+    var Rs = grillageConstructionUserSettings.Rs;
+    var Rb = grillageConstructionUserSettings.Rb;
+    var b = minimalConstructionReinforcement.width;
+    var h0 = grillageConstructionUserSettings.h0;
+    // пошагово посчитаем выраженную из формул величину альфа м:
+    var temp = (As * Rs) / (Rb * b * h0);
+    temp = 1 - temp;
+    temp = Math.pow(temp, 2);
+    var Alpha_m = (1 - temp) / 2;
+    // момент сил
+    var M = Alpha_m * Rb * b * h0 * h0;
+    var l = Math.sqrt(8 * M / q);
 
-
+    return l;
 }
+

@@ -5,7 +5,7 @@
 <p><a href="{% url 'edit' %}">Редактировать профиль</a> или
     <a href="{% url 'password_change' %}">Сменить пароль</a>.
 </p>
-<h1>Мои проекты</h1>
+<h3>Мои проекты</h3>
 
 <a href="{% url 'plan_create' %}">Создать проект</a>
 {% if my_plans_list %}
@@ -18,6 +18,40 @@
 </ul>
 {% else %}
 <p>Пока у вас нет ни одного проекта...</p>
+{% endif %}
+
+<h3>Мои участки</h3>
+
+<a href="{% url 'land_create' %}">Добавить участок</a>
+{% if my_lands_list %}
+<ul>
+    {% for land in my_lands_list %}
+    <li>
+        <a href="{{ land.get_absolute_url }}"> {{ land.cadastral_number }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Пока у вас нет ни одного участка...</p>
+{% endif %}
+
+
+<h3>Геологические изыскания, проведенные мною</h3>
+<p>Это должен видеть только пользователь, который может проводить геологические изыскания,</p>
+<p>поскольку здесь показываются изыскания, который провел данный юзер-изыскательная организация.</p>
+<p>Изыскания для частного пользователя находятся на странице с деталями его участка</p>
+
+<a href="{% url 'geologicalsurvey_create' %}">Добавить геологическое изыскание</a>
+{% if my_geologicalsurveys_list %}
+<ul>
+    {% for geologicalsurvey in my_geologicalsurveys_list %}
+    <li>
+        <a href="{{ geologicalsurvey.get_absolute_url }}"> Для участка: {{ geologicalsurvey.land.cadastral_number }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Пока у вас нет ни одного геологического изыскания...</p>
 {% endif %}
 
 {% endblock %}
