@@ -16,12 +16,22 @@ export class BInSten extends Blok {
         this.graphics.beginFill(0x00ff00, 0.5);    
         this.graphics.drawCircle(0,0,150);
 
+        this.stAct=new BTAct(this);
+
         this.onDragStart=function(e){            
             if(self.par.par.par.sobSP!=undefined)self.par.par.par.sobSP("downBlok",self,e)
         }
 
         this.graphics.interactive = true;            
         this.graphics.on('mousedown', this.onDragStart);
+
+        this.graphics.on('mouseover', function(e){     
+            self.stAct.sahPlus=10;      
+        });
+        this.graphics.on('mouseout', function(e){       
+            self.stAct.sahPlus=0;    
+        });
+
 
 
         this.rect1={}
@@ -76,9 +86,79 @@ export class BInSten extends Blok {
                 this.graphics.moveTo(0,-this._delph/2-200);
                 this.graphics.lineTo(0,+this._delph/2+200);
             }
+
+            this.stAct.draw1();
+        }
+
+
+
+        this.drawActive=function(){
+            
+            this.stAct.sahAct=this._active ? 40: 0;
         }
 
         this.init()
     }
 
+}
+
+export function BTAct (par) {
+
+    var self = this;
+    this.type = 'BTAct';
+    this.par = par;
+    this._sahAct=0;
+
+    this._sahPlus=0;
+
+  
+    this.graphics = new PIXI.Graphics();
+    this.par.content2d.addChild(this.graphics);
+    this.graphics.alpha=this._sahAct/100;
+
+    this.draw1=function(){
+        this.graphics.clear();
+
+
+        this.graphics.clear();
+        this.graphics.beginFill(par.par.par.colorUI);
+        this.graphics.drawRect(-this.par._width/2,-this.par._delph/2,this.par._width,this.par._delph);
+        this.graphics.endFill()
+            
+        
+       
+        
+
+    }
+
+    this.corektSetGet=function(){
+
+        this.graphics.alpha = (this._sahAct+this._sahPlus)/100; 
+        this.par.par.render()
+
+    }
+
+}
+BTAct.prototype = {
+
+
+    set sahAct (v) {
+        if (this._sahAct === v) return;         
+        this._sahAct = v;
+        this.corektSetGet()
+    },
+    get sahAct () {
+
+        return this._sahAct;
+    },
+
+    set sahPlus (v) {
+        if (this._sahPlus === v) return;        
+        this._sahPlus = v;
+        this.corektSetGet()
+    },
+    get sahPlus () {
+
+        return this._sahPlus;
+    },
 }

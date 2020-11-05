@@ -6,6 +6,7 @@ import { Sten3D } from './Sten3D.js';
 */
 import { Splice } from './../sp/Splice.js';
 import { SPLWindow } from './SPLWindow.js';
+
 /**
 * Стена(линия)
 * @class
@@ -27,6 +28,7 @@ export function SpliceSten (_stage) {
 	this._delph = _stage._delph;// толщина линии
 
 	this._uuid=calc.generateRendom(2);
+	this._mashtabText=8;
 
 	this._carrier = _stage.carrier;// несущия
 	this._out = _stage.out;// несущия
@@ -46,6 +48,12 @@ export function SpliceSten (_stage) {
 	
 
 	this._height = this.stage._height;
+
+	this.cont2dDeb = new PIXI.Container();
+	_stage.content2d2.addChild(this.cont2dDeb);
+	this.graphDeb = new PIXI.Graphics();
+	this.cont2dDeb.addChild(this.graphDeb);
+
 	
 	this.content2d = new PIXI.Container();
 	_stage.content2d2.addChild(this.content2d);
@@ -54,6 +62,8 @@ export function SpliceSten (_stage) {
     this.content2d.addChild(this.graphics);
     this.graphics.interactive = true;
 
+
+    this.stAct=new STAct(this)
 
 
 
@@ -95,10 +105,29 @@ export function SpliceSten (_stage) {
     this.graphics.on('mousedown', this.onDragStart);
 
 
+    this.graphics.on('mouseover', function(e){    	
+    	self.stAct.sahPlus=10;    	
+    });
+    this.graphics.on('mouseout', function(e){    	
+    	self.stAct.sahPlus=0;    
+    });
+
+    this.c2dt= new PIXI.Container();
+    this.text = new PIXI.Text('345634634',{ fontFamily : 'Arial' })//,{ font: 'bold 200px Arial', fontFamily : 'Arial', fontSize: 24, fill : 0xff1010 }); 
+    this.c2dt.addChild(this.text);
+    this.text.scale.x=this.text.scale.y=this._mashtabText;
+    this.content2d.addChild(this.c2dt)
+    this.c2dt.visible=false
+
+    this.c2dt1= new PIXI.Container();
+    this.text1 = new PIXI.Text('345634634',{ fontFamily : 'Arial' })//,{ font: 'bold 200px Arial', fontFamily : 'Arial', fontSize: 24, fill : 0xff1010 }); 
+    this.c2dt1.addChild(this.text1);
+    this.text1.scale.x=this.text1.scale.y=this._mashtabText;
+    this.content2d.addChild(this.c2dt1)
+    this.c2dt1.visible=false
 
 
-
-
+    this.numBlok=0
     var numBlok
 	this.draw1 = function (b) {
 		if(b==undefined)this.windows.draw()
@@ -172,21 +201,17 @@ export function SpliceSten (_stage) {
 					this.graphics.lineTo(numBlok[i+1],this.arrPosit1[0].y);
 					this.graphics.lineTo(numBlok[i+1],this.arrPosit1[5].y);					
 				}
-			}
-
-			
+			}			
 		}
-		
 
 
 
-
-
-		this.graphics.beginFill(0x0000ff, 0.8);
+		this.graphics.beginFill(0x0000ff, 0.1);
 		this.graphics.drawCircle(200,0,50)
 
 		this.graphics1.clear();	
 		this.graphics1.lineStyle(20, 0x000000, 1);
+	
 		if(numBlok==0){
 			for (var i = 0; i < this.aVKol; i++) {			
 				this.graphics1.moveTo(this.arrVorur[i].x,this.arrVorur[i].y);
@@ -195,15 +220,9 @@ export function SpliceSten (_stage) {
 			}
 		}else{
 
-
-
-
-
-
 			this.drawGrah(this.graphics1,-this.arrPosit[2].x,this.arrPosit[2].y,true)
 			this.drawGrah(this.graphics1,-this.arrPosit[1].x,this.arrPosit[1].y,false)
 			this.drawGrah(this.graphics1,-this.arrPosit[0].x,this.arrPosit[0].y,false)
-
 
 			this.drawGrah(this.graphics1,numBlok[0],this.arrPosit[0].y,false)
 			this.drawGrah(this.graphics1,numBlok[0],this.arrPosit[5].y,false)
@@ -212,6 +231,7 @@ export function SpliceSten (_stage) {
 			this.drawGrah(this.graphics1,-this.arrPosit[4].x,this.arrPosit[4].y,false)
 			this.drawGrah(this.graphics1,-this.arrPosit[3].x,this.arrPosit[3].y,false)
 			this.drawGrah(this.graphics1,-this.arrPosit[2].x,this.arrPosit[2].y,false)
+
 
 			for (var i = 0; i < numBlok.length; i+=2) {
 				if(i!=numBlok.length-2){
@@ -242,6 +262,72 @@ export function SpliceSten (_stage) {
 				}
 			}
 		}
+
+		/*this.graphDeb.clear();	
+		this.graphDeb.lineStyle(5, 0xff0000, 1);
+		this.graphDeb.drawRect(this.rectBig.x,this.rectBig.y,this.rectBig.w,this.rectBig.h)*/
+
+
+
+
+		////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////
+		//if(this.idArr==0){
+			/*trace(this.arrPosit)
+			for (var i = 0; i < this.arrPosit.length; i++) {
+				trace(i+" "+this.arrPosit[i].x)
+			}
+			trace(this.arrPosit1)
+			for (var i = 0; i < this.arrPosit1.length; i++) {
+				trace(i+" "+this.arrPosit1[i].x)
+			}*/
+			var bb=true;
+			if(this._rotation>-Math.PI/2&&this._rotation<Math.PI/2)bb=false;
+
+
+			var xx=this._distans-this.arrPosit[0].x+this.arrPosit1[5].x
+			if(xx<1000){
+				this.c2dt.visible=false				
+			}else{
+				this.c2dt.visible=true
+				this.text.text=Math.round(xx)+""				
+				if(bb==false){
+					this.c2dt.x=(xx-this.text.width)/2;
+					this.c2dt.y=this._delph/2
+					this.c2dt.rotation=0
+				}else{
+					this.c2dt.x=(xx)/2+this.text.width/2;
+					this.c2dt.y=this._delph/2+32*this._mashtabText
+					this.c2dt.rotation=Math.PI
+				}				
+			}
+			xx=this._distans-this.arrPosit[5].x+this.arrPosit1[0].x;
+			if(xx<1000){
+				this.c2dt1.visible=false;				
+			}else{
+				this.c2dt1.visible=true;
+				this.text1.text=Math.round(xx)+"";
+				if(bb==false){
+					this.c2dt1.x=(xx-this.text1.width)/2;
+					this.c2dt1.y=-this._delph/2-32*this._mashtabText;
+					this.c2dt1.rotation=0;
+				}else{
+					this.c2dt1.x=(xx)/2+this.text1.width/2;
+					this.c2dt1.y=-this._delph/2;//-32*this._mashtabText
+					this.c2dt1.rotation=Math.PI;
+				}
+			}
+			
+		//}
+
+
+
+		////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////
+
+
+		this.stAct.draw1()
+
 		this.par.render()
 	}
 
@@ -296,12 +382,15 @@ export function SpliceSten (_stage) {
 		this.content2d1.rotation=this._rotation;
 		this.draw1();
 		this.stage.render();
+		this.poiskGran();
 	}
 
 	////////////////////////////////
 	var a1,d1,a
 	var pNull=new Position()
+
 	this.arrGran = [new Position(), new Position(), new Position(), new Position()];
+	this.rectBig={x:0,y:0,x1:0,y1:0,w:0,h:0,o:null}
 	this.poiskGran=function(){
 		a=calc.getAngle(this.position, this.position1);
 		
@@ -340,7 +429,61 @@ export function SpliceSten (_stage) {
         calc.getVector(d1,a+a1,this.arrGran[3])
         this.arrGran[3].x+=this.position.x;
         this.arrGran[3].y+=this.position.y;
+
+        this.rectBig.x=99999999999
+        this.rectBig.y=99999999999
+        this.rectBig.x1=-29999999999
+        this.rectBig.y1=-29999999999
+        for (var i = 0; i < this.arrGran.length; i++) {
+        	if(this.rectBig.x>this.arrGran[i].x)this.rectBig.x=this.arrGran[i].x
+        	if(this.rectBig.x1<this.arrGran[i].x)this.rectBig.x1=this.arrGran[i].x
+        	if(this.rectBig.y>this.arrGran[i].y)this.rectBig.y=this.arrGran[i].y
+        	if(this.rectBig.y1<this.arrGran[i].y)this.rectBig.y1=this.arrGran[i].y	
+        }
+    	this.rectBig.w=this.rectBig.x1-this.rectBig.x
+        this.rectBig.h=this.rectBig.y1-this.rectBig.y
+        //this.rectBig.y-=this.rectBig.h;
+     
+
+
 	}
+	var rez,bp,bp1,res
+	var arrayCol=[]
+	this.isRect=function(r,b){
+		if(b==undefined)this.poiskGran();	
+		if(calc.isRectS(r,this.rectBig)==true){
+			arrayCol.length=0
+			bp=calc.isRectPoint(r, this.position);
+			bp1=calc.isRectPoint(r, this.position1);
+			if(bp==true||bp1==true){
+				if(bp==true)arrayCol.push(this.addPoint);
+				if(bp1==true)arrayCol.push(this.addPoint1);	
+			}
+
+
+			if(arrayCol.length!=0&&arrayCol[0].uuid!=this.uuid)arrayCol.unshift(this);
+
+			if(arrayCol.length==0){//Ищем по массиву линий краюв
+				for (var i = 0; i < this.arrGran.length; i+=2) {
+					res=calc.isRectLine(r, this.arrGran[i], this.arrGran[i+1]);
+					if(res==true){
+						arrayCol.unshift(this);
+						break;
+					}
+				}
+			}
+
+			
+			if(arrayCol.length!=0){
+				for (var i = 0; i < this.windows.array.length; i++) {
+					arrayCol.push(this.windows.array[i])
+				}
+				return arrayCol;
+			}
+		}
+		return null;
+	}
+
 
 	///////////////////////////////
 	
@@ -445,6 +588,8 @@ export function SpliceSten (_stage) {
 		}
 	}
 
+	
+
 
 
 }
@@ -505,8 +650,6 @@ SpliceSten.prototype.drag = function () {
 	
 };
 Object.defineProperties(SpliceSten.prototype, {
-
-
 	height: {
 		set: function (value) {
 			if (this._height === value) return;			
@@ -530,6 +673,8 @@ Object.defineProperties(SpliceSten.prototype, {
 		set: function (value) {
 			if (this._active === value) return;			
 			this._active = value;
+			this.stAct.sahAct=value ? 40: 0;
+
 			this._setAllParam('active', this._active);
 		},
 		get: function () { return this._active; }
@@ -554,6 +699,11 @@ Object.defineProperties(SpliceSten.prototype, {
 			for (var ii = 0; ii < this.arrayClass.length; ii++) {
 				if ('activMouse' in this.arrayClass[ii]) this.arrayClass[ii].life = this._life;
 			}
+
+
+			if(this._life==true)this.stage.content2d2.addChild(this.cont2dDeb);
+			else if(this.cont2dDeb.parent!=undefined)this.cont2dDeb.parent.removeChild(this.cont2dDeb);
+
 			if(this._life==true)this.stage.content2d2.addChild(this.content2d);
 			else if(this.content2d.parent!=undefined)this.content2d.parent.removeChild(this.content2d);
 
@@ -772,3 +922,68 @@ SpliceStenSquare.prototype = {
 	}
 };
 */
+
+
+
+export function STAct (par) {
+
+	var self = this;
+	this.type = 'STAct';
+	this.par = par;
+	this._sahAct=0;
+
+	this._sahPlus=0;
+
+	this.arrVorur=this.par.arrVorur;	
+	this.graphics = new PIXI.Graphics();
+    this.par.content2d.addChild(this.graphics);
+    this.graphics.alpha=this._sahAct/100;
+
+    this.draw1=function(){
+		this.graphics.clear();
+
+
+	
+		
+		
+		this.graphics.beginFill(par.par.colorUI);		
+		this.graphics.moveTo(this.par.arrVorur[0].x,this.par.arrVorur[0].y);
+		for (var i = 1; i < this.par.aVKol; i++) {
+			this.graphics.lineTo(this.par.arrVorur[i].x,this.par.arrVorur[i].y);				
+		}
+		this.graphics.lineTo(this.par.arrVorur[0].x,this.par.arrVorur[0].y);
+		
+
+    }
+
+    this.corektSetGet=function(){
+
+		this.graphics.alpha = (this._sahAct+this._sahPlus)/100;	
+		this.par.par.render()
+
+    }
+
+}
+STAct.prototype = {
+
+
+	set sahAct (v) {
+		if (this._sahAct === v) return;			
+		this._sahAct = v;
+		this.corektSetGet()
+	},
+	get sahAct () {
+
+		return this._sahAct;
+	},
+
+	set sahPlus (v) {
+		if (this._sahPlus === v) return;		
+		this._sahPlus = v;
+		this.corektSetGet()
+	},
+	get sahPlus () {
+
+		return this._sahPlus;
+	},
+}

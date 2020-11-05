@@ -4,6 +4,8 @@ import { MDragScane } from './MDragScane.js';
 import { MObject } from './MObject.js';
 import { MGridDrag } from './MGridDrag.js';
 
+import { MCont2dHelp } from './MCont2dHelp.js';
+
 import { MStart} from './MStart.js';
 
 import { MInfo} from './MInfo.js';
@@ -17,7 +19,7 @@ export class Menu  {
 		var self=this;
 		this.par=par;
 		this.fun=fun;
-
+		this._mashtab=1;
 		this.wh=48;
 		this.otstup=5;
 		this.otstup1=10;
@@ -66,11 +68,18 @@ export class Menu  {
            // self.fun(s,p)
         });
 
+		this.array[this.array.length]=this.mCont2dHelp = new MCont2dHelp(this,function(s,p){
+           // self.fun(s,p)
+        });
+
+
         this.array[this.array.length]=global.mInfo=this.mInfo = new MInfo(this.par.dCont);
 
 
         this.array[this.array.length]=global.dragPic=this.dragPic = new DDragPic(this.par.dCont);
-        global.dragPic.whBase=this.wh
+        global.dragPic.whBase=this.wh;
+
+
 
 		this.setP20=function(p20){
 			this.p20=p20;
@@ -80,6 +89,7 @@ export class Menu  {
 		this.setSP=function(sp){
 			this.mDragScane.setSP(sp)
 			this.mGridDrag.setSP(sp)
+			this.mCont2dHelp.setSP(sp)
 		}
 
 
@@ -139,6 +149,20 @@ export class Menu  {
 	    		if(this.array[i].sizeWindow)this.array[i].sizeWindow(w,h,s);
 	    	}
 	    }
+
+	    this.keydown=function(e){
+	    	for (var i = this.array.length - 1; i >= 0; i--) {
+	    		if(this.array[i].keydown)this.array[i].keydown(e);
+	    	} 
+            
+        }
+        this.keyup=function(e){
+            for (var i = this.array.length - 1; i >= 0; i--) {
+	    		if(this.array[i].keyup)this.array[i].keyup(e);
+	    	} 
+        }
+
+
 	    this.menuIndex=0;
 	}
 
@@ -151,5 +175,17 @@ export class Menu  {
         }
     }    
     get menuIndex() { return  this._menuIndex;}
+
+
+    set mashtab(value) {  
+        if(this._mashtab!= value) {
+            this._mashtab= value;
+            for (var i = this.array.length - 1; i >= 0; i--) {
+	    		if(this.array[i]._mashtab!=undefined)this.array[i].mashtab=value;
+	    	}
+        }    
+              
+    }    
+    get mashtab() { return  this._mashtab;}
 } 
 

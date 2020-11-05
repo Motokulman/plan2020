@@ -14,7 +14,6 @@ export class MOPoint extends MOBaza {
        
 
         this.dCont=new DCont(par.dCont);
-
         
         this.button=undefined;
         this.slid
@@ -65,8 +64,7 @@ export class MOPoint extends MOBaza {
                 
                 self.slid1.min=self.object.position.y-500
                 self.slid1.max=self.object.position.y+500
-                self.slid1.value=Math.round(self.object.position.y)
-                
+                self.slid1.value=Math.round(self.object.position.y)                
             }            
         }
 
@@ -75,6 +73,7 @@ export class MOPoint extends MOBaza {
         this.postSO=function(){ 
             this.bool=true           
             this.object.funDragMenu=this.drag
+            this.object.par.setActive(this.object);
             this.drag()
         }
         this.clear=function(){

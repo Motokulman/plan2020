@@ -19,11 +19,8 @@ export class SPLWindow  {
   		this.content2d = new PIXI.Container();
   		this.par.content2d.addChild(this.content2d);
 
-  		this.deb=new SpDebugPixi()
-  		this.content2d.addChild(this.deb.content2d);
-  		this.deb.al=0.3
-  		//this.deb.content2d.alpha=0.15;
-  		//this.deb.content2d.visible=false
+  		
+
 
   		this.world=new World(function(s,p){
   			if(s=="korektPosition"){
@@ -36,7 +33,11 @@ export class SPLWindow  {
   				}
   			}
   		});
-  		this.world.deb=this.deb
+
+		this.deb=new SpDebugPixi()
+  		this.content2d.addChild(this.deb.content2d);
+  		this.deb.al=0.3
+  		//this.world.deb=this.deb
 
 
   		this.array=[];
@@ -96,23 +97,37 @@ export class SPLWindow  {
 	    	return this.vr;
 	    }
 
+	    var arrNum2=[]
 	    var arrNum=[]
 	    this.getNumBlok = function () {
 	    	arrNum.length=0
+	    	arrNum2.length=0
+
+	    	
+
+
 	    	if(this.array.length!=0){
-	    		for (var i = 0; i < this.array.length; i++) {
-	    			//if(this.array[i].obj.rect1!=undefined){
-	    				arrNum.push(this.array[i].body.position.x+this.array[i].rect1.x);
-	    				arrNum.push(this.array[i].body.position.x+this.array[i].rect1.x+this.array[i].rect1.w);
-	    			//}
+	    		for (var i = 0; i < this.array.length; i++) {	
+	    			arrNum2.push(this.array[i])
+	    		}
+				arrNum2.sort(function(a, b){
+					
+					return a.body.position.x - b.body.position.x
+				})
+
+
+	    		for (var i = 0; i < arrNum2.length; i++) {	    			
+	    			arrNum.push(arrNum2[i].body.position.x+arrNum2[i].rect1.x);
+	    			arrNum.push(arrNum2[i].body.position.x+arrNum2[i].rect1.x+arrNum2[i].rect1.w);
+	    			
 	    		}
 	    	}
-	    	trace(arrNum)
+	    	
 	    	return arrNum;
 	    }
 
 
-
+	    
 
 	    var xx,xx1,ww
 	    this.draw = function () {

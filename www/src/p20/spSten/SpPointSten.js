@@ -27,11 +27,12 @@ export function SpPointSten (_stage) {
     this.content2d.addChild(this.graphics);
     this.graphics.interactive = true;
     
+    this.stAct=new PTAct(this)
 
     this.graphics.beginFill(0xff0000, 0.3);    
     this.graphics.drawCircle(0,0,150);
 
-    this.funDragMenu=undefined
+    this.funDragMenu=undefined;
 
 
     this.onDragStart=function(e){
@@ -40,6 +41,13 @@ export function SpPointSten (_stage) {
 
     this.graphics.interactive = true;            
     this.graphics.on('mousedown', this.onDragStart);
+
+    this.graphics.on('mouseover', function(e){    	
+    	self.stAct.sahPlus=10;    	
+    });
+    this.graphics.on('mouseout', function(e){    	
+    	self.stAct.sahPlus=0;    
+    });
 
 
     this.funDragVokrug=function(a,a1){   
@@ -110,6 +118,7 @@ Object.defineProperties(SpPointSten.prototype, {
 		set: function (value) {
 			if (this._active == value) return;
 			this._active = value;
+			this.stAct.sahAct=value ? 40: 0;
 			for (var ii = 0; ii < this.arrayClass.length; ii++) {
 				if ('active' in this.arrayClass[ii]) this.arrayClass[ii].active = this._active;
 			}
@@ -151,3 +160,55 @@ Object.defineProperties(SpPointSten.prototype, {
 	},
 
 });
+
+
+export function PTAct (par) {
+
+	var self = this;
+	this.type = 'PTAct';
+	this.par = par;
+	this._sahAct=0;
+
+	this._sahPlus=0;
+
+	this.arrVorur=this.par.arrVorur;	
+	this.graphics = new PIXI.Graphics();
+    this.par.content2d.addChild(this.graphics);
+    this.graphics.alpha=this._sahAct/100;
+
+    this.graphics.beginFill(par.par.colorUI);    
+    this.graphics.drawCircle(0,0,150);
+
+    
+
+    this.corektSetGet=function(){
+
+		this.graphics.alpha = (this._sahAct+this._sahPlus)/100;	
+		this.par.par.render()
+
+    }
+
+}
+PTAct.prototype = {
+
+
+	set sahAct (v) {
+		if (this._sahAct === v) return;			
+		this._sahAct = v;
+		this.corektSetGet()
+	},
+	get sahAct () {
+
+		return this._sahAct;
+	},
+
+	set sahPlus (v) {
+		if (this._sahPlus === v) return;		
+		this._sahPlus = v;
+		this.corektSetGet()
+	},
+	get sahPlus () {
+
+		return this._sahPlus;
+	},
+}

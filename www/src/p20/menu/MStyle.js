@@ -14,7 +14,7 @@ export class MStyle  {
         this.dCont.y=this.otstup*4+this.wh
 
         var aJ= [
-            '{"colorC0":"#ff0000","colorC1":"#00ff00","delphC0":217.07,"delphC1":500}',
+            '{"colorC0":"#ffc0b0","colorC1":"#f4f4f4","delphC0":217.07,"delphC1":500}',
             '{"colorC0":"#89ffa3","colorC1":"#f3267c","delphC0":217.07,"delphC1":500}',
             '{"colorC0":"#89ffa3","colorC1":"#07419b","delphC0":824.43,"delphC1":206.37}'
         ];

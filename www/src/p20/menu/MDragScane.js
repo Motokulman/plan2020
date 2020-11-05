@@ -5,6 +5,9 @@ import { SobIndex0 } from './fManager/SobIndex0.js';
 import { SobIndex1 } from './fManager/SobIndex1.js';
 import { SobIndex2 } from './fManager/SobIndex2.js';
 import { SobIndex3 } from './fManager/SobIndex3.js';
+
+import { SpDebugPixi } from '../spSten/SpDebugPixi.js';
+
 export class MDragScane  {
   	constructor(par,fun) {  		
   		this.type="MDragScane";
@@ -16,14 +19,26 @@ export class MDragScane  {
         this.cont1=undefined;
         this.stage=undefined;
         this._menuIndex=-1
+        this._mashtab=1;
 
         this.otstup=this.par.otstup;
         this.otstup1=this.par.otstup1;
         this.wh=this.par.wh;
 
 
-
-
+       /* function disablecontext(e) {
+            trace(e)
+            var clickedEl = (e==null) ? event.srcElement.tagName : e.target.tagName;
+            if (clickedEl == "IMG") {
+                alert(errorMsg);
+                return false;
+            }
+        }
+        var errorMsg = "Вы не можете сохранять изображения с этого сайта.";
+        document.oncontextmenu = disablecontext;*/
+        $(document).bind('contextmenu', function(e) {
+            return false;
+        });
 
         this.actAI=undefined;
         this.sobIndex=[];
@@ -31,6 +46,9 @@ export class MDragScane  {
         this.sobIndex[1]=new SobIndex1(this);
         this.sobIndex[2]=new SobIndex2(this);
         this.sobIndex[3]=new SobIndex3(this);
+
+
+
 
 
 
@@ -49,11 +67,12 @@ export class MDragScane  {
             }  
         }
 
-       /* this.deb=new DebbugPixi(); 
+        /*this.deb=new DebbugPixi(); 
         this.div.appendChild(this.deb.div);
         this.content2d = new PIXI.Container();*/
       
        
+        this.helpDP=new SpDebugPixi(); 
 
 
 
@@ -74,7 +93,8 @@ export class MDragScane  {
         } 
         this.sp=undefined
         this.setSP=function(sp){
-            this.sp=sp
+            this.sp=sp;
+
             for (var i = 0; i < this.sobIndex.length; i++) {
                 this.sobIndex[i].setSP(sp)
             }      
@@ -95,6 +115,18 @@ export class MDragScane  {
                 this.cont.y=h/2;  
             }      		            	
   		} 
+
+        this.keydown=function(e){
+            for (var i = this.sobIndex.length - 1; i >= 0; i--) {
+                if(this.sobIndex[i].keydown)this.sobIndex[i].keydown(e);
+            } 
+            
+        }
+        this.keyup=function(e){
+            for (var i = this.sobIndex.length - 1; i >= 0; i--) {
+                if(this.sobIndex[i].keyup)this.sobIndex[i].keyup(e);
+            } 
+        }
   	}
 
     set menuIndex(value) {      
@@ -113,4 +145,15 @@ export class MDragScane  {
         }
     }    
     get menuIndex() { return  this._menuIndex;}
+
+    set mashtab(value) {  
+        if(this._mashtab!= value) {
+            this._mashtab= value;            
+            for (var i = 0; i < this.sobIndex.length; i++) {           
+                this.sobIndex[i].mashtab= value;
+            }
+        }    
+              
+    }    
+    get mashtab() { return  this._mashtab;}
 }

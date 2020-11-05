@@ -73,11 +73,13 @@ export class Main  {
 	        if(event.keyCode==81&&self.boolCTRL)  {
             	self.localStorage.object.debug=!self.localStorage.object.debug;
 	            self.localStorage.save();
+	        }
+	        self.glaf.keydown(e)
 
-	        }            
 	    }
 	    this.keyup=function(e){
 	        if(event.keyCode==17)self.boolCTRL=false
+	        self.glaf.keyup(e)	
 	    }
 
 	    window.addEventListener( 'keydown', this.keydown );    

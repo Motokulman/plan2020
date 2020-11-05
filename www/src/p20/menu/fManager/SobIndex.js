@@ -12,7 +12,8 @@ export class SobIndex  {
 
         this._active=false;
         this.funActive=undefined;
-
+        this._mashtab=1;
+        this._otstup=25;
         this._sah=0
         this.color=0xff0000
         this.activColor=0x00ff00
@@ -204,13 +205,64 @@ export class SobIndex  {
             return rezult;
         }
 
+        this.pointOld=undefined
 
         var pos={x:0,y:0,o:null}
         var r
+        var mX,mXI,mY,mYI,b,pp,mXY,mYX;
         this.korektAP=function(_p,_o){
             _p.x=Math.round(_p.x/100)*100;
             _p.y=Math.round(_p.y/100)*100;
             _p.o=null;
+            _p.oy=null;
+            _p.ox=null;
+
+            this._otstup=25;
+            if(self.pointOld!=undefined){
+                if(Math.abs(_p.x-this.pointOld.x)<this._otstup/this._mashtab)_p.x=this.pointOld.x
+                if(Math.abs(_p.y-this.pointOld.y)<this._otstup/this._mashtab)_p.y=this.pointOld.y
+                
+                mX=this._otstup/this._mashtab;
+                mXI=null;
+                mY=this._otstup/this._mashtab;
+                mYI=null;
+
+                for (var i = 0; i < self.p20.sp.arrPoint.length; i++) {
+                    if (!self.p20.sp.arrPoint[i].life) continue;
+                    if (self.p20.sp.arrPoint[i]._uuid==_o._uuid)continue;
+                    if (this.pointOld.uuidArr!=undefined){
+                        b=true;
+                        for (var j = 0; j < this.pointOld.uuidArr.length; j++) {
+                            if(this.pointOld.uuidArr[j]==self.p20.sp.arrPoint[i]._uuid)b=false;
+                        }
+                        if(!b)continue;
+                    }
+                    pp=Math.abs(_p.x-self.p20.sp.arrPoint[i].position.x)
+                    if(pp<mX){
+                        mX=pp;
+                        mXI=self.p20.sp.arrPoint[i].position.x
+                        mXY=self.p20.sp.arrPoint[i].position.y
+                    }
+
+                    pp=Math.abs(_p.y-self.p20.sp.arrPoint[i].position.y)
+                    if(pp<mY){
+                        mY=pp;
+                        mYI=self.p20.sp.arrPoint[i].position.y
+                        mYX=self.p20.sp.arrPoint[i].position.x
+                    }
+                    
+                } 
+                
+                if(mXI!=null){
+                    _p.x=mXI;
+                    _p.oy=mXY
+                }
+                if(mYI!=null){
+                    _p.y=mYI;
+                    _p.ox=mYX;
+                }
+                    
+            }
             
            /* for (var i = 0; i < self.p20.sp.arrSplice.length; i++) {
                 if (!self.p20.sp.arrSplice[i].life) continue;
@@ -262,10 +314,12 @@ export class SobIndex  {
         this.downFont=function(e){
             self.par.par.mGridDrag.downFont(e);
         }
-
+        this.helpDP=undefined
         this.setP20=function(p20){
             self.cont=p20.cont2d
             self.p20=p20
+            self.helpDP=self.par.par.mCont2dHelp.helpDP
+
         }
 
         this.sp=undefined
@@ -289,6 +343,21 @@ export class SobIndex  {
         this.sobMenu=function(s,p,e){
             trace(this.type+" sobMenu >>",s,p,e)    
         }
+
+
+
+        this.boolCTRL=false
+        this.keydown=function(e){
+            if(event.keyCode==17)self.boolCTRL=true
+            /*if(event.keyCode==81&&self.boolCTRL)  {
+                
+            }*/
+            
+        }
+
+        this.keyup=function(e){
+            if(event.keyCode==17)self.boolCTRL=false
+        }
                 
     }
 
@@ -296,13 +365,20 @@ export class SobIndex  {
         if(this._active!=v){
             this._active = v;            
             if(this.funActive!=undefined)this.funActive();
-           
+            if(this.helpDP)this.helpDP.clear()
             
         }       
     }   
     get active() { return  this._active;}  
 
-
+    set mashtab(value) {  
+        if(this._mashtab!= value) {
+            this._mashtab= value;
+            
+        }    
+              
+    }    
+    get mashtab() { return  this._mashtab;}
 }
 
 

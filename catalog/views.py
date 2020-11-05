@@ -182,12 +182,17 @@ def edit_variant(request, pk):
 def set_scheme(request, pk):
     """Сохранение, изменение схемы"""
     return_dict = dict()
-    data = request.POST
+    if request.POST:
+        data = request.POST
+    if request.GET:
+        data = request.GET
     e = get_object_or_404(Plan, pk=pk)
     e.scheme = data.get("d")
     e.save()
-
-    return JsonResponse(return_dict)
+    # если проект имеет статус завершенного, сразу вычисляем его стоимость для всех городов и всех поставщиков
+    return_dict = Plan.objects.filter(id=pk)
+    return_dict = serializers.serialize('json', return_dict)
+    return JsonResponse(return_dict, safe=False)
 
 
 def get_plan(request, pk):

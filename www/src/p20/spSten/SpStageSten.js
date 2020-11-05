@@ -10,6 +10,8 @@ import {  Calc } from './../Calc.js';
 
 import {  SPLineWord } from './SPLineWord.js';
 import {  WorldBlok } from './worldBlok/WorldBlok.js';
+
+import { SPGroup} from './SPGroup.js';
 /**
 * Мир для сращалок дорог
 * @class
@@ -28,6 +30,9 @@ export function SpStageSten (par,  fun) {
 
 	this._delph = 500;
 	
+	this._colorUI=0x008cba;
+	this._colorUIActive=0xf28044;
+
 
 	this._color="#c5d6e0";
 	this._colorP=0xc5d6e0;
@@ -68,19 +73,23 @@ export function SpStageSten (par,  fun) {
 
 	this.boolText = true;
 	this.content2d = new PIXI.Container();
-
+	
+	this.contNiz = new PIXI.Container();
 	this.content2d1 = new PIXI.Container();
 	this.content2d2 = new PIXI.Container();
 	this.content2dPoint = new PIXI.Container();	
 	this.cont2dLine = new PIXI.Container();
 	this.cont2dBlok = new PIXI.Container();
+	this.cont2dGroup = new PIXI.Container();
 
 
+	this.content2d.addChild(this.contNiz);
 	this.content2d.addChild(this.content2d1);
     this.content2d.addChild(this.content2d2);
     this.content2d.addChild(this.content2dPoint);
     this.content2d.addChild(this.cont2dBlok);
     this.content2d.addChild(this.cont2dLine);
+    this.content2d.addChild(this.cont2dGroup);
 
 
 
@@ -91,6 +100,7 @@ export function SpStageSten (par,  fun) {
 
 	this.lineWord=new SPLineWord(this);
 	this.worldBlok=new WorldBlok(this);
+	this.group=new SPGroup(this);
 
 	
 
@@ -145,7 +155,6 @@ export function SpStageSten (par,  fun) {
 			for (var i = 0; i < this.arrSplice.length; i++) {
 				if (this.arrSplice[i].life == false) continue;				
 				aSten.push(this.arrSplice[i])
-
 			}
 		}
 
@@ -191,6 +200,42 @@ export function SpStageSten (par,  fun) {
 		if(b1==true && b==true)r+=this._delphPlus;
 		return r;
 	}
+
+	var arrAvtiv=[]
+	this.setActive=function(ao){
+		arrAvtiv.length=0;
+		if(ao!=undefined){
+			if(ao[0]!=undefined){
+				for (var i = 0; i < ao.length; i++) {
+					arrAvtiv.push(ao[i])
+				}
+			}else{
+				arrAvtiv.push(ao)
+			}
+		}
+		for (var i = 0; i < this.arrPoint.length; i++) {			
+			if (this.arrPoint[i].life==false) continue;
+			if(this.testSetActive(this.arrPoint[i])==true)this.arrPoint[i].active=true
+			else this.arrPoint[i].active=false;
+		}
+		for (var i = 0; i < this.arrSplice.length; i++) {
+			if (this.arrSplice[i].life == false) continue;	
+			if(this.testSetActive(this.arrSplice[i])==true)this.arrSplice[i].active=true
+			else this.arrSplice[i].active=false;
+			for (var j = 0; j < this.arrSplice[i].windows.array.length; j++) {
+				if(this.testSetActive(this.arrSplice[i].windows.array[j])==true)this.arrSplice[i].windows.array[j].active=true
+				else this.arrSplice[i].windows.array[j].active=false;
+			}
+		}
+	}
+	this.testSetActive=function(o){
+		if(arrAvtiv.length==0)return false
+		for (var i = 0; i < arrAvtiv.length; i++) {
+			if(arrAvtiv[i].uuid==o.uuid)return true;
+		}
+		return false	
+	}
+
 		
 
 
@@ -229,6 +274,8 @@ export function SpStageSten (par,  fun) {
 		self.arrObj.length=0;
 		return true;	
 	}
+
+
 
 
 
