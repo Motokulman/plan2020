@@ -11,7 +11,6 @@ class PlanCreateForm(forms.ModelForm):
         fields = 'title',
 
     def __init__(self, *args, **kwargs):
-        # author = self.author
         self.user = kwargs.pop('author')
         self.user_id = get_object_or_404(User, username=self.user)
         super(PlanCreateForm, self).__init__(*args, **kwargs)
