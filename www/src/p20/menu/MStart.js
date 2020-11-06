@@ -172,7 +172,7 @@ export class MStart  {
 
 				}) 
 				//self.dev.visible=false	
-				self.dev.active=true//=false	
+				self.dev.active=false//=false	
 			};
 		}	
 		self.dev=undefined
