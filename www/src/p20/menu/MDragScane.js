@@ -94,7 +94,6 @@ export class MDragScane  {
         this.sp=undefined
         this.setSP=function(sp){
             this.sp=sp;
-
             for (var i = 0; i < this.sobIndex.length; i++) {
                 this.sobIndex[i].setSP(sp)
             }      

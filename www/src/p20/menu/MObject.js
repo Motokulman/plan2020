@@ -17,6 +17,7 @@ export class MObject  {
         this.par=par
         this.fun=fun
 
+
         this.otstup=this.par.otstup;
         this.otstup1=this.par.otstup1;
 
@@ -50,9 +51,14 @@ export class MObject  {
                 this.array[i].clear()
             }
         }
+        this.clearActive=function(){
+            for (var i = 0; i < this.array.length; i++) {
+                this.array[i].active=false
+            }
+        }
 
         this.setObject=function(obj){
-            trace("setObject=======",obj,this.perehvat)
+            
             if(this.perehvat!=undefined){
                 this.perehvat(obj)
                 this.perehvat=undefined
@@ -70,6 +76,14 @@ export class MObject  {
                 }
             }
         }
+
+        this.sp=undefined
+        this.setSP=function(sp){
+            this.sp=sp;
+            for (var i = 0; i < this.array.length; i++) {
+                this.array[i].setSP(sp)
+            }      
+        } 
 
 
         this.sizeWindow = function(w,h,s){           

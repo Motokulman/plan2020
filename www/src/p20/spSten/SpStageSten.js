@@ -1,6 +1,6 @@
 
 //import { TriangulateShape } from './TriangulateShape.js';
-import { SpliceSten } from './SpliceSten.js';
+import { SpliceSten } from './sten/SpliceSten.js';
 import { SpPointSten } from './SpPointSten.js';
 import { SpDebugPixi } from './SpDebugPixi.js';
 //import { Pol3D } from './Pol3D.js';
@@ -213,6 +213,10 @@ export function SpStageSten (par,  fun) {
 				arrAvtiv.push(ao)
 			}
 		}
+		if(ao==undefined){
+			this.group.active=false
+		}
+
 		for (var i = 0; i < this.arrPoint.length; i++) {			
 			if (this.arrPoint[i].life==false) continue;
 			if(this.testSetActive(this.arrPoint[i])==true)this.arrPoint[i].active=true
@@ -236,7 +240,7 @@ export function SpStageSten (par,  fun) {
 		return false	
 	}
 
-		
+			
 
 
 	this.bigDrag=function(){		

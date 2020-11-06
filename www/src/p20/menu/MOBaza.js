@@ -32,6 +32,16 @@ export class MOBaza  {
             this.window.width=this.width;
             this.window.hasMinimizeButton=false;
             this.window.dragBool=false;
+
+            this.buttonClose=new DButton(this.window,2,2,"",function(){
+                self.active=false;
+                self.sp.setActive();
+            },"resources/image/close.png");
+            this.buttonClose.width=this.buttonClose.height=32-4
+            this.buttonClose.x=this.width-this.buttonClose.width-2
+            this.buttonClose.boolFond=false
+
+
             if(this.postIn!=undefined)this.postIn();
         }
 
@@ -41,6 +51,12 @@ export class MOBaza  {
             this.init()
             if(this.postSO!=undefined)this.postSO();
         }
+
+        this.sp=undefined
+        this.setSP=function(sp){
+            this.sp=sp;
+                  
+        } 
 
 
         this.drag=function(){
