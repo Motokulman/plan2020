@@ -26,10 +26,6 @@ export class MOGroup extends MOBaza {
             this.button.width=this.button.height=this.wh;
             this.window.height=210;
 
-
-
-
-
             this.mogObj=new MOGObj(this,function(s,p){
 
             })
@@ -39,20 +35,9 @@ export class MOGroup extends MOBaza {
         
         this.drag=function(){
             if(self.bool!=false){
-
-                self.mogObj.drag()
-                self.window.height=self.mogObj.height+32+self.otstup1*2+self.wh;
-               /* self.col.value=self.object.color;
-                self.slid.value=self.object.alpha;
-
-                self.slid.min=self.object.position.x-500
-                self.slid.max=self.object.position.x+500
-                self.slid.value=Math.round(self.object.position.x)
-                
-                self.slid1.min=self.object.position.y-500
-                self.slid1.max=self.object.position.y+500
-                self.slid1.value=Math.round(self.object.position.y)*/
-                
+                self.mogObj.drag()               
+                self.object.par.setActive(self.object.array);
+                self.window.height=self.mogObj.height+32+self.otstup1*2+self.wh;                 
             }            
         }
 

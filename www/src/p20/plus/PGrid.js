@@ -11,8 +11,6 @@ export class PGrid  {
         //var scale = 100 / 256;
 
         this.wh = wh;
-        trace(this.wh)
-
         var sprit = new PIXI.extras.TilingSprite(this.texture, this.wh, this.wh);
         //sprit.anchor.set(0.5, 0.5);
         cont.addChild(sprit);

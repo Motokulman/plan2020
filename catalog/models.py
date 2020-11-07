@@ -3,7 +3,7 @@ from django.conf import settings
 from suppliers.models import Provider
 from suppliers.models import Manufacturer
 from geography.models import City
-from brands.models import Brand
+from brands.models import *
 from names.models import *
 from materials.models import *
 # from materials.models import *

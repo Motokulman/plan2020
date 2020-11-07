@@ -1,6 +1,6 @@
 
 //import { TriangulateShape } from './TriangulateShape.js';
-import { SpliceSten } from './SpliceSten.js';
+import { SpliceSten } from './sten/SpliceSten.js';
 import { SpPointSten } from './SpPointSten.js';
 import { SpDebugPixi } from './SpDebugPixi.js';
 //import { Pol3D } from './Pol3D.js';
@@ -200,7 +200,47 @@ export function SpStageSten (par,  fun) {
 		if(b1==true && b==true)r+=this._delphPlus;
 		return r;
 	}
-		
+
+	var arrAvtiv=[]
+	this.setActive=function(ao){
+		arrAvtiv.length=0;
+		if(ao!=undefined){
+			if(ao[0]!=undefined){
+				for (var i = 0; i < ao.length; i++) {
+					arrAvtiv.push(ao[i])
+				}
+			}else{
+				arrAvtiv.push(ao)
+			}
+		}
+		if(ao==undefined){
+			this.group.active=false
+		}
+
+		for (var i = 0; i < this.arrPoint.length; i++) {			
+			if (this.arrPoint[i].life==false) continue;
+			if(this.testSetActive(this.arrPoint[i])==true)this.arrPoint[i].active=true
+			else this.arrPoint[i].active=false;
+		}
+		for (var i = 0; i < this.arrSplice.length; i++) {
+			if (this.arrSplice[i].life == false) continue;	
+			if(this.testSetActive(this.arrSplice[i])==true)this.arrSplice[i].active=true
+			else this.arrSplice[i].active=false;
+			for (var j = 0; j < this.arrSplice[i].windows.array.length; j++) {
+				if(this.testSetActive(this.arrSplice[i].windows.array[j])==true)this.arrSplice[i].windows.array[j].active=true
+				else this.arrSplice[i].windows.array[j].active=false;
+			}
+		}
+	}
+	this.testSetActive=function(o){
+		if(arrAvtiv.length==0)return false
+		for (var i = 0; i < arrAvtiv.length; i++) {
+			if(arrAvtiv[i].uuid==o.uuid)return true;
+		}
+		return false	
+	}
+
+			
 
 
 	this.bigDrag=function(){		
@@ -238,6 +278,8 @@ export function SpStageSten (par,  fun) {
 		self.arrObj.length=0;
 		return true;	
 	}
+
+
 
 
 

@@ -56,7 +56,10 @@ export class Glaf  {
         //document.body.appendChild(this.p20.div); //приатачиваем див там 3д и соты
 
         this.menu=new Menu(this,function(s,p,p1){           
-            if(s=="mashtab")self.p20.mashtab=p;
+            if(s=="mashtab"){
+                self.p20.mashtab=p;
+                self.menu.mashtab=p;
+            }
             if(s=="render"){}
             if(s=="setObjSP"){
                 self.p20.setObj(p)
