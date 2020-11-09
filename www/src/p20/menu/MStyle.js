@@ -14,9 +14,9 @@ export class MStyle  {
         this.dCont.y=this.otstup*4+this.wh
 
         var aJ= [
-            '{"colorC0":"#ffc0b0","colorC1":"#f4f4f4","delphC0":217.07,"delphC1":500}',
-            '{"colorC0":"#89ffa3","colorC1":"#f3267c","delphC0":217.07,"delphC1":500}',
-            '{"colorC0":"#89ffa3","colorC1":"#07419b","delphC0":824.43,"delphC1":206.37}'
+            '{"colorC0":"#ffc0b0","colorC1":"#f4f4f4","delphC0":217.07,"delphC1":500, "sizeLine":10, "colorLine":"#000000"}',
+            '{"colorC0":"#89ffa3","colorC1":"#f3267c","delphC0":217.07,"delphC1":500, "sizeLine":10, "colorLine":"#000000"}',
+            '{"colorC0":"#89ffa3","colorC1":"#07419b","delphC0":824.43,"delphC1":206.37, "sizeLine":10, "colorLine":"#000000"}'
         ];
 
 
@@ -24,9 +24,11 @@ export class MStyle  {
         this.object={
             colorC0:"#ff0000",
             colorC1:"#00ff00",
+            colorLine:"#000000",
             delphC0:200,
             delphC1:500,
-            delphPlus:100
+            delphPlus:100,
+            sizeLine:10
         }
 
 		this.init=function(){

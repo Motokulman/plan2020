@@ -69,6 +69,9 @@ export class BInSten extends Blok {
                 this._delph=d;
             }
             
+            // this.par.par._colorLine_;
+            // this.par.par._sizeLine;
+
             this.graphics.clear();
             this.graphics.beginFill(0x222222, 0.01);
             this.graphics.drawRect(-this._width/2,-this._delph/2,this._width,this._delph);

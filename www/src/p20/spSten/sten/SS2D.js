@@ -123,10 +123,12 @@ export class SS2D  {
 
 			numBlok=this.par.windows.getNumBlok();
 	
+
+
+
 			this.graphics.clear();
-			this.graphics.beginFill(this._adjacent == false ? this.par.par._colorC0_ : this.par.par._colorC1_, this.alpha);
-
-
+			this.graphics.beginFill(this._adjacent == false ? this.par.par._colorC0_ : this.par.par._colorC1_, 1);
+			
 
 			if(numBlok.length==0){
 
@@ -187,8 +189,11 @@ export class SS2D  {
 
 
 
+
 			this.graphics1.clear();	
-			this.graphics1.lineStyle(20, 0x000000, 1);
+			var sL=this.par.par._sizeLine*2///this.par.par._mashtab
+			this.graphics1.lineStyle( sL, this.par.par._colorLine_, 1);
+			
 		
 			if(numBlok==0){
 				for (var i = 0; i < this.aVKol; i++) {			
