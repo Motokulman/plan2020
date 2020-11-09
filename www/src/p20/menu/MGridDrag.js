@@ -36,6 +36,7 @@ export class MGridDrag  {
         this.mKrai = new MKrai(this, function(s,p){ //полосочки            
             
         });
+        
 
 
 
