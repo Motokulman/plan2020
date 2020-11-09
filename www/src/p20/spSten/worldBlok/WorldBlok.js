@@ -10,7 +10,12 @@ export class WorldBlok  {
         var self=this;
         this.par=par;
         this.fun=fun;
+
+        this._sizeLine=this.par._sizeLine
+        this._colorLine_=this.par._colorLine_
+
         this.uuid=calc.generateRendom(2);
+
       
 
         this.array = [];
@@ -92,4 +97,28 @@ export class WorldBlok  {
         }
     }    
     get activeMouse() { return  this._activeMouse;}
+
+    set colorLine(value) {      
+        if(this._colorLine!=value){
+            this._colorLine= value;
+            for (var i = 0; i < this.array.length; i++) {
+                this.array[i].dragWHD();
+            }
+        }
+    }    
+    get colorLine() { return  this._colorLine;}
+
+    
+    
+    set sizeLine(value) {      
+        if(this._sizeLine!=value){
+            this._sizeLine= value;
+
+            for (var i = 0; i < this.array.length; i++) {
+                this.array[i].dragWHD();
+
+            }
+        }
+    }    
+    get sizeLine() { return  this._sizeLine;}
 }

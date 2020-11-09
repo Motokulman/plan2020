@@ -60,18 +60,18 @@ export function SpStageSten (par,  fun) {
 	this._amPol=false;
 	this._activMouse=false;
 
+
+	this._colorLine = "#000000";
+    this._colorLine_ = 0x000000;
+	this._sizeLine = 10;
+
+
 	this._activeSten=-1;
 	this._activePoint=-1;
 	this._activePol=-1;
 	this._height = 300;
 	this._alpha=1;
 	this._status=2;
-
-
-	this._colorLine = "#000000";
-    this._colorLine_ = 0x000000;
-	this._sizeLine = 10;
-
 
 	this.boolText = true;
 	this.content2d = new PIXI.Container();
@@ -598,7 +598,10 @@ Object.defineProperties(SpStageSten.prototype, {
 		set: function (value) {	
 			if(this._colorLine == value)	return			
 			this._colorLine = value;			
-			this._colorLine_ =this.convertC(value)			
+			this._colorLine_ =this.convertC(value)
+			this.worldBlok._colorLine_=this._colorLine_;		
+			this.worldBlok.colorLine=this._colorLine_;	
+					
 			for (var i = 0; i < this.arrSplice.length; i++) {								
 				this.arrSplice[i].draw1();
 			}
@@ -613,7 +616,7 @@ Object.defineProperties(SpStageSten.prototype, {
 		set: function (value) {	
 			if(this._sizeLine == value)	return					
 			this._sizeLine = value;			
-						
+			this.worldBlok.sizeLine=value;			
 			for (var i = 0; i < this.arrSplice.length; i++) {
 				this.arrSplice[i].delph =this.getDelphToBoolS(this.arrSplice[i].carrier,this.arrSplice[i].out,this.arrSplice[i].adjacent)					
 			}
