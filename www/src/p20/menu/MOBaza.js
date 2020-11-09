@@ -65,6 +65,14 @@ export class MOBaza  {
         this.clear=function(){
             this.active=false
         }
+
+        this.deleteObj=function(){
+            if(this.object!=undefined && this.object.clear!=undefined){
+                this.object.clear();
+                this.active=false;
+            }
+            
+        }
         
   	}
 
