@@ -29,6 +29,7 @@ export class Blok  {
         this._life=true;
         this._parent=undefined
 
+
         this.uuid=calc.generateRendom(2);
 
         this.content2d = new PIXI.Container();
@@ -90,9 +91,13 @@ export class Blok  {
         this.render=function(){  
             this.par.render()
         }
-
-        this.dragWHD=function(){  
-            
+        
+        this.dragWHD=function(w,h,d){  
+            if(w!==undefined){
+                this._width=w;
+                this._height=h;
+                this._delph=d;
+            }
         }
 
         this.funSetObj=undefined
@@ -190,4 +195,5 @@ export class Blok  {
         }
     }    
     get parent() { return  this._parent;}
+
 }

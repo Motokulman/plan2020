@@ -76,6 +76,23 @@ export class MObject  {
                 }
             }
         }
+        this.keydown=function(e){
+            trace(e.keyCode)
+            if(e.keyCode== 46){
+                for (var i = this.array.length - 1; i >= 0; i--) {
+                    if(this.array[i].active == true)this.array[i].deleteObj();
+                }
+            }
+            /*for (var i = this.array.length - 1; i >= 0; i--) {
+                if(this.array[i].keydown)this.array[i].keydown(e);
+            }*/ 
+            
+        }
+        this.keyup=function(e){
+            /*for (var i = this.array.length - 1; i >= 0; i--) {
+                if(this.array[i].keyup)this.array[i].keyup(e);
+            }*/ 
+        }
 
         this.sp=undefined
         this.setSP=function(sp){
@@ -87,8 +104,7 @@ export class MObject  {
 
 
         this.sizeWindow = function(w,h,s){           
-            this.dCont.x=w/s-this.width -   this.otstup;
-            
+            this.dCont.x=w/s-this.width -   this.otstup;            
         }
   	}
 
