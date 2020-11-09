@@ -42,7 +42,8 @@ export class MLeft  {
             {src:"resources/image/w.png",array:[
                 {src:"resources/image/w0.png",array:[],id:0},
                 {src:"resources/image/w1.png",array:[],id:1},
-                {src:"resources/image/w2.png",array:[],id:2}
+                {src:"resources/image/w2.png",array:[],id:2},
+                {src:"resources/image/w1.png",array:[],id:4}
             ]},
         ]
 

@@ -66,9 +66,11 @@ export function SpStageSten (par,  fun) {
 	this._height = 300;
 	this._alpha=1;
 	this._status=2;
-	
 
 
+	this._colorLine = "#000000";
+    this._colorLine_ = 0x000000;
+	this._sizeLine = 10;
 
 
 	this.boolText = true;
@@ -362,7 +364,10 @@ Object.defineProperties(SpStageSten.prototype, {
 		set: function (value) {	
 			if(this._mashtab!=value)	{
 				this._mashtab = value;
-				
+				/*for (var i = 0; i < this.arrSplice.length; i++) {
+					if (this.arrSplice[i].life==false) continue;				
+					this.arrSplice[i].draw1();
+				}*/
 			}			
 		},
 		get: function () {			
@@ -582,11 +587,43 @@ Object.defineProperties(SpStageSten.prototype, {
 			this.amPoint= value;	
 			this.amSten= value;	
 		},
-		get: function () { return this._activMouse; }
+		get: function () { return this._activMouse; },
 	},
 
 
+///////////////////////////////////////////////////////////
 
+
+	colorLine: {
+		set: function (value) {	
+			if(this._colorLine == value)	return			
+			this._colorLine = value;			
+			this._colorLine_ =this.convertC(value)			
+			for (var i = 0; i < this.arrSplice.length; i++) {								
+				this.arrSplice[i].draw1();
+			}
+		},
+		get: function () {			
+		 	return this._colorLine;
+		}
+	},
+
+
+	sizeLine: {
+		set: function (value) {	
+			if(this._sizeLine == value)	return					
+			this._sizeLine = value;			
+						
+			for (var i = 0; i < this.arrSplice.length; i++) {
+				this.arrSplice[i].delph =this.getDelphToBoolS(this.arrSplice[i].carrier,this.arrSplice[i].out,this.arrSplice[i].adjacent)					
+			}
+		},
+		get: function () {			
+		 	return this._sizeLine;
+		}
+	},
+
+///////////////////////////////////////////////////////////
 	
 
 
