@@ -46,11 +46,8 @@
 			
 			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
 				url: 'https://plan.z25945zw.beget.tech/catalog/plan/20/edit_scheme/get_response',
-		        type: 'POST',
+		        type: 'GET',
 		        data: {
-		        	d:JSON.stringify({test:10}),
-		        	checked:false,
-		        	csrfmiddlewaretoken:"xz Тут нужен ключь, который генериться под юзеров "
 		        },
 		        cache: false,
 		        async: false,
@@ -69,9 +66,7 @@
 				url: 'https://plan.z25945zw.beget.tech/catalog/plan/20/edit_scheme/get_response',
 		        type: 'POST',
 		        data: {
-		        	d:JSON.stringify({test:10}),
-		        	checked:false,
-		        	csrfmiddlewaretoken:"xz Тут нужен ключь, который генериться под юзеров "
+                    json:"{\"test\":10}"
 		        },
 		        cache: false,
 		        async: false,
