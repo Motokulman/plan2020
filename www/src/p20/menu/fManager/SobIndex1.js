@@ -28,7 +28,7 @@ export class SobIndex1  extends SobIndex {
             self.p20.sp.addObjFun(sp.o);
 
 
-            self.helpDP.clear()
+            self.helpDP.clear();
             if(pos.oy!=null)self.helpDP.dLineParam(sp.o.position.x,sp.o.position.y, sp.o.position.x, pos.oy)
             if(pos.ox!=null)self.helpDP.dLineParam(sp.o.position.x,sp.o.position.y, pos.ox, sp.o.position.y)
         } 

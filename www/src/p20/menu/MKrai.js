@@ -522,6 +522,7 @@ export class MKPV extends DCont {
 
             self.helpDP.alpha=1  
             self.helpDP.clear();
+            if(self.arrX.length==0)return
             if(self.dragB1==true )return
             bb=true;
             self.ooo=1/self.par._mashtab
@@ -542,6 +543,7 @@ export class MKPV extends DCont {
         this.dragB1=false
 
         this.startDragMove=function(){
+            if(self.arrX.length==0)return
             self.testPosit();
             self.moveIn(); 
             
@@ -577,7 +579,8 @@ export class MKPV extends DCont {
         var raz=200
         var pointDin=new Position()
         var p,p1
-        this.move1 = function(e){     
+        this.move1 = function(e){ 
+            if(self.arrX.length==0)return    
             var r=0;
             self.par.par.getPositPlan(pointDin);            
             p=pointDin.x-self.smd.x;
@@ -603,6 +606,7 @@ export class MKPV extends DCont {
         }
 
         this.moveIn=function(){
+            if(self.arrX.length==0)return
             self.poiskXY(arrX,"x");            
                 
             for (var i = 0; i < arrX.length; i++) {
@@ -751,11 +755,13 @@ export class MKPV extends DCont {
 
 
         this.startActive= function(name){  
-            self.boolStart=true                  
+            self.boolStart=true;                
             self.testPosit();
             dcmParam.addFunMove(self.move);
-            self.dCont.visible=true
-            self.pan.visible=!self.dCont.visible
+            self.dCont.visible=true;
+            self.pan.visible=!self.dCont.visible;
+
+            if(arrX.length==0)self.finalActive();
         }
 
 
@@ -819,6 +825,8 @@ export class MKPV extends DCont {
                     return b.position.x - a.position.x
                 })
             }
+
+            if(arrX.length==0)return
 
             positStart.x=arrX[0].array[0].position.x
             positStart.y=arrY[arrY.length-1].array[0].position.y
