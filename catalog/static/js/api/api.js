@@ -38,7 +38,7 @@ function creatArrApi() {
         help: "Возврощает обьект плана типа: {id:234,url:'путь к j....",//пояснения
 
         obj: {//то что посылаем через аякс на сервер, собственно тут сам запрос
-            url: 'http://87.236.23.29/catalog/plan/22/edit_scheme/',
+            url: 'https://plan.z25945zw.beget.tech/catalog/plan/22/edit_scheme/',
             type: 'POST',
             data: {
                 d: JSON.stringify({ test: 10 }),
@@ -59,7 +59,7 @@ function creatArrApi() {
         help: "По идишнику записывает json пална по ",//пояснения
 
         obj: {//то что посылаем через аякс на сервер, собственно тут сам запрос
-            url: 'http://87.236.23.29/catalog/plan/22/edit_scheme/',
+            url: 'https://plan.z25945zw.beget.tech/catalog/plan/22/edit_scheme/',
             type: 'POST',
             data: {
                 d: JSON.stringify({ test: 10 }),

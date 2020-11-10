@@ -1,7 +1,7 @@
 
-import { World } from './colozi/World.js';
+import { World } from '../colozi/World.js';
 
-import { SpDebugPixi } from './SpDebugPixi.js';
+import { SpDebugPixi } from '../SpDebugPixi.js';
 
 
 
@@ -17,7 +17,7 @@ export class SPLWindow  {
 
 
   		this.content2d = new PIXI.Container();
-  		this.par.content2d.addChild(this.content2d);
+  		this.par.cont2dOfset.addChild(this.content2d);
 
   		
 

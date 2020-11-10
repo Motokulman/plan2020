@@ -35,7 +35,7 @@ export class SobIndex0  extends SobIndex {
                     sp.o.dragVokrug();
                 }                   
                 if(pos.o.type=="SpliceSten"){
-                    pos.o.dividedSten(sp.o,true)
+                    //pos.o.dividedSten(sp.o,true)
                     sp.o.dragVokrug();                        
                 }                     
             }            
@@ -94,6 +94,7 @@ export class SobIndex0  extends SobIndex {
 
         var tip1=0
         this.sobSP=function(s,p,e){
+            
             if(e.data.originalEvent.button==2){                 
                 if(self.boolCTRL==false)self.sp.group.active=false;
                 if(self.sp.group.active == false){
@@ -130,7 +131,7 @@ export class SobIndex0  extends SobIndex {
             }
 
             self.sp.group.active = false
-
+            trace(s,p,e);
             if(p)self.par.par.mObject.setObject(p) 
             if(s=="downPoint"){
                 self.sp.group.active=false;

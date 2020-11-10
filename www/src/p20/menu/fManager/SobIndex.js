@@ -363,7 +363,7 @@ export class SobIndex  {
 
     set active(v) {
         if(this._active!=v){
-            this._active = v;            
+            this._active = v;                        
             if(this.funActive!=undefined)this.funActive();
             if(this.helpDP)this.helpDP.clear()
             

@@ -10,7 +10,12 @@ export class WorldBlok  {
         var self=this;
         this.par=par;
         this.fun=fun;
+
+        this._sizeLine=this.par._sizeLine
+        this._colorLine_=this.par._colorLine_
+
         this.uuid=calc.generateRendom(2);
+
       
 
         this.array = [];
@@ -21,8 +26,9 @@ export class WorldBlok  {
         this.arrBD=[];
         this.arrObj={};
         this.arrBD.push({id:0,icon:"resources/image/w0.png",rect:[-1000,-1000,-100,2000,2000,200], str:["BInSten",'Window','','','','']})
-        this.arrBD.push({id:1,icon:"resources/image/w0.png",rect:[-1500,-1500,-100,3000,3000,200], rect1:[-1300,-1500,-100,2600,3000,200], str:["BInSten",'Door','','','','']})
-        this.arrBD.push({id:2,icon:"resources/image/w0.png",rect:[-1000,-1000,-100,2000,2000,200], str:["BInSten",'Not','','','','']})
+        this.arrBD.push({id:1,icon:"resources/image/w1.png",rect:[-1500,-1500,-100,3000,3000,200], rect1:[-1300,-1500,-100,2600,3000,200], str:["BInSten",'Door','','','','']})
+        this.arrBD.push({id:4,icon:"resources/image/w1.png",rect:[-2500,-1500,-100,5000,3000,200], rect1:[-2300,-1500,-100,4600,3000,200], str:["BInSten",'Door','','','','']})     
+        this.arrBD.push({id:2,icon:"resources/image/w2.png",rect:[-1000,-1000,-100,2000,2000,200], str:["BInSten",'Not','','','','']})
         this.arrBD.push({id:3,icon:"resources/image/w0.png",rect:[-3000,-3000,-200,6000,6000,400], str:["BWord",'xz','','','','']})
 
         for (var i = 0; i < this.arrBD.length; i++) {
@@ -91,4 +97,28 @@ export class WorldBlok  {
         }
     }    
     get activeMouse() { return  this._activeMouse;}
+
+    set colorLine(value) {      
+        if(this._colorLine!=value){
+            this._colorLine= value;
+            for (var i = 0; i < this.array.length; i++) {
+                this.array[i].dragWHD();
+            }
+        }
+    }    
+    get colorLine() { return  this._colorLine;}
+
+    
+    
+    set sizeLine(value) {      
+        if(this._sizeLine!=value){
+            this._sizeLine= value;
+
+            for (var i = 0; i < this.array.length; i++) {
+                this.array[i].dragWHD();
+
+            }
+        }
+    }    
+    get sizeLine() { return  this._sizeLine;}
 }

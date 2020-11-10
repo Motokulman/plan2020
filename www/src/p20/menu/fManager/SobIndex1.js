@@ -28,7 +28,7 @@ export class SobIndex1  extends SobIndex {
             self.p20.sp.addObjFun(sp.o);
 
 
-            self.helpDP.clear()
+            self.helpDP.clear();
             if(pos.oy!=null)self.helpDP.dLineParam(sp.o.position.x,sp.o.position.y, sp.o.position.x, pos.oy)
             if(pos.ox!=null)self.helpDP.dLineParam(sp.o.position.x,sp.o.position.y, pos.ox, sp.o.position.y)
         } 
@@ -45,12 +45,12 @@ export class SobIndex1  extends SobIndex {
                     sp.o.dragVokrug();
                 }                   
                 if(pos.o.type=="SpliceSten"){
-                    pos.o.dividedSten(sp.o,true)
+                    //pos.o.dividedSten(sp.o,true)
                     sp.o.dragVokrug();                        
                 }                     
             }
-            self.pointOld=undefined
-            self.helpDP.clear()
+            self.pointOld=undefined;
+            self.helpDP.clear();
             document.removeEventListener("mouseup", self.mouseup);
             document.removeEventListener("mousemove", self.mousemove); 
         }
@@ -115,7 +115,7 @@ export class SobIndex1  extends SobIndex {
                 point1.position.set(pppo.x,pppo.y);
 
 
-                p.dividedSten(point1)
+                //p.dividedSten(point1)
                            
                 
 

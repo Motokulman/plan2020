@@ -1,6 +1,6 @@
 
 //import { TriangulateShape } from './TriangulateShape.js';
-import { SpliceSten } from './SpliceSten.js';
+import { SpliceSten } from './sten/SpliceSten.js';
 import { SpPointSten } from './SpPointSten.js';
 import { SpDebugPixi } from './SpDebugPixi.js';
 //import { Pol3D } from './Pol3D.js';
@@ -60,16 +60,18 @@ export function SpStageSten (par,  fun) {
 	this._amPol=false;
 	this._activMouse=false;
 
+
+	this._colorLine = "#000000";
+    this._colorLine_ = 0x000000;
+	this._sizeLine = 10;
+
+
 	this._activeSten=-1;
 	this._activePoint=-1;
 	this._activePol=-1;
 	this._height = 300;
 	this._alpha=1;
 	this._status=2;
-	
-
-
-
 
 	this.boolText = true;
 	this.content2d = new PIXI.Container();
@@ -213,6 +215,10 @@ export function SpStageSten (par,  fun) {
 				arrAvtiv.push(ao)
 			}
 		}
+		if(ao==undefined){
+			this.group.active=false
+		}
+
 		for (var i = 0; i < this.arrPoint.length; i++) {			
 			if (this.arrPoint[i].life==false) continue;
 			if(this.testSetActive(this.arrPoint[i])==true)this.arrPoint[i].active=true
@@ -236,7 +242,7 @@ export function SpStageSten (par,  fun) {
 		return false	
 	}
 
-		
+			
 
 
 	this.bigDrag=function(){		
@@ -358,7 +364,10 @@ Object.defineProperties(SpStageSten.prototype, {
 		set: function (value) {	
 			if(this._mashtab!=value)	{
 				this._mashtab = value;
-				
+				/*for (var i = 0; i < this.arrSplice.length; i++) {
+					if (this.arrSplice[i].life==false) continue;				
+					this.arrSplice[i].draw1();
+				}*/
 			}			
 		},
 		get: function () {			
@@ -578,11 +587,46 @@ Object.defineProperties(SpStageSten.prototype, {
 			this.amPoint= value;	
 			this.amSten= value;	
 		},
-		get: function () { return this._activMouse; }
+		get: function () { return this._activMouse; },
 	},
 
 
+///////////////////////////////////////////////////////////
 
+
+	colorLine: {
+		set: function (value) {	
+			if(this._colorLine == value)	return			
+			this._colorLine = value;			
+			this._colorLine_ =this.convertC(value)
+			this.worldBlok._colorLine_=this._colorLine_;		
+			this.worldBlok.colorLine=this._colorLine_;	
+					
+			for (var i = 0; i < this.arrSplice.length; i++) {								
+				this.arrSplice[i].draw1();
+			}
+		},
+		get: function () {			
+		 	return this._colorLine;
+		}
+	},
+
+
+	sizeLine: {
+		set: function (value) {	
+			if(this._sizeLine == value)	return					
+			this._sizeLine = value;			
+			this.worldBlok.sizeLine=value;			
+			for (var i = 0; i < this.arrSplice.length; i++) {
+				this.arrSplice[i].delph =this.getDelphToBoolS(this.arrSplice[i].carrier,this.arrSplice[i].out,this.arrSplice[i].adjacent)					
+			}
+		},
+		get: function () {			
+		 	return this._sizeLine;
+		}
+	},
+
+///////////////////////////////////////////////////////////
 	
 
 

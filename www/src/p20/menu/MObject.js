@@ -17,6 +17,7 @@ export class MObject  {
         this.par=par
         this.fun=fun
 
+
         this.otstup=this.par.otstup;
         this.otstup1=this.par.otstup1;
 
@@ -50,9 +51,14 @@ export class MObject  {
                 this.array[i].clear()
             }
         }
+        this.clearActive=function(){
+            for (var i = 0; i < this.array.length; i++) {
+                this.array[i].active=false
+            }
+        }
 
         this.setObject=function(obj){
-            trace("setObject=======",obj,this.perehvat)
+            
             if(this.perehvat!=undefined){
                 this.perehvat(obj)
                 this.perehvat=undefined
@@ -70,11 +76,35 @@ export class MObject  {
                 }
             }
         }
+        this.keydown=function(e){
+            trace(e.keyCode)
+            if(e.keyCode== 46){
+                for (var i = this.array.length - 1; i >= 0; i--) {
+                    if(this.array[i].active == true)this.array[i].deleteObj();
+                }
+            }
+            /*for (var i = this.array.length - 1; i >= 0; i--) {
+                if(this.array[i].keydown)this.array[i].keydown(e);
+            }*/ 
+            
+        }
+        this.keyup=function(e){
+            /*for (var i = this.array.length - 1; i >= 0; i--) {
+                if(this.array[i].keyup)this.array[i].keyup(e);
+            }*/ 
+        }
+
+        this.sp=undefined
+        this.setSP=function(sp){
+            this.sp=sp;
+            for (var i = 0; i < this.array.length; i++) {
+                this.array[i].setSP(sp)
+            }      
+        } 
 
 
         this.sizeWindow = function(w,h,s){           
-            this.dCont.x=w/s-this.width -   this.otstup;
-            
+            this.dCont.x=w/s-this.width -   this.otstup;            
         }
   	}
 

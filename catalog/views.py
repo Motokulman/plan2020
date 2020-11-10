@@ -179,20 +179,23 @@ def edit_variant(request, pk):
 #     return render(request, 'catalog/book_renew_librarian.html', context)
 
 
-def set_scheme(request, pk):
+def set_scheme(request, plan_id):
     """Сохранение, изменение схемы"""
     return_dict = dict()
     if request.POST:
         data = request.POST
-    if request.GET:
-        data = request.GET
-    e = get_object_or_404(Plan, pk=pk)
-    e.scheme = data.get("d")
-    e.save()
+        e = get_object_or_404(Plan, id=plan_id)
+        e.scheme = data.get("json")
+        try:
+            e.save()
+            return_dict={"id":plan_id,"status":"save"}
+        except:
+            return_dict = {"id": plan_id, "status": "false"}
     # если проект имеет статус завершенного, сразу вычисляем его стоимость для всех городов и всех поставщиков
-    return_dict = Plan.objects.filter(id=pk)
-    return_dict = serializers.serialize('json', return_dict)
-    return JsonResponse(return_dict, safe=False)
+    else:
+        t = Plan.objects.get(id=plan_id)
+        return_dict={"id":plan_id,"json":t.scheme}
+    return JsonResponse(return_dict)
 
 
 def get_plan(request, pk):

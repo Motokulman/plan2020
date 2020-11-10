@@ -24,6 +24,9 @@ export class P20  {
 
 
         this.sobSP=function(s,p,p1){
+
+ 
+
             self.fun(s,p,p1)
         }
 

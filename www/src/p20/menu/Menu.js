@@ -86,10 +86,13 @@ export class Menu  {
 			this.mDragScane.setP20(p20)
 		}
 
+		this.sp=undefined
 		this.setSP=function(sp){
+			this.sp=sp
 			this.mDragScane.setSP(sp)
 			this.mGridDrag.setSP(sp)
 			this.mCont2dHelp.setSP(sp)
+			this.mObject.setSP(sp)
 		}
 
 
@@ -172,6 +175,9 @@ export class Menu  {
             this.mLeft.index=value;
             this.mDragScane.menuIndex= value;
             this.mGridDrag.menuIndex= value;
+
+            this.mObject.clear()
+            if(this.sp)this.sp.setActive();
         }
     }    
     get menuIndex() { return  this._menuIndex;}
