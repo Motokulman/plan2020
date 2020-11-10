@@ -6,7 +6,7 @@ export class BInSten extends Blok {
         super(par,obj,fun); 		
   		this.type="BInSten";
   		var self=this;
-
+        this.par
 
         
 
@@ -77,17 +77,34 @@ export class BInSten extends Blok {
             this.graphics.drawRect(-this._width/2,-this._delph/2,this._width,this._delph);
             this.graphics.endFill()
 
+
+            let sizeLine=this.par._sizeLine
+            let colorLine=this.par._colorLine_
+
+
             if(this.typeStr1 == "Window"){
 
-                this.graphics.lineStyle(20, 0x000000, 1);
-                this.graphics.drawRect(this.rect1.x,-this._delph/2,this.rect1.w,this._delph);
+                this.graphics.lineStyle(sizeLine, colorLine, 1);
+                this.graphics.drawRect(this.rect1.x,-this._delph/2-(sizeLine/2),this.rect1.w,this._delph+sizeLine);
+                this.graphics.lineStyle(sizeLine/2, colorLine, 1);
                 this.graphics.drawRect(this.rect1.x,-40,this.rect1.w,80);
             }
             if(this.typeStr1 == "Door"){
-                this.graphics.lineStyle(20, 0x000000, 1);
-                this.graphics.drawRect(this.rect1.x,-this._delph/2,this.rect1.w,this._delph);
-                this.graphics.moveTo(0,-this._delph/2-200);
-                this.graphics.lineTo(0,+this._delph/2+200);
+                this.graphics.lineStyle(sizeLine, colorLine, 1);
+                this.graphics.drawRect(this.rect1.x,-this._delph/2-(sizeLine/2),this.rect1.w, this._delph+sizeLine);
+
+                this.graphics.lineStyle(sizeLine/2, colorLine/2, 1);
+
+                let cc = calc.getVector(-this._delph/2 - this._delph/2, 0);
+                let pp = calc.getVector(this.rect1.x - this.rect1.w/5, 90);
+                let ppp = calc.getVector(Math.abs(this.rect1.x - this.rect1.w/5), 45);
+
+                this.graphics.moveTo(this.rect1.x, cc.y);
+                this.graphics.lineTo(this.rect1.w/2, cc.y);
+                this.graphics.moveTo(this.rect1.x, cc.y);
+                this.graphics.lineTo(pp.x, pp.y);
+                this.graphics.moveTo(pp.x, pp.y);
+                this.graphics.quadraticCurveTo(ppp.x + (ppp.x /4), -ppp.y + (ppp.y /4) , this.rect1.w/2, cc.y)
             }
 
             this.stAct.draw1();

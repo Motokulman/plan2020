@@ -41,7 +41,7 @@ urlpatterns += [
 
 # Сохранение схемы
 urlpatterns += [
-    path('plan/<int:pk>/edit_scheme/get_response',
+    path('plan/<int:plan_id>/edit_scheme/get_response',
          views.set_scheme, name='get_response'),
 ]
 
