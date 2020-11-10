@@ -221,15 +221,17 @@ export class SobIndex  {
             if(self.pointOld!=undefined){
                 if(Math.abs(_p.x-this.pointOld.x)<this._otstup/this._mashtab)_p.x=this.pointOld.x
                 if(Math.abs(_p.y-this.pointOld.y)<this._otstup/this._mashtab)_p.y=this.pointOld.y
-                
-                mX=this._otstup/this._mashtab;
-                mXI=null;
-                mY=this._otstup/this._mashtab;
-                mYI=null;
+            }
 
-                for (var i = 0; i < self.p20.sp.arrPoint.length; i++) {
-                    if (!self.p20.sp.arrPoint[i].life) continue;
-                    if (self.p20.sp.arrPoint[i]._uuid==_o._uuid)continue;
+            mX=this._otstup/this._mashtab;
+            mXI=null;
+            mY=this._otstup/this._mashtab;
+            mYI=null;
+
+            for (var i = 0; i < self.p20.sp.arrPoint.length; i++) {
+                if (!self.p20.sp.arrPoint[i].life) continue;
+                if (_o && self.p20.sp.arrPoint[i]._uuid==_o._uuid)continue;
+                if (this.pointOld){
                     if (this.pointOld.uuidArr!=undefined){
                         b=true;
                         for (var j = 0; j < this.pointOld.uuidArr.length; j++) {
@@ -237,43 +239,50 @@ export class SobIndex  {
                         }
                         if(!b)continue;
                     }
-                    pp=Math.abs(_p.x-self.p20.sp.arrPoint[i].position.x)
-                    if(pp<mX){
-                        mX=pp;
-                        mXI=self.p20.sp.arrPoint[i].position.x
-                        mXY=self.p20.sp.arrPoint[i].position.y
-                    }
-
-                    pp=Math.abs(_p.y-self.p20.sp.arrPoint[i].position.y)
-                    if(pp<mY){
-                        mY=pp;
-                        mYI=self.p20.sp.arrPoint[i].position.y
-                        mYX=self.p20.sp.arrPoint[i].position.x
-                    }
-                    
-                } 
+                }
                 
-                if(mXI!=null){
-                    _p.x=mXI;
-                    _p.oy=mXY
+
+                pp=Math.abs(_p.x-self.p20.sp.arrPoint[i].position.x)
+                
+                if(pp<mX){
+                    trace("#################################################")
+                    mX=pp;
+                    mXI=self.p20.sp.arrPoint[i].position.x
+                    mXY=self.p20.sp.arrPoint[i].position.y
                 }
-                if(mYI!=null){
-                    _p.y=mYI;
-                    _p.ox=mYX;
+
+                pp=Math.abs(_p.y-self.p20.sp.arrPoint[i].position.y)
+                if(pp<mY){
+                    mY=pp;
+                    mYI=self.p20.sp.arrPoint[i].position.y
+                    mYX=self.p20.sp.arrPoint[i].position.x
                 }
-                    
+                
+            } 
+
+            
+            if(mXI!=null){
+                trace("########################################@@@@@@@@@@#########")
+                _p.x=mXI;
+                _p.oy=mXY
             }
+            if(mYI!=null){
+                _p.y=mYI;
+                _p.ox=mYX;
+            }
+                
+            
             
            /* for (var i = 0; i < self.p20.sp.arrSplice.length; i++) {
                 if (!self.p20.sp.arrSplice[i].life) continue;
                 r=this.getDistSten(self.p20.sp.arrSplice[i],_p)
                
             }*/
-            if(_o==undefined && _o._uuid==undefined)return
+
 
             for (var i = 0; i < self.p20.sp.arrPoint.length; i++) {
                 if (!self.p20.sp.arrPoint[i].life) continue;
-                if (self.p20.sp.arrPoint[i]._uuid==_o._uuid)continue;
+                if (_o && self.p20.sp.arrPoint[i]._uuid==_o._uuid)continue;
                 let d=calc.getDistance(self.p20.sp.arrPoint[i].position,_p)
                 if(d<300){
                     _p.x=self.p20.sp.arrPoint[i].position.x;
@@ -286,7 +295,7 @@ export class SobIndex  {
             
             for (var i = 0; i < self.p20.sp.arrSplice.length; i++) {
                 if (!self.p20.sp.arrSplice[i].life) continue;
-                if(
+                if(_o!=undefined)if(
                     self.p20.sp.arrSplice[i].addPoint._uuid==_o._uuid||
                     self.p20.sp.arrSplice[i].addPoint1._uuid==_o._uuid
                 )continue;
