@@ -9,8 +9,20 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-     path('geologicalsurvey/create/', views.GeologicalSurveyCreateView.as_view(), name='geologicalsurvey_create'),
-     path('geologicalsurvey/<int:pk>', views.GeologicalSurveyDetailView.as_view(), name='geologicalsurvey_detail'),
-     path('geologicalsurvey/<int:pk>/delete/', views.GeologicalSurveyDelete.as_view(), name='geologicalsurvey_delete'),
+     path('survey/create/', views.SurveyCreateView.as_view(), name='survey_create'),
+     path('survey/<int:pk>', views.survey_detail_view, name='survey_detail'),
+     path('survey/<int:pk>/delete/', views.SurveyDelete.as_view(), name='survey_delete'),
+]
+
+urlpatterns += [
+     # path('well/create/', views.WellCreateView.as_view(), name='well_create'),
+     path('well/<int:pk>', views.well_detail_view, name='well_detail'),
+     path('well/<int:pk>/delete/', views.WellDelete.as_view(), name='well_delete'),
+]
+
+urlpatterns += [
+     # path('layer/create/', views.LayerCreateView.as_view(), name='layer_create'),
+     path('layer/<int:pk>', views.LayerDetailView.as_view(), name='layer_detail'),
+     path('layer/<int:pk>/delete/', views.LayerDelete.as_view(), name='layer_delete'),
 ]
 

@@ -1,9 +1,0 @@
-{% extends "base_generic.html" %}
-
-{% block content %}
-  <h3>Геологическое исследование участка: {{ geologicalsurvey.land.cadastral_number }}</h3>
-  <a href="{% url 'geologicalsurvey_delete' geologicalsurvey.id %}">Удалить</a>
-
-{% endblock %}
-
-  
