@@ -21,7 +21,34 @@
 
 	function init () {
 
-        var linkIframe = "https://motokulman.github.io/plan2020/www/"   +     "?infoDlaVorodis2= tut moshno peredan danui!!!!!!!!!!!!!!!!!!!!!";
+		var url=window.document.URL.toString();
+
+		var id=null;
+		//alphakp.ru
+		var link="http://localhost:8080/";
+		if(url.indexOf("alphakp.ru")!=-1){
+
+			link="https://alphakp.ru/www/";
+
+			var a=url.split("/")
+			for (var i = 0; i < a.length; i++) {
+				if(a[i]=="plan"){
+					console.warn("fgh")
+					if(a[i+1]!=undefined){
+						console.warn("fgh")
+						id=a[i+1]
+					}
+				}
+			}	
+		}
+
+		
+
+        var linkIframe = link;
+        if(id!=null)linkIframe+="?id="+id
+
+
+        //   +     "?infoDlaVorodis2= tut moshno peredan danui!!!!!!!!!!!!!!!!!!!!!";
         //передаюм куда    + пердавать параметры в данном случии infoDlaVorodis2 в дальнешем можно конект повесить но это сложнее
 		
 		iframe = document.createElement("IFRAME");        
@@ -38,8 +65,8 @@
         
         window.onresize = sizeWindow;
 		sizeWindow();
-
 	}
+
                 
 	
 </script>

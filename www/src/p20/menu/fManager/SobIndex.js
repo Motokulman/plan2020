@@ -130,7 +130,7 @@ export class SobIndex  {
 
             
             po=calc.isPointInLin(sten.position,sten.position1,po1,100,100)
-            //trace("FIXE 1",po, sten)
+
             rezult.z=2
             rezult.x=po.x;
             rezult.y=po.y;
@@ -245,7 +245,7 @@ export class SobIndex  {
                 pp=Math.abs(_p.x-self.p20.sp.arrPoint[i].position.x)
                 
                 if(pp<mX){
-                    trace("#################################################")
+
                     mX=pp;
                     mXI=self.p20.sp.arrPoint[i].position.x
                     mXY=self.p20.sp.arrPoint[i].position.y
@@ -262,7 +262,6 @@ export class SobIndex  {
 
             
             if(mXI!=null){
-                trace("########################################@@@@@@@@@@#########")
                 _p.x=mXI;
                 _p.oy=mXY
             }
