@@ -72,7 +72,7 @@ export class MStart  {
 
     		
 
-
+trace(par)
 		   /* var b = new DButton(this.w, 204, this.par.otstup, "set",function(){
 		        self.openJSON(self.textArea.value)
 		    })
@@ -201,22 +201,17 @@ export class MStart  {
 
     	this.init3=function(o){
 			let script = document.createElement('script');
-
 			// мы можем загрузить любой скрипт с любого домена
 			script.src = "src/libMy/divLibPlus.js"
 			document.head.append(script);
 
-
 			script.onload = function() {
 			  	// в скрипте создаётся вспомогательная функция с именем "_"
-			  	
-
-			  	self.dev=new DCompDev(self.dCont,25,25,"test33",function(){          
-
-				}) 
-				//self.dev.visible=false	
-				self.dev.active=false//=false	
+			  	self.dev=new DCompDev(self.dCont, 500, 70,"DevWindow",function(){}) 
+				self.dev.active=false	
 			};
+
+
 		}	
 		self.dev=undefined
 

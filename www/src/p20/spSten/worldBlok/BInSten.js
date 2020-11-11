@@ -54,7 +54,6 @@ export class BInSten extends Blok {
                 this.rect1.h= this.obj.rect1[4];
                 this.rect1.d= this.obj.rect1[5];
             }
-            trace(this.rect1)
             
         }
 
@@ -72,14 +71,15 @@ export class BInSten extends Blok {
             // this.par.par._colorLine_;
             // this.par.par._sizeLine;
 
-            this.graphics.clear();
-            this.graphics.beginFill(0x222222, 0.01);
-            this.graphics.drawRect(-this._width/2,-this._delph/2,this._width,this._delph);
-            this.graphics.endFill()
-
-
             let sizeLine=this.par._sizeLine
             let colorLine=this.par._colorLine_
+
+            this.graphics.clear();
+            this.graphics.beginFill(0x222222, 0.01);
+
+            this.graphics.drawRect(-this._width/2-sizeLine,-this._delph/2-sizeLine,this._width+(sizeLine*2),this._delph+(sizeLine*2));
+            this.graphics.endFill()
+
 
 
             if(this.typeStr1 == "Window"){
@@ -106,7 +106,10 @@ export class BInSten extends Blok {
                 this.graphics.moveTo(pp.x, pp.y);
                 this.graphics.quadraticCurveTo(ppp.x + (ppp.x /4), -ppp.y + (ppp.y /4) , this.rect1.w/2, cc.y)
             }
-
+            if(this.typeStr1 == "Not"){
+                this.graphics.lineStyle(sizeLine/2, colorLine, 1);
+                this.graphics.drawRect(this.rect1.x-(sizeLine*1.5)/2,-this._delph/2-(sizeLine*1.5)/2,this.rect1.w+sizeLine*1.5, this._delph+sizeLine*1.5);
+            }
             this.stAct.draw1();
         }
 
