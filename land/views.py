@@ -121,7 +121,7 @@ def well_detail_view(request, pk):
     else:
         layer_form = LayerCreateForm()
 
-    well.bearing_resistance_pile_2000_300 = 1
+    well.bearing_resistance_pile_2000_300 = well.bearing_resistance_pile_2000_300 + 1
     well.save() 
 
     context = {
