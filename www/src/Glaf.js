@@ -74,6 +74,11 @@ export class Glaf  {
                 self.menu.setMessage(p,p1)
                 return
             }
+            if(s=="rectSP"){ 
+                self.menu.setSop(s,p,p1)
+            }
+            
+
 
             if(s=="addChild")self[p].addChild(p1);
             self.render()

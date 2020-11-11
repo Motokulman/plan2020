@@ -12,6 +12,9 @@ import {  SPLineWord } from './SPLineWord.js';
 import {  WorldBlok } from './worldBlok/WorldBlok.js';
 
 import { SPGroup} from './SPGroup.js';
+
+import { SpPolygon } from './polygon/SpPolygon.js';
+
 /**
 * Мир для сращалок дорог
 * @class
@@ -56,7 +59,7 @@ export function SpStageSten (par,  fun) {
 
 	//this._mashtab = 1;
 	this._amSten=false;
-	this._amPoint=false;
+	this._amPoint=true;
 	this._amPol=false;
 	this._activMouse=false;
 
@@ -126,10 +129,9 @@ export function SpStageSten (par,  fun) {
 
 	
 	this.getPoint=function(){ return new SpPointSten(this);}
-	this.getSplice=function(){ 
-	
-		return new SpliceSten(this);
-	}/**/
+	this.getSplice=function(){return new SpliceSten(this);}
+	this.getPol=function(){ return new SpPolygon(this);}
+
 	//this.getPol=function(){ return new Pol3D(this);}
 
 
@@ -262,7 +264,7 @@ export function SpStageSten (par,  fun) {
 
 	this.addObjFun=function(o){
 		for (let i = 0; i < this.arrObj.length; i++) {
-			if(this.arrObj[i].idRandom==o.idRandom){
+			if(this.arrObj[i]._uuid==o._uuid){
 				return;
 			}
 		}

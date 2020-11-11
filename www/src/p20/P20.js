@@ -104,8 +104,6 @@ export class P20  {
 
 
         this.creatFloor=function(){
-            trace(">>>>>>>")
-
             if(this.arrayChesh[this.array.length]==undefined){
                 this.arrayChesh[this.array.length]= new SpStageSten(this,this.sobSP);
                 this.arrayChesh[this.array.length].idArr=this.array.length;
@@ -128,8 +126,7 @@ export class P20  {
             for (var i = 0; i < this.arrayChesh.length; i++) {
                 this.arrayChesh[i].clear();
             }
-            this.array=[];
-            
+            this.array=[];            
         }
 
 
@@ -140,21 +137,29 @@ export class P20  {
             }else{
                 this.clearBig();
                 this.setObj(o);
+                if(o.position!=undefined && this.sGposition!=undefined){
+                    this.sGposition(o.position);
+                }else{
+                    setTimeout(function() {
+                        self.fun("rectSP"); 
+                    }, 1); 
+                }                               
             } 
         }
 
+        this.sGposition=undefined
 
 
         this.getObj=function(){
             
-            //var o=this.sp.getObj();            
+                       
             var o={} 
             o.index=this._index;
             o.array=[]
             for (var i = 0; i < this.array.length; i++) {
                 o.array[i]=this.array[i].getObj();
-            }
-           
+            } 
+            if(this.sGposition!=undefined)o.position= this.sGposition()        
             return o;
         }
         this.setObj=function(o){ 
@@ -172,6 +177,7 @@ export class P20  {
                 }
                 this.array[i].setObj(o.array[i]);
             }
+            this.index=o.index;
 
         }
 

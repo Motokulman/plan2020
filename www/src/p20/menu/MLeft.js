@@ -169,8 +169,7 @@ export class MLButGal  {
             if(this.obj.array.length!=0){
 
                 if(this.idArr==2) {
-                    this.gallery=new DGalObj(this.dCGal,0,0,function(s,p){
-                        
+                    this.gallery=new DGalObj(this.dCGal,0,0,function(s,p){                        
                         
                     },this)
                 }    
@@ -208,6 +207,8 @@ export class MLButGal  {
 
                     if(this._startIndex!=-1)this.gallery.index=this._startIndex;
                 }
+
+                if(this.idArr==1)this.gallery.index=0//актианый первый элемент
 
 
 

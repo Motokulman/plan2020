@@ -86,6 +86,7 @@ export class Menu  {
 		this.setP20=function(p20){
 			this.p20=p20;
 			this.mDragScane.setP20(p20)
+			this.mGridDrag.setP20(p20)
 		}
 
 		this.sp=undefined
@@ -136,6 +137,20 @@ export class Menu  {
         	this.mStart.setArrObj(o)       	
         	this.mDragScane.redrag();
         }
+
+
+        this.setSop=function(s,p,p1){
+        	if(s=="rectSP"){
+        		var r=self.par.p20.getRect(self.par.p20.index);
+        		trace(r)
+        	 	
+	        	
+	        		self.mGridDrag.setRect(r,10, true);
+
+        	}
+
+        }
+
 
 
 
