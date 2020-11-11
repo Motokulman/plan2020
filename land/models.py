@@ -49,9 +49,9 @@ class CottageCommunity(models.Model):
         return f' Коттеджный поселок{self.name} ({self.clarify}) '
 
 
-class GeologicalSurvey(models.Model):
+class Survey(models.Model):
     """Геологическое исследование"""
-    land = models.ForeignKey(Land, on_delete=models.SET_NULL, null=True, verbose_name='Участок') # исполнитель  - организация, проводящая исследование
+    land = models.ForeignKey(Land, on_delete=models.CASCADE, null=True, verbose_name='Участок') # исполнитель  - организация, проводящая исследование
     contractor = models.ForeignKey(User, related_name='contractor', on_delete=models.SET_NULL, null=True, verbose_name='Пользователь-исполнитель', help_text='Есть резон хранить и пользователя и организацию, от имени которой он проводит исследование') # исполнитель  - организация, проводящая исследование
     legal_entity = models.ForeignKey(LegalEntity, related_name='legal_entity', on_delete=models.SET_NULL, null=True, verbose_name='Организация-исполнитель', help_text='Есть резон хранить и пользователя и организацию, от имени которой он проводит исследование') # исполнитель  - организация, проводящая исследование
     customer = models.ForeignKey(User, related_name='customer', on_delete=models.SET_NULL, null=True, verbose_name='Заказчик изыскания', help_text='Сделать здесь поиск пользователя по номеру телефона') # заказчик
@@ -66,23 +66,31 @@ class GeologicalSurvey(models.Model):
         return f'Участок {self.land}, заказчик {self.customer} '
 
     def get_absolute_url(self):
-        return reverse('geologicalsurvey_detail', args=[str(self.id)])
+        return reverse('survey_detail', args=[str(self.id)])
 
 
-class SurveyWell(models.Model): 
+class Well(models.Model): 
     """Скважина геологического исследования"""
-    number = models.IntegerField(unique=True, verbose_name='Номер скважины')
-    survey = models.ForeignKey(GeologicalSurvey, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Геологическое исследование')
-    bearing_resistance_pile_2000_300 = models.FloatField(verbose_name='Несущая способность сваи глубиной 2 метра и диаметром 300мм') # определяется расчетом после получения исследования
-    
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE, related_name='wells', null=True, verbose_name='Геологическое исследование', help_text="Нужно, чтобы при создании скважины не приходилось выбирать исследование. Ведь это скважина для этого исследования")
+    number = models.IntegerField(default=1, verbose_name='Порядковый номер скважины')
+    height = models.IntegerField(default=0, verbose_name='Высота в сантиметрах устья скважины относительно других скважин, если есть. Самая низкая = 0')
+    bearing_resistance_pile_2000_300 = models.FloatField(null=True, blank=True, verbose_name='Несущая способность сваи глубиной 2 метра и диаметром 300мм') # определяется расчетом после получения исследования
+        
+    class Meta:
+        verbose_name = 'Скважина геологического изыскания'
+        verbose_name_plural = 'Скважины геологического изыскания'
+
     def __str__(self):
         return f'Скважина № {self.number} '
 
-class EngineeringLayer(models.Model): 
+    def get_absolute_url(self):
+        return reverse('well_detail', args=[str(self.id)])
+
+
+class Layer(models.Model): 
     """Cлой грунта в скважине"""
-    survey = models.ForeignKey(SurveyWell, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Скважина')
-    number = models.IntegerField(unique=True, verbose_name='Номер слоя в скважине (уникален)')
-    height = models.IntegerField(default=0, verbose_name='Высота в сантиметрах устья скважины относительно других скважин, если есть. Самая низкая = 0')
+    well = models.ForeignKey(Well, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Скважина')
+    number = models.IntegerField( verbose_name='Номер слоя в скважине (уникален)')
     power = models.FloatField(default=0, verbose_name='Мощность слоя, в метрах')
     
     YES_OR_NO = (
@@ -94,14 +102,14 @@ class EngineeringLayer(models.Model):
         max_length=1,
         choices=YES_OR_NO,
         default='n',
-        help_text='Насыпной неконсолидированный',
+        verbose_name='Насыпной неконсолидированный',
     )
 
     debris = models.CharField(
         max_length=1,
         choices=YES_OR_NO,
         default='n',
-        help_text='Крупнообломочный строительный мусор',
+        verbose_name='Крупнообломочный строительный мусор',
     )
     
     SAND_VS_CLAY = (
@@ -114,7 +122,7 @@ class EngineeringLayer(models.Model):
         max_length=1,
         choices=SAND_VS_CLAY,
         default='n',
-        help_text='Описание грунта инженерного слоя',
+        verbose_name='Описание грунта инженерного слоя',
     )
 
     SAND = (
@@ -127,16 +135,20 @@ class EngineeringLayer(models.Model):
         max_length=1,
         choices=SAND,
         default='n',
-        help_text='Описание песка',
+        verbose_name='Описание песка',
     )
 
-
-
-
-    porosity = models.FloatField(help_text='Коэффициент пористости')
-    # gamma_streak_1 = models.FloatField(help_text='Расчетное значение удельного веса грунта, кН/м.куб - для крупнообломочных и песков')
-    IL = models.FloatField(help_text='Показатель текучести - для глинистых')
-    # subsidence_soil = models.BooleanField(default=False, help_text='Просадочный или нет - для глинистых')
+    porosity = models.FloatField(verbose_name='Коэффициент пористости')
+    # gamma_streak_1 = models.FloatField(verbose_name='Расчетное значение удельного веса грунта, кН/м.куб - для крупнообломочных и песков')
+    IL = models.FloatField(verbose_name='Показатель текучести - для глинистых')
+    # subsidence_soil = models.BooleanField(default=False, verbose_name='Просадочный или нет - для глинистых')
+        
+    class Meta:
+        verbose_name = 'Слой грунта'
+        verbose_name_plural = 'Слои грунта'
 
     def __str__(self):
-        return f'Инженерный слой № {self.number} '
+        return f'Слой грунта № {self.number} '
+
+    def get_absolute_url(self):
+        return reverse('layer_detail', args=[str(self.id)])

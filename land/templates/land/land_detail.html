@@ -5,11 +5,11 @@
 <a href="{% url 'land_delete' land.id %}">Удалить</a>
 
 <h4>Геологическое изыскание</h4>
-{% if my_geologicalsurveys_list %}
+{% if my_surveys_list %}
 <ul>
-  {% for gs in my_geologicalsurveys_list %}
+  {% for gs in my_surveys_list %}
   <li>
-    <a href="{{ geologicalsurvey.get_absolute_url }}"> {{ gs }}</a>
+    <a href="{{ survey.get_absolute_url }}"> {{ gs }}</a>
   </li>
   {% endfor %}
 </ul>

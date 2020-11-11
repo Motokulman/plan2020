@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from land.models import Land, GeologicalSurvey
+from land.models import Land, Survey, Well, Layer
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
@@ -22,11 +22,36 @@ class LandCreateForm(forms.ModelForm):
         return cadastral_number
 
 
-class GeologicalSurveyCreateForm(forms.ModelForm):
+class SurveyCreateForm(forms.ModelForm):
     class Meta:
-        model = GeologicalSurvey
+        model = Survey
         fields = 'land', 'legal_entity', 'customer', 
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('contractor', None)
-        super(GeologicalSurveyCreateForm, self).__init__(*args, **kwargs)
+        super(SurveyCreateForm, self).__init__(*args, **kwargs)
+
+
+class WellCreateForm(forms.ModelForm):
+    class Meta:
+        model = Well
+        fields = ('number', 'height',)
+
+    # def __init__(self, *args, **kwargs):
+    #     self.survey = kwargs.pop('survey', None)
+    #     super(WellCreateForm, self).__init__(*args, **kwargs)
+
+
+class LayerCreateForm(forms.ModelForm):
+    class Meta:
+        model = Layer
+        fields = ('number', 'power', 'non_consolidated', 'debris', 'sand_vs_clay', 'sand', 'porosity', 'IL',)
+
+    # def __init__(self, *args, **kwargs):
+    #     self.well = kwargs.pop('well', None)
+    #     super(LayerCreateForm, self).__init__(*args, **kwargs)
+
+
+# class WellCreateForm(forms.Form):
+#     number = forms.IntegerField(unique=True, verbose_name='Номер скважины')    
+#     height = forms.IntegerField(default=0, verbose_name='Высота в сантиметрах устья скважины относительно других скважин, если есть. Самая низкая = 0')

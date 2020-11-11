@@ -1,0 +1,28 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h3>Скважина изыскания для участка: {{ well.survey.land.cadastral_number }}</h3>
+<a href="{% url 'well_delete' well.id %}">Удалить</a>
+<p>Несущая способность: {{ well.bearing_resistance_pile_2000_300 }}</p>
+{% if my_layers_list %}
+<ul>
+  {% for el in my_layers_list %}
+  <li>
+    <a href="{{ el.get_absolute_url }}"> {{ el.number }}</a>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>Пока в скважине нет ни одного слоя грунта</p>
+{% endif %}
+
+
+<h2>Добавить слой грунта</h2>
+<form action="" method='POST'>
+  {{ layer_form.as_p }}
+  {% csrf_token %}
+  <p><input type="submit" value="Добавить"></p>
+</form>
+
+
+{% endblock %}
