@@ -9,66 +9,69 @@ export class MOP20 extends MOBaza {
         this.typeNa="P20";
   		var self=this;
 
-        this.whSize=5555555;
+
        
         this.dCont=new DCont(par.dCont);
 
-        this.buttons=undefined;
-        this.slid
-        this.slid1
-        this.bool=true
 
+        this.bool=true
+        this.button=undefined;
+        this.button1=undefined;
 
         this.postIn=function(){
-            trace(this.window.width-this.otstup*2)
             this.window.title="P20";
-            var a = this.get()
-
+            /*var a = this.get()
             for (var i = 0; i < a.length; i++) {
                 this.window.content.add(a[i])
-            }
+            }*/
+
+
+            this.button = new DButton(this.window.content, this.otstup, this.otstup, "Добавить этаж",function(){
+                self.object.creatFloor();
+                self.drag();
+            });
+            this.button1 = new DButton(this.window.content, this.otstup, this.otstup+30, "delete этаж",function(){
+                
+            });             
         }
 
 
-        this.array=[]
-        this.arrayCehs = []
-        this.buttons=[]
+        this.array = []
+ 
 
-        this.get=function(value){
-            var width = 207
-            var yy=this.otstup;
-            var wh=40;  
+        this.getM20Gron=function(){
 
-            for (var i = 0; i < this.object.array.length; i++) {
-                this.buttons[i]=new DButton(null,yy,yy+i*(wh+this.otstup),""+i,function(){
-                    self.object.index=this.idArr
-                    self.drag();
-                })
-                this.buttons[i].width=width;
-                this.buttons[i].height=wh
-                this.buttons[i].idArr=i;
-            }
-
-            yy+=this.buttons.length*(wh+this.otstup); 
-
-            this.buttons[this.buttons.length-1] = new DButton(null,this.otstup,yy,"Добавить этаж",function(){self.object.creatFloor()})  
-            this.buttons[this.buttons.length-1].width=width
-
-            yy+=(wh+this.otstup);
-            this.window.height=yy+32;
-
-            return this.buttons
             
+           
         }
              
-        
+        this.sobbb=function(s,p,p1){
+
+        }
+
         this.drag=function(){
             if(self.bool!=false){
-                for (var i = 0; i < this.buttons.length; i++) {
+                trace(self.object.array)
+
+                for (var i = 0; i < self.array.length; i++) {
+                    self.array[i].active=false;
+                }
+
+                for (var i = 0; i < self.object.array.length; i++) {
+                    if(self.array[i]==undefined)self.array[i]=new M20Gron(self, i, self.sobbb)
+                    self.array[i].active=true; 
+                    self.array[i].setObject(self.object.array[i])   
+                }
+                trace(self.array)
+
+                this.button.y=self.object.array.length*36
+                this.button1.y=self.object.array.length*36+36
+               /* for (var i = 0; i < this.buttons.length; i++) {
                     if(i==self.object.index)this.buttons[i].color=dcmParam.activButton;
                     else this.buttons[i].color=dcmParam.color;
                     this.postIn()
-                }                
+                }*/ 
+
             }            
         }
 
@@ -90,11 +93,38 @@ export class MOP20 extends MOBaza {
             }
       	}
 
-    set index(value) {
-        if(this._index!=value){
-            this._index= value;
-                  
-        }
-    }  
+  
 
+}
+
+
+export class M20Gron  {
+    constructor(par,idArr,fun) {  
+     
+        this.type="M20Gron";
+        var self=this;
+
+        this._active=true;
+
+        this.otstup=2;
+        this.dCont=new DCont(par.dCont);
+
+        this.button = new DButton(this.dCont, this.otstup, this.otstup+idArr*36, "xz",function(){
+           
+        });
+
+        this.object
+        this.setObject=function(_spStageSten){
+            this.object=_spStageSten
+            
+        }
+
+    }
+    set active(value) {
+        if(this._active!=value){
+            this._active= value;
+            this.dCont.visible= value;     
+        }
+    }    
+    get active() { return  this._active;}
 }
