@@ -12,9 +12,9 @@ export class P20  {
 
         this.sobSP=undefined;
 
-        this.startStyle='{"colorC0":"#ffe4d4","colorC1":"#f0f0f0","delphC0":200,"delphC1":500,"delphPlus":100}'
 
-        this.startStyle='{"colorC0":"#ffe4d4","colorC1":"#b0dfee","delphC0":200,"delphC1":500,"delphPlus":100}'
+
+        this.startStyle='{"colorC0":"#ffe4d4","colorC1":"#b0dfee","delphC0":200,"delphC1":500,"delphPlus":100,"sizeLine":10, "colorLine":"#000000"}'
 
         this._activObject=undefined;
         this.div= document.createElement('div');
@@ -36,6 +36,9 @@ export class P20  {
             this.arrayChesh[i]= new SpStageSten(this,this.sobSP);
             this.arrayChesh[i].idArr=i
             this.array[i] = this.arrayChesh[i];
+
+            trace('1111', this.arrayChesh[i])
+            trace('2222', this.arrayChesh[i] == this.array[i])
         }
 
    
@@ -105,11 +108,10 @@ export class P20  {
 
         this.creatFloor=function(){
             if(this.arrayChesh[this.array.length]==undefined){
-                this.arrayChesh[this.array.length]= new SpStageSten(this,this.sobSP);
+                this.arrayChesh[this.array.length]= new SpStageSten(this, this.sobSP);
                 this.arrayChesh[this.array.length].idArr=this.array.length;
             }
             this.array[this.array.length]=this.arrayChesh[this.array.length];
-            //var floor=
         }
 
             
