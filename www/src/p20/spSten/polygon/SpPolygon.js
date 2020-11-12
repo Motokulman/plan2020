@@ -30,30 +30,18 @@ export function SpPolygon (_stage) {
 
 
 	this.draw1 = function (b) {
-		this.ssPolygon2d.draw1()
+		this.ssPolygon2d.draw1();
 	}
 
 
 	this.drag = function () {
-		self.par.addObjFun(self)
+		self.par.addObjFun(self);
 	};
 
 
-	this.dragPost=function(){	
-		
+	this.dragPost=function(){		
 
-		this.draw1()
-	/*	this.content2d.x=this.position.x;
-		this.content2d.y=this.position.y;
-		this.content2d.rotation=this._rotation;
-	
-
-		this.content2d1.x=this.position.x;
-		this.content2d1.y=this.position.y;
-		this.content2d1.rotation=this._rotation;
 		this.draw1();
-		this.stage.render();
-		this.poiskGran();*/
 	}
 
 
