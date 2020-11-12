@@ -4,6 +4,8 @@ import { P20 } from './p20/P20.js';
 import { Menu} from './p20/menu/Menu.js';
     
 import { VisiPixi } from './libMy/VisiPixi.js';
+import { ViewServer } from './viewServer/ViewServer.js';
+
 
 export class Glaf  {
   	constructor(par) {  		
@@ -37,6 +39,25 @@ export class Glaf  {
             this.intRend=1;
         }
 
+        this.viewServer=new ViewServer(function(s,p,p1){ 
+            trace("viewServer",s,p,p1)
+            if(s=="setObj"){   
+                if(p==null)  {
+                    self.menu.setMessage("message","Error","Проект id ="+self.viewServer.id+" не создан. json еще не сохранен и нечего открывать");
+                }else{
+                    //self.p20.setObj(p);
+                    self.p20.setObjOpen(p); 
+                }       
+                
+                self.menu.mStart.visiId(self.viewServer.id);                               
+            }
+            if(s=="message"){
+                console.warn(p,p1)
+                self.menu.setMessage(p,p1);
+                return
+            }
+        });
+
         this.p20=new P20(this,function(s,p,p1){                  
             if(s=="render"){ 
                 self.intRend=p ? p: 1          
@@ -49,6 +70,15 @@ export class Glaf  {
             if(s=="indexSP"){ 
                 self.menu.setSP(p);
             }
+            if(s=="message"){
+                self.menu.setMessage(p,p1)
+                return
+            }
+            if(s=="rectSP"){ 
+                self.menu.setSop(s,p,p1)
+            }
+            
+
 
             if(s=="addChild")self[p].addChild(p1);
             self.render()
@@ -64,12 +94,27 @@ export class Glaf  {
             if(s=="setObjSP"){
                 self.p20.setObj(p)
             }  
-            if(s=="dragStyleObj") self.p20.dragStyleObj(p) 
+            if(s=="dragStyleObj") self.p20.dragStyleObj(p)
+
+            if(s=="openId"){
+                self.viewServer.openId(p)
+            } 
+            if(s=="message"){
+                self.menu.setMessage(p,p1)
+                return
+            }
+
+            if(s=="saveGetObjId"){
+                self.viewServer.saveGetObjId(self.p20.getObj())               
+                return
+            }
             
             self.render()
         });
         this.menu.setP20(this.p20);
-        this.p20.index=1;       
+        this.p20.index=1; 
+
+
 
 
 
@@ -89,18 +134,19 @@ export class Glaf  {
         this.sizeWindow = function(w,h,s){              
             this.scale=s;
             this.dCont.scale=s;
-            this.menu.sizeWindow(w,h,s);
-                  
+            this.menu.sizeWindow(w,h,s);                  
         }
 
         this.keydown=function(e){ 
             this.menu.keydown(e)
         }
+
         this.keyup=function(e){
-            this.menu.keyup(e)  
+            this.menu.keyup(e);  
         }
 
   
+        this.viewServer.openURL();
   	}
 }
 

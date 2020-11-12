@@ -24,18 +24,18 @@ export class P20  {
 
 
         this.sobSP=function(s,p,p1){
-
- 
-
             self.fun(s,p,p1)
         }
 
         this._index=-1;
         this._mashtab=1;
 
+        this.arrayChesh=[]
         this.array=[];
-        for (var i = 0; i < 4; i++) {
-            this.array[i] = new SpStageSten(this,this.sobSP);
+        for (var i = 0; i < 2; i++) {
+            this.arrayChesh[i]= new SpStageSten(this,this.sobSP);
+            this.arrayChesh[i].idArr=i
+            this.array[i] = this.arrayChesh[i];
         }
 
    
@@ -78,21 +78,16 @@ export class P20  {
                 else {
                     oo.sUi=-1
                 }
-                o.arrSplice.push(oo);
-
-                
+                o.arrSplice.push(oo);                
 
                 if(max.x>a[i].point0.x)max.x=a[i].point0.x
                 if(max.y>a[i].point0.y)max.y=a[i].point0.y
                 
                 if(max.x1<a[i].point0.x)max.x1=a[i].point0.x
                 if(max.y1<a[i].point0.y)max.y1=a[i].point0.y                
-            }
+            }            
 
-
-            
-
-            this.setObj(o)          
+            this.setObj(o);          
         } 
 
         this.dragStyleObj=function(o){
@@ -108,6 +103,14 @@ export class P20  {
         }
 
 
+        this.creatFloor=function(){
+            if(this.arrayChesh[this.array.length]==undefined){
+                this.arrayChesh[this.array.length]= new SpStageSten(this,this.sobSP);
+                this.arrayChesh[this.array.length].idArr=this.array.length;
+            }
+            this.array[this.array.length]=this.arrayChesh[this.array.length];
+            //var floor=
+        }
 
             
         this.upDate=function(){
@@ -119,16 +122,66 @@ export class P20  {
         }
 
 
+        this.clearBig=function(){ 
+            for (var i = 0; i < this.arrayChesh.length; i++) {
+                this.arrayChesh[i].clear();
+            }
+            this.array=[];            
+        }
+
+
+
+        this.setObjOpen=function(o){             
+            if(o.index==undefined){
+                this.sp.setObj(o); 
+            }else{
+                this.clearBig();
+                this.setObj(o);
+                if(o.position!=undefined && this.sGposition!=undefined){
+                    this.sGposition(o.position);
+                }else{
+                    setTimeout(function() {
+                        self.fun("rectSP"); 
+                    }, 1); 
+                }                               
+            } 
+        }
+
+        this.sGposition=undefined
+
 
         this.getObj=function(){
-            var o=this.sp.getObj();            
+            
+                       
+            var o={} 
+            o.index=this._index;
+            o.array=[]
+            for (var i = 0; i < this.array.length; i++) {
+                o.array[i]=this.array[i].getObj();
+            } 
+            if(this.sGposition!=undefined)o.position= this.sGposition()        
             return o;
         }
+        this.setObj=function(o){ 
+            if(o.index==undefined){
+                self.fun("message","Error Старая модель файла","Старый не опдерживал этажность");
+                return
+            }           
+            for (var i = 0; i < o.array.length; i++) {
+                if(this.array[i]==undefined){
+                    if(this.arrayChesh[i]==undefined){
+                        this.arrayChesh[i]= new SpStageSten(this,this.sobSP);
+                        this.arrayChesh[i].idArr=i;
+                    }
+                    this.array[i]=this.arrayChesh[i];
+                }
+                this.array[i].setObj(o.array[i]);
+            }
+            this.index=o.index;
 
-        this.setObj=function(o){           
-            this.sp.setObj(o);                                  
         }
-        this.getRect=function(num){ 
+
+        this.getRect=function(num){           
             let s=this.sp
             if(num!=undefined){
                 if(this.array[num]==undefined)return null

@@ -241,6 +241,30 @@ export class MGridDrag  {
             this.mKrai.setSP(sp)
         }
 
+        this.setP20=function(p20){
+            this.p20=p20;
+            p20.sGposition=  this.sGposition         
+        }
+
+        this.sGposition = function(_o){
+            if(_o==undefined){
+                var o={}
+                o.x=self.cont.x
+                o.y=self.cont.y
+                o.mashtab=self._mashtab
+                return o
+            }
+            trace(">>>>>>>>>>>>",_o)
+            
+            self.cont.x= _o.x 
+            self.cont.y= _o.y
+            self.mashtab=_o.mashtab
+            self.fun("mashtab",self._mashtab) 
+
+            return null
+        }
+
+
 
         this.graphics.name="xz";
         var r=this.sizeMax;

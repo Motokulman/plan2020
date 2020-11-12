@@ -18,6 +18,7 @@ export function SpPointSten (_stage) {
 	this._height = 300;
 
 	this._active=false
+	this._activMouse=_stage._amPoint
 
 	this.content2d = new PIXI.Container();
 	this.stage.content2dPoint.addChild(this.content2d);
@@ -39,7 +40,7 @@ export function SpPointSten (_stage) {
     	if(_stage.par.sobSP!=undefined)_stage.par.sobSP("downPoint",self,e)
     }
 
-    this.graphics.interactive = true;            
+    this.graphics.interactive = this._activMouse;            
     this.graphics.on('mousedown', this.onDragStart);
 
     this.graphics.on('mouseover', function(e){    	
@@ -142,6 +143,8 @@ Object.defineProperties(SpPointSten.prototype, {
 		set: function (value) {
 			if (this._activMouse == value) return;
 			this._activMouse = value;
+			this.graphics.interactive = value; 
+			console.warn(this.idArr+"   "+this._activMouse+"   "+this._life)
 			for (var ii = 0; ii < this.arrayClass.length; ii++) {
 				if ('activMouse' in this.arrayClass[ii]) this.arrayClass[ii].activMouse = this._activMouse;
 			}
@@ -152,7 +155,7 @@ Object.defineProperties(SpPointSten.prototype, {
 		set: function (value) {
 			if (this._life == value) return;
 			this._life = value;	
-					
+			//this.activMouse = value;			
 			if(this._life==true)this.stage.content2dPoint.addChild(this.content2d);
 			else if(this.content2d.parent!=undefined)this.content2d.parent.removeChild(this.content2d);
 		},

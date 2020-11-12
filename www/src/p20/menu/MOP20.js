@@ -24,8 +24,7 @@ export class MOP20 extends MOBaza {
             this.window.title="P20";
             this.buttons=[]
             var yy=this.otstup;
-            var wh=(this.window.width-this.otstup)/this.object.array.length-this.otstup
-        
+            var wh=(this.window.width-this.otstup)/this.object.array.length-this.otstup;        
             for (var i = 0; i < this.object.array.length; i++) {
                 this.buttons[i]=new DButton(this.window.content,this.otstup+i*(wh+this.otstup),yy,""+i,function(){
                     self.object.index=this.idArr
@@ -34,7 +33,15 @@ export class MOP20 extends MOBaza {
                 this.buttons[i].width=this.buttons[i].height=wh;
                 this.buttons[i].idArr=i;
             }           
-            yy+=wh+this.otstup;           
+            yy+=wh+this.otstup; 
+
+            var b= new DButton(this.window.content,this.otstup,yy,"Плюс новый этаж",function(){
+                self.object.creatFloor()
+            })  
+            b.width=this.window.width-this.otstup;
+
+            yy+=b.height+this.otstup; 
+
             this.window.height=yy+32;
         }
 

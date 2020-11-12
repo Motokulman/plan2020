@@ -47,8 +47,10 @@ export class Menu  {
 
 
 
-	    this.array[this.array.length]=this.sStart=new MStart(this, function(s,p){             
+	    this.array[this.array.length]=this.mStart=new MStart(this, function(s,p,p1){             
            	if(s=="index")self.menuIndex=p;
+
+           	self.fun(s,p,p1)
         });
 
       
@@ -84,6 +86,7 @@ export class Menu  {
 		this.setP20=function(p20){
 			this.p20=p20;
 			this.mDragScane.setP20(p20)
+			this.mGridDrag.setP20(p20)
 		}
 
 		this.sp=undefined
@@ -110,15 +113,13 @@ export class Menu  {
 	    	this.openMenu(p);
 	    }
 
-	    /*this.openMenu=function(p){
-			for (var i = 0; i < this.array.length; i++) {
-				if(this.array[i].dCont==undefined)continue;				
-	    		if(i==p)this.array[i].dCont.visible = true;
-	    		else this.array[i].dCont.visible = false;
-	    	}
+	    this.setMessage=function(p,p1){
 	    	
-	    } 
-	    this.openMenu(0);*/
+	    	var s=!p ? "Сообщение" : p;
+	    	var s1=!p1 ? "null" : p1;
+	    
+	    	mInfo.setFun(s,s1);
+	    }
 
 		this.setApi=function(s,p,p1){
 			if(s=="activObject"){
@@ -127,15 +128,29 @@ export class Menu  {
 	    } 
 
 	    this.setObj=function(o){
-	    	this.sStart.setObj(o)    	
+	    	this.mStart.setObj(o)    	
 	    	
             
         }
 
         this.setArrObj=function(o){
-        	this.sStart.setArrObj(o)       	
+        	this.mStart.setArrObj(o)       	
         	this.mDragScane.redrag();
         }
+
+
+        this.setSop=function(s,p,p1){
+        	if(s=="rectSP"){
+        		var r=self.par.p20.getRect(self.par.p20.index);
+        		trace(r)
+        	 	
+	        	
+	        		self.mGridDrag.setRect(r,10, true);
+
+        	}
+
+        }
+
 
 
 

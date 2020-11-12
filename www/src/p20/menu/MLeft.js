@@ -37,7 +37,10 @@ export class MLeft  {
 
         var aa=[
             {src:"resources/image/p1_100.png",array:[]},
-            {src:"resources/image/p2_100.png",array:[]},
+            {src:"resources/image/p2_100.png",array:[
+                {src:"resources/image/p2_100.png",array:[],id:0},
+                {src:"resources/image/p4_100.png",array:[],id:0}
+            ]},
             {src:"resources/image/size.png",array:[]},
             {src:"resources/image/w.png",array:[
                 {src:"resources/image/w0.png",array:[],id:0},
@@ -166,8 +169,7 @@ export class MLButGal  {
             if(this.obj.array.length!=0){
 
                 if(this.idArr==2) {
-                    this.gallery=new DGalObj(this.dCGal,0,0,function(s,p){
-                        
+                    this.gallery=new DGalObj(this.dCGal,0,0,function(s,p){                        
                         
                     },this)
                 }    
@@ -205,6 +207,8 @@ export class MLButGal  {
 
                     if(this._startIndex!=-1)this.gallery.index=this._startIndex;
                 }
+
+                if(this.idArr==1)this.gallery.index=0//актианый первый элемент
 
 
 
