@@ -21,7 +21,7 @@ export class MOPolygon extends MOBaza {
         this.bool=true
         this.postIn=function(){
            
-            this.window.title="Point"
+            this.window.title="Polygon"
             this.button=new DButton(this.window.content,this.otstup1,this.otstup1,"",function(){
                 self.bool=false
                 self.object.clear();                
@@ -74,6 +74,8 @@ export class MOPolygon extends MOBaza {
             this.bool=true           
             this.object.funDragMenu=this.drag
             this.object.par.setActive(this.object);
+
+            this.window.title="Polygon: "+this.object.idArr
             this.drag();
         }
         this.clear=function(){

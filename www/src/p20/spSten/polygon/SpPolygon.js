@@ -68,54 +68,32 @@ SpPolygon.prototype = Object.create(SpPol.prototype);
 SpPolygon.prototype.constructor = SpPolygon;
 
 SpPolygon.prototype.getObj = function () {
-	var o = Splice.prototype.getObj.call(this);
-	o.type = this.type;
-	o.windows = this.windows.getObj();
-	o.colorSten = this.colorSten;
-	o.height = this.height;
-	o.sUi=this.sUi;
-	o.idUi=this.idUi;	
-	o.offset=this.offset;
-	o.bChaz=this.bChaz;
-
-	o.carrier=this.carrier;
-	o.out=this.out;
-	o.adjacent=this.adjacent;
+	var o = SpPol.prototype.getObj.call(this);
+	trace(">>>>>>>>>>",o)
 	return o;
 };
 SpPolygon.prototype.setObj = function (o) {
-	Splice.prototype.setObj.call(this, o);
-	if (o.windows !== undefined) this.windows.setObj(o.windows);
-	if (o.boolText!== undefined)  this.boolText=o.boolText;
-	if (o.height!== undefined)  this.height=o.height;
-	//if (o.col3d!== undefined ) this.col3d=o.col3d;
-	if (o.idUi!== undefined ) this.idUi=o.idUi;
-	if (o.sUi!== undefined ) this.sUi=o.sUi;		
-	if (o.offset!== undefined ) this.offset=o.offset;
-	if (o.bChaz!== undefined ) this.bChaz=o.bChaz;	
-
-	if (o.carrier!== undefined ) this.carrier=o.carrier;
-	if (o.out!== undefined ) this.out=o.out;
-	if (o.adjacent!== undefined ) this.adjacent=o.adjacent;	
+	SpPol.prototype.setObj.call(this, o);
+	trace("000000000",o)
 	
 };
 SpPolygon.prototype.compare = function (_sten) {
 	var rez = true;
-	if (!Splice.prototype.compare(this, _sten)) rez = false;
+	if (!SpPol.prototype.compare(this, _sten)) rez = false;
 	return rez;
 };
 SpPolygon.prototype.setSten = function (_sten) {
-	Splice.prototype.setSten.call(this, _sten);
+	SpPol.prototype.setSten.call(this, _sten);
 };
 SpPolygon.prototype.restart = function () {
-	Splice.prototype.restart(this);
+	SpPol.prototype.restart(this);
 	//this.windows.clear();
 	//this.content2d.addChild(this.sten2D.content2d);
-	//this.stage.configureSplice(this);
+	//this.stage.configureSpPol(this);
 };
 
 SpPolygon.prototype.drag = function () {
-	Splice.prototype.drag.call(this);
+	SpPol.prototype.drag.call(this);
 	this.stage.addObjFun(this);
 	
 };

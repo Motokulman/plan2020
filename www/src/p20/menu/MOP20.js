@@ -46,7 +46,7 @@ export class MOP20 extends MOBaza {
         }
              
         this.sobbb=function(s,p,p1){
-
+            if(s=="index")self.object.index=p;
         }
 
         this.drag=function(){
@@ -103,14 +103,15 @@ export class M20Gron  {
      
         this.type="M20Gron";
         var self=this;
+        this.idArr=idArr
 
         this._active=true;
 
         this.otstup=2;
         this.dCont=new DCont(par.dCont);
 
-        this.button = new DButton(this.dCont, this.otstup, this.otstup+idArr*36, "xz",function(){
-           
+        this.button = new DButton(this.dCont, this.otstup, this.otstup+idArr*36, "этаж: "+idArr,function(){
+            fun("index",self.idArr)
         });
 
         this.object
