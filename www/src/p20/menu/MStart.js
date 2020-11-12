@@ -210,7 +210,6 @@ trace(par)
 			  	self.dev=new DCompDev(self.dCont, 10, 290,"DevWindow",function(){})
 
 			  	self.dev1=new DWStenColiz(self.dev.dCont)
-			  	trace('124',self.dev1)
 			  	self.dev.addCont(self.dev1, self.dev1.dCont,"DWS",undefined,undefined)
 				self.dev.active=false	
 				self.dev1.active=false	

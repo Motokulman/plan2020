@@ -21,23 +21,14 @@ export class MStyle  {
 
 
 		this.dCont.visible=	this._active;
-        this.object={
-            colorC0:"#ff0000",
-            colorC1:"#00ff00",
-            colorLine:"#000000",
-            delphC0:200,
-            delphC1:500,
-            delphPlus:100,
-            sizeLine:10
-        }
+        this.object=JSON.parse(aJ[0]);
 
 		this.init=function(){
             if(this.window!=undefined)return          
             
 
             this.window=new DWindow(this.dCont,0,0,"style");
-            this.pObject=new DParamObject(this.window.content,this.otstup,this.otstup,function(){         
-               
+            this.pObject=new DParamObject(this.window.content,this.otstup,this.otstup,function(){                
                 self.dragObj(self.object)
             });
             this.pObject.tipRide=true

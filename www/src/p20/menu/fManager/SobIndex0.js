@@ -94,28 +94,29 @@ export class SobIndex0  extends SobIndex {
 
         var tip1=0
         this.sobSP=function(s,p,e){
-            
-            if(e.data.originalEvent.button==2){                 
-                if(self.boolCTRL==false)self.sp.group.active=false;
-                if(self.sp.group.active == false){
-                    self.sp.group.active = true;
-                    self.par.par.mObject.setObject(self.sp.group) 
-                }
-                tip1=0
-                self.getPositPlan(pos);  
+            if(e!==undefined&&e.data!==undefined){
+                if(e.data.originalEvent.button==2){                 
+                    if(self.boolCTRL==false)self.sp.group.active=false;
+                    if(self.sp.group.active == false){
+                        self.sp.group.active = true;
+                        self.par.par.mObject.setObject(self.sp.group) 
+                    }
+                    tip1=0
+                    self.getPositPlan(pos);  
 
-                document.addEventListener("mouseup", self.mouseup1);
-                document.addEventListener("mousemove", self.mousemove1); 
-                return;
-            }else{
-                if(s=="downGroup"){                    
-                    tip1=1                    
-                    self.getPositPlan(pos)
                     document.addEventListener("mouseup", self.mouseup1);
                     document.addEventListener("mousemove", self.mousemove1); 
                     return;
+                }else{
+                    if(s=="downGroup"){                    
+                        tip1=1                    
+                        self.getPositPlan(pos)
+                        document.addEventListener("mouseup", self.mouseup1);
+                        document.addEventListener("mousemove", self.mousemove1); 
+                        return;
+                    }
                 }
-            }
+            }else return
            
             if(self.boolCTRL==true){
                 if(s=="downPoint"||s=="downSten"||s=="downBlok"){
