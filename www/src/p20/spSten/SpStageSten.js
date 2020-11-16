@@ -31,6 +31,8 @@ export function SpStageSten (par,  fun) {
 	this.fun = fun;
 	this.uuid=calc.generateRendom(2);
 
+	this.name='xz..';
+
 	this._delph = 500;
 	
 	this._colorUI=0x008cba;
@@ -299,15 +301,19 @@ SpStageSten.prototype.getObj = function (_activ) {
 	o.lineWord=this.lineWord.getObj()
 	o.worldBlok=this.lineWord.getObj()
 
+	o.name=this.name
 	
 	return o;
 };
 SpStageSten.prototype.setObj = function (o) {	
 	SpStage.prototype.setObj.call(this, o);
 	if(o.color)this.color=o.color
-	if(o.alpha)this.alpha=o.alpha	
+	if(o.alpha)this.alpha=o.alpha
+	if(o.name)this.name=o.name;	
+		
 	if(o.lineWord)this.lineWord.setObj(o.lineWord);
 	if(o.worldBlok)this.lineWord.setObj(o.worldBlok);	
+	
 	this.bigDrag()		
 };
 

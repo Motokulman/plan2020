@@ -33,17 +33,10 @@ export class P20  {
         this.arrayChesh=[]
         this.array=[];
         for (var i = 0; i < 2; i++) {
-            this.arrayChesh[i]= new SpStageSten(this,this.sobSP);
+            this.arrayChesh[i]= new SpStageSten(this, this.sobSP);
             this.arrayChesh[i].idArr=i
             this.array[i] = this.arrayChesh[i];
-
-            trace('1111', this.arrayChesh[i])
-            trace('2222', this.arrayChesh[i] == this.array[i])
         }
-
-   
-
-
 
 
         this.setArrObj=function(a){
@@ -112,6 +105,17 @@ export class P20  {
                 this.arrayChesh[this.array.length].idArr=this.array.length;
             }
             this.array[this.array.length]=this.arrayChesh[this.array.length];
+        }
+
+        this.clearFloor=function(p){
+            p = p!= undefined ? p : -1
+            this.arrayChesh.splice(p, 1)
+
+            for (var i = 0; i < this.arrayChesh.length; i++) {
+                this.arrayChesh[i].idArr = i
+            }
+            this.array=this.arrayChesh;
+            trace('1234123412341234',this.arrayChesh)
         }
 
             
