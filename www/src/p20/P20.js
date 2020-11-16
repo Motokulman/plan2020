@@ -101,21 +101,34 @@ export class P20  {
 
         this.creatFloor=function(){
             if(this.arrayChesh[this.array.length]==undefined){
-                this.arrayChesh[this.array.length]= new SpStageSten(this, this.sobSP);
-                this.arrayChesh[this.array.length].idArr=this.array.length;
-            }
-            this.array[this.array.length]=this.arrayChesh[this.array.length];
+                this.arrayChesh[this.array.length] = new SpStageSten(this, this.sobSP);
+                this.arrayChesh[this.arrayChesh.length-1].idArr=this.array.length;
+            }   
+            this.array[this.arrayChesh.length-1]=this.arrayChesh[this.arrayChesh.length-1];
         }
 
         this.clearFloor=function(p){
-            p = p!= undefined ? p : -1
-            this.arrayChesh.splice(p, 1)
+            p = p!= undefined ? p : this._index
+            if(this.array[this._index]!=undefined){
+                let aF=this.array.splice(p, 1);
+                if(aF[0]!=undefined)aF[0].clear();
+                let ii=this._index;
+                if(this.array[ii]!=undefined){
+                    this._index=-2;
+                    this.index=ii
+                }
 
-            for (var i = 0; i < this.arrayChesh.length; i++) {
-                this.arrayChesh[i].idArr = i
+
+            }else{
+                console.error("FIXE Передан этаж которого несуществует")
             }
-            this.array=this.arrayChesh;
-            trace('1234123412341234',this.arrayChesh)
+
+            /*this.arrayChesh.splice(p, 1);
+            for (var i = 0; i < this.arrayChesh.length; i++) {
+                this.arrayChesh[i].idArr = i;
+            }
+            this.array.length=this.arrayChesh.length;
+            this.array=this.arrayChesh;*/
         }
 
             
@@ -169,6 +182,7 @@ export class P20  {
             return o;
         }
         this.setObj=function(o){ 
+
             if(o.index==undefined){
                 self.fun("message","Error Старая модель файла","Старый не опдерживал этажность");
                 return
@@ -202,16 +216,18 @@ export class P20  {
 
 
     set index(value) {       
-        this._index= value;
-        for (var i = 0; i < this.array.length; i++) {
-            let status=2 //не видем - не активный
-            if(this.array[value-1] && i==value-1 )status=1;//видный-неактивный                
-            if(this.array[i] && value==i ){
-                status=0//видный-активный
-                this.sp= this.array[i];
-                this.fun("indexSP",this.sp)
+        if(this._index!= value) {
+            this._index= value;
+            for (var i = 0; i < this.array.length; i++) {
+                let status=2 //не видем - не активный
+                if(this.array[value-1] && i==value-1 )status=1;//видный-неактивный                
+                if(this.array[i] && value==i ){
+                    status=0//видный-активный
+                    this.sp= this.array[i];
+                    this.fun("indexSP",this.sp)
+                }
+                this.array[i].status= status;
             }
-            this.array[i].status= status;
         }          
     }    
     get index() { return  this._index;}
