@@ -17,6 +17,7 @@ export function SpPolygon (_stage) {
 	this._offset=0;
 	this._bChaz=false;
 	this._delph = _stage._delph;// толщина линии
+	this._active = false;
 
 	this._uuid=calc.generateRendom(2);
 	
@@ -26,9 +27,13 @@ export function SpPolygon (_stage) {
 	_stage.content2d1.addChild(this.content2d);
 
 
+	this.cont2dVerh = new PIXI.Container();
+	_stage.cont2dVerh.addChild(this.cont2dVerh);
+	this.cont2dVerh.visible=false
+
 	this.ssPolygon2d=new SSPolygon2D(this);
 
-
+	this.arrayClass.push(this.ssPolygon2d);
 	this.draw1 = function (b) {
 		this.ssPolygon2d.draw1();
 	}
@@ -109,17 +114,27 @@ Object.defineProperties(SpPolygon.prototype, {
 
 
 			
-/*
-			if(this._life==true)this.stage.content2d2.addChild(this.content2d);
-			else if(this.content2d.parent!=undefined)this.content2d.parent.removeChild(this.content2d);
-*/
+
+			if(this._life==true)this.stage.cont2dVerh.addChild(this.cont2dVerh);
+			else if(this.cont2dVerh.parent!=undefined)this.cont2dVerh.parent.removeChild(this.cont2dVerh);
+
 			if(this._life==true)this.stage.content2d1.addChild(this.content2d);
 			else if(this.content2d.parent!=undefined)this.content2d.parent.removeChild(this.content2d);
 
-
+			this._setAllParam('life', this._life);
 
 		},
 		get: function () { return this._life; }
+	},
+	active: {
+		set: function (value) {
+			if (this._active === value) return;			
+			this._active = value;
+			this.cont2dVerh.visible=this._active
+
+			this._setAllParam('active', this._active);
+		},
+		get: function () { return this._active; }
 	},
 
 });

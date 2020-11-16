@@ -42,9 +42,7 @@ export class Main  {
             this.fina();
 		};
 
-		function animate() {
-			requestAnimationFrame( animate );
-		}
+		
 
 		//стартуем дальше
         this.fina = function () { 

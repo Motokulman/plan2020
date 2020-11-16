@@ -87,6 +87,9 @@ export function SpStageSten (par,  fun) {
 	this.content2dPoint = new PIXI.Container();	
 	this.cont2dLine = new PIXI.Container();
 	this.cont2dBlok = new PIXI.Container();
+
+	this.cont2dVerh = new PIXI.Container();
+
 	this.cont2dGroup = new PIXI.Container();
 
 
@@ -96,6 +99,7 @@ export function SpStageSten (par,  fun) {
     this.content2d.addChild(this.content2dPoint);
     this.content2d.addChild(this.cont2dBlok);
     this.content2d.addChild(this.cont2dLine);
+    this.content2d.addChild(this.cont2dVerh);
     this.content2d.addChild(this.cont2dGroup);
 
 
@@ -237,6 +241,13 @@ export function SpStageSten (par,  fun) {
 				else this.arrSplice[i].windows.array[j].active=false;
 			}
 		}
+
+		for (var i = 0; i < this.arrPol.length; i++) {			
+			if (this.arrPol[i].life==false) continue;
+			if(this.testSetActive(this.arrPol[i])==true)this.arrPol[i].active=true
+			else this.arrPol[i].active=false;
+		}
+		this.render();
 	}
 	this.testSetActive=function(o){
 		if(arrAvtiv.length==0)return false
