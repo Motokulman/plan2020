@@ -8,6 +8,7 @@ export class MLeft  {
   		var self=this;
         this.par=par
         this.fun=fun
+        trace('parparparpar',par)
 
         this.otstup=this.par.otstup;
         this.otstup1=this.par.otstup1;

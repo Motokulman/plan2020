@@ -31,7 +31,7 @@ export function SpStageSten (par,  fun) {
 	this.fun = fun;
 	this.uuid=calc.generateRendom(2);
 
-	this.name='xz..';
+	this.name='xzStart';
 
 	this._delph = 500;
 	
