@@ -42,7 +42,7 @@ export class SobIndex1  extends SobIndex {
         this.mouseup=function(e){
 
             if(sp.o==undefined){
-                trace("@@@@@@@@@@@@@@@@@mouseup@@@@@@@@@@@@@@@@")
+               
                 return
 
             }
@@ -75,26 +75,48 @@ export class SobIndex1  extends SobIndex {
                     if(pos.o.type=="SpPointSten"){
                        /* sp.o.slitie(pos.o)
                         sp.o.dragVokrug();*/
-                        point1=pos.o
+                        point1=pos.o;
+
+                        if(activObject.array.length>3 && activObject.array[0].idArr==point1.idArr){
+                            self.stopUp()
+                            return
+                        }
+
+
+                        if(activObject.array[activObject.array.length-1].idArr!=point1.idArr){
+                            activObject.addPoint(point1, activObject.array.length-1);
+                        }                       
+
+
                         b=true;
                     }                   
                     if(pos.o.type=="SpliceSten"){
                         point1=self.p20.sp.craetPoint();
                         point1.position.setPoint(pos);
-                        b=true;
-
-                        //pos.o.dividedSten(sp.o,true)
-                        //sp.o.dragVokrug();                        
+                        activObject.addPoint(point1, activObject.array.length-1);
+                        b=true;                      
                     }
                 }
 
                 if(b==false){
-
+                    
                     point1=self.p20.sp.craetPoint();
-                    point1.position.setPoint(positDin)
+                    point1.position.setPoint(positDin);                   
+                    activObject.addPoint(point1, activObject.array.length-1);
+                }
+                for (var i = activObject.array.length-1; i >=1; i--) {
+                    if(activObject.array[i].idArr==activObject.array[i-1].idArr){
+                        activObject.array.splice(i,1)
+                        activObject.drag();
+                    }
                 }
                 
-                activObject.addPoint(point1, activObject.array.length-1);
+                
+             /*  trace(">>>>>",activObject,point1)
+                for (var i = 0; i < activObject.array.length; i++) {
+                    trace(i+"@@"+activObject.array[i].idArr)
+                }*/
+
             }
            
         }
@@ -123,10 +145,19 @@ export class SobIndex1  extends SobIndex {
 
             if(self._tool=="Pol"){
                 activObject.removePoint(point)
+                trace(point.idArr)
+                trace(activObject)
+                for (var i = 0; i < activObject.array.length; i++) {
+                    trace(i+"  "+activObject.array[i].idArr)
+                }
+               
+                if(activObject.array.length<=2)activObject.clear();
+
+
                 point.clear();
                 sp.o=undefined
             }
-            console.warn("<<<<<<<<<<<<<<stopUp********<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+            console.warn("<<<<<<<<<<<<<<stopUp********<<<<<<<<<<<<<<<<<")
             document.addEventListener("mouseup", self.mouseup);
         }
 
@@ -147,7 +178,7 @@ export class SobIndex1  extends SobIndex {
             }
 
 
-            trace(s,p,e)
+            trace("@@@@@@@@@@@@@@@@@@",s,p,e)
             
 
 
@@ -174,6 +205,10 @@ export class SobIndex1  extends SobIndex {
                     activObject.addPoint(point1);
                     activObject.addPoint(point);
                     point.activMouse=false;
+                    trace("%%%%%%%%%%%%%%%%%%%",activObject.idArr)
+                    for (var i = 0; i < activObject.array.length; i++) {
+                        trace(i+"@@"+activObject.array[i].idArr)
+                    }
                 }
 
 

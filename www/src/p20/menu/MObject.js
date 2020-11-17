@@ -71,9 +71,8 @@ export class MObject  {
 
             this.clear();
             if(obj){  
-                trace(obj.type)              
-                for (var i = 0; i < this.array.length; i++) {
-                    trace(i+"   "+this.array[i].typeNa)
+                           
+                for (var i = 0; i < this.array.length; i++) {                  
                     if(this.array[i].typeNa==obj.type){                        
                         this.array[i].setObject(obj)
                         this.dCont.visible=true

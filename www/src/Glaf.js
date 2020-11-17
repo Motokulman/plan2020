@@ -6,6 +6,9 @@ import { Menu} from './p20/menu/Menu.js';
 import { VisiPixi } from './libMy/VisiPixi.js';
 import { ViewServer } from './viewServer/ViewServer.js';
 
+import { MVisi3D } from './visi3D/MVisi3D.js';
+import { SceneSB } from './visi3D/SceneSB.js';
+
 
 export class Glaf  {
   	constructor(par) {  		
@@ -39,8 +42,44 @@ export class Glaf  {
             this.intRend=1;
         }
 
+
+        this.div= document.createElement('div');
+        this.div.style.position = 'fixed';
+        this.div.style.top = '0px';
+        this.div.style.left = '0px';
+
+        //this.content3d = new THREE.Object3D();
+        //порезаный от пикси вювер
+        this.visi3D = new MVisi3D(this.div, null, false, true, false, true, false);     
+        //this.visi3D.yes3d = true;           
+        //this.visi3D.groupObject.add(this.content3d); 
+        var o='{"ambient":{"works":true,"active":true,"color":"#fdffff","intensity":0.71},"shadow":{"works":true,"active":true,"mapSize":4096,"color":"#8c8c8c","bias":-0.0014,"intensity":1.01,"radius":1.27,"bAlphaForCoating":false,"fixation":true,"rotationX":0.93,"rotationZ":0.73,"distance":500,"cubWidth":1000,"cubHeight":1000,"distanceUpdateShadow":65.41},"sky":{"works":true,"active":true,"color":"#ffff00","link":"null","rotZ":2.73,"radius":2000,"x":0,"y":0,"z":0},"mirror":{"works":true,"link":"null","exposure":1.44,"gamma":2.87,"xz":"reflect","link1":"null","exposure1":-1,"gamma1":-1},"visi3D":{"works":true,"alwaysRender":false,"fov":40,"far":47175,"minZum":0,"maxZum":10942,"zume":2500,"minRotationX":3.14,"maxRotationX":0,"rotationX":0.94,"rotationZ":0.17,"debug":true,"isDragPan":false,"alphaAd":false,"globZ":0,"powerZum":1},"fog":{"works":true,"active":false,"color":"#ffffff","near":0,"far":0},"effect":{"works":true,"active":false,"edgeStrength":3,"edgeGlow":0,"pulsePeriod":0,"linkTextur":"null","visibleEdgeColor":"#ffffff","hiddenEdgeColor":"#190a05"}}'
+        var scene=JSON.parse(o);  
+        this.sceneSB=new SceneSB(this.visi3D);
+        for (var i = 0; i <  this.sceneSB.array.length; i++) {
+            if (scene[this.sceneSB.array[i].name] === undefined) {
+                scene[this.sceneSB.array[i].name] = {};                
+            }            
+            this.sceneSB.array[i].setBasa(scene[this.sceneSB.array[i].name]);
+        }
+
+        this.visi3D.zume=100;//this.par.objectBase.settings.zume
+
+        
+        this.visi3D.isDragPan=true;
+
+
+        
+ 
+ 
+
+
+
+
+
+
         this.viewServer=new ViewServer(function(s,p,p1){ 
-            trace("viewServer",s,p,p1)
+            
             if(s=="setObj"){   
                 if(p==null)  {
                     self.menu.setMessage("message","Error","Проект id ="+self.viewServer.id+" не создан. json еще не сохранен и нечего открывать");
@@ -56,7 +95,7 @@ export class Glaf  {
                 self.menu.setMessage(p,p1);
                 return
             }
-        });
+        });       
 
         this.p20=new P20(this,function(s,p,p1){                  
             if(s=="render"){ 
@@ -76,9 +115,7 @@ export class Glaf  {
             }
             if(s=="rectSP"){ 
                 self.menu.setSop(s,p,p1)
-            }
-            
-
+            } 
 
             if(s=="addChild")self[p].addChild(p1);
             self.render()
@@ -114,8 +151,26 @@ export class Glaf  {
         this.menu.setP20(this.p20);
         this.p20.index=1; 
 
+        this.menu.mVisi3D.setVisi3D(this.visi3D);
 
+//
+        
 
+        /*this.dCont.div.appendChild(this.visi3D.contentHTML);
+        
+        this.visi3D.yes3d = true; 
+        var ss=100;
+        var ss1=1000;
+        this.content3d = new THREE.Object3D();
+        //this.visi3D.groupObject.add(this.content3d); 
+        this.visi3D.scene.add(this.content3d); 
+        for (var i = 0; i < 100; i++) {
+            var m = new THREE.Mesh(new THREE.BoxBufferGeometry( ss, ss, ss ),new THREE.MeshBasicMaterial( {color: 0xffffff*Math.random()} ))
+            m.scale.set(0.1+Math.random(),0.1+Math.random(),0.1+Math.random())
+            m.position.set(ss1/2+Math.random()*ss1,ss1/2+Math.random()*ss1,ss1/2+Math.random()*ss1)
+            this.content3d.add(m);             
+        }
+        this.visi3D.sizeWindow(0,0,533,533);*/
 
 
         //ап дете сцена деленая на 2 в мейне
@@ -124,8 +179,11 @@ export class Glaf  {
 
             if(this.intRend<=1 || this.intRend==100){
                 this.visiPixi.render();
-                this.intRend=2
+                this.visi3D.intRend=1;
+
+                this.intRend=2;
             }
+            this.visi3D.upDate();
             this.intRend++;
             //trace(this.intRend)
         }

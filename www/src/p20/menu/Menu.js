@@ -8,6 +8,8 @@ import { MCont2dHelp } from './MCont2dHelp.js';
 
 import { MStart} from './MStart.js';
 
+import { MVisi3D } from './MVisi3D.js';
+
 import { MInfo} from './MInfo.js';
 
 
@@ -30,16 +32,9 @@ export class Menu  {
 
 	    this.dCont=new DCont(this.par.dCont);
 
-
-
-
-	    this.localStorage=par.par.localStorage;//new LocalStorage(function(){},"planer2020")
-
-	   
+	    this.localStorage=par.par.localStorage;//new LocalStorage(function(){},"planer2020")	   
 	    
-	    this.array=[]
-
-
+	    this.array=[];
 
 		this.array[this.array.length] = this.mGridDrag = new MGridDrag(this, function(s,p,p1){             
            	self.fun(s,p,p1)
@@ -71,6 +66,10 @@ export class Menu  {
         });
 
 		this.array[this.array.length]=this.mCont2dHelp = new MCont2dHelp(this,function(s,p){
+           // self.fun(s,p)
+        });
+
+        this.array[this.array.length]=this.mVisi3D = new MVisi3D(this,function(s,p){
            // self.fun(s,p)
         });
 

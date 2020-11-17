@@ -8,17 +8,20 @@ export class SSPolygon2D  {
         var self=this;
         this.par=par;
 
-
+        this._active = false;
         
 
 
         this.content2d = new PIXI.Container();
         this.par.content2d.addChild(this.content2d);
-
+		this.cont2dVerh = new PIXI.Container();
+		this.par.cont2dVerh.addChild(this.cont2dVerh);
    
 
         this.graphics = new PIXI.Graphics();
     	this.content2d.addChild(this.graphics);
+
+
 
 		this.stAct=new STAct1(this)
 
@@ -61,6 +64,14 @@ export class SSPolygon2D  {
 			}
 		}	
     }
+
+	set active(value) {
+        if(this._active!=value){
+            this._active= value;            
+
+        }
+    }    
+    get active() { return  this._active;}
 }
 
 
@@ -79,19 +90,15 @@ export function STAct1 (par) {
     this.par.content2d.addChild(this.graphics);
     this.graphics.alpha=this._sahAct/100;
 
+ 	this.graphicsVV = new PIXI.Graphics();
+    this.par.cont2dVerh.addChild(this.graphicsVV);
+    
+    this.graphicsVV.beginFill(0xff0000, 0.3);    
+    this.graphicsVV.drawCircle(0,0,350);   
+
     this.draw1=function(){
 		this.graphics.clear();
-
-		
-		/*this.graphics.beginFill(par.par.colorUI);		
-		this.graphics.moveTo(this.par.arrVorur[0].x,this.par.arrVorur[0].y);
-		for (var i = 1; i < this.par.aVKol; i++) {
-			this.graphics.lineTo(this.par.arrVorur[i].x,this.par.arrVorur[i].y);				
-		}
-		this.graphics.lineTo(this.par.arrVorur[0].x,this.par.arrVorur[0].y);*/
-
-		this.graphics.beginFill(par.par.colorUI);	
-
+		this.graphics.beginFill(par.par.colorUI);
 		if(this.par.par.array.length!=0){
 			this.graphics.moveTo(this.par.par.array[0].position.x,this.par.par.array[0].position.y);
 			for (var i = 1; i < this.par.par.array.length; i++) {
@@ -100,9 +107,21 @@ export function STAct1 (par) {
 			this.graphics.lineTo(this.par.par.array[0].position.x,this.par.par.array[0].position.y);
 		}
 
+		this.graphicsVV.clear();
+		this.graphicsVV.beginFill(par.par.colorUI,0.2);
+		this.graphicsVV.lineStyle( this.par.par.par._sizeLine*2, this.par.par.par._colorLine_, 1);
 
+		if(this.par.par.array.length!=0){
+			this.graphicsVV.moveTo(this.par.par.array[0].position.x,this.par.par.array[0].position.y);
+			for (var i = 1; i < this.par.par.array.length; i++) {
+				this.graphicsVV.lineTo(this.par.par.array[i].position.x,this.par.par.array[i].position.y);
+			}
+			this.graphicsVV.lineTo(this.par.par.array[0].position.x,this.par.par.array[0].position.y);
+		}
 
     }
+
+
 
     this.corektSetGet=function(){
 		this.graphics.alpha = (this._sahAct+this._sahPlus)/100;	
