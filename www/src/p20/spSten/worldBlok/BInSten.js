@@ -6,7 +6,7 @@ export class BInSten extends Blok {
         super(par,obj,fun); 		
   		this.type="BInSten";
   		var self=this;
-        this.par
+        this.par=par;
 
         
 
@@ -17,6 +17,10 @@ export class BInSten extends Blok {
         this.graphics.drawCircle(0,0,150);
 
         this.stAct=new BTAct(this);
+
+        this.unik=undefined;
+        
+
 
         this.onDragStart=function(e){            
             if(self.par.par.par.sobSP!=undefined)self.par.par.par.sobSP("downBlok",self,e)
@@ -43,18 +47,14 @@ export class BInSten extends Blok {
             this.rect1.w= this._width;
             this.rect1.h= this._height;
             this.rect1.d= this._delph;
-
-
-            if(this.obj.rect1!=undefined){
-                
+            if(this.obj.rect1!=undefined){                
                 this.rect1.x= this.obj.rect1[0];
                 this.rect1.y= this.obj.rect1[1];
                 this.rect1.z= this.obj.rect1[2];
                 this.rect1.w= this.obj.rect1[3];
                 this.rect1.h= this.obj.rect1[4];
                 this.rect1.d= this.obj.rect1[5];
-            }
-            
+            }            
         }
 
        
