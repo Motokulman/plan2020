@@ -70,16 +70,20 @@ export function SpStageSten (par,  fun) {
     this._colorLine_ = 0x000000;
 	this._sizeLine = 10;
 
+	this._height=3000;
+	this._height1=0;
+
 
 	this._activeSten=-1;
 	this._activePoint=-1;
 	this._activePol=-1;
-	this._height = 300;
+
 	this._alpha=1;
 	this._status=2;
 
 	this.boolText = true;
 	this.content2d = new PIXI.Container();
+	this.par.content2d.addChild(this.content2d)
 	
 	this.contNiz = new PIXI.Container();
 	this.content2d1 = new PIXI.Container();
@@ -104,8 +108,15 @@ export function SpStageSten (par,  fun) {
 
 
 
+    this.content3d = new THREE.Object3D();
+    this.par.content3d.add(this.content3d)
 
+    this.planeXZ=new PlaneXZ( 1, 1 )
 
+    this.boxBufferGeometry=new THREE.BoxBufferGeometry( 1, 1, 1 )
+    this.meshBasicMaterial=new THREE.MeshBasicMaterial( {color: 0x008cba} )
+
+    this.lineBasicMaterial = new THREE.LineBasicMaterial( { color: 0x00ff00, transparent: true, opacity: 0.5 ,linewidth: 1});
 
 
 
@@ -113,14 +124,10 @@ export function SpStageSten (par,  fun) {
 	this.worldBlok=new WorldBlok(this);
 	this.group=new SPGroup(this);
 
-	
-
-
 	this.colorT=new THREE.Color()
 	this.convertC=function(c,a){
 		this.colorT.set(c)
 		if(a!=undefined){
-
 			this.colorT.r*=a[0]
 			this.colorT.g*=a[1]
 			this.colorT.b*=a[2]
@@ -138,7 +145,7 @@ export function SpStageSten (par,  fun) {
 	this.getSplice=function(){return new SpliceSten(this);}
 	this.getPol=function(){ return new SpPolygon(this);}
 
-	//this.getPol=function(){ return new Pol3D(this);}
+
 
 
 	this.arrFun=[];
@@ -362,22 +369,30 @@ Object.defineProperties(SpStageSten.prototype, {
 		set: function (value) {	
 			if(this._status!=value)	{
 				this._status = value;
-				if(this.content2d.parent!=undefined)this.content2d.parent.removeChild(this.content2d)	
+				
 				if(this._status==2){//не видем - не активный
-					
+					this.content2d.visible=false
+					this.content3d.visible=false
 				}
 				if(this._status==1){//видный-неактивный 
-					this.fun("addChild","c2dSloi",this.content2d);
+					this.content2d.visible=true
+					this.content3d.visible=true
+					//this.fun("addChild","c2dSloi",this.content2d);
 				}
 				if(this._status==0){//видный-неактивный 
-					this.fun("addChild","c2dSloi2",this.content2d);
+					this.content2d.visible=true
+					this.content3d.visible=true
+					//this.fun("addChild","c2dSloi2",this.content2d);
 				}
+				this.render()
 			}			
 		},
 		get: function () {			
 		 	return this._status;
 		}
 	},
+
+
 
 	mashtab: {
 		set: function (value) {	
@@ -394,6 +409,34 @@ Object.defineProperties(SpStageSten.prototype, {
 		}
 	},
 
+	height: {
+		set: function (value) {	
+			if(this._height!=value)	{
+				this._height = value;
+				for (var i = 0; i < this.arrSplice.length; i++) {
+					this.arrSplice[i].height=this._height
+				}
+				this.par.korektHeight()
+			}			
+		},
+		get: function () {			
+		 	return this._height;
+		}
+	},
+
+	height1: {
+		set: function (value) {	
+			if(this._height1!=value)	{
+				this._height1 = value;
+				for (var i = 0; i < this.arrSplice.length; i++) {
+					this.arrSplice[i].height1=this._height1
+				}
+			}			
+		},
+		get: function () {			
+		 	return this._height1;
+		}
+	},
 
 	carrier: {
 		set: function (value) {			
@@ -699,3 +742,36 @@ Object.defineProperties(SpStageSten.prototype, {
 	},	
 
 });
+
+
+/*
+import { BufferGeometry } from '../core/BufferGeometry.js';
+import { Float32BufferAttribute } from '../core/BufferAttribute.js';*/
+
+class PlaneXZ extends THREE.BufferGeometry {
+
+	constructor( width) {
+
+		super();
+
+		const vertices = [];
+		var wh=width/2
+		vertices.push(-wh,-wh,0);
+		vertices.push(-wh,-wh,0);
+		vertices.push(-wh, wh,0);
+
+		vertices.push(-wh,-wh,0);
+		vertices.push(-wh,-wh,0);
+		vertices.push(wh,-wh,0);
+
+		vertices.push(wh,-wh,0);
+		vertices.push(wh,wh,0);
+		vertices.push(wh,wh,0);
+
+		vertices.push(-wh,wh,0);
+		vertices.push(-wh,wh,0);
+		vertices.push(wh,wh,0);	
+		this.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+	}
+
+}

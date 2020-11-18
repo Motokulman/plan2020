@@ -7,6 +7,7 @@ import { Sten3D } from './Sten3D.js';
 import { Splice } from './../../sp/Splice.js';
 import { SPLWindow } from './SPLWindow.js';
 import { SS2D } from './SS2D.js';
+import { SS3D } from './SS3D.js';
 
 import { SSMatematik} from './SSMatematik.js';
 /**
@@ -30,21 +31,22 @@ export function SpliceSten (_stage) {
 	this._delph = _stage._delph;// толщина линии
 
 	this._uuid=calc.generateRendom(2);
-	
+
+	this._height=_stage._height;
+	this._height1=_stage._height1;
 
 	this._carrier = _stage.carrier;// несущия
 	this._out = _stage.out;// несущия
 	this._adjacent = _stage.adjacent;// несущия
 
-	if(this._carrier)
+	
 
 	if(this._carrier==true)this._delph =_stage._delphC1;
 	else this._delph =_stage._delphC0;
     
     this.alpha =_stage._alpha;    
     this.colorP = _stage._colorP;
-    this.colorP1 = _stage._colorP1;	
-
+    this.colorP1 = _stage._colorP1;
 	this._height = this.stage._height;
 
 
@@ -75,12 +77,15 @@ export function SpliceSten (_stage) {
 
 
 	this.matematik=new SSMatematik(this);
+	this.korektRect=this.par.par.korektRect;
 
 
 
 	//отрисовываем 2д стены
     this.ss2d=new SS2D(this);
+    this.ss3d=new SS3D(this);
     this.arrayClass.push(this.ss2d);
+    this.arrayClass.push(this.ss3d);
 
     //отрисовываем окна
     this.windows=new SPLWindow(this);
@@ -111,8 +116,9 @@ export function SpliceSten (_stage) {
     var numBlok
 	this.draw1 = function (b) {
 		if(b==undefined)this.windows.draw()		
-		this.ss2d.draw1()
-		this.par.render()
+		this.ss2d.draw1();
+		this.ss3d.draw1();
+		this.par.render();
 	}
 
 
@@ -127,6 +133,11 @@ export function SpliceSten (_stage) {
 		this.content2d1.x=this.position.x;
 		this.content2d1.y=this.position.y;
 		this.content2d1.rotation=this._rotation;
+
+		this.korektRect.setSten(this,0,0);
+		this.korektRect.korekt1();
+		
+		this.ss3d.dragPost();
 		this.draw1();
 		this.stage.render();
 		this.poiskGran();
@@ -229,6 +240,14 @@ Object.defineProperties(SpliceSten.prototype, {
 			if (this._height === value) return;			
 			this._height = value;
 			this._setAllParam('height', this._height);
+		},
+		get: function () { return this._height; }
+	},
+	height1: {
+		set: function (value) {
+			if (this._heigh1 === value) return;			
+			this._height1 = value;
+			this._setAllParam('height1', this._height1);
 		},
 		get: function () { return this._height; }
 	},

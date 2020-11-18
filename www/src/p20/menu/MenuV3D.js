@@ -1,7 +1,7 @@
 
-export class MVisi3D  {
+export class MenuV3D  {
     constructor(par, fun) {
-    	this.type="MVisi3D";
+    	this.type="MenuV3D";
 		var self=this;
 		this.par=par
 		this.fun=fun
@@ -10,7 +10,7 @@ export class MVisi3D  {
         this.otstup=this.par.otstup
         this.wh=this.par.wh
 
-        this.whMin=200
+        this.whMin=400
 
 
 		this.dCont=new DCont(par.dCont);
@@ -45,6 +45,7 @@ export class MVisi3D  {
             this.button2.width=this.button2.height=this.wh
 
 
+                     
         }
 
         this.visi3D
@@ -56,7 +57,10 @@ export class MVisi3D  {
             this.visi3D.contentHTML.style.left = '0px';
             this.panel.content.div.appendChild(this.visi3D.contentHTML);
 
-            var ss=10;
+            this.sizeWindow();
+            self.activeSah = 1;   
+
+           /* var ss=10;
             var ss1=100;
             
             for (var i = 0; i < 100; i++) {
@@ -65,7 +69,7 @@ export class MVisi3D  {
                 m.position.set(-ss1/2+Math.random()*ss1,-ss1/2+Math.random()*ss1,-ss1/2+Math.random()*ss1)
                 this.visi3D.groupObject.add(m); 
                 
-            }
+            }*/
             
 
 
@@ -95,6 +99,7 @@ export class MVisi3D  {
 
                 this.button1.x=this.panel.width-this.wh-this.otstup
                 this.button2.x=this.panel.width-this.wh*2-this.otstup*2
+                trace(">>>>>>>>@@>>>>>",this.panel.width,this.panel.height,this.visi3D)
 
                 if(this.visi3D&&b==true)this.visi3D.sizeWindow(0,0,this.panel.width,this.panel.height);
             }

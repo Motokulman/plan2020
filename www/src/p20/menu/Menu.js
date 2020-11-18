@@ -8,7 +8,7 @@ import { MCont2dHelp } from './MCont2dHelp.js';
 
 import { MStart} from './MStart.js';
 
-import { MVisi3D } from './MVisi3D.js';
+import { MenuV3D } from './MenuV3D.js';
 
 import { MInfo} from './MInfo.js';
 
@@ -25,11 +25,9 @@ export class Menu  {
 		this.wh=48;
 		this.otstup=5;
 		this.otstup1=10;
-		this.sizeMax=100000;
-
+		this.sizeMax=this.par.sizeMax;
 		dcmParam.activButton="#f28044";
 		this._menuIndex=-1;
-
 	    this.dCont=new DCont(this.par.dCont);
 
 	    this.localStorage=par.par.localStorage;//new LocalStorage(function(){},"planer2020")	   
@@ -69,7 +67,7 @@ export class Menu  {
            // self.fun(s,p)
         });
 
-        this.array[this.array.length]=this.mVisi3D = new MVisi3D(this,function(s,p){
+        this.array[this.array.length]=this.menuV3D = new MenuV3D(this,function(s,p){
            // self.fun(s,p)
         });
 
@@ -86,6 +84,7 @@ export class Menu  {
 			this.p20=p20;
 			this.mDragScane.setP20(p20)
 			this.mGridDrag.setP20(p20)
+			this.mStart.setP20(p20)
 		}
 
 		this.sp=undefined
@@ -141,7 +140,7 @@ export class Menu  {
         this.setSop=function(s,p,p1){
         	if(s=="rectSP"){
         		var r=self.par.p20.getRect(self.par.p20.index);
-        		trace(r)
+        		
         	 	
 	        	
 	        		self.mGridDrag.setRect(r,10, true);

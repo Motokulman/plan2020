@@ -8,7 +8,7 @@ export class World  {
         this.fun=fun
         
         this.children=[];
-
+        this.array=this.children;
         var gran=999
         this.rect = {
             x:-gran,
@@ -19,15 +19,12 @@ export class World  {
             d:2*gran
         }//границы мира
         this.calc=new Calc();
-
         this.line_x=new Line("x","w");
-
 
         this.add=function(body) {
             this.children.push(body);
             body.parent=this;
-            this.korekt();
-            
+            this.korekt();            
         } 
 
         this.remove=function(body) {

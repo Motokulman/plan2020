@@ -19,7 +19,7 @@ export class BInSten extends Blok {
         this.stAct=new BTAct(this);
 
         this.unik=undefined;
-        
+
 
 
         this.onDragStart=function(e){            
@@ -67,6 +67,7 @@ export class BInSten extends Blok {
                 this._height=h;
                 this._delph=d;
             }
+            
             
             // this.par.par._colorLine_;
             // this.par.par._sizeLine;
