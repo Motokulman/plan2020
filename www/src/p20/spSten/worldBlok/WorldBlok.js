@@ -110,7 +110,6 @@ export class WorldBlok  {
     get colorLine() { return  this._colorLine;}
 
     
-    
     set sizeLine(value) {      
         if(this._sizeLine!=value){
             this._sizeLine= value;

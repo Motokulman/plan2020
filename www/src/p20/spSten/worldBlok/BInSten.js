@@ -1,5 +1,6 @@
 
 import { Blok } from './Blok.js';
+import { Unik_Steps } from './unik/Unik_Steps.js';
 
 export class BInSten extends Blok {  
   	constructor(par,obj,fun) { 
@@ -8,9 +9,6 @@ export class BInSten extends Blok {
   		var self=this;
         this.par=par;
 
-        
-
-       
         this.graphics = new PIXI.Graphics();
         this.content2d.addChild(this.graphics);
         this.graphics.beginFill(0x00ff00, 0.5);    
@@ -18,7 +16,6 @@ export class BInSten extends Blok {
 
         this.stAct=new BTAct(this);
 
-        this.unik=undefined;
 
 
 
@@ -35,6 +32,12 @@ export class BInSten extends Blok {
         this.graphics.on('mouseout', function(e){       
             self.stAct.sahPlus=0;    
         });
+
+        
+
+        if(this.typeStr1 == "Unik_Steps")this.unik = new Unik_Steps(self)  
+                          
+
 
 
 
@@ -68,12 +71,17 @@ export class BInSten extends Blok {
                 this._delph=d;
             }
             
-            
-            // this.par.par._colorLine_;
-            // this.par.par._sizeLine;
 
             let sizeLine=this.par._sizeLine
             let colorLine=this.par._colorLine_
+
+
+            if(this.unik!=undefined){
+                this.unik.dragWHD(this._width,this._height,this._delph); 
+                return;
+            }
+            
+
 
             this.graphics.clear();
             this.graphics.beginFill(0x222222, 0.01);
@@ -123,7 +131,6 @@ export class BInSten extends Blok {
 
         this.init()
     }
-
 }
 
 export function BTAct (par) {
@@ -150,8 +157,6 @@ export function BTAct (par) {
         this.graphics.endFill()
             
         
-       
-        
 
     }
 
@@ -162,9 +167,9 @@ export function BTAct (par) {
 
     }
 
+
 }
 BTAct.prototype = {
-
 
     set sahAct (v) {
         if (this._sahAct === v) return;         

@@ -64,7 +64,8 @@ export class MOP20 extends MOBaza {
                     self.array[i].setObject(self.object.array[i])
 
                     if(i!=0)self.array[i].y=self.array[i-1].y+self.array[i-1].height;
-                    if (self.object.array.length == 2 || i==0) self.array[i].button1.activMouse=false
+                    if (self.object.array.length <= 2 || i==0) {self.array[i].button1.activMouse=false} 
+                    if (self.object.array.length > 2 && i!=0) {self.array[i].button1.activMouse=true} 
                 }
 
                 let yy = self.array[self.object.array.length-1].y+self.array[self.object.array.length-1].height

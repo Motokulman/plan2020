@@ -23,13 +23,14 @@ export class Blok  {
         this._width=100;
         this._height=100;
         this._delph=100;
+        
         this._boolSten=false;
         this._rotation=0
         this.boxHelper=undefined
         this._life=true;
         this._parent=undefined
 
-
+        this.unik=undefined;
         this.uuid=calc.generateRendom(2);
 
         this.content2d = new PIXI.Container();
@@ -112,11 +113,11 @@ export class Blok  {
 
         this.setObj=function(o){
 
-            this._width=o.w;
-            this._height=o.h;
-            this._delph=o.d;    
+            this._width=o.w||o.width;
+            this._height=o.h||o.height;
+            this._delph=o.d||o.delph;   
 
-
+            if(this.unik!=undefined)if(this.unik.setObj!=undefined)if(o.unik!=undefined)this.unik.setObj(o.unik)
             this.setReal(o.x,o.y,o.z);
             this.dragWHD();
 
@@ -128,9 +129,11 @@ export class Blok  {
             o.x= this._x;
             o.y= this._y;
             o.z= this._z;
-            o.w= this._width;
-            o.h= this._height;
-            o.d= this._delph;
+            o.width= this._width;
+            o.height= this._height;
+            o.delph= this._delph;
+
+            if(this.unik!=undefined)if(this.unik.getObj!=undefined)o.unik=this.unik.getObj();
             if(this.funGetObj)this.funGetObj(o);
             return  o
         }
