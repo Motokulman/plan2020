@@ -26,6 +26,16 @@ export class Unik_Steps {
         this.h;
         this.d;
 
+        this.array=[ 
+                {tipe:'DSliderBig', name: 'slider1', param: 'width', title: 'width', min: 1, max: 3, okrug: 10},  
+                {tipe:'DSliderBig', name: 'slider2', param: 'height', title: 'height', min: 1, max: 3, okrug: 10},  
+                {tipe:'DSliderBig', name: 'slider3', param: 'step', title: 'step', min: 1, max: 3, okrug: 10},  
+ 
+                {tipe:'DCheckBox', name: 'check1', param: 'bool', title: 'bool'}, 
+                {tipe:'DCheckBox', name: 'check2', param: 'bool1', title: 'bool1'}, 
+                {tipe:'DCheckBox', name: 'check3', param: 'bool2', title: 'bool2'}, 
+            ];
+
 		this.clearDefolt=function(){
 			this._width=defolt.width;
         	this._height=defolt.height;
@@ -127,6 +137,76 @@ export class Unik_Steps {
 
             return  o
         }
+
+        // Object.defineProperties(Unik_Steps.prototype, {  
+        //     width: {
+        //         set: function (value) {
+        //             if(this._width!=value){
+        //                 this._width= value;            
+        //                 this.par.dragWHD()
+        //                 this.par.par.render()
+        //             }
+        //         },
+        //         get: function () { return this._width; }
+
+        //     }, 
+
+        //     height: {
+        //         set: function (value) {
+        //             if(this._height!=value){
+        //                 this._height= value;
+        //                 this.par.dragWHD()
+        //                 this.par.par.render()
+        //             }
+        //         },
+        //         get: function () { return  this._height;}
+        //     },
+
+        //     step: {
+        //         set: function(value) {
+        //             if(this._step!=value){
+        //                 this._step= value;
+        //                 this.par.dragWHD()
+        //                 this.par.par.render()
+        //             }
+        //         },   
+        //         get: function() { return  this._step;}
+        //     },
+
+        //     bool: {
+        //         set: function(value) {
+        //             if(this._bool!=value){
+        //                 this._bool= value;
+        //                 this.par.dragWHD()
+        //                 this.par.par.render()     
+        //             }
+        //         },
+        //         get: function() { return  this._bool;}  
+        //     },
+
+        //     bool1: {
+        //         set: function(value) {
+        //             if(this._bool1!=value){
+        //                 this._bool1= value;
+        //                 this.par.dragWHD()
+        //                 this.par.par.render()     
+        //             }
+        //         },
+        //         get: function() { return  this._bool1;}  
+        //     },
+
+        //     bool2: {
+        //         set: function(value) {
+        //             if(this._bool2!=value){
+        //                 this._bool2= value;
+        //                 this.par.dragWHD()
+        //                 this.par.par.render()     
+        //             }
+        //         },
+        //         get: function() { return  this._bool2;}  
+        //     }
+        // })
+
 	}
 
     set width(value) {
@@ -185,4 +265,7 @@ export class Unik_Steps {
         }
     }    
     get bool2() { return  this._bool2;}  
+
+
 }
+

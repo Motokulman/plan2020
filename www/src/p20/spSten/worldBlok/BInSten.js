@@ -9,10 +9,6 @@ export class BInSten extends Blok {
   		var self=this;
         this.par=par;
 
-        this._widthUnik = 1000;
-        this._heightUnik = 1000;
-
-       
         this.graphics = new PIXI.Graphics();
         this.content2d.addChild(this.graphics);
         this.graphics.beginFill(0x00ff00, 0.5);    
@@ -20,7 +16,7 @@ export class BInSten extends Blok {
 
         this.stAct=new BTAct(this);
 
-        
+
 
 
         this.onDragStart=function(e){            
@@ -75,6 +71,7 @@ export class BInSten extends Blok {
                 this._delph=d;
             }
             
+
             let sizeLine=this.par._sizeLine
             let colorLine=this.par._colorLine_
 
@@ -134,23 +131,6 @@ export class BInSten extends Blok {
 
         this.init()
     }
-
-  /*  set widthUnik(value) {
-        if(this._widthUnik!=value){
-            this._widthUnik= value;
-            
-            this.unik.width = value
-        }
-    }
-    get widthUnik() { return  this._widthUnik;}
-
-    set heightUnik(value) {
-        if(this._heightUnik!=value){
-            this._heightUnik= value;
-            this.unik.height = value
-        }
-    }
-    get heightUnik() { return  this._heightUnik;}*/
 }
 
 export function BTAct (par) {
@@ -176,8 +156,6 @@ export function BTAct (par) {
         this.graphics.drawRect(-this.par._width/2,-this.par._delph/2,this.par._width,this.par._delph);
         this.graphics.endFill()
             
-        
-       
         
 
     }

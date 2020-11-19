@@ -2,6 +2,7 @@
 
 import { SpPol } from './../../sp/SpPol.js';
 import { SSPolygon2D } from './SSPolygon2D.js';
+import { SSP3D } from './SSP3D.js';
 
 export function SpPolygon (_stage) {
 	SpPol.call(this,_stage);
@@ -32,6 +33,7 @@ export function SpPolygon (_stage) {
 	this.cont2dVerh.visible=false
 
 	this.ssPolygon2d=new SSPolygon2D(this);
+	this.ssP3d=new SSP3D(this);
 
 	this.arrayClass.push(this.ssPolygon2d);
 	this.draw1 = function (b) {
@@ -44,9 +46,9 @@ export function SpPolygon (_stage) {
 	};
 
 
-	this.dragPost=function(){		
-
+	this.dragPost=function(){
 		this.draw1();
+		this.ssP3d.draw1();
 	}
 
 

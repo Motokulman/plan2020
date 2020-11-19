@@ -13,18 +13,18 @@ export class MOWUnik{
         this.pObject=new DParamObject(this.dCont,2,2,function(){
         },false);
 
-        /*this.sliderUnik = new DSliderBig (this.dCont, this.otstup, this.otstup, function(){self.par.object.unik.width=this.value;}, 'width', 500, 5000)
-        this.sliderUnik.value = self.par.object._widthUnik
-        this.sliderUnik1 = new DSliderBig (this.dCont, this.otstup, this.sliderUnik.height + this.otstup, function(){self.par.object.heightUnik=this.value;}, 'height', 500, 5000)
-        this.sliderUnik1.value = self.par.object._heightUnik*/
+        this.array=[ 
+                {tipe:'DSliderBig', name: 'slider1', param: 'width', title: 'width', min: 1000, max: 3000, okrug: 10},  
+                {tipe:'DSliderBig', name: 'slider2', param: 'height', title: 'height', min: 1000, max: 3000, okrug: 10},  
+                {tipe:'DSliderBig', name: 'slider3', param: 'step', title: 'step', min: 1, max: 3, okrug: 10},  
+ 
+                {tipe:'DCheckBox', name: 'check1', param: 'bool', title: 'bool'}, 
+                {tipe:'DCheckBox', name: 'check2', param: 'bool1', title: 'bool1'}, 
+                {tipe:'DCheckBox', name: 'check3', param: 'bool2', title: 'bool2'}, 
+            ];
 
 
-        
         this.drag=function(){
-            /*if (this.par.object.typeStr1 != "Unik_Steps"){
-                this.dCont.visible = false 
-                return
-            } else {this.dCont.visible = true}*/
         }
 
         
@@ -38,9 +38,11 @@ export class MOWUnik{
                 this.dCont.visible = false         
                 this.active=false        
             }else{
+                trace("this.pObject.usingShablon",this.pObject.usingShablon)
+                this.pObject.usingShablon=this.par.object.unik.array;
                 this.pObject.addObject(this.par.object.unik);
                 this.dCont.visible = true
-                this.active=true 
+                this.active=true
             }
 
         this.height = this.pObject.height
