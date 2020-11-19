@@ -24,22 +24,29 @@ export class SS3D  {
         this.content3d = new THREE.Object3D();
         this.par.par.content3d.add(this.content3d);
 
+	    this.cont3d = new THREE.Object3D();
+	    this.content3d.add(this.cont3d);
 
-		this.c3dM = new THREE.Object3D();
+	    this.cont3dL = new THREE.Object3D();
+	    this.content3d.add(this.cont3dL); 
+	           
+
+
+		/*this.c3dM = new THREE.Object3D();
         this.content3d.add(this.c3dM);
         this.mesh = new THREE.Mesh(
          	this.par.par.boxBufferGeometry,
          	this.par.par.meshBasicMaterial
         )
-        this.c3dM.add(this.mesh);
+        this.c3dM.add(this.mesh);*/
 
-        trace("THREE.lineSegments  ",THREE.Object3D)
+        
 
    		this.lineSegments = new THREE.LineSegments(
          	this.par.par.planeXZ,
          	this.par.par.lineBasicMaterial
         )
-        this.c3dM.add(this.lineSegments);
+        this.cont3dL.add(this.lineSegments);
         this.lineSegments.rotation.x=Math.PI/2;
 
         
@@ -61,16 +68,15 @@ export class SS3D  {
 			this._distans=this.par._distans;
 			this._delph=this.par._delph;
 			this._rotation=this.par._rotation;
-			this.mesh.scale.set(this._distans,this._delph,100);
+			//this.mesh.scale.set(this._distans,this._delph,100);
 
 			this.lineSegments.scale.set(this._distans,this.par._height,1);
 			this.lineSegments.position.x=this._distans/2;
 			this.lineSegments.position.z=-this.par._height/2;
 
-			this.mesh.position.x=this._distans/2;
+			//this.mesh.position.x=this._distans/2;
 
-			//this.korektRect.
-			//trace(this.mesh)			
+						
 		}
     }
 
@@ -84,8 +90,7 @@ export class SS3D  {
 
     set life(value) {
         if(this._life!=value){
-            this._life= value;    
-
+            this._life= value;
 			if(this._life==true)this.par.par.content3d.add(this.content3d);
 			else if(this.content3d.parent!=undefined)this.content3d.parent.remove(this.content3d);
                        

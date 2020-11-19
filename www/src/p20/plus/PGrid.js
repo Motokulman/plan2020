@@ -47,13 +47,15 @@ export class Grid extends THREE.Object3D {
 
 
         let material=new THREE.MeshPhongMaterial({color:0xffffff, map:this.texture})
-        material.side=THREE.DoubleSide  
+        material.side=THREE.DoubleSide;  
 
-        trace("%%%%%%%%%%%%",_size,_alpha)
+        
         let mesh=new THREE.Mesh( new THREE.PlaneBufferGeometry( _size, _size,1,1), material)        
         this.add(mesh)
         mesh.castShadow = true;
         mesh.receiveShadow = true;
+        mesh.renderOrder=1
+        mesh.position.z=20
 
         if(_alpha!=undefined){
             material.transparent=true

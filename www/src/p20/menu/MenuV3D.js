@@ -58,24 +58,12 @@ export class MenuV3D  {
             this.panel.content.div.appendChild(this.visi3D.contentHTML);
 
             this.sizeWindow();
-            self.activeSah = 1;   
-
-           /* var ss=10;
-            var ss1=100;
-            
-            for (var i = 0; i < 100; i++) {
-                var m=new THREE.Mesh(new THREE.BoxBufferGeometry( ss, ss, ss ))
-                m.scale.set(0.1+Math.random(),0.1+Math.random(),0.1+Math.random())
-                m.position.set(-ss1/2+Math.random()*ss1,-ss1/2+Math.random()*ss1,-ss1/2+Math.random()*ss1)
-                this.visi3D.groupObject.add(m); 
-                
-            }*/
-            
-
-
-            
-
+            self.activeSah = 1;
+      
         }
+
+       
+        
 
 
         var w,h,s
@@ -113,9 +101,7 @@ export class MenuV3D  {
                 if(this.visi3D)this.visi3D.sizeWindow(0,0,this.panel.width,this.panel.height);
             }
 
-           
-
-
+            
         }
 
         this.init();    

@@ -42,7 +42,7 @@ export class P20  {
             this.arrayChesh[i]= new SpStageSten(this, this.sobSP);
             this.arrayChesh[i].dragStyleObj(this.startObject);
             this.arrayChesh[i].idArr=i
-            this.startObject
+           
             this.array[i] = this.arrayChesh[i];
 
         }
@@ -293,7 +293,7 @@ export class RulimActivSP  {
         this.graphics.interactive = true;
 
         //3d-------------
-        this.grid3d = new Grid(this.par.sizeMax,100,'resources/image/fill.png',0.8);
+        this.grid3d = new Grid(this.par.sizeMax,100,'resources/image/fill.png',0.9);
     }
 
     set index(value) {       

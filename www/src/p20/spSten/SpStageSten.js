@@ -15,6 +15,8 @@ import { SPGroup} from './SPGroup.js';
 
 import { SpPolygon } from './polygon/SpPolygon.js';
 
+import { PlaneXZ } from '../plus/PlaneXZ.js';
+
 /**
 * Мир для сращалок дорог
 * @class
@@ -109,15 +111,18 @@ export function SpStageSten (par,  fun) {
 
 
     this.content3d = new THREE.Object3D();
-    this.par.content3d.add(this.content3d)
+    this.par.content3d.add(this.content3d);
 
-    this.planeXZ=new PlaneXZ( 1, 1 )
+
+
+
+    this.planeXZ=new PlaneXZ()
 
     this.boxBufferGeometry=new THREE.BoxBufferGeometry( 1, 1, 1 )
     this.meshBasicMaterial=new THREE.MeshBasicMaterial( {color: 0x008cba} )
 
-    this.lineBasicMaterial = new THREE.LineBasicMaterial( { color: 0x00ff00, transparent: true, opacity: 0.5 ,linewidth: 1});
-
+    this.lineBasicMaterial = new THREE.LineBasicMaterial( { color: 0x00ff00, linewidth: 10});
+    this.lineBasicMaterial1 = new THREE.LineBasicMaterial( { color: 0x0000ff, linewidth: 10});
 
 
 	this.lineWord=new SPLineWord(this);
@@ -185,7 +190,6 @@ export function SpStageSten (par,  fun) {
 			korRect(r,aSten[i].arrGran[1]);
 			korRect(r,aSten[i].arrGran[2]);
 			korRect(r,aSten[i].arrGran[3]);
-
 		}
 
 
@@ -744,34 +748,3 @@ Object.defineProperties(SpStageSten.prototype, {
 });
 
 
-/*
-import { BufferGeometry } from '../core/BufferGeometry.js';
-import { Float32BufferAttribute } from '../core/BufferAttribute.js';*/
-
-class PlaneXZ extends THREE.BufferGeometry {
-
-	constructor( width) {
-
-		super();
-
-		const vertices = [];
-		var wh=width/2
-		vertices.push(-wh,-wh,0);
-		vertices.push(-wh,-wh,0);
-		vertices.push(-wh, wh,0);
-
-		vertices.push(-wh,-wh,0);
-		vertices.push(-wh,-wh,0);
-		vertices.push(wh,-wh,0);
-
-		vertices.push(wh,-wh,0);
-		vertices.push(wh,wh,0);
-		vertices.push(wh,wh,0);
-
-		vertices.push(-wh,wh,0);
-		vertices.push(-wh,wh,0);
-		vertices.push(wh,wh,0);	
-		this.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
-	}
-
-}

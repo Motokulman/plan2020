@@ -34,6 +34,13 @@ export class Blok  {
 
         this.content2d = new PIXI.Container();
 
+
+        this.content3d = new THREE.Object3D();
+        this.cont3d = new THREE.Object3D();
+        this.content3d.add(this.cont3d);
+        this.cont3dL = new THREE.Object3D();
+        this.content3d.add(this.cont3dL); 
+
         
         this.funInit=undefined
         this.body=undefined;
