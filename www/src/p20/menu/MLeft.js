@@ -8,8 +8,6 @@ export class MLeft  {
   		var self=this;
         this.par=par
         this.fun=fun
-        trace('parparparpar',par)
-
         this.otstup=this.par.otstup;
         this.otstup1=this.par.otstup1;
         this.wh=this.par.wh;
@@ -48,7 +46,7 @@ export class MLeft  {
                 {src:"resources/image/w1.png",array:[],id:1},
                 {src:"resources/image/w2.png",array:[],id:2},
                 {src:"resources/image/w0.png",array:[],id:4},
-                {src:"resources/image/w4.png",array:[],id:4},
+                {src:"resources/image/w4.png",array:[],id:5},
             ]},
         ]
 
