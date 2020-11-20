@@ -71,7 +71,8 @@ export function SpliceSten (_stage) {
 	this.content2d.addChild(this.cont2dOfset);
 
 
-
+	this.content3d = new THREE.Object3D();
+    this.par.content3d.add(this.content3d);
 
 
 
@@ -133,6 +134,10 @@ export function SpliceSten (_stage) {
 		this.content2d1.x=this.position.x;
 		this.content2d1.y=this.position.y;
 		this.content2d1.rotation=this._rotation;
+
+		this.content3d.position.x=this.position.x;
+		this.content3d.position.y=this.position.y;
+		this.content3d.rotation.z=this._rotation;
 
 		this.korektRect.setSten(this,0,0);
 		this.korektRect.korekt1();
@@ -293,7 +298,8 @@ Object.defineProperties(SpliceSten.prototype, {
 				if ('life' in this.arrayClass[ii]) this.arrayClass[ii].life = this._life;
 			}
 
-
+			if(this._life==true)this.par.content3d.add(this.content3d);
+			else if(this.content3d.parent!=undefined)this.content3d.parent.remove(this.content3d);
 			
 
 			if(this._life==true)this.stage.content2d2.addChild(this.content2d);

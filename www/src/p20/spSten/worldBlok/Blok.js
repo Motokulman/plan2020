@@ -46,6 +46,17 @@ export class Blok  {
         this.funInit=undefined
         this.body=undefined;
         this.shape=undefined;
+
+
+        this.rect={}
+        this.rect.x= this.obj.rect[0];
+        this.rect.y= this.obj.rect[1];
+        this.rect.z= this.obj.rect[2];
+        this.rect.w= this.obj.rect[3];
+        this.rect.h= this.obj.rect[4];
+        this.rect.d= this.obj.rect[5];
+       
+
         this.init = function(){            
             this.body=new Body();
             this.body.target=this
@@ -93,6 +104,10 @@ export class Blok  {
         this.drag=function(){            
             self.content2d.x=self.body.position.x;
             self.content2d.y=0;
+
+            self.content3d.position.x=self.body.position.x;
+            //self.content2d.position.y=0;
+            self.content3d.position.z=self.rect.y;
         }
 
         

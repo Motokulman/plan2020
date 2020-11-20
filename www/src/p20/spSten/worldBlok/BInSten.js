@@ -17,6 +17,14 @@ export class BInSten extends Blok {
         this.stAct=new BTAct(this);
 
 
+        this.planeXZ=par.planeXZ;
+        this.lineSegments = new THREE.LineSegments(
+            this.planeXZ,
+            this.par.lineBasicMaterial2
+        )
+        this.cont3dL.add(this.lineSegments);
+        this.lineSegments.rotation.x=Math.PI/2
+
 
 
         this.onDragStart=function(e){            
@@ -51,12 +59,12 @@ export class BInSten extends Blok {
             this.rect1.h= this._height;
             this.rect1.d= this._delph;
             if(this.obj.rect1!=undefined){                
-                this.rect1.x= this.obj.rect1[0];
-                this.rect1.y= this.obj.rect1[1];
-                this.rect1.z= this.obj.rect1[2];
-                this.rect1.w= this.obj.rect1[3];
-                this.rect1.h= this.obj.rect1[4];
-                this.rect1.d= this.obj.rect1[5];
+                this.rect1.x= this.obj.rect[0];
+                this.rect1.y= this.obj.rect[1];
+                this.rect1.z= this.obj.rect[2];
+                this.rect1.w= this.obj.rect[3];
+                this.rect1.h= this.obj.rect[4];
+                this.rect1.d= this.obj.rect[5];
             }            
         }
 
@@ -120,12 +128,15 @@ export class BInSten extends Blok {
                 this.graphics.drawRect(this.rect1.x-(sizeLine*1.5)/2,-this._delph/2-(sizeLine*1.5)/2,this.rect1.w+sizeLine*1.5, this._delph+sizeLine*1.5);
             }
             this.stAct.draw1();
+
+             trace("this.rect   ",this.rect)
+
+            this.lineSegments.scale.set(this.rect.w,this.rect.h,1);
         }
 
 
 
-        this.drawActive=function(){
-            
+        this.drawActive=function(){            
             this.stAct.sahAct=this._active ? 40: 0;
         }
 

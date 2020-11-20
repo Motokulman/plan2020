@@ -123,6 +123,7 @@ export function SpStageSten (par,  fun) {
 
     this.lineBasicMaterial = new THREE.LineBasicMaterial( { color: 0x00ff00, linewidth: 10});
     this.lineBasicMaterial1 = new THREE.LineBasicMaterial( { color: 0x0000ff, linewidth: 10});
+    this.lineBasicMaterial2 = new THREE.LineBasicMaterial( { color: 0xff0000, linewidth: 10});
 
 
 	this.lineWord=new SPLineWord(this);

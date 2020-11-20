@@ -25,10 +25,10 @@ export class SS3D  {
         this.par.par.content3d.add(this.content3d);
 
 	    this.cont3d = new THREE.Object3D();
-	    this.content3d.add(this.cont3d);
+	    this.par.content3d.add(this.cont3d);
 
 	    this.cont3dL = new THREE.Object3D();
-	    this.content3d.add(this.cont3dL); 
+	    this.par.content3d.add(this.cont3dL); 
 	           
 
 
@@ -53,12 +53,8 @@ export class SS3D  {
 
     	
         this.dragPost=function(){
-        	this._distans=this.par._distans
-        	this._delph=this.par._delph
-			this._rotation=this.par._rotation
-        	this.content3d.position.x=this.par.position.x;
-			this.content3d.position.y=this.par.position.y;
-			this.content3d.rotation.z=this._rotation;
+
+
         	this.draw1();
         }
 
@@ -91,8 +87,7 @@ export class SS3D  {
     set life(value) {
         if(this._life!=value){
             this._life= value;
-			if(this._life==true)this.par.par.content3d.add(this.content3d);
-			else if(this.content3d.parent!=undefined)this.content3d.parent.remove(this.content3d);
+			
                        
         }
     }    

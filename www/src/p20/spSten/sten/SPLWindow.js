@@ -52,6 +52,9 @@ export class SPLWindow  {
   			blok.parent=this;
   			this.content2d.addChild(blok.content2d)  
   			this.par.draw1(true)
+  			trace(this.par.content3d)
+  			trace(blok.content3d)
+  			this.par.content3d.add(blok.content3d)  
 	    	return -1;	    	
 	    }
 
@@ -61,6 +64,7 @@ export class SPLWindow  {
 	    		_blok=this.array[ii]	    		
 	    		this.array.splice(ii, 1);	    		
 	    		this.content2d.removeChild(_blok.content2d);
+	    		this.par.content3d.remove(blok.content3d)  
 	    		_blok.parent = undefined;
 	    		this.removeBlok(blok);
 	    		this.world.remove(blok.body);

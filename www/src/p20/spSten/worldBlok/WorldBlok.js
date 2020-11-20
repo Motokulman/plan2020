@@ -16,7 +16,9 @@ export class WorldBlok  {
 
         this.uuid=calc.generateRendom(2);
 
-      
+        this.planeXZ=par.planeXZ;
+        this.lineBasicMaterial2=par.lineBasicMaterial2;
+        
 
         this.array = [];
         this.content2d = new PIXI.Container();
@@ -25,7 +27,7 @@ export class WorldBlok  {
 
         this.arrBD=[];
         this.arrObj={};
-        this.arrBD.push({id:0,icon:"resources/image/w0.png",rect:[-1000,-1000,-100,2000,2000,200], str:["BInSten",'Window','','','','']})
+        this.arrBD.push({id:0,icon:"resources/image/w0.png",rect:[-1000,-1500,-100,2000,2000,200], str:["BInSten",'Window','','','','']})
         this.arrBD.push({id:1,icon:"resources/image/w1.png",rect:[-1500,-1500,-100,3000,3000,200], rect1:[-1300,-1500,-100,2600,3000,200], str:["BInSten",'Door','','','','']})
         this.arrBD.push({id:4,icon:"resources/image/w1.png",rect:[-2500,-1500,-100,5000,3000,200], rect1:[-2300,-1500,-100,4600,3000,200], str:["BInSten",'Door','','','','']})     
         this.arrBD.push({id:2,icon:"resources/image/w2.png",rect:[-1000,-1000,-100,2000,2000,200], str:["BInSten",'Not','','','','']})        
