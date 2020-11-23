@@ -50,6 +50,19 @@ export class SS3D  {
         this.lineSegments.rotation.x=Math.PI/2;
 
         
+        trace("---------------------------------------------------------------------");
+       	var p= parseInt("11100001000", 2);
+       	var p1=parseInt("00011111111", 2);
+   		
+       	trace(p,p1)
+       	trace("&="+(p&p1))
+       	trace("|="+(p|p1))
+       	trace("^="+(p^p1))
+
+        
+
+
+        trace("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
     	
         this.dragPost=function(){

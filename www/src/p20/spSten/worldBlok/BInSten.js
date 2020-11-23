@@ -49,23 +49,11 @@ export class BInSten extends Blok {
 
 
 
-        this.rect1={}
+  
 
         this.funInit=function(){ 
-            this.rect1.x= -this._width/2;
-            this.rect1.y= -this._height/2;
-            this.rect1.z= -this._delph/2;
-            this.rect1.w= this._width;
-            this.rect1.h= this._height;
-            this.rect1.d= this._delph;
-            if(this.obj.rect1!=undefined){                
-                this.rect1.x= this.obj.rect[0];
-                this.rect1.y= this.obj.rect[1];
-                this.rect1.z= this.obj.rect[2];
-                this.rect1.w= this.obj.rect[3];
-                this.rect1.h= this.obj.rect[4];
-                this.rect1.d= this.obj.rect[5];
-            }            
+            
+                     
         }
 
        
@@ -102,30 +90,30 @@ export class BInSten extends Blok {
             if(this.typeStr1 == "Window"){
 
                 this.graphics.lineStyle(sizeLine, colorLine, 1);
-                this.graphics.drawRect(this.rect1.x,-this._delph/2-(sizeLine/2),this.rect1.w,this._delph+sizeLine);
+                this.graphics.drawRect(this.rect.x,-this._delph/2-(sizeLine/2),this.rect.w,this._delph+sizeLine);
                 this.graphics.lineStyle(sizeLine/2, colorLine, 1);
-                this.graphics.drawRect(this.rect1.x,-40,this.rect1.w,80);
+                this.graphics.drawRect(this.rect.x,-40,this.rect.w,80);
             }
             if(this.typeStr1 == "Door"){
                 this.graphics.lineStyle(sizeLine, colorLine, 1);
-                this.graphics.drawRect(this.rect1.x,-this._delph/2-(sizeLine/2),this.rect1.w, this._delph+sizeLine);
+                this.graphics.drawRect(this.rect.x,-this._delph/2-(sizeLine/2),this.rect.w, this._delph+sizeLine);
 
                 this.graphics.lineStyle(sizeLine/2, colorLine/2, 1);
 
                 let cc = calc.getVector(-this._delph/2 - this._delph/2, 0);
-                let pp = calc.getVector(this.rect1.x - this.rect1.w/5, 90);
-                let ppp = calc.getVector(Math.abs(this.rect1.x - this.rect1.w/5), 45);
+                let pp = calc.getVector(this.rect.x - this.rect.w/5, 90);
+                let ppp = calc.getVector(Math.abs(this.rect.x - this.rect.w/5), 45);
 
-                this.graphics.moveTo(this.rect1.x, cc.y);
-                this.graphics.lineTo(this.rect1.w/2, cc.y);
-                this.graphics.moveTo(this.rect1.x, cc.y);
+                this.graphics.moveTo(this.rect.x, cc.y);
+                this.graphics.lineTo(this.rect.w/2, cc.y);
+                this.graphics.moveTo(this.rect.x, cc.y);
                 this.graphics.lineTo(pp.x, pp.y);
                 this.graphics.moveTo(pp.x, pp.y);
-                this.graphics.quadraticCurveTo(ppp.x + (ppp.x /4), -ppp.y + (ppp.y /4) , this.rect1.w/2, cc.y)
+                this.graphics.quadraticCurveTo(ppp.x + (ppp.x /4), -ppp.y + (ppp.y /4) , this.rect.w/2, cc.y)
             }
             if(this.typeStr1 == "Not"){
                 this.graphics.lineStyle(sizeLine/2, colorLine, 1);
-                this.graphics.drawRect(this.rect1.x-(sizeLine*1.5)/2,-this._delph/2-(sizeLine*1.5)/2,this.rect1.w+sizeLine*1.5, this._delph+sizeLine*1.5);
+                this.graphics.drawRect(this.rect.x-(sizeLine*1.5)/2,-this._delph/2-(sizeLine*1.5)/2,this.rect.w+sizeLine*1.5, this._delph+sizeLine*1.5);
             }
             this.stAct.draw1();
 

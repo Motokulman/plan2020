@@ -37,7 +37,7 @@ export class SPLWindow  {
 		this.deb=new SpDebugPixi()
   		this.content2d.addChild(this.deb.content2d);
   		this.deb.al=0.3
-  		//this.world.deb=this.deb
+  		this.world.deb=this.deb
 
 
   		this.array=[];
@@ -52,8 +52,7 @@ export class SPLWindow  {
   			blok.parent=this;
   			this.content2d.addChild(blok.content2d)  
   			this.par.draw1(true)
-  			trace(this.par.content3d)
-  			trace(blok.content3d)
+  			
   			this.par.content3d.add(blok.content3d)  
 	    	return -1;	    	
 	    }
@@ -114,15 +113,14 @@ export class SPLWindow  {
 	    		for (var i = 0; i < this.array.length; i++) {	
 	    			arrNum2.push(this.array[i])
 	    		}
-				arrNum2.sort(function(a, b){
-					
+				arrNum2.sort(function(a, b){					
 					return a.body.position.x - b.body.position.x
 				})
 
 
 	    		for (var i = 0; i < arrNum2.length; i++) {	    			
-	    			arrNum.push(arrNum2[i].body.position.x+arrNum2[i].rect1.x);
-	    			arrNum.push(arrNum2[i].body.position.x+arrNum2[i].rect1.x+arrNum2[i].rect1.w);
+	    			arrNum.push(arrNum2[i].body.position.x+arrNum2[i].rect.x);
+	    			arrNum.push(arrNum2[i].body.position.x+arrNum2[i].rect.x+arrNum2[i].rect.w);
 	    			
 	    		}
 	    	}
@@ -143,6 +141,7 @@ export class SPLWindow  {
 
 			this.world.rect.x=xx;
 			this.world.rect.w=ww;
+			this.world.rect.x1=ww+xx;
 			this.world.rect.y=-this._delph/2;
 			this.world.rect.h=this._delph;
 

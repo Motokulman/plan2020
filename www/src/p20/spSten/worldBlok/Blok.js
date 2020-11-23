@@ -55,6 +55,13 @@ export class Blok  {
         this.rect.w= this.obj.rect[3];
         this.rect.h= this.obj.rect[4];
         this.rect.d= this.obj.rect[5];
+
+        this.col=parseInt(this.obj.rect[6],2)
+        this.col1=parseInt(this.obj.rect[7],2)
+        this.offset=this.obj.rect[8];
+
+        
+
        
 
         this.init = function(){            
@@ -64,6 +71,10 @@ export class Blok  {
             this.shape=new Shape();
             this.shape.setRect(obj.rect);
             this.body.addShape(this.shape);
+            this.body.col=this.col
+            this.body.col1=this.col1
+            this.body.offset=this.offset
+
             this._width=obj.rect[3];
             this._height=obj.rect[5];
             this._delph=obj.rect[4];

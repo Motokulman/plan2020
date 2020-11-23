@@ -87,7 +87,7 @@ export class MenuV3D  {
 
                 this.button1.x=this.panel.width-this.wh-this.otstup
                 this.button2.x=this.panel.width-this.wh*2-this.otstup*2
-                trace(">>>>>>>>@@>>>>>",this.panel.width,this.panel.height,this.visi3D)
+        
 
                 if(this.visi3D&&b==true)this.visi3D.sizeWindow(0,0,this.panel.width,this.panel.height);
             }
