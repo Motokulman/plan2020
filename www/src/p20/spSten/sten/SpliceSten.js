@@ -68,7 +68,7 @@ export function SpliceSten (_stage) {
 
 	//смещеная над
     this.cont2dOfset = new PIXI.Container();
-	this.content2d.addChild(this.cont2dOfset);
+	
 
 
 	this.content3d = new THREE.Object3D();
@@ -87,6 +87,7 @@ export function SpliceSten (_stage) {
     this.ss3d=new SS3D(this);
     this.arrayClass.push(this.ss2d);
     this.arrayClass.push(this.ss3d);
+    this.content2d.addChild(this.cont2dOfset);
 
     //отрисовываем окна
     this.windows=new SPLWindow(this);
@@ -141,6 +142,7 @@ export function SpliceSten (_stage) {
 
 		this.korektRect.setSten(this,0,0);
 		this.korektRect.korekt1();
+		this.korektRect.korektGrid();
 		
 		this.ss3d.dragPost();
 		this.draw1();

@@ -50,24 +50,14 @@ export class SS3D  {
         this.lineSegments.rotation.x=Math.PI/2;
 
         
-        trace("---------------------------------------------------------------------");
+
        	var p= parseInt("11100001000", 2);
        	var p1=parseInt("00011111111", 2);
    		
-       	trace(p,p1)
-       	trace("&="+(p&p1))
-       	trace("|="+(p|p1))
-       	trace("^="+(p^p1))
 
-        
-
-
-        trace("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
     	
         this.dragPost=function(){
-
-
         	this.draw1();
         }
 
@@ -78,6 +68,7 @@ export class SS3D  {
 			this._delph=this.par._delph;
 			this._rotation=this.par._rotation;
 			//this.mesh.scale.set(this._distans,this._delph,100);
+            
 
 			this.lineSegments.scale.set(this._distans,this.par._height,1);
 			this.lineSegments.position.x=this._distans/2;

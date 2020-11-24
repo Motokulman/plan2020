@@ -17,6 +17,8 @@ export class BInSten extends Blok {
         this.stAct=new BTAct(this);
 
 
+        //this.planeXZ=new PlaneXZ();
+        //this.lineSegments.geometry=his.planeXZ
         this.planeXZ=par.planeXZ;
         this.lineSegments = new THREE.LineSegments(
             this.planeXZ,
@@ -117,12 +119,14 @@ export class BInSten extends Blok {
             }
             this.stAct.draw1();
 
-             trace("this.rect   ",this.rect)
+           
 
             this.lineSegments.scale.set(this.rect.w,this.rect.h,1);
         }
 
-
+        this.postParent=function(){
+            if(this.unik!=undefined)if(this.unik.postParent!=undefined)this.unik.postParent()
+        }
 
         this.drawActive=function(){            
             this.stAct.sahAct=this._active ? 40: 0;

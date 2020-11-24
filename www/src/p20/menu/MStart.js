@@ -180,11 +180,11 @@ export class MStart  {
 				//self.dev1.active=false;
 				trace(self.p20)
 				//////////////////////////////
-				/*self.dev1.setKR(self.p20.korektRect)			
+				self.dev1.setKR(self.p20.korektRect)			
 				setTimeout(function() {
 					self.dev.active=true;	
 					self.dev.index=2	
-				}, 1000);*/
+				}, 1000);
 				/////////////////
 
 

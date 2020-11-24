@@ -17,6 +17,8 @@ import { SpPolygon } from './polygon/SpPolygon.js';
 
 import { PlaneXZ } from '../plus/PlaneXZ.js';
 
+import { SPMetod } from './SPMetod.js';
+
 /**
 * Мир для сращалок дорог
 * @class
@@ -32,6 +34,7 @@ export function SpStageSten (par,  fun) {
 	this.tipPoint = 'SpPointSten';
 	this.fun = fun;
 	this.uuid=calc.generateRendom(2);
+
 
 	this.name='xzStart';
 
@@ -130,6 +133,9 @@ export function SpStageSten (par,  fun) {
 	this.worldBlok=new WorldBlok(this);
 	this.group=new SPGroup(this);
 
+
+	this.metod=new SPMetod(this);
+
 	this.colorT=new THREE.Color()
 	this.convertC=function(c,a){
 		this.colorT.set(c)
@@ -192,7 +198,6 @@ export function SpStageSten (par,  fun) {
 			korRect(r,aSten[i].arrGran[2]);
 			korRect(r,aSten[i].arrGran[3]);
 		}
-
 
 		r.w=r.x1-r.x
 		r.h=r.y1-r.y
@@ -306,21 +311,16 @@ export function SpStageSten (par,  fun) {
 		}
 		self.arrObj.length=0;
 		return true;	
-	}
-
-
-
-
-
-	
+	}	
 }
 SpStageSten.prototype = Object.create(SpStage.prototype);
 SpStageSten.prototype.constructor = SpStageSten;
 
 SpStageSten.prototype.getObj = function (_activ) {
 	var o = SpStage.prototype.getObj.call(this, _activ);	
-	o.color=this._color;
-	o.alpha=this._alpha;
+	o.height=this._height;
+	o.height1=this._height1;
+
 	o.lineWord=this.lineWord.getObj()
 	o.worldBlok=this.lineWord.getObj()
 
@@ -330,8 +330,8 @@ SpStageSten.prototype.getObj = function (_activ) {
 };
 SpStageSten.prototype.setObj = function (o) {	
 	SpStage.prototype.setObj.call(this, o);
-	if(o.color)this.color=o.color
-	if(o.alpha)this.alpha=o.alpha
+	if(o.height)this.height=o.height
+	if(o.height1)this.height1=o.height1
 	if(o.name)this.name=o.name;	
 		
 	if(o.lineWord)this.lineWord.setObj(o.lineWord);
@@ -414,27 +414,50 @@ Object.defineProperties(SpStageSten.prototype, {
 		}
 	},
 
-	height: {
+/*	height: {
 		set: function (value) {	
 			if(this._height!=value)	{
 				this._height = value;
+				trace("@@@@@@@@@@",value)
 				for (var i = 0; i < this.arrSplice.length; i++) {
-					this.arrSplice[i].height=this._height
+					this.arrSplice[i].height=this._height;
+					this.arrSplice[i].draw1();
+					//this.addObjFun(this.arrSplice[i])
 				}
+				this.bigDrag()
 				this.par.korektHeight()
 			}			
 		},
 		get: function () {			
 		 	return this._height;
 		}
+	},*/
+
+	height: {
+		set: function (value) {			
+			this._height = value;
+			for (var i = 0; i < this.arrSplice.length; i++) {
+				this.arrSplice[i].height = this._height;
+				this.arrSplice[i].draw1();
+			}
+
+			for (var i = 0; i < this.arrPoint.length; i++) {
+				if (!this.arrPoint[i].life) continue;					
+				this.arrPoint[i].dragGG();								
+			}
+
+		},
+		get: function () { return this._height; }
 	},
+
 
 	height1: {
 		set: function (value) {	
 			if(this._height1!=value)	{
 				this._height1 = value;
 				for (var i = 0; i < this.arrSplice.length; i++) {
-					this.arrSplice[i].height1=this._height1
+					this.arrSplice[i].height1=this._height1;
+					this.arrSplice[i].draw1();
 				}
 			}			
 		},
@@ -586,22 +609,7 @@ Object.defineProperties(SpStageSten.prototype, {
 
 
 
-	height: {
-		set: function (value) {			
-			this._height = value;
-			for (var i = 0; i < this.arrSplice.length; i++) {
-				this.arrSplice[i].height = this._height;
-			}
-
-			for (var i = 0; i < this.arrPoint.length; i++) {
-				if (!this.arrPoint[i].life) continue;					
-				this.arrPoint[i].dragGG();								
-			}
-
-		},
-		get: function () { return this._height; }
-	},
-
+	
 
 
 

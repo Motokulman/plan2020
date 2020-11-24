@@ -56,12 +56,16 @@ export class Blok  {
         this.rect.h= this.obj.rect[4];
         this.rect.d= this.obj.rect[5];
 
+        this._width=this.rect.w;
+        this._height=this.rect.h;
+        this._delph=this.rect.d;        
+
         this.col=parseInt(this.obj.rect[6],2)
         this.col1=parseInt(this.obj.rect[7],2)
         this.offset=this.obj.rect[8];
 
         
-
+        trace("^^^",this._width)
        
 
         this.init = function(){            
@@ -69,7 +73,7 @@ export class Blok  {
             this.body.target=this
             this.body.drag=this.drag;
             this.shape=new Shape();
-            this.shape.setRect(obj.rect);
+            this.shape.setRect(this.rect);
             this.body.addShape(this.shape);
             this.body.col=this.col
             this.body.col1=this.col1
@@ -226,8 +230,8 @@ export class Blok  {
             }else{
                 this._life=true;
             }
-
             this.par.render();
+            if(this.postParent!=undefined)this.postParent()
         }
     }    
     get parent() { return  this._parent;}

@@ -24,8 +24,25 @@ export class DWStenColiz extends DCont{
         this.pan.visible = this.active;
 
 
+        this.window=undefined
+        this.init=function(){
+            if(this.window!=undefined)return
 
+            this.window=new DWindow(this.dCont) 
+            this.window.width=222
+            this.slider = new DSliderBig (this.window.content, 2, 2, function(){kr.pS.x=this.value;kr.korektGrid()}, 'x', -1000, 1000);
+            this.slider1 = new DSliderBig (this.window.content, 2, 2+52*1, function(){kr.pS.y=this.value;kr.korektGrid()}, 'y', -1000, 1000);
+            this.slider2 = new DSliderBig (this.window.content, 2, 2+52*2, function(){kr.pS.w=this.value;kr.korektGrid()}, 'w', 100, 1000);  
+            this.slider3 = new DSliderBig (this.window.content, 2, 2+52*3, function(){kr.pS.h=this.value;kr.korektGrid()}, 'h', 100, 1000);
 
+            this.slider.width=this.slider1.width=this.slider2.width=this.slider3.width=this.window.width-4
+            this.slider.value=kr.pS.x;
+            this.slider1.value=kr.pS.y;
+            this.slider2.value=kr.pS.w;
+            this.slider3.value=kr.pS.h;
+            this.window.height=2+52*4; 
+
+        }
 
 
 
@@ -34,10 +51,12 @@ export class DWStenColiz extends DCont{
         this.slider1 = new DSliderBig (this.pan, this._otstup, this.slider.height + this._otstup * 2, function(){self.height=this.value;}, 'height', 150, 800)
         this.slider1.value = this._height*/
 
-
+        var kr
         this.kr
-        this.setKR=function(kr){
-            this.kr=kr;
+        this.setKR=function(_kr){
+            this.kr=_kr;
+            kr=_kr
+            this.init()
         }
 
         this.visiPixi=undefined//new VisiPixi();   
@@ -50,10 +69,7 @@ export class DWStenColiz extends DCont{
         this.debugPixi.content2d.scale.set(scale,scale); 
         var dp=this.debugPixi
 
-        this.drag=function(){
-            
-
-           // if(self.par.active==false)return
+        this.drag=function(){           
             
             if(self.visiPixi==undefined){
                 self.visiPixi=new VisiPixi(); 
@@ -67,12 +83,40 @@ export class DWStenColiz extends DCont{
             self.width=self.pan.width+otstup*2
             self.height=self.pan.height+otstup*2
 
-            dp.clear()
-            dp.dRect(self.kr.rect)
+            if(self.window!=undefined){
+                self.window.x=300;
+                self.window.y=self.pan.height+otstup*2;
+            }
 
+            dp.clear()
+            dp.dRect(self.kr.rect);
+
+            for (var i = 0; i < kr.sah; i++) {
+                self.dragBR(kr.array[i])
+            }
 
             self.visiPixi.render();
         }
+
+        var p={x:0,y:0}
+        this.dragBR=function(br){ 
+           
+            dp.dRect(br);
+            p.x=br.x+br.w/2
+            p.y=br.y+br.h/2
+            dp.dText(p,br.idArr);
+           
+            //грании
+            if(br.bool[0]==true)dp.dLineParam(br.x,br.y,br.x+br.w,br.y,0xff0000,20);           
+            if(br.bool[1]==true)dp.dLineParam(br.x+br.w,br.y,br.x+br.w,br.y+br.h,0xff0000,25);
+            if(br.bool[2]==true)dp.dLineParam(br.x+br.w,br.y+br.h,br.x,br.y+br.h,0xff0000,30);
+            if(br.bool[3] == true)dp.dLineParam(br.x, br.y, br.x, br.y+br.h,0xff0000,35);   
+                
+            
+
+
+        }
+
 
 
         this.funDrwgWG=null

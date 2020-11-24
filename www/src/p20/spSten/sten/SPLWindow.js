@@ -100,7 +100,9 @@ export class SPLWindow  {
 	    	return this.vr;
 	    }
 
-	    var arrNum2=[]
+
+
+	   /* var arrNum2=[]
 	    var arrNum=[]
 	    this.getNumBlok = function () {
 	    	arrNum.length=0
@@ -124,9 +126,90 @@ export class SPLWindow  {
 	    			
 	    		}
 	    	}
+
+
+	    	
+	    	return arrNum;
+	    }*/
+
+	    this.colCentr=parseInt("0000010000",2);
+
+	    var arrNum2=[]
+	    var arrNum=[];
+	    var arrBody=[];
+	    this.getNumBlok = function () {
+	    	
+	    	arrNum.length=0
+	    	arrNum2.length=0
+	    	arrBody.length=0
+
+	    	
+	    	for (var i = 0; i < this.world.array.length; i++) {	
+	    		if((this.world.array[i].col&this.colCentr)!==0){ 
+					arrBody.push(this.world.array[i])
+
+	    		}
+	    	}
+	    	if(arrBody.length==0)return arrNum;
+
+	    	arrBody.sort(function(a,b){
+	    		return a.position.x-b.position.x
+	    	})
+
+	    	for (var i = 0; i < arrBody.length; i++) {
+	    		arrNum2.push(arrBody[i].position.x+arrBody[i].rect.x,arrBody[i].position.x+arrBody[i].rect.x1);	    		
+	    	}
+	    	this.sort2(arrNum2);
+	    	
+	    	
+
+	    	return arrNum2
+	    	/**/
+
+
+
+
+	    	/*if(this.array.length!=0){
+	    		for (var i = 0; i < this.array.length; i++) {	
+	    			arrNum2.push(this.array[i])
+	    		}
+				arrNum2.sort(function(a, b){					
+					return a.body.position.x - b.body.position.x
+				})
+
+
+	    		for (var i = 0; i < arrNum2.length; i++) {	    			
+	    			arrNum.push(arrNum2[i].body.position.x+arrNum2[i].rect.x);
+	    			arrNum.push(arrNum2[i].body.position.x+arrNum2[i].rect.x+arrNum2[i].rect.w);
+	    			
+	    		}
+	    	}*/
+
+
 	    	
 	    	return arrNum;
 	    }
+
+	    var j
+	    this.sort2=function (_a) {
+            if(_a.length==2)return
+            j=_a.length-2
+            for (var i = 0; i < j; i+=2) {
+                if(_a[i+1]>=_a[i+2]){
+                    if(_a[i+1]>=_a[i+3]){
+                        _a.splice(i+2, 2)
+                        this.sort2(_a);
+                        return
+                    }else{
+                        _a[i+1]=_a[i+3];
+                        _a.splice(i+2, 2)
+                        this.sort2(_a);
+                        return 
+                    }                    
+                } 
+            }    
+        }
+
 
 
 	    

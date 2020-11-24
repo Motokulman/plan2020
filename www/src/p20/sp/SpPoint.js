@@ -15,7 +15,7 @@ export function SpPoint (_stage) {
 	this.size2 = 10;
 	this.size3 = 0.001;	// размер при выделении
 	this._uuid = calc.generateUUID();
-
+	
 	this.arrSHronBaza = [];
 	this.arrSHron = [];
 	this.arrPol = [];

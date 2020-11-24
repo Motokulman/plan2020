@@ -21,12 +21,16 @@ export class Shape  {
         }//границы мира
 
         this.setRect=function(rect) {
-            this.rect.x=rect[0];
+            for (var s in rect) {
+                this.rect[s]=rect[s]
+            }
+           /* this.rect.x=rect[0];
             this.rect.y=rect[1];
             this.rect.z=rect[2];
             this.rect.w=rect[3];
             this.rect.h=rect[4];
-            this.rect.d=rect[5];
+            this.rect.d=rect[5];*/
+
             if(this._parent!=undefined)this._parent.korekt()
         } 
         

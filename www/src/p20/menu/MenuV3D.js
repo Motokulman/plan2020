@@ -10,7 +10,7 @@ export class MenuV3D  {
         this.otstup=this.par.otstup
         this.wh=this.par.wh
 
-        this.whMin=400
+        this.whMin=200
 
 
 		this.dCont=new DCont(par.dCont);

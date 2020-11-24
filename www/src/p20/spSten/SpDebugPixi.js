@@ -45,12 +45,47 @@ export class SpDebugPixi  {
 		};
 
 
+		var sT=0;
+		var aT=[];
+
 		this.clearD = function () {
 			g.clear();
+			sT=0
+			for (var i = 0; i < aT.length; i++) {
+				aT[i].visible=false
+			}
 		};
 		this.clear = function () {
-			g.clear();			
+			
+			this.clearD()			
 		};
+
+
+
+		var label, pp;
+		this.dText = function (p, text, color, s) {
+			var ss=s||4
+			if(aT[sT]==undefined){
+				aT[sT]= new PIXI.Container();
+	    		pp = new PIXI.Text('345634634',{ fontFamily : 'Arial' })
+	    		aT[sT].addChild(pp);	
+	    		this.content2d.addChild(aT[sT])    
+			}
+			label=aT[sT]
+			label.children[0].text=text+"";
+			label.children[0].position.x=-label.children[0].width/2
+			label.children[0].position.y=-label.children[0].height/2
+			label.position.x=p.x;
+			label.position.y=p.y;
+			label.scale.x=ss
+			label.scale.y=ss
+			label.visible=true;			
+			sT++
+		}
+
+
+
+
 
 		var oo={x:0,y:0}
 		var oo1={x:0,y:0}

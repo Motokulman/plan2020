@@ -11,7 +11,7 @@ export class PlaneXZ extends THREE.BufferGeometry {
         var vertices = [];
         this.upNull=function(){
             
-            var wh=0.5
+            var wh=0.5;
             vertices.push(-wh,-wh,0);
             vertices.push(-wh,-wh,0);
             vertices.push(-wh, wh,0);
@@ -41,6 +41,7 @@ export class PlaneXZ extends THREE.BufferGeometry {
         this.addLine=function(p,p1){
             this.array.push(p,p1)
             trace(p,p1)
+            
         }
 
         

@@ -22,29 +22,40 @@ export class MOSp extends MOBaza {
         this.bool=true
         this.postIn=function(){           
             this.window.title="SP";
-            var yy=this.otstup1
+            var yy=this.otstup1;
+
+
             /*this.col=new DColor(this.window.content,this.otstup1,yy,"",function(){
                 self.object.color=this.value;            
             })
             this.col.width=this.width-this.otstup1*2
             yy+=36*/
 
-            this.slid=new DSliderBig(this.window.content, this.otstup1,yy, function(s){ 
+            this.slidH=new DSliderBig(this.window.content, this.otstup1,yy, function(s){ 
                 self.bool=false
-                self.object.alpha=self.slid.value
-            }, "alpha",  0, 1)
-            this.slid.width=this.width-this.otstup1*2
-            this.slid.okrug=100;
+                self.object.height=this.value
+            }, "height",  1, 5000)
+            this.slidH.width=this.width-this.otstup1*2
+            this.slidH.okrug=1;
+            yy+=(this.otstup1+this.wh)
+
+            this.slidH1=new DSliderBig(this.window.content, this.otstup1,yy, function(s){ 
+                self.bool=false
+                self.object.height1=this.value
+            }, "height1",  0, 2000)
+            this.slidH1.width=this.width-this.otstup1*2
+            this.slidH1.okrug=100;
             yy+=(this.otstup1+this.wh)
 
 
             
-            /*this.button=new DButton(this.window.content,this.otstup1,this.otstup1,"",function(){
-                self.bool=false
-                self.object.clear();                
-            },"resources/image/p0.png");
-            this.button.width=this.button.height=this.wh;
+            this.button=new DButton(this.window.content,this.otstup1,yy,"Взять сверху",function(){                
+                self.object.metod.getFloor(self.object.par.array[self.object.idArr+1]);            
+            });
+            this.button.width=this.width-this.otstup1*2
 
+            yy+=(this.otstup1+32)
+/*
             this.slid=new DSliderBig(this.window.content, this.otstup1,this.otstup1+ (this.otstup1+this.wh)*1, function(s){ 
                 self.bool=false
                 self.object.position.x=self.slid.value
@@ -77,9 +88,10 @@ export class MOSp extends MOBaza {
         
         this.drag=function(){
             if(self.bool!=false){
-                self.col.value=self.object.color;
-                self.slid.value=self.object.alpha;
 
+               // self.col.value=self.object.color;
+                self.slidH.value=self.object.height;
+                self.slidH1.value=self.object.height1;
                 /*self.slid.min=self.object.position.x-500
                 self.slid.max=self.object.position.x+500
                 self.slid.value=Math.round(self.object.position.x)

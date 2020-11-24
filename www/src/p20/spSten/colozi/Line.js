@@ -174,7 +174,15 @@ export class Line  {
                     }                    
                 } 
             }    
+        }
+        var arrNum=[];
+        this.getNumBlok=function () { 
+            
+
+
+            return arrNum;
         }*/
+
 
         /////////////////////////////////////////////////////
         //есть ли куда пихнуть на лингию боди
@@ -228,7 +236,7 @@ export class Line  {
                 of=this.par.offset;
                 if(body.offset>of)of=body.offset;
                 rr =  this.boInBoXX1(this.par,xx,xx1,xx2,true,of);
-                trace(rr)
+                
 
                 if(rr.tip!=0){
                     arrPoz.push(rr.param,rr.param1);

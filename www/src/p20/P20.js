@@ -15,8 +15,13 @@ export class P20  {
 
 
 
+        this.startFund='{"colorC0":"#ffc0b0","colorC1":"#3a11b5","delphC0":262.33,"delphC1":744.91, "delphPlus":150, "sizeLine":10,"colorLine":"#000000"}'
+        this.sOFund=JSON.parse(this.startFund);
+        
         this.startStyle='{"colorC0":"#ffe4d4","colorC1":"#b0dfee","delphC0":200,"delphC1":500,"delphPlus":100,"sizeLine":10, "colorLine":"#000000"}'
         this.startObject=JSON.parse(this.startStyle)
+
+
         this._activObject=undefined;
 
 
@@ -40,12 +45,15 @@ export class P20  {
         this.array=[];
         for (var i = 0; i < 2; i++) {
             this.arrayChesh[i]= new SpStageSten(this, this.sobSP);
-            this.arrayChesh[i].dragStyleObj(this.startObject);
-            this.arrayChesh[i].idArr=i
+            
+            //this.arrayChesh[i].dragStyleObj(this.startObject);
+            this.arrayChesh[i].idArr=i;
            
             this.array[i] = this.arrayChesh[i];
 
         }
+        this.arrayChesh[0].dragStyleObj(this.sOFund);
+        this.arrayChesh[1].dragStyleObj(this.startObject);
 
 
         this.setArrObj=function(a){
@@ -218,6 +226,7 @@ export class P20  {
                 }
                 this.array[i].setObj(o.array[i]);
             }
+            this._index=-1
             this.index=o.index;
         }
 

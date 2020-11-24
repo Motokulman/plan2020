@@ -13,10 +13,11 @@ export class MStyle  {
         this.dCont.x=this.otstup*4+this.wh
         this.dCont.y=this.otstup*4+this.wh
 
+
         var aJ= [
-            '{"colorC0":"#ffc0b0","colorC1":"#f4f4f4","delphC0":217.07,"delphC1":500, "sizeLine":10, "colorLine":"#000000"}',
-            '{"colorC0":"#89ffa3","colorC1":"#f3267c","delphC0":217.07,"delphC1":500, "sizeLine":10, "colorLine":"#000000"}',
-            '{"colorC0":"#89ffa3","colorC1":"#07419b","delphC0":824.43,"delphC1":206.37, "sizeLine":10, "colorLine":"#000000"}'
+            '{"colorC0":"#ffe4d4","colorC1":"#b0dfee","delphC0":200,"delphC1":500,"delphPlus":100,"sizeLine":10, "colorLine":"#000000"}',
+            '{"colorC0":"#ffc0b0","colorC1":"#3a11b5","delphC0":262.33,"delphC1":744.91, "delphPlus":150, "sizeLine":10,"colorLine":"#000000"}',
+            '{"colorC0":"#89ffa3","colorC1":"#07419b","delphC0":824.43,"delphC1":206.37, "delphPlus":100,"sizeLine":10, "colorLine":"#000000"}'
         ];
 
 

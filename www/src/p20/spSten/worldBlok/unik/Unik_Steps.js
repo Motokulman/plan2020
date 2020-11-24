@@ -9,7 +9,7 @@ export class Unik_Steps {
 
         var defolt={width:1000, height:1000, delph:1000, step:4, bool:false, bool1:true, bool2:false}
 
-        this._width=1000;
+        this._width=800;
         this._height=1000;
         this._delph=1000;
         this._step = 4
@@ -26,17 +26,21 @@ export class Unik_Steps {
         this.h;
         this.d;
 
-        this.array=[ 
-                {tipe:'DSliderBig', name: 'slider1', param: 'width', title: 'width', min: 1, max: 3, okrug: 10},  
-                {tipe:'DSliderBig', name: 'slider2', param: 'height', title: 'height', min: 1, max: 3, okrug: 10},  
-                {tipe:'DSliderBig', name: 'slider3', param: 'step', title: 'step', min: 1, max: 3, okrug: 10},  
- 
-                {tipe:'DCheckBox', name: 'check1', param: 'bool', title: 'bool'}, 
-                {tipe:'DCheckBox', name: 'check2', param: 'bool1', title: 'bool1'}, 
-                {tipe:'DCheckBox', name: 'check3', param: 'bool2', title: 'bool2'}, 
-            ];
+        this.maxWidth
 
-		this.clearDefolt=function(){
+
+        this.array=[ 
+            {tipe:'DSliderBig', name: 'slider1', param: 'width', title: 'width', min: 1, max: 5000, okrug: 10},  
+            {tipe:'DSliderBig', name: 'slider2', param: 'height', title: 'height', min: 1, max: 5000, okrug: 10},  
+            {tipe:'DSliderBig', name: 'slider3', param: 'step', title: 'step', min: 1, max: 3, okrug: 10},  
+
+            {tipe:'DCheckBox', name: 'check1', param: 'bool', title: 'bool'}, 
+            {tipe:'DCheckBox', name: 'check2', param: 'bool1', title: 'bool1'}, 
+            {tipe:'DCheckBox', name: 'check3', param: 'bool2', title: 'bool2'}, 
+        ];
+
+
+		/*this.clearDefolt=function(){
 			this._width=defolt.width;
         	this._height=defolt.height;
         	this._delph=defolt.delph;
@@ -45,8 +49,8 @@ export class Unik_Steps {
 	        this._bool = defolt.bool
 	        this._bool1 = defolt.bool1
 	        this._bool2 = defolt.bool2
-	        }
-        this.clearDefolt();
+	    }
+        this.clearDefolt();*/
 
 
         this.dragWHD=function(_w,_h,_d){
@@ -55,7 +59,11 @@ export class Unik_Steps {
 	        	this.h = _h;
 	        	this.d = _d;
 		    }
-        	trace (this.w,this.h,this.d)
+            this._width=this.par._width;
+            this._height=this.par._height;
+
+
+        	
         	this.graphics.clear()
         	this.graphics.beginFill(0x222222, 0);
 			this.graphics.lineStyle(10, 0x000000, 1);
@@ -109,25 +117,27 @@ export class Unik_Steps {
         this.setObj=function(o){
         	if(o==undefined)return
         	if(o.width==undefined)return	
-        	this._width= o.width;
-	        this._height= o.height;
+        	
+	    
 	        this._delph= o.delph;
 	        this._step = o.step;
 
 	        this._bool = o.bool;
 	        this._bool1 = o.bool1;
 	        this._bool2 = o.bool2;
+            
+            
+	        this.par.dragWHD();
+            this.korWit();
+            
 
-	        this.par.dragWHD()
-
-            trace('(o(o(o(o',o)
         }
         this.getObj=function(){
             var o={}
-            // o.xz="ghjghjghj"
+            
 
-			o.width = 	this._width;
-			o.height = this._height;
+			//o.width = 	this._width;
+			//o.height = this._height;
 			o.delph =  this._delph;
 			o.step =  this._step;
 
@@ -207,11 +217,33 @@ export class Unik_Steps {
         //     }
         // })
 
+        //////////////////////////////////////
+        this.postParent=function(){
+            
+            if(this.par.parent==undefined){
+                //this.width= 1000;
+            }
+        }
+
+
+        /////////////////////////////
+
+        this.korWit=function(){
+            this.par._width=this._width;
+            this.par.rect.x=-this._width/2;
+            this.par.rect.x1=this._width/2;
+            this.par.rect.w=this._width;            
+            this.par.shape.setRect(this.par.rect); 
+            this.par.setReal(this.par._x,this.par._y,this.par._z);
+
+        }
+
 	}
 
     set width(value) {
         if(this._width!=value){
-            this._width= value;            
+            this._width = value;            
+            this.korWit()
           	this.par.dragWHD()
           	this.par.par.render()
         }
@@ -220,7 +252,8 @@ export class Unik_Steps {
 
     set height(value) {
         if(this._height!=value){
-            this._height= value;
+            this.par._height= value;
+
           	this.par.dragWHD()
 			this.par.par.render()
         }

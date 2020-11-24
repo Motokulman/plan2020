@@ -73,6 +73,7 @@ export class Body  {
             this.rect.x=this.rect.y=this.rect.z=999999999999999;
             this.rect.x1=this.rect.y1=this.rect.z1=-999999999999999;
             this.rect.w=this.rect.h=this.rect.d=0
+            trace(this.children);
             for (var i = 0; i < this.children.length; i++) {
                 if(this.rect.x>this.children[i].rect.x)this.rect.x=this.children[i].rect.x
                 if(this.rect.y>this.children[i].rect.y)this.rect.y=this.children[i].rect.y
