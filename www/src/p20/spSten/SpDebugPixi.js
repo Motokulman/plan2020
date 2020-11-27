@@ -84,7 +84,7 @@ export class SpDebugPixi  {
 		}
 
 
-
+		
 
 
 		var oo={x:0,y:0}

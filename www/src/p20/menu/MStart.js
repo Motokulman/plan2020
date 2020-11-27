@@ -153,7 +153,7 @@ export class MStart  {
 
 		 
 
-		    this.par.array[this.par.array.length]=this.sStyle=new MStyle(this, function(s,p){             
+		    this.par.array[this.par.array.length]=this.sStyle = new MStyle(this, function(s,p){             
            		self.par.fun(s,p);
         	});
 
