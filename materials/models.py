@@ -85,7 +85,44 @@ class FlexibleTile(models.Model):
         """String for representing the Model object."""
         return f'{self.name} '
 
+# class Plate(models.Model):
+#     """Плиты перекрытия"""
+
+#     name = models.CharField(max_length=200, help_text='Наименование плиты (ГОСТ)', blank=True, unique = True)
+
+#     length = models.IntegerField(help_text='Длина плиты, мм')
+#     width = models.IntegerField(help_text='Ширина плиты, мм')
+#     height = models.IntegerField(help_text='Высота плиты, мм')
+#     weight = models.IntegerField(help_text='Масса плиты, тонн')
+
+#     class Meta:
+#         ordering = ('name', )
+#         verbose_name = 'Плита перекрытия'
+#         verbose_name_plural = 'Плиты перекрытия'
+
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return f'{self.name} '
+
         
+# class lintel(models.Model):
+#     """Перемычки"""
+
+#     name = models.CharField(max_length=200, help_text='Наименование перемычки (ГОСТ)', blank=True, unique = True)
+
+#     length = models.IntegerField(help_text='Длина перемычки, мм')
+#     width = models.IntegerField(help_text='Ширина перемычки, мм')
+#     height = models.IntegerField(help_text='Высота перемычки, мм')
+#     weight = models.IntegerField(help_text='Масса перемычки, тонн')
+
+#     class Meta:
+#         ordering = ('name', )
+#         verbose_name = 'Перемычка'
+#         verbose_name_plural = 'Перемычки'
+
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return f'{self.name} '
 # class RoofCoverMaterial(models.Model):
 #     """Материалы кровельных покрытий"""
 

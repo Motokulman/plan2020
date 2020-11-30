@@ -74,7 +74,17 @@ class Well(models.Model):
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE, related_name='wells', null=True, verbose_name='Геологическое исследование', help_text="Нужно, чтобы при создании скважины не приходилось выбирать исследование. Ведь это скважина для этого исследования")
     number = models.IntegerField(default=1, verbose_name='Порядковый номер скважины')
     height = models.IntegerField(default=0, verbose_name='Высота в сантиметрах устья скважины относительно других скважин, если есть. Самая низкая = 0')
-    bearing_resistance_pile_2000_300 = models.FloatField(null=True, blank=True, verbose_name='Несущая способность сваи глубиной 2 метра и диаметром 300мм') # определяется расчетом после получения исследования
+    Hw0 = models.FloatField(null=True, blank=True,verbose_name='Уровень грунтовых вод появившийся')
+    Hw1 = models.FloatField(null=True, blank=True,verbose_name='Уровень грунтовых вод установившийся')
+    F_2000_300 = models.FloatField(null=True, blank=True, verbose_name='Несущая способность сваи глубиной 2 метра и диаметром 300мм') # определяется расчетом после получения исследования
+    F_2000_350 = models.FloatField(null=True, blank=True, verbose_name='Несущая способность сваи глубиной 2 метра и диаметром 350мм') # определяется расчетом после получения исследования
+    F_2000_400 = models.FloatField(null=True, blank=True, verbose_name='Несущая способность сваи глубиной 2 метра и диаметром 400мм') # определяется расчетом после получения исследования
+    F_2500_300 = models.FloatField(null=True, blank=True, verbose_name='Несущая способность сваи глубиной 2.5 метра и диаметром 300мм') # определяется расчетом после получения исследования
+    F_2500_350 = models.FloatField(null=True, blank=True, verbose_name='Несущая способность сваи глубиной 2.5 метра и диаметром 350мм') # определяется расчетом после получения исследования
+    F_2500_400 = models.FloatField(null=True, blank=True, verbose_name='Несущая способность сваи глубиной 2.5 метра и диаметром 400мм') # определяется расчетом после получения исследования
+    F_3000_300 = models.FloatField(null=True, blank=True, verbose_name='Несущая способность сваи глубиной 3 метра и диаметром 300мм') # определяется расчетом после получения исследования
+    F_3000_350 = models.FloatField(null=True, blank=True, verbose_name='Несущая способность сваи глубиной 3 метра и диаметром 350мм') # определяется расчетом после получения исследования
+    F_3000_400 = models.FloatField(null=True, blank=True, verbose_name='Несущая способность сваи глубиной 3 метра и диаметром 400мм') # определяется расчетом после получения исследования
         
     class Meta:
         verbose_name = 'Скважина геологического изыскания'
@@ -92,56 +102,20 @@ class Layer(models.Model):
     well = models.ForeignKey(Well, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Скважина')
     number = models.IntegerField( verbose_name='Номер слоя в скважине (уникален)')
     power = models.FloatField(default=0, verbose_name='Мощность слоя, в метрах')
+    non_consolidated = models.BooleanField(default=False, verbose_name='Насыпной неконсолидированный грунт')
+    debris = models.BooleanField(default=False, verbose_name='Крупнообломочный строительный мусор')
     
-    YES_OR_NO = (
-        ('y', 'Да'),
-        ('n', 'Нет'),
-    )
-
-    non_consolidated = models.CharField(
-        max_length=1,
-        choices=YES_OR_NO,
-        default='n',
-        verbose_name='Насыпной неконсолидированный',
-    )
-
-    debris = models.CharField(
-        max_length=1,
-        choices=YES_OR_NO,
-        default='n',
-        verbose_name='Крупнообломочный строительный мусор',
-    )
-    
-    SAND_VS_CLAY = (
-        ('n', 'Органический'),
-        ('s', 'Песок'),
-        ('l', 'Супесь/суглинок'),
-        ('c', 'Глина'),
-    )
-    sand_vs_clay = models.CharField(
-        max_length=1,
-        choices=SAND_VS_CLAY,
-        default='n',
-        verbose_name='Описание грунта инженерного слоя',
-    )
-
-    SAND = (
-        ('n', 'Ничего из перечисленного'),
-        ('c', 'Крупный и средней крупности песок'),
-        ('f', 'Мелкий песок'),
-        ('d', 'Пылеватый песок'),
-    )
-    sand = models.CharField(
-        max_length=1,
-        choices=SAND,
-        default='n',
-        verbose_name='Описание песка',
-    )
-
-    porosity = models.FloatField(verbose_name='Коэффициент пористости')
-    # gamma_streak_1 = models.FloatField(verbose_name='Расчетное значение удельного веса грунта, кН/м.куб - для крупнообломочных и песков')
-    IL = models.FloatField(verbose_name='Показатель текучести - для глинистых')
-    # subsidence_soil = models.BooleanField(default=False, verbose_name='Просадочный или нет - для глинистых')
+    Ros = models.FloatField(null=True, blank=True,verbose_name='Плотность частиц грунта, г/см.куб')
+    Rod = models.FloatField(null=True, blank=True,verbose_name='Плотность сухого грунта, г/см.куб')
+    W = models.FloatField(null=True, blank=True,verbose_name='Естественная влажность грунта W')
+    WP = models.FloatField(null=True, blank=True,verbose_name='Влажность на границе раскатывания Wp')
+    WL = models.FloatField(null=True, blank=True,verbose_name='Влажность на границе текучести WL')
+    m = models.IntegerField(null=True, blank=True,verbose_name='Масса просеиваемой навески, грамм')
+    m250 = models.IntegerField(null=True, blank=True,verbose_name='Остаток на сите 2.5 мм, грамм')
+    m125 = models.IntegerField(null=True, blank=True,verbose_name='Остаток на сите 1.25 мм, грамм')
+    m063 = models.IntegerField(null=True, blank=True,verbose_name='Остаток на сите 0.63 мм, грамм')
+    m0315 = models.IntegerField(null=True, blank=True,verbose_name='Остаток на сите 0.315 мм, грамм')
+    m016 = models.IntegerField(null=True, blank=True,verbose_name='Остаток на сите 0.16 мм, грамм')
         
     class Meta:
         verbose_name = 'Слой грунта'

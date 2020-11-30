@@ -20,7 +20,7 @@ var grillageConstructionDefaultSettings = {
     reinforcing: [
         { width: 400, reinforcingCount: 3, reinforcingDiameter: 12, As: 3.39 }, // подразумевается, что и сверху и снизу одинаковое количество прутков
         { width: 500, reinforcingCount: 4, reinforcingDiameter: 12, As: 4.52 },
-        { width: 650, reinforcingCount: 4, reinforcingDiameter: 12, As: 4.52 }
+        { width: 640, reinforcingCount: 4, reinforcingDiameter: 12, As: 4.52 }
     ],
     concreteClass: '20', // классы бетона В, а не марки, так как именно для классов указаны нормативные данные
     Rb: 10.4, // формула 2.1 или сразу таблица 2.2 , умноженный на коэффициент 0.9 - при действии только постоянных и длительных нагрузок

@@ -69,6 +69,11 @@ export class SpDebugPixi  {
 			g.lineTo(p1.x, p1.y);
 			g.endFill();
 		};
+
+		this.dPointParam = function (x,y,r,  color, wL) {
+			oo.x=x;oo.y=y;
+			this.dPoint(oo, r,color, wL); 
+		};		
 		this.dPoint = function (p, r, color, wL) {
 			//if (this.debagOk(aP) == false) return;
 			r = r || 50;

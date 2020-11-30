@@ -37,7 +37,10 @@ export class MLeft  {
 
         var aa=[
             {src:"resources/image/p1_100.png",array:[]},
-            {src:"resources/image/p2_100.png",array:[]},
+            {src:"resources/image/p2_100.png",array:[
+                {src:"resources/image/p2_100.png",array:[],id:0},
+                {src:"resources/image/p4_100.png",array:[],id:0}
+            ]},
             {src:"resources/image/size.png",array:[]},
             {src:"resources/image/w.png",array:[
                 {src:"resources/image/w0.png",array:[],id:0},

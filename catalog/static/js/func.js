@@ -905,7 +905,7 @@ $("#get_fundament").click(function () {  // обработка кнопки по
 function saveScheme() {
     var data = {};
     var d = {};
-    console.log("elements при сохранении= ", elements)
+    // console.log("elements при сохранении= ", elements)
     d.elements = elements;
     d.lines = lines;
     d.points = points;
@@ -919,8 +919,9 @@ function saveScheme() {
     data.d = d;
     data.checked = false;
     data["csrfmiddlewaretoken"] = csrf_token;
-    console.log("data до JSON = ", data)
-    console.log("data после JSON, но до пересылки = ", data)
+    // console.log("data до JSON = ", data)
+    // console.log("data после JSON, но до пересылки = ", data)
+    var start_time = new Date();
     $.ajax({
         url: 'get_response',
         type: 'POST',
@@ -930,6 +931,8 @@ function saveScheme() {
         success: function (data) {
             schemeChange = false;
             console.log("Схема сохранена = ", data);
+            var stop_time = new Date();
+            console.log("Время выполнения операции = ", (stop_time - start_time), ' миллисекунд');
         },
         error: function () {
             console.log("Ошибка сохранения схемы");

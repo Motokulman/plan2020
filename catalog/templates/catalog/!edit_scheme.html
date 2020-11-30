@@ -1,0 +1,46 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<!-- стили для модальных окон-->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/sunny/jquery-ui.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+
+<h3>Проект: {{ plan_title }}</h3>
+<p id="p1"></p>
+<form id="canvas_form" class="canvas-field" action="" name="{{ plan_id}}" method="POST">
+  {% csrf_token %}
+</form>
+<h4>Тест: {% csrf_token %}</h4>
+<!-- <div class="container-fluid">
+  <div class="row">
+
+  </div>
+</div>  -->
+<script>$(document).ready(function () {
+    // var csrf_token = $('#canvas_form [name="csrfmiddlewaretoken"]').val();
+    // document.getElementById("p1").innerHTML=csrf_token;
+    init();
+  });</script>
+
+
+{% load static %}
+
+<script type="text/javascript" src="{% static 'js/api/divLib.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/api/jquery-1.11.3.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/api/api.js' %}"></script>
+
+<style type="text/css">
+  #stats {
+    position: absolute;
+    top: 0;
+    left: 200px;
+  }
+</style>
+<meta name="viewport"
+  content="width=device-width,height=device-height,user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+{% endblock %}
