@@ -18,7 +18,7 @@ export function SpPol (_stage) {
 	this._uuid = calc.generateUUID();
 
 	this.array=[]
-
+	this.arrayClass=[]
 
 	var kol = 0;
 	var sHron;
@@ -55,9 +55,9 @@ export function SpPol (_stage) {
 		}		
 		if(r!=0){
 			this.drag();
-			this.testKill()
+			this.testKill();
 		}	
-		this.stage.render()
+		this.stage.render();
 		return r;
 	};
 
@@ -76,11 +76,20 @@ export function SpPol (_stage) {
 
 
 	this.testKill = function () {
-		if(this.array.length<=1){
+		if(this.array.length<=2){
 			this.clear()
 			
 		}
-	};	
+	};
+
+	function _setAllParam (nameParam, value) {
+		//console.warn(nameParam, value,self.arrayClass)
+		for (var ii = 0; ii < self.arrayClass.length; ii++) {			
+			if (nameParam in self.arrayClass[ii]) self.arrayClass[ii][nameParam] = value;
+		}
+	}
+
+	this._setAllParam = _setAllParam;
 }
 
 SpPol.prototype = {

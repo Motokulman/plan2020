@@ -8,6 +8,8 @@ import { MCont2dHelp } from './MCont2dHelp.js';
 
 import { MStart} from './MStart.js';
 
+import { MenuV3D } from './MenuV3D.js';
+
 import { MInfo} from './MInfo.js';
 
 
@@ -23,23 +25,14 @@ export class Menu  {
 		this.wh=48;
 		this.otstup=5;
 		this.otstup1=10;
-		this.sizeMax=100000;
-
+		this.sizeMax=this.par.sizeMax;
 		dcmParam.activButton="#f28044";
 		this._menuIndex=-1;
-
 	    this.dCont=new DCont(this.par.dCont);
 
-
-
-
-	    this.localStorage=par.par.localStorage;//new LocalStorage(function(){},"planer2020")
-
-	   
+	    this.localStorage=par.par.localStorage;//new LocalStorage(function(){},"planer2020")	   
 	    
-	    this.array=[]
-
-
+	    this.array=[];
 
 		this.array[this.array.length] = this.mGridDrag = new MGridDrag(this, function(s,p,p1){             
            	self.fun(s,p,p1)
@@ -74,6 +67,10 @@ export class Menu  {
            // self.fun(s,p)
         });
 
+        this.array[this.array.length]=this.menuV3D = new MenuV3D(this,function(s,p){
+           // self.fun(s,p)
+        });
+
 
         this.array[this.array.length]=global.mInfo=this.mInfo = new MInfo(this.par.dCont);
 
@@ -86,6 +83,8 @@ export class Menu  {
 		this.setP20=function(p20){
 			this.p20=p20;
 			this.mDragScane.setP20(p20)
+			this.mGridDrag.setP20(p20)
+			this.mStart.setP20(p20)
 		}
 
 		this.sp=undefined
@@ -136,6 +135,20 @@ export class Menu  {
         	this.mStart.setArrObj(o)       	
         	this.mDragScane.redrag();
         }
+
+
+        this.setSop=function(s,p,p1){
+        	if(s=="rectSP"){
+        		var r=self.par.p20.getRect(self.par.p20.index);
+        		
+        	 	
+	        	
+	        		self.mGridDrag.setRect(r,10, true);
+
+        	}
+
+        }
+
 
 
 

@@ -7,6 +7,7 @@ import { Sten3D } from './Sten3D.js';
 import { Splice } from './../../sp/Splice.js';
 import { SPLWindow } from './SPLWindow.js';
 import { SS2D } from './SS2D.js';
+import { SS3D } from './SS3D.js';
 
 import { SSMatematik} from './SSMatematik.js';
 /**
@@ -30,21 +31,22 @@ export function SpliceSten (_stage) {
 	this._delph = _stage._delph;// толщина линии
 
 	this._uuid=calc.generateRendom(2);
-	
+
+	this._height=_stage._height;
+	this._height1=_stage._height1;
 
 	this._carrier = _stage.carrier;// несущия
 	this._out = _stage.out;// несущия
 	this._adjacent = _stage.adjacent;// несущия
 
-	if(this._carrier)
+	
 
 	if(this._carrier==true)this._delph =_stage._delphC1;
 	else this._delph =_stage._delphC0;
     
     this.alpha =_stage._alpha;    
     this.colorP = _stage._colorP;
-    this.colorP1 = _stage._colorP1;	
-
+    this.colorP1 = _stage._colorP1;
 	this._height = this.stage._height;
 
 
@@ -66,21 +68,26 @@ export function SpliceSten (_stage) {
 
 	//смещеная над
     this.cont2dOfset = new PIXI.Container();
-	this.content2d.addChild(this.cont2dOfset);
+	
 
 
-
+	this.content3d = new THREE.Object3D();
+    this.par.content3d.add(this.content3d);
 
 
 
 
 	this.matematik=new SSMatematik(this);
+	this.korektRect=this.par.par.korektRect;
 
 
 
 	//отрисовываем 2д стены
     this.ss2d=new SS2D(this);
+    this.ss3d=new SS3D(this);
     this.arrayClass.push(this.ss2d);
+    this.arrayClass.push(this.ss3d);
+    this.content2d.addChild(this.cont2dOfset);
 
     //отрисовываем окна
     this.windows=new SPLWindow(this);
@@ -111,8 +118,9 @@ export function SpliceSten (_stage) {
     var numBlok
 	this.draw1 = function (b) {
 		if(b==undefined)this.windows.draw()		
-		this.ss2d.draw1()
-		this.par.render()
+		this.ss2d.draw1();
+		this.ss3d.draw1();
+		this.par.render();
 	}
 
 
@@ -127,6 +135,16 @@ export function SpliceSten (_stage) {
 		this.content2d1.x=this.position.x;
 		this.content2d1.y=this.position.y;
 		this.content2d1.rotation=this._rotation;
+
+		this.content3d.position.x=this.position.x;
+		this.content3d.position.y=this.position.y;
+		this.content3d.rotation.z=this._rotation;
+
+		this.korektRect.setSten(this,0,0);
+		this.korektRect.korekt1();
+		this.korektRect.korektGrid();
+		
+		this.ss3d.dragPost();
 		this.draw1();
 		this.stage.render();
 		this.poiskGran();
@@ -232,6 +250,14 @@ Object.defineProperties(SpliceSten.prototype, {
 		},
 		get: function () { return this._height; }
 	},
+	height1: {
+		set: function (value) {
+			if (this._heigh1 === value) return;			
+			this._height1 = value;
+			this._setAllParam('height1', this._height1);
+		},
+		get: function () { return this._height; }
+	},
 
 	boolText: {
 		set: function (value) {
@@ -274,7 +300,8 @@ Object.defineProperties(SpliceSten.prototype, {
 				if ('life' in this.arrayClass[ii]) this.arrayClass[ii].life = this._life;
 			}
 
-
+			if(this._life==true)this.par.content3d.add(this.content3d);
+			else if(this.content3d.parent!=undefined)this.content3d.parent.remove(this.content3d);
 			
 
 			if(this._life==true)this.stage.content2d2.addChild(this.content2d);

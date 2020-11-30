@@ -23,28 +23,62 @@ export class Blok  {
         this._width=100;
         this._height=100;
         this._delph=100;
+        
         this._boolSten=false;
         this._rotation=0
         this.boxHelper=undefined
         this._life=true;
         this._parent=undefined
 
-
+        this.unik=undefined;
         this.uuid=calc.generateRendom(2);
 
         this.content2d = new PIXI.Container();
+
+
+        this.content3d = new THREE.Object3D();
+        this.cont3d = new THREE.Object3D();
+        this.content3d.add(this.cont3d);
+        this.cont3dL = new THREE.Object3D();
+        this.content3d.add(this.cont3dL); 
 
         
         this.funInit=undefined
         this.body=undefined;
         this.shape=undefined;
+
+
+        this.rect={}
+        this.rect.x= this.obj.rect[0];
+        this.rect.y= this.obj.rect[1];
+        this.rect.z= this.obj.rect[2];
+        this.rect.w= this.obj.rect[3];
+        this.rect.h= this.obj.rect[4];
+        this.rect.d= this.obj.rect[5];
+
+        this._width=this.rect.w;
+        this._height=this.rect.h;
+        this._delph=this.rect.d;        
+
+        this.col=parseInt(this.obj.rect[6],2)
+        this.col1=parseInt(this.obj.rect[7],2)
+        this.offset=this.obj.rect[8];
+
+        
+        trace("^^^",this._width)
+       
+
         this.init = function(){            
             this.body=new Body();
             this.body.target=this
             this.body.drag=this.drag;
             this.shape=new Shape();
-            this.shape.setRect(obj.rect);
+            this.shape.setRect(this.rect);
             this.body.addShape(this.shape);
+            this.body.col=this.col
+            this.body.col1=this.col1
+            this.body.offset=this.offset
+
             this._width=obj.rect[3];
             this._height=obj.rect[5];
             this._delph=obj.rect[4];
@@ -85,6 +119,10 @@ export class Blok  {
         this.drag=function(){            
             self.content2d.x=self.body.position.x;
             self.content2d.y=0;
+
+            self.content3d.position.x=self.body.position.x;
+            //self.content2d.position.y=0;
+            self.content3d.position.z=self.rect.y;
         }
 
         
@@ -105,11 +143,11 @@ export class Blok  {
 
         this.setObj=function(o){
 
-            this._width=o.w;
-            this._height=o.h;
-            this._delph=o.d;    
+            this._width=o.w||o.width;
+            this._height=o.h||o.height;
+            this._delph=o.d||o.delph;   
 
-
+            if(this.unik!=undefined)if(this.unik.setObj!=undefined)if(o.unik!=undefined)this.unik.setObj(o.unik)
             this.setReal(o.x,o.y,o.z);
             this.dragWHD();
 
@@ -121,9 +159,11 @@ export class Blok  {
             o.x= this._x;
             o.y= this._y;
             o.z= this._z;
-            o.w= this._width;
-            o.h= this._height;
-            o.d= this._delph;
+            o.width= this._width;
+            o.height= this._height;
+            o.delph= this._delph;
+
+            if(this.unik!=undefined)if(this.unik.getObj!=undefined)o.unik=this.unik.getObj();
             if(this.funGetObj)this.funGetObj(o);
             return  o
         }
@@ -190,8 +230,8 @@ export class Blok  {
             }else{
                 this._life=true;
             }
-
             this.par.render();
+            if(this.postParent!=undefined)this.postParent()
         }
     }    
     get parent() { return  this._parent;}

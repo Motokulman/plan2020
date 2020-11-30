@@ -9,6 +9,7 @@ import { MOP20 } from './MOP20.js';
 
 import { MOWindow } from './MOWindow.js';
 import { MOGroup } from './MOGroup.js';
+import { MOPolygon } from './MOPolygon.js';
 
 export class MObject  {
     constructor(par,fun) {          
@@ -45,6 +46,8 @@ export class MObject  {
 
         this.array[5]=this.moWindow=new MOWindow(this, function(s,p){});
         this.array[6]=this.moGroup=new MOGroup(this, function(s,p){});
+        this.array[7]=this.moPolygon=new MOPolygon(this, function(s,p){});
+
 
         this.clear=function(){
             for (var i = 0; i < this.array.length; i++) {
@@ -67,8 +70,9 @@ export class MObject  {
 
 
             this.clear();
-            if(obj){                
-                for (var i = 0; i < this.array.length; i++) {
+            if(obj){  
+                           
+                for (var i = 0; i < this.array.length; i++) {                  
                     if(this.array[i].typeNa==obj.type){                        
                         this.array[i].setObject(obj)
                         this.dCont.visible=true

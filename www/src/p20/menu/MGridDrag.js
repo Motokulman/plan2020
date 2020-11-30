@@ -3,9 +3,10 @@
 //драгер сцены и расчеты максимумов, тут функция позиции к плану
 
 
-import { PGrid } from '../plus/PGrid.js';//сетка
+
 import { MKrai } from './MKrai.js';//полосочки
 import { SpDebugPixi } from '../spSten/SpDebugPixi.js';//пикси отрисовка
+
 
 
 export class MGridDrag  {
@@ -24,14 +25,10 @@ export class MGridDrag  {
 
         this._mashtab=1;
         this._menuIndex=-1;
-
         this.sizeMax=par.sizeMax;
 
-        this.dCont = new DCont(this.par.dCont); 
-        
-
+        this.dCont = new DCont(this.par.dCont);
         this.visiPixi = this.par.par.visiPixi;
-
 
         this.mKrai = new MKrai(this, function(s,p){ //полосочки            
             
@@ -43,9 +40,10 @@ export class MGridDrag  {
         this.debugPixi = new SpDebugPixi();
         this.par.par.cont2d.addChild(this.debugPixi.content2d);
         this.debugPixi.content2d.scale.set(0.1,0.1); 
-        this.grid = new PGrid(this.par.par.c2dSloi1,this.sizeMax, 20);
-        this.graphics = new PIXI.Graphics();
-        this.par.par.c2dSloi1.addChild(this.graphics);
+        
+        //this.grid = new PGrid(this.par.par.c2dSloi1,this.sizeMax, 20);
+
+        
 
         this.panel = new DPanel(this.dCont,this.otstup,this.otstup*4+this.wh);
         this.panel.div.appendChild(this.visiPixi.div);
@@ -82,9 +80,6 @@ export class MGridDrag  {
             let o={position:self.getPositPlan()}
             self.par.mDragScane.sobSP("downFont",o,e);
         }
-
-
-
 
         var rect = {x:0,y:0}//
         var point={x:0,y:0}
@@ -241,13 +236,35 @@ export class MGridDrag  {
             this.mKrai.setSP(sp)
         }
 
+        this.setP20=function(p20){
+            this.p20=p20;
+            p20.sGposition=  this.sGposition  
 
-        this.graphics.name="xz";
-        var r=this.sizeMax;
-        this.graphics.beginFill(0xdcf1fa, 0.1);
-        this.graphics.drawRect(-r/2,-r/2,r,r);
-        this.graphics.interactive = true; 
-        this.graphics.on('mousedown', this.klikGoem)
+            //подвешиваем события 
+            this.p20.rulimActivSP.name="xz";
+            this.p20.rulimActivSP.graphics.on('mousedown', this.klikGoem)      
+        }
+
+        this.sGposition = function(_o){
+            if(_o==undefined){
+                var o={}
+                o.x=self.cont.x
+                o.y=self.cont.y
+                o.mashtab=self._mashtab
+                return o
+            }           
+            
+            self.cont.x= _o.x 
+            self.cont.y= _o.y
+            self.mashtab=_o.mashtab
+            self.fun("mashtab",self._mashtab) 
+            return null
+        }
+
+
+
+        
+        
 
    
 
@@ -267,8 +284,8 @@ export class MGridDrag  {
             pp.w=this.width
             pp.h=this.height
 
-            pp.x=-this.width/2
-            pp.y=-this.height/2
+            pp.x=-this.width/2;
+            pp.y=-this.height/2;
 
             this.par.par.cont2d.position.set(this.width/2,this.height/2)
 

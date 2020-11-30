@@ -1,0 +1,288 @@
+<!DOCTYPE html><html><head>
+<meta charset="UTF-8">
+<title>p20</title>	
+<script src='divLib.js'></script>
+<script src='jquery-1.11.3.js'></script>
+
+<script>
+	var trace = window.console.log.bind(window.console);
+
+	var dcmParam,scane,wind,object,pObject,ta,ta1
+	var array=[];
+	var aButton=[]
+	var objectBase
+
+
+
+
+
+
+	function creatArrApi(){
+		//создаюм обьекты отправки
+
+		var  o={
+			name:"creat",//имя кнопки
+			help:"Создаюм план, хз кто, то есть клиент не залогинен, в ответ обьект планна. типа {id:234,url:'путь к json файлу',info:'asdhjf'...}, id-иди проекта, url-путь к моделе, по умолчанию сущесествует пустой, типа: '{}'",//пояснения
+			color:"#faca30",
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'https://alphakp.ru/catalog/plan/20/edit_scheme/get_response',
+		        type: 'GET',
+		        data: {
+		        	d:JSON.stringify({test:10}),
+		        	checked:false,
+		        	csrfmiddlewaretoken:"xz Тут нужен ключь, который генериться под юзеров "
+		        },
+		        cache: false,
+		        async: false,
+			}
+		}
+		array.push(o);
+
+		var  o={
+			name:"creatV",//имя кнопки
+			help:"Создаюм план, для вирифицированного юзера, юзера который в бд, хз как его делать, может через токен, в ответ обьект планна. типа {id:234,url:'путь к json файлу',info:'asdhjf'...}, id-иди проекта, url-путь к моделе, по умолчанию сущесествует пустой, типа: '{}'",//пояснения
+			color:"#faca30",
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'https://alphakp.ru/catalog/plan/20/edit_scheme/get_response',
+		        type: 'GET',
+		        data: {
+		        	d:JSON.stringify({test:10}),
+		        	checked:false,
+		        	csrfmiddlewaretoken:"xz Тут нужен ключь, который генериться под юзеров "
+		        },
+		        cache: false,
+		        async: false,
+			}
+		}
+		array.push(o);
+
+
+
+
+		var  o={
+			name:"getId",//имя кнопки
+			help:"Возврощает обьект плана типа: {id:234,url:'путь к j....",//пояснения
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'https://alphakp.ru/catalog/plan/20/edit_scheme/get_response',
+		        type: 'GET',
+		        data: {
+		        },
+		        cache: false,
+		        async: false,
+			}
+		}
+		array.push(o);
+
+
+		var  o={
+			name:"save",//имя кнопки
+			help:"По идишнику записывает json пална по ",//пояснения
+
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'https://alphakp.ru/catalog/plan/20/edit_scheme/get_response',
+		        type: 'POST',
+		        data: {
+                    json:"{\"test\":10}"
+		        },
+		        cache: false,
+		        async: false,
+			}
+		}
+		array.push(o);
+
+
+		///////////////////текстуры//////////////////////
+		var  o={
+			name:"creatTexture",
+			help:"Создаюм текстуру {id:234,type:'xz',..}, возврощаем обьект: id-иди проекта, доп параметры бд пока хз",
+			color:"#93c32f",
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'xz',
+		        type: 'GET'
+			}
+		}
+		array.push(o);
+
+		var  o={
+			name:"deleteTexture",
+			help:"ид даем, по ниму убиваем текстуру и все что с ней связанно, файлы",
+			color:"#93c32f",
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'xz',
+		        type: 'xz'
+			}
+		}
+		array.push(o);
+
+
+		var  o={
+			name:"getTexturs",
+			help:"возврощаем Список всех текстур. Возможность передать type, тогда только те что что имеют аналогичный type",
+			color:"#93c32f",
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'xz',
+		        type: 'GET'
+			}
+		}
+		array.push(o);
+
+
+		var  o={
+			name:"getTextursJSON",
+			help:"тоесть тут есть json который хранит все текстуры в полном виде, перезаписываеться если было созданна/эдоленна/изменена текстура. Нужен что бы не дергать бд всякий, короче часто вызываеться. ПС Метот получения не нужен))!!",
+			color:"#93c32f",
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'этот путь ведет на джейсон кеша всех текстур'
+			}
+		}
+		array.push(o);
+
+
+		var  o={
+			name:"creatFileTextur",
+			help:"Я передаю file, он записывает в обьект линк на фаил и иди. возврощает {id:234,src:'полный линк общедоступный'}, причем у обТекстуры есть date:[{id:234,src:'по...'-то есть все файлы в проекте",
+			color:"#93c32f",
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'xz',
+		        type: 'xz'
+			}
+		}
+		array.push(o);
+
+
+		var  o={
+			name:"deleteFileTextur",
+			help:"Я даю иди текстуры и иди файла, он убивает в бд и сам фаил, возврощаем обьект текстуцры измененый'}",
+			color:"#93c32f",
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'xz',
+		        type: 'xz'
+			}
+		}
+		array.push(o);
+
+
+
+
+
+
+
+
+
+	}
+
+
+
+
+
+
+
+	function init () {
+		dcmParam=new DCM();
+		scane= new DCont(document.body);	
+		creatArrApi();
+		initInterfes();
+
+		openObj(array[0])		
+	}
+
+
+	function successMy (e){//удачиный ответ
+		ta1.colorText1="#007700";
+		var s=JSON.stringify(e,null,4);
+		ta1.text=s;
+		console.log("success");
+	}
+	function errorMy (e){//не удачиный ответ
+		trace(e);
+		ta1.colorText1="#ff0000";
+		var s=JSON.stringify(e,null,4);
+		ta1.text=s;
+		console.log("error");
+	}
+
+	
+
+
+	function openObj (o){		
+		for (var i = 0; i < aButton.length; i++) {
+			aButton[i].alpha=o.name==aButton[i].obj.name ? 0.5 :1		
+		}
+		objectBase=o
+
+		pObject.addObject(objectBase);
+		dragObj()
+	}
+	function dragObj (){
+			
+		var s=JSON.stringify(objectBase.obj,null,4)		
+		ta.text=s
+	}
+
+
+	function initInterfes (){
+		wind=new DWindow(scane,0,0,"API")
+		wind.width=1000
+		wind.height=500
+		for (var i = 0; i < array.length; i++) {
+			aButton[i]=new DButton(wind.content, 2,2+34*i,array[i].name,function(){
+				openObj(this.obj)
+			})
+			aButton[i].obj=array[i]
+			if(array[i].color!=undefined){
+				aButton[i].color=array[i].color
+			}
+		}
+		pObject=new DParamObject(wind.content,106,2,function(){			
+			dragObj()
+		},1);
+		pObject.tipRide=true
+		pObject.arrType.push("object")
+		pObject.width=333
+		pObject.arrayLabel=["help"];
+
+		let hh=(wind.height-20-4-32-36)/2
+		var b=new DButton(wind.content,pObject.x+pObject.width+2,2,"Посылаем",function(){
+			objectBase.obj.success=successMy
+			objectBase.obj.error=errorMy
+			$.ajax(objectBase.obj)
+		});
+		b.width=wind.width-(pObject.x+pObject.width)-6
+
+		ta=new DTextArea(wind.content, pObject.x+pObject.width+2,36,"")
+		ta.textAlign = "left";
+		ta.width=wind.width-ta.x-2
+		ta.height=hh
+		ta.fontSize=12
+		ta.object.style.readonly="disabled";		
+		
+
+		new DLabel(wind.content,pObject.x+pObject.width,36+hh,"Принимаем")
+		ta1=new DTextArea(wind.content,pObject.x+pObject.width,36+20+hh,"")
+		ta1.width=wind.width-ta.x-2
+		ta1.height=hh;
+		ta1.textAlign = "left";
+		ta1.fontSize=12
+	}
+
+
+</script>
+
+<style type="text/css">
+	#stats { position: absolute; top:0; left: 200px; }	
+</style>
+</head>
+<meta name="viewport" content="width=device-width,height=device-height,user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+<body onload="init()">
+
+</body></html>

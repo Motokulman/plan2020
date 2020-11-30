@@ -144,7 +144,8 @@ SpStage.prototype = {
 	* @return {Splice} линия
 	*/
 	craetSplice1: function () {
-
+		trace(this)
+		trace("this==",this.arrSplice)
 		for (var i = 0; i < this.arrSplice.length; i++) {
 			if (this.arrSplice[i].life == false) {
 				this.arrSplice[i].life = true;								
@@ -162,6 +163,9 @@ SpStage.prototype = {
 
 
 		return this.arrSplice[this.arrSplice.length - 1];
+	},
+	craetSplice11: function () {
+		return this.craetSplice1();
 	},
 
 	craetSplice: function (obj, uuid) {

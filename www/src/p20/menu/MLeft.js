@@ -8,7 +8,6 @@ export class MLeft  {
   		var self=this;
         this.par=par
         this.fun=fun
-
         this.otstup=this.par.otstup;
         this.otstup1=this.par.otstup1;
         this.wh=this.par.wh;
@@ -46,7 +45,8 @@ export class MLeft  {
                 {src:"resources/image/w0.png",array:[],id:0},
                 {src:"resources/image/w1.png",array:[],id:1},
                 {src:"resources/image/w2.png",array:[],id:2},
-                {src:"resources/image/w0.png",array:[],id:4}
+                {src:"resources/image/w0.png",array:[],id:4},
+                {src:"resources/image/w4.png",array:[],id:5},
             ]},
         ]
 
@@ -169,8 +169,7 @@ export class MLButGal  {
             if(this.obj.array.length!=0){
 
                 if(this.idArr==2) {
-                    this.gallery=new DGalObj(this.dCGal,0,0,function(s,p){
-                        
+                    this.gallery=new DGalObj(this.dCGal,0,0,function(s,p){                        
                         
                     },this)
                 }    
@@ -208,6 +207,8 @@ export class MLButGal  {
 
                     if(this._startIndex!=-1)this.gallery.index=this._startIndex;
                 }
+
+                if(this.idArr==1)this.gallery.index=0//актианый первый элемент
 
 
 

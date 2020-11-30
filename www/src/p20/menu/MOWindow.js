@@ -1,5 +1,5 @@
 
-
+import { MOWUnik } from './MOWUnik.js';
 import { MOBaza } from './MOBaza.js';
 
 export class MOWindow extends MOBaza {
@@ -9,12 +9,12 @@ export class MOWindow extends MOBaza {
         this.typeNa="BInSten";
   		var self=this;
 
-
         this.whSize=5555555;
-       
-
+    
         this.dCont=new DCont(par.dCont);
 
+
+        this.mowUnik;
         
         this.button=undefined;
         this.slid
@@ -37,7 +37,6 @@ export class MOWindow extends MOBaza {
             this.slid.okrug=100;
             yy+=(this.otstup1+this.wh)*/
 
-
             
             this.button=new DButton(this.window.content,this.otstup1,this.otstup1,"",function(){
                 self.bool=false
@@ -45,16 +44,18 @@ export class MOWindow extends MOBaza {
             },"resources/image/p0.png");
             this.button.width=this.button.height=this.wh;
 
+            this.mowUnik=new MOWUnik(this,function(s,p){})
+            this.mowUnik.dCont.y=this.button.y+this.wh+this.otstup1
 
-            this.window.height=210;
-
-   
+            this.yy = this.button.y+this.wh+this.otstup1*2 + 32
+            this.window.height=this.yy;
         }
 
         
-        
         this.drag=function(){
             if(self.bool!=false){
+
+
                /* self.col.value=self.object.color;
                 self.slid.value=self.object.alpha;
 
@@ -74,10 +75,14 @@ export class MOWindow extends MOBaza {
         this.postSO=function(){ 
             this.bool=true;        
             this.drag()
+
             this.window.title="Blok: "+this.object.idArr;
-            trace(this.object._parent.par.par)
+
             if(this.object._parent)this.object._parent.par.par.setActive(this.object);
-            
+            if(self.mowUnik.postSO != undefined)this.mowUnik.postSO();
+
+            this.yy =this.button.y+this.wh+this.otstup1*2 + 32+ this.mowUnik.height
+            this.window.height=this.yy;
             //this.object.par.par.setActive(this.object);
         }
         this.clear=function(){
@@ -87,6 +92,7 @@ export class MOWindow extends MOBaza {
             }
             this.active=false;
         }
+
 
         this.sizeWindow = function(w,h,s){ 
             this.dCont.x=w/s-this.width       
@@ -99,5 +105,4 @@ export class MOWindow extends MOBaza {
                   
         }
     }  
-
 }

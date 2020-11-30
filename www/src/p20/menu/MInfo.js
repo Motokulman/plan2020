@@ -67,7 +67,7 @@ export  function MInfo(dC) {
 
         this.window.height=this.label.y+r.height+p;
         this.button1.y=this.button.y=this.label.y+r.height+this.otstup2;
-        this.sizeWindow(this._width*1, this._height*1);
+        this.sizeWindow();
     }
 
 
@@ -96,7 +96,7 @@ export  function MInfo(dC) {
 
         this.window.height=this.label.y+r.height+p+32+5;
         this.button1.y=this.button.y=this.label.y+r.height+this.otstup2+32+5;
-        this.sizeWindow(this._width*1, this._height*1)
+        this.sizeWindow()
     }
 
 
@@ -111,15 +111,24 @@ export  function MInfo(dC) {
     }
     this.setW(300);
 
-    this.sizeWindow = function(w,h){ 
+
+    var w,h,s
+    this.sizeWindow = function(_w,_h,_s){ 
+        if(_w!=undefined){
+            w=_w
+            h=_h
+            s=_s
+        }
         this._width=w;
         this._height=h;
         if(this._active==false)return;
 
-        this.panel.width=w;
-        this.panel.height=h;
-        this.window.x=(w-this.window.width)/2;
-        this.window.y=(h-this.window.height)/2;        
+        this.panel.width=w/s;
+        this.panel.height=h/s;
+        this.window.x=(w/s-this.window.width)/2;
+        this.window.y=(h/s-this.window.height)/2;   
+
+
     }
 
 

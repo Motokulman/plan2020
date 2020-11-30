@@ -16,23 +16,38 @@ export class WorldBlok  {
 
         this.uuid=calc.generateRendom(2);
 
-      
+        this.planeXZ=par.planeXZ;
+        this.lineBasicMaterial2=par.lineBasicMaterial2;
+        
 
         this.array = [];
         this.content2d = new PIXI.Container();
         this.par.cont2dBlok.addChild(this.content2d);
 
+        /*
+        1-колизии стен 0 -обьект не заброситься в колизии
+        1-коллизии с другими обьектами
+        1-зарезервированы под типы обьектов 
+        1-зарезервированы под типы обьектов 
+        1-зарезервированы под типы обьектов
+        1-дырка в центре
+        1-дырка на
+        1-дырка от
+        0-xz
+        0-xz
+        */
 
         this.arrBD=[];
         this.arrObj={};
-        this.arrBD.push({id:0,icon:"resources/image/w0.png",rect:[-1000,-1000,-100,2000,2000,200], str:["BInSten",'Window','','','','']})
-        this.arrBD.push({id:1,icon:"resources/image/w1.png",rect:[-1500,-1500,-100,3000,3000,200], rect1:[-1300,-1500,-100,2600,3000,200], str:["BInSten",'Door','','','','']})
-        this.arrBD.push({id:4,icon:"resources/image/w1.png",rect:[-2500,-1500,-100,5000,3000,200], rect1:[-2300,-1500,-100,4600,3000,200], str:["BInSten",'Door','','','','']})     
-        this.arrBD.push({id:2,icon:"resources/image/w2.png",rect:[-1000,-1000,-100,2000,2000,200], str:["BInSten",'Not','','','','']})
-        this.arrBD.push({id:3,icon:"resources/image/w0.png",rect:[-3000,-3000,-200,6000,6000,400], str:["BWord",'xz','','','','']})
+        this.arrBD.push({id:0,icon:"resources/image/w0.png",rect:[-1000,-1500,-100,2000,2000,200,"1110011100","100",200], str:["BInSten",'Window','','','','']})
+        this.arrBD.push({id:1,icon:"resources/image/w1.png",rect:[-500,-1500,-100,1000,3000,200,"1110011100","100",200], rect1:[-1300,-1500,-100,2600,3000,200], str:["BInSten",'Door','','','','']})
+        this.arrBD.push({id:2,icon:"resources/image/w1.png",rect:[-500,-1500,-100,1000,3000,200,"1010011100","000",0], rect1:[-2300,-1500,-100,4600,3000,200], str:["BInSten",'Door','','','','']})     
+        this.arrBD.push({id:3,icon:"resources/image/w2.png",rect:[-1000,-1000,-100,2000,2000,200,"1110011100","111",0], str:["BInSten",'Not','','','','']})        
+        this.arrBD.push({id:4,icon:"resources/image/w0.png",rect:[-3000,-3000,-200,6000,6000,400,"1110011100","111",0], str:["BWord",'xz','','','','']})
+        this.arrBD.push({id:5,icon:"resources/image/w4.png",rect:[-200,-100,-100,400,200,200,"1110011100","001",0], str:["BInSten",'Unik_Steps','','','','']})
 
         for (var i = 0; i < this.arrBD.length; i++) {
-            this.arrObj[this.arrBD[i].id]=this.arrBD[i]
+            this.arrObj[this.arrBD[i].id]=this.arrBD[i];
         }
 
        
@@ -70,7 +85,7 @@ export class WorldBlok  {
 
 
         this.setObj=function(o){ 
-            trace(">>>>",o)          
+                    
             for (var i = 0; i < o.array.length; i++) {                
                 //let line=this.craetLine();
                 //line.setObj(o.array[i])
@@ -82,7 +97,7 @@ export class WorldBlok  {
             for (var i = 0; i < this.array.length; i++) {
                 if (this.array[i].life==false) continue;
                 if(this.array[i].parent.uuid!=this.uuid)continue;
-                o.array.push(this.array[i].getObj())
+                o.array.push(this.array[i].getObj());
             }            
             return  o
         }
@@ -108,7 +123,6 @@ export class WorldBlok  {
     }    
     get colorLine() { return  this._colorLine;}
 
-    
     
     set sizeLine(value) {      
         if(this._sizeLine!=value){
