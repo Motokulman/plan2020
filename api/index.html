@@ -152,7 +152,9 @@
 			name:"creatFileTextur",
 			help:"Я передаю file, он записывает в обьект линк на фаил и иди. возврощает {id:234,src:'полный линк общедоступный'}, причем у обТекстуры есть date:[{id:234,src:'по...'-то есть все файлы в проекте",
 			color:"#93c32f",
-			
+
+			file:true,
+
 			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
 				url: 'xz',
 		        type: 'xz'
@@ -186,7 +188,172 @@
 
 
 
+	function init () {
+		dcmParam=new DCM();
+		scane= new DCont(document.body);	
+		creatArrApi();
+		initInterfes();
 
+		openObj(array[0])		
+	}
+
+
+	function successMy (e){//удачиный ответ
+		ta1.colorText1="#007700";
+		var s=JSON.stringify(e,null,4);
+		ta1.text=s;
+		console.log("success");
+	}
+	function errorMy (e){//не удачиный ответ		
+		ta1.colorText1="#ff0000";
+		var s=JSON.stringify(e,null,4);
+		ta1.text=s;
+		console.log("error");
+	}
+
+	
+
+
+	function openObj (o,file){		
+		for (var i = 0; i < aButton.length; i++) {
+			if(o.name==aButton[i].obj.name){
+				aButton[i].alpha=0.5;
+				history.pushState(null, null, serv+"?index="+i); 
+			}else{
+				aButton[i].alpha=1;
+			}		
+		}
+		objectBase = o;
+		labelHelp.text=objectBase.help
+		pObject.y=labelHelp.y+labelHelp.getRect().height+5
+		pObject.addObject(objectBase.obj);
+
+		dragObj()
+	}
+	function dragObj (){
+			
+		var s=JSON.stringify(objectBase.obj,null,4)		
+		ta.text=s
+	}
+
+	var serv=window.document.URL.toString()
+	function initInterfes (){
+		var whB=200
+		var whB1=550
+		var whB2=350
+		wind=new DWindow(scane,0,0,"API")		
+		wind.width=whB+whB1+whB2+2*5
+		wind.height=500
+		
+		for (var i = 0; i < array.length; i++) {
+			aButton[i]=new DButton(wind.content, 2,2+34*i,array[i].name,function(s){
+				if(s!=undefined){
+					var data = new FormData();           
+            		data.append('file', this.files[0]);
+            		
+            		this.obj.obj.data=data;
+
+            		trace(">>>>>",this.obj,this.files[0])
+				}
+				openObj(this.obj);
+			})
+			if(array[i].file!=undefined){
+				aButton[i].startFile();
+			}
+			aButton[i].obj=array[i]
+			aButton[i].width=whB
+			if(array[i].color!=undefined){
+				aButton[i].color=array[i].color
+			}
+		}
+
+		pObject=new DParamObject(wind.content,whB+4,2,function(){			
+			dragObj()
+		},1);
+		pObject.tipRide=true
+		pObject.arrType.push("object")
+		pObject.width=whB1
+		pObject.arrayLabel=["help"];
+
+		labelHelp=new DLabel(wind.content,whB+8,10,"Принимаем")
+		labelHelp.width=whB1-8;
+
+
+
+		let hh=(wind.height-20-4-32-36)/2
+		var b=new DButton(wind.content,pObject.x+pObject.width+2,2,"Посылаем",function(){
+			objectBase.obj.success=successMy
+			objectBase.obj.error=errorMy
+			trace(objectBase.obj)
+			$.ajax(objectBase.obj)
+		});
+		b.width=whB2
+
+		ta=new DTextArea(wind.content, pObject.x+pObject.width+2,36,"")
+		ta.textAlign = "left";
+		ta.width=whB2
+		ta.height=hh
+		ta.fontSize=12
+		ta.object.style.readonly="disabled";		
+		
+
+		new DLabel(wind.content,pObject.x+pObject.width,36+hh,"Принимаем")
+		ta1=new DTextArea(wind.content,pObject.x+pObject.width,36+20+hh,"")
+		ta1.width=whB2
+		ta1.height=hh;
+		ta1.textAlign = "left";
+		ta1.fontSize=12
+
+		var index=getURLParameters("index");
+		if(index!=undefined){
+
+		}
+		var aa=window.document.URL.toString().split("?")
+		serv=aa[0]
+		console.log(index)
+	}
+
+
+	//customDepth+trasparent
+    function getURLParameters(paramName, _sURL){
+        var sURL = window.document.URL.toString();
+        if(_sURL)sURL =_sURL
+        var arrParams = sURL.split("/");                        
+        if (sURL.indexOf("?") > 0) {
+            var arrParams = sURL.split("?");
+            var arrURLParams = arrParams[1].split("&");
+            var arrParamNames = new Array(arrURLParams.length);
+            var arrParamValues = new Array(arrURLParams.length);
+
+            arrParams = sURL.split("?");
+            arrURLParams = arrParams[1].split("&");
+            arrParamNames = new Array(arrURLParams.length);
+            arrParamValues = new Array(arrURLParams.length);
+
+
+            var i = 0;
+            for (i = 0; i < arrURLParams.length; i++) {
+
+                var sParam =  arrURLParams[i].split("=");
+                arrParamNames[i] = sParam[0];
+                if (sParam[1] != "")
+                    arrParamValues[i] = unescape(sParam[1]);
+                else
+                    arrParamValues[i] = null;
+            }
+
+            for (i=0; i<arrURLParams.length; i++) {
+                if (arrParamNames[i] == paramName) {
+
+                    return arrParamValues[i];
+                }
+            }
+            return null;
+        }
+    }
+
+
+/*
 
 
 	function init () {
@@ -276,7 +443,7 @@
 		ta1.textAlign = "left";
 		ta1.fontSize=12
 	}
-
+*/
 
 </script>
 
