@@ -77,7 +77,7 @@ class Plan(models.Model):
 
     def __str__(self):
         """String for representing the Plan object."""
-        return self.title
+        return f'{self.title}, id:{self.id}, автор: {self.author}'
 
     def get_absolute_url(self):
         """Returns the url to access a detail record for this Plan."""

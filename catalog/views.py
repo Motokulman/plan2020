@@ -75,6 +75,7 @@ class PlanDetailView(generic.DetailView):
     model = Plan
 
 
+# создание проекта дома
 class PlanCreateView(CreateView):
     template_name = 'catalog/plan_form.html'
     form_class = PlanCreateForm
@@ -97,12 +98,12 @@ class PlanCreateView(CreateView):
         kwargs['author'] = self.request.user
         return kwargs
 
-
+# удаление проекта здания
 class PlanDelete(DeleteView):
     model = Plan
     success_url = reverse_lazy('plans')
 
-
+# редактирование схемы, но не проекта
 def edit_scheme(request, pk):
     """View function for editing scheme of a specific plan"""
 
@@ -185,21 +186,24 @@ def set_scheme(request, plan_id):
     if request.POST:
         data = request.POST
         e = get_object_or_404(Plan, id=plan_id)
+        # d = data.d
+        # d = serializers.serialize('json', d)
+        # e.scheme = d
         e.scheme = data.get("json")
         try:
             e.save()
-            return_dict={"id":plan_id,"status":"save"}
+            return_dict={"id":plan_id,"status":"save", "json": data }
         except:
             return_dict = {"id": plan_id, "status": "false"}
-    # если проект имеет статус завершенного, сразу вычисляем его стоимость для всех городов и всех поставщиков
     else:
         t = Plan.objects.get(id=plan_id)
         return_dict={"id":plan_id,"json":t.scheme}
     return JsonResponse(return_dict)
 
 
-def get_plan(request, pk):
-    """Получение схемы """
+# получение Plan. Берем строку из БД, заворачиваем в JSON и отправляем клиенту
+def get_plan(request, pk):  
+
     d = Plan.objects.filter(id=pk)
     d = serializers.serialize('json', d)
 
