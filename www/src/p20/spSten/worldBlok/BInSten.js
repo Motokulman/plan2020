@@ -1,6 +1,7 @@
 
 import { Blok } from './Blok.js';
 import { Unik_Steps } from './unik/Unik_Steps.js';
+import { Unik_Vent } from './unik/Unik_Vent.js';
 
 
 export class BInSten extends Blok {  
@@ -63,6 +64,7 @@ export class BInSten extends Blok {
         
 
         if(this.typeStr1 == "Unik_Steps")this.unik = new Unik_Steps(self)  
+        if(this.typeStr1 == "Unik_Vent")this.unik = new Unik_Vent(self)  
                           
 
 
@@ -92,7 +94,7 @@ export class BInSten extends Blok {
 
 
             if(this.unik!=undefined){
-                this.unik.dragWHD(this._width,this._height,this._delph); 
+                this.unik.dragWHD(); 
                 return;
             }
             
