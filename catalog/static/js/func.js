@@ -826,7 +826,7 @@ function drawHVLine(type) {
 // Сохранение схемы
 $("#save").click(function () {
     if (schemeChange) { // если схема менялась
-        saveScheme();
+        setScheme();
         checked = false;
     }
 });
@@ -839,10 +839,11 @@ $("#roof_material_type").change(function () {
     // }
 });
 
-// Воспроизведение схемы
+// Воспроизведение схемы. Получаем сначала Plan, а из него выделяем схему
 function getScheme() {
     var data = {};
     var url = 'get_plan';
+    console.log(" getScheme ");
     $.ajax({
         url: url,
         type: 'GET',
@@ -850,10 +851,10 @@ function getScheme() {
         cache: true,
         //async: false,
         success: function (data) {
-            //////console.log(" d = ", data);
+            console.log(" data = ", data);
             p = JSON.parse(data);
             d = JSON.parse(p[0].fields.scheme);
-            console.log(" Данные = ", d);
+            // console.log(" !Данные = ", d);
             if (d != null) {
                 elements = d.elements;
                 lines = d.lines;
@@ -902,7 +903,7 @@ $("#get_fundament").click(function () {  // обработка кнопки по
     getFundament();
 });
 
-function saveScheme() {
+function setScheme() {
     var data = {};
     var d = {};
     // console.log("elements при сохранении= ", elements)
@@ -920,10 +921,10 @@ function saveScheme() {
     data.checked = false;
     data["csrfmiddlewaretoken"] = csrf_token;
     // console.log("data до JSON = ", data)
-    // console.log("data после JSON, но до пересылки = ", data)
+    console.log("data после JSON, но до пересылки = ", data)
     var start_time = new Date();
     $.ajax({
-        url: 'get_response',
+        url: 'set_scheme',
         type: 'POST',
         data: data,
         cache: false,
@@ -935,7 +936,7 @@ function saveScheme() {
             console.log("Время выполнения операции = ", (stop_time - start_time), ' миллисекунд');
         },
         error: function () {
-            console.log("Ошибка сохранения схемы");
+            console.log("Ошибка сохранения схемы , data = ", data);
         }
     });
 }

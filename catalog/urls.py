@@ -39,10 +39,10 @@ urlpatterns += [
     path('plan/<int:pk>/edit_variant/', views.edit_variant, name='edit-variant'),
 ]
 
-# Сохранение схемы
+# set схемы
 urlpatterns += [
-    path('plan/<int:plan_id>/edit_scheme/get_response',
-         views.set_scheme, name='get_response'),
+    path('plan/<int:plan_id>/edit_scheme/set_scheme',
+         views.set_scheme, name='set_scheme'),
 ]
 
 # Воспроизведение схемы
