@@ -70,7 +70,11 @@ export class ViewServer  {
         this.openURL=function() {   
             var _id=getURLParameters("id")
 
-            if(_id!=null)this.openId(_id);
+            if(_id!=null){
+                this.openId(_id);
+            }else{
+                self.fun("openStart")
+            }
 
         }
 
