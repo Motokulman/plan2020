@@ -37,7 +37,7 @@ export class SPLWindow  {
 		this.deb=new SpDebugPixi()
   		this.content2d.addChild(this.deb.content2d);
   		this.deb.al=0.3
-  		this.world.deb=this.deb
+  		//this.world.deb=this.deb
 
 
   		this.array=[];

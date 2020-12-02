@@ -81,7 +81,7 @@ export class Glaf  {
 
 
 
-        this.viewServer=new ViewServer(function(s,p,p1){ 
+        this.viewServer=new ViewServer(function(s,p,p1,p2){ 
             
             if(s=="setObj"){   
                 if(p==null)  {
@@ -91,11 +91,22 @@ export class Glaf  {
                     self.p20.setObjOpen(p); 
                 }       
                 
-                self.menu.mStart.visiId(self.viewServer.id);                               
+                self.menu.mStart.visiId(self.viewServer.id); 
+                return                              
             }
             if(s=="message"){
                 console.warn(p,p1)
                 self.menu.setMessage(p,p1);
+                if(p2!=undefined){
+                    setTimeout(function() {
+                        self.menu.setMessage("messageClose",500);
+                    }, p2);
+                }
+
+                return
+            }
+            if(s=="openStart"){
+                self.p20.index=1
                 return
             }
         });       

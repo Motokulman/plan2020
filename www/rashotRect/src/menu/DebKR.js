@@ -28,7 +28,7 @@ export class DebKR  {
         this.pan.visible = this.active;
         this.window=undefined;
 
-
+        var nGeom=0
 		var date;
         this.sss=function(){
         	date=new Date().getTime()
@@ -142,7 +142,7 @@ export class DebKR  {
 
 
             this.window.width=222
-            this.slider = new DSliderBig (this.window.content, 2, 2, function(){kr.pS.x=this.value;self.sss()}, 'x', -1000, 10000);
+            this.slider = new DSliderBig (this.window.content, 2, 2, function(){kr.pS.x=this.value;self.sss()}, 'x', 0, 10000);
             this.slider1 = new DSliderBig (this.window.content, 2, 2+52*1, function(){kr.pS.y=this.value;self.sss()}, 'y', -1000, 1000);
             this.slider2 = new DSliderBig (this.window.content, 2, 2+52*2, function(){kr.pS.w=this.value;self.sss()}, 'w', 100, 10000);  
             this.slider3 = new DSliderBig (this.window.content, 2, 2+52*3, function(){kr.pS.h=this.value;self.sss()}, 'h', 100, 10000);
@@ -222,8 +222,30 @@ export class DebKR  {
             }, 'кол. итораций', 1, 2000);
             this.sliItar.width=this.win1.width-4
             this.sliItar.okrug=1;
-            self.sliItar.value=1
+            self.sliItar.value=1;
             yy+=50
+
+
+            this.b0 = new DButton(this.win1.content, 2, yy, '0', function(){
+                nGeom=0;
+                self.sss()
+            });
+            this.b1 = new DButton(this.win1.content, 2+34, yy, '1', function(){
+                nGeom=1;
+                self.sss()
+            });
+            this.b2 = new DButton(this.win1.content, 2+34*2, yy, '2', function(){
+                nGeom=2;
+                self.sss()
+            });
+
+            this.b0.width=this.b1.width=this.b2.width=32
+            trace("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+
+            yy+=34
+
+
+            
            	this.button = new DButton(this.win1.content, 2, yy, 'add Random Line', function(){
             	var ww=(1000+kr.rect.w)
             	var hh=(1000+kr.rect.h)
@@ -339,7 +361,7 @@ export class DebKR  {
 	            kr.setGeomLine(self.plXZ);
 	            self.cont3d.position.x=-self.kr.rect.w/2;
 				self.cont3d.position.y=-self.kr.rect.h/2;
-				kr.setGeom(self.plXZ2);
+				kr.setGeom(self.plXZ2,nGeom);
 
 				self.par.visi3D.intRend=1
 			}

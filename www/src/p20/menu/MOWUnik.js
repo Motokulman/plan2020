@@ -13,16 +13,6 @@ export class MOWUnik{
         this.pObject=new DParamObject(this.dCont,2,2,function(){
         },false);
 
-        this.array=[ 
-                {tipe:'DSliderBig', name: 'slider1', param: 'width', title: 'width', min: 1000, max: 3000, okrug: 10},  
-                {tipe:'DSliderBig', name: 'slider2', param: 'height', title: 'height', min: 1000, max: 3000, okrug: 10},  
-                {tipe:'DSliderBig', name: 'slider3', param: 'step', title: 'step', min: 1, max: 3, okrug: 10},  
- 
-                {tipe:'DCheckBox', name: 'check1', param: 'bool', title: 'bool'}, 
-                {tipe:'DCheckBox', name: 'check2', param: 'bool1', title: 'bool1'}, 
-                {tipe:'DCheckBox', name: 'check3', param: 'bool2', title: 'bool2'}, 
-            ];
-
 
         this.drag=function(){
         }
@@ -39,7 +29,7 @@ export class MOWUnik{
                 this.active=false        
             }else{
                 trace("this.pObject.usingShablon",this.pObject.usingShablon)
-                this.pObject.usingShablon=this.par.object.unik.array;
+                this.pObject.usingShablon=this.par.object.unik.arrayInfo;
                 this.pObject.addObject(this.par.object.unik);
                 this.dCont.visible = true
                 this.active=true

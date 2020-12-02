@@ -112,7 +112,12 @@ export class Menu  {
 	    }
 
 	    this.setMessage=function(p,p1){
-	    	
+	    	if(p=="messageClose"){
+	    		mInfo.closeTime(p1);
+	    		return
+	    	}
+
+
 	    	var s=!p ? "Сообщение" : p;
 	    	var s1=!p1 ? "null" : p1;
 	    

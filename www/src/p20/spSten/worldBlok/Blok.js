@@ -165,6 +165,7 @@ export class Blok  {
 
             if(this.unik!=undefined)if(this.unik.getObj!=undefined)o.unik=this.unik.getObj();
             if(this.funGetObj)this.funGetObj(o);
+            trace(o)
             return  o
         }
         //trace("===========================================================================",this.type);

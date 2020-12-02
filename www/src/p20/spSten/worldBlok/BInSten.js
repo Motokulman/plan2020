@@ -2,6 +2,7 @@
 import { Blok } from './Blok.js';
 import { Unik_Steps } from './unik/Unik_Steps.js';
 
+
 export class BInSten extends Blok {  
   	constructor(par,obj,fun) { 
         super(par,obj,fun); 		
@@ -17,15 +18,31 @@ export class BInSten extends Blok {
         this.stAct=new BTAct(this);
 
 
-        //this.planeXZ=new PlaneXZ();
-        //this.lineSegments.geometry=his.planeXZ
-        this.planeXZ=par.planeXZ;
+        this.planeXZ=this.par.planeXZ //new PlaneXZ(); 
         this.lineSegments = new THREE.LineSegments(
+        //this.lineSegments = new THREE.Line(   
             this.planeXZ,
             this.par.lineBasicMaterial2
         )
+        trace('this.planeXZ',this.planeXZ)
+
+        /*this.lineSegments = new THREE.Mesh(   
+            this.planeXZ
+        )*/
+        
         this.cont3dL.add(this.lineSegments);
         this.lineSegments.rotation.x=Math.PI/2
+
+
+
+
+        // this.planeXZ=par.planeXZ;
+        // this.lineSegments = new THREE.LineSegments(
+        //     this.planeXZ,
+        //     this.par.lineBasicMaterial2
+        // )
+        // this.cont3dL.add(this.lineSegments);
+        // this.lineSegments.rotation.x=Math.PI/2
 
 
 
@@ -150,13 +167,19 @@ export function BTAct (par) {
     this.par.content2d.addChild(this.graphics);
     this.graphics.alpha=this._sahAct/100;
 
-    this.draw1=function(){
-        this.graphics.clear();
-
-
+    this.draw1=function(x,y,w,h){
         this.graphics.clear();
         this.graphics.beginFill(par.par.par.colorUI);
-        this.graphics.drawRect(-this.par._width/2,-this.par._delph/2,this.par._width,this.par._delph);
+        if(w==undefined){
+            this.graphics.drawRect(-this.par._width/2,-this.par._delph/2,this.par._width,this.par._delph);
+        }else{
+            this.graphics.drawRect(x,y,w,h);
+        }
+
+
+
+        
+        
         this.graphics.endFill()
             
         

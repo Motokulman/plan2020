@@ -127,7 +127,7 @@ export class SS2D  {
 
 
 			this.graphics.clear();
-			this.graphics.beginFill(this._adjacent == false ? this.par.par._colorC0_ : this.par.par._colorC1_, 1);
+			this.graphics.beginFill(this._adjacent == false ? this.par.par._colorC0_ : this.par.par._colorC1_, 0.3);
 			
 
 			if(numBlok.length==0){
