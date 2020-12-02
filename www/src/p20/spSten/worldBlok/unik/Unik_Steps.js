@@ -9,9 +9,7 @@ export class Unik_Steps {
         this.par.planeXZ=new PlaneXZ();
         this.par.lineSegments.geometry=this.par.planeXZ    
 
-
         this.sizeLine = this.par.par._sizeLine
-        trace ('this.sizeLine', this.sizeLine)
 
         this.arrayInfo=[ 
             {tipe:'DSliderBig', name: 'slider1', param: 'w', title: 'width', min: 1, max: 5000, okrug: 10},
