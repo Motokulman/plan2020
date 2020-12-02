@@ -62,7 +62,9 @@
 	        }
 	    }
   		//------------------------------------------
-
+  		this.getURLParameters = function(paramName){	
+  			return getURLParameters(paramName)
+  		}
   		
   		this.load = function(obj, fun){	
 			var s=this.server+"src/phpBase.php";		
