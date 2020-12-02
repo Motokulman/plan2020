@@ -251,12 +251,15 @@ export class MGridDrag  {
                 o.x=self.cont.x
                 o.y=self.cont.y
                 o.mashtab=self._mashtab
+
+                o.visi3D=self.par.par.visi3D.getObj()
                 return o
             }           
             
-            self.cont.x= _o.x 
-            self.cont.y= _o.y
-            self.mashtab=_o.mashtab
+            self.cont.x= _o.x;
+            self.cont.y= _o.y;
+            self.mashtab=_o.mashtab;            
+            if(_o.visi3D!=undefined)self.par.par.visi3D.setObj(_o.visi3D)
             self.fun("mashtab",self._mashtab) 
             return null
         }

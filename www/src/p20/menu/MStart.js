@@ -177,14 +177,13 @@ export class MStart  {
 			  	self.dev1=new DWStenColiz(self.dev.dCont);
 			  	self.dev.addCont(self.dev1, self.dev1.dCont,"DWS",undefined,undefined)
 				self.dev.active=false;	
-				//self.dev1.active=false;
-				trace(self.p20)
+				
 				//////////////////////////////
-				self.dev1.setKR(self.p20.korektRect)			
+				/*self.dev1.setKR(self.p20.korektRect)			
 				setTimeout(function() {
 					self.dev.active=true;	
 					self.dev.index=2	
-				}, 1000);
+				}, 1000);*/
 				/////////////////
 
 
@@ -235,11 +234,9 @@ export class MStart  {
 	    }
     	
 
-    	this.sizeWindow=function(w,h,s){
-    		//trace(w,h,s,par.otstup)
+    	this.sizeWindow=function(w,h,s){    		
     		this.w.width=w/s-par.otstup*2;    		
-    		this.dCont1.x =this.w.width-this.dCont1.width
-    		
+    		this.dCont1.x =this.w.width-this.dCont1.width;    		
     	}
 
 

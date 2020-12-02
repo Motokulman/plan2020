@@ -39,7 +39,7 @@ export class WorldBlok  {
 
         this.arrBD=[];
         this.arrObj={};
-        this.arrBD.push({id:0,icon:"resources/image/w0.png",rect:[-1000,-1500,-100,2000,2000,200,"1110011100","100",200], str:["BInSten",'Window','','','','']})
+        this.arrBD.push({id:0,icon:"resources/image/w0.png",rect:[-501,-801,-100,1002,1602,200,"1110011100","100",200], str:["BInSten",'Window','','','','']})
         this.arrBD.push({id:1,icon:"resources/image/w1.png",rect:[-500,-1500,-100,1000,3000,200,"1110011100","100",200], rect1:[-1300,-1500,-100,2600,3000,200], str:["BInSten",'Door','','','','']})
         this.arrBD.push({id:2,icon:"resources/image/w1.png",rect:[-500,-1500,-100,1000,3000,200,"1010011100","000",0], rect1:[-2300,-1500,-100,4600,3000,200], str:["BInSten",'Door','','','','']})     
         this.arrBD.push({id:3,icon:"resources/image/w2.png",rect:[-1000,-1000,-100,2000,2000,200,"1110011100","111",0], str:["BInSten",'Not','','','','']})        

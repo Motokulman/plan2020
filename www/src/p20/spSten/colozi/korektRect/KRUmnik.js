@@ -60,58 +60,26 @@ export class KRUmnik  {
             }
         }
 
-        var wwww
+
         this.naVV = function(_y,_hh,_b,_b2,_sy,_fy){
             ww1= this.par.rect.w+ this.par.rect.x;
             ww2=this.par.rect.x;          
 
             if(this.par.pS.x!=0){
-               
-
                 b3=true;
                 ww = Math.abs(this.par.pS.x) % this.par.pS.w;
                 xz1=1;
                 xz=1-(ww/this.par.pS.w)
-               
                 if(ww>this.par.rect.w){
-
-
-                    
-
-                    
-
                     ww=this.par.rect.w;
-                    b1=true;                    
-                    xz=Math.abs(this.par.pS.x)/this.par.pS.w;
-
-                    wwww=(this.par.rect.w-this.par.pS.x)/(this.par.pS.w);
-
-                    xz1=1//xz-wwww
-                   // trace("xz1 =","::",wwww)  
-
-
-                   /* ww=this.par.rect.w;
-                    b1=true;                    
+                    b1=true;
+                    
                     xz=Math.abs(this.par.pS.x)/this.par.pS.w;
                     xz1=1;
-
-                    if(this.par.pS.x>this.par.rect.w){
-                        wwww=((this.par.pS.x)%this.par.pS.w+this.par.pS.w)/this.par.rect.w;
-                       // xz1=
-
-                        trace("xz1 =",this.par.pS.x,"::",this.par.rect.w)  
-                        
-
-                    }*/
                 }
-               // trace("xz1 =",xz,"::",xz1)   
-                
-                this.creatNS(ww2,_y,ww,_hh,_b,b1,_b2,b3, xz,_sy, xz1,_fy)
-                
-               
-                ww2+=ww;
 
-                //return
+                this.creatNS(ww2,_y,ww,_hh,_b,b1,_b2,b3,xz,_sy,xz1,_fy)
+                ww2+=ww;
             }
               
             for (var i = ww2; i < ww1; i+=this.par.pS.w) {
@@ -126,9 +94,8 @@ export class KRUmnik  {
                     b1=true;
                 }                    
                 if(i+ww==ww1) b1=true;
-                xz1=ww/this.par.pS.w; 
-                 
-                rrr=this.creatNS(i,_y,ww,_hh,_b,b1,_b2,b3, 0,_sy, xz1,_fy);                
+                xz1=ww/this.par.pS.w;     
+                rrr=this.creatNS(i,_y,ww,_hh,_b,b1,_b2,b3,0,_sy,xz1,_fy);                
             }
         }
         this.creatNS=function(x,y,w,h,b,b1,b2,b3,_x,_y,_x1,_y1){
@@ -420,7 +387,7 @@ export class KRUmnik  {
 
             vertices.length=0
             uv.length=0  
-        
+         
             for (var i = 0; i < this.par.arrDin.length; i++) {
                 this.setGeomB(this.par.arrDin[i]);
             }            

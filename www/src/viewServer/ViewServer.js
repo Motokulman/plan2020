@@ -14,15 +14,14 @@ export class ViewServer  {
             this.id=_id;
             trace(_id)
             var obj={//то что посылаем через аякс на сервер, собственно тут сам запрос
-                url: 'https://alphakp.ru/catalog/plan/'+_id+'/edit_scheme/get_response',
+                url: 'https://alphakp.ru/catalog/plan/'+_id+'/edit_scheme/set_scheme',
                 type: 'GET',
                 data: {
                 },
                 cache: false,
                 async: false,
                 success:function(e){                   
-                    if(e.json!=undefined){
-                        
+                    if(e.json!=undefined){                        
                         self.fun("setObj",JSON.parse(e.json));
                     }else{
                         self.fun("setObj",null);
@@ -45,16 +44,16 @@ export class ViewServer  {
 
 
             var obj={//то что посылаем через аякс на сервер, собственно тут сам запрос
-                url: 'https://alphakp.ru/catalog/plan/'+this.id+'/edit_scheme/get_response',
+                url: 'https://alphakp.ru/catalog/plan/'+this.id+'/edit_scheme/set_scheme',
                 type: 'POST',
                 data: {
                     json:JSON.stringify(o),
                 },
                 cache: false,
                 async: false,
-                success:function(e){
-                       
-                    self.fun("message","Проект сохронен","ХЗ потом вобще снести этот месендж")
+                success:function(e){                       
+                    self.fun("message","Проект сохронен","Проект сохронен на сервере.",500)
+
                 },             
                 error:function(e){
                     self.fun("message","Error","Чо то не грузит линк")

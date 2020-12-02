@@ -81,7 +81,7 @@ export class Glaf  {
 
 
 
-        this.viewServer=new ViewServer(function(s,p,p1){ 
+        this.viewServer=new ViewServer(function(s,p,p1,p2){ 
             
             if(s=="setObj"){   
                 if(p==null)  {
@@ -96,8 +96,16 @@ export class Glaf  {
             if(s=="message"){
                 console.warn(p,p1)
                 self.menu.setMessage(p,p1);
+                if(p2!=undefined){
+                    setTimeout(function() {
+                        self.menu.setMessage("messageClose",500);
+                    }, p2);
+                }
+
                 return
             }
+
+
         });       
 
         this.p20=new P20(this,function(s,p,p1){                  

@@ -47,10 +47,27 @@ export  function MInfo(dC) {
 
     })
     this.input.timeFun=1
+    
+
+    this.tween = new TWEEN.Tween(this.dC);
+    this.tween.onComplete(function(){
+        self.active=false
+        self.dC.alpha=1; 
+    }) 
+
+    this.closeTime= function(time){ 
+        this.tween.to({alpha:0},time).start();
+
+
+    }
+
 
     this.setFun = function(title, text, fun){ 
         this.active = true;
         this.fun=fun;
+        this.tween.stop()
+        this.dC.alpha=1;
+
         
         
         this.window.text=title;

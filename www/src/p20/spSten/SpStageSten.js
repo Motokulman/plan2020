@@ -19,6 +19,7 @@ import { PlaneXZ } from '../plus/PlaneXZ.js';
 
 import { SPMetod } from './SPMetod.js';
 
+
 /**
 * Мир для сращалок дорог
 * @class
@@ -129,6 +130,17 @@ export function SpStageSten (par,  fun) {
     this.lineBasicMaterial2 = new THREE.LineBasicMaterial( { color: 0xff0000, linewidth: 10});
 
 
+    this.texture = new THREE.TextureLoader().load('resources/image/pic.png');  
+    this.texture.wrapS = THREE.RepeatWrapping;
+	this.texture.wrapT = THREE.RepeatWrapping;
+	this.texture.repeat.y=-1
+
+
+
+
+	this.mat=new THREE.MeshBasicMaterial( {color: 0xff8cba, map:this.texture } )
+    this.mat1=new THREE.MeshBasicMaterial( {color: 0x00800a, map:this.texture } )
+    
 
 	this.lineWord=new SPLineWord(this);
 	this.worldBlok=new WorldBlok(this);
@@ -211,8 +223,7 @@ export function SpStageSten (par,  fun) {
 		if(r.y1<p.y)r.y1=p.y;	
 	}
 
-	this.dragStyleObj=function(o){	
-		
+	this.dragStyleObj=function(o){		
 		for (var s in o) {
 			if(this[s]!=undefined)this[s]=o[s]
 		}
@@ -288,8 +299,6 @@ export function SpStageSten (par,  fun) {
 			if (this.arrPoint[i].life==false) continue;					
 			this.arrPoint[i].dragPost();											
 		}
-
-
 	}
 
 

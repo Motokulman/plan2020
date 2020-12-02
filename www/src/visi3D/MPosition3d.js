@@ -25,9 +25,9 @@ export default function MPosition3d (_parent, _content2d, _div) {
 	this.maxZum = 5000;
 	this.powerZum = 50;
 	//setTimeout(function() {self.powerZum=0.2}, 1000);
-	this.distMinMaxBox = 1500;
+	this.distMinMaxBox = 10000;
 
-	this.boolDrahXZ=true
+	this.boolDrahXZ=true;
 
 
 	this.isDragPan = _parent._isDragPan;

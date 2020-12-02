@@ -78,7 +78,7 @@ export function SpliceSten (_stage) {
 
 
 	this.matematik=new SSMatematik(this);
-	this.korektRect=this.par.par.korektRect;
+	
 
 
 
@@ -140,9 +140,8 @@ export function SpliceSten (_stage) {
 		this.content3d.position.y=this.position.y;
 		this.content3d.rotation.z=this._rotation;
 
-		this.korektRect.setSten(this,0,0);
-		this.korektRect.korekt1();
-		this.korektRect.korektGrid();
+		
+		
 		
 		this.ss3d.dragPost();
 		this.draw1();
