@@ -8,6 +8,7 @@ export class PlaneXZ extends THREE.BufferGeometry {
 
         super();
 
+        // var indices = [];
         var vertices = [];
         this.upNull=function(){
             
@@ -28,7 +29,6 @@ export class PlaneXZ extends THREE.BufferGeometry {
             vertices.push(-wh,wh,0);
             vertices.push(wh,wh,0); 
             this.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
-
         }
 
         this.upNull();
@@ -40,7 +40,7 @@ export class PlaneXZ extends THREE.BufferGeometry {
         this.array=[]
         this.addLine=function(p,p1){
             this.array.push(p,p1)
-            trace(p,p1)
+           // trace(p,p1)
             
         }
 
@@ -50,16 +50,27 @@ export class PlaneXZ extends THREE.BufferGeometry {
                 this.upNull();
             }
             vertices.length=0;
-            trace(this.array.length+"   ",this.array)
+           // trace(this.array.length+"   ",this.array)
             for (var i = 0; i < this.array.length; i+=2) {                
                 
                 
                
                 vertices.push(this.array[i].x,this.array[i].y,this.array[i].z);
-
                 vertices.push(this.array[i+1].x,this.array[i+1].y,this.array[i+1].z);
-                 vertices.push(this.array[i].x,this.array[i].y,this.array[i].z);
+                //vertices.push(this.array[i].x,this.array[i].y,this.array[i].z);
+                
+                
+                // indices.push(i+1, i+1, i);
             }
+            // var rr=1
+            // for (var i = 0; i < vertices.length; i+=9) { 
+            //     indices.push((i+0)*rr,(i+1)*rr,(i+2)*rr);
+            // } 
+            // indices=[0*rr,1*rr,2*rr,3*rr,4*rr,5*rr]   
+
+            // //this.setIndex( indices );
+            // trace(vertices)
+            // trace(indices)
 
             this.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
 

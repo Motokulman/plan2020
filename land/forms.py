@@ -35,7 +35,7 @@ class SurveyCreateForm(forms.ModelForm):
 class WellCreateForm(forms.ModelForm):
     class Meta:
         model = Well
-        fields = ('number', 'height',)
+        fields = ('number', 'height', 'Hw0', 'Hw1',)
 
     # def __init__(self, *args, **kwargs):
     #     self.survey = kwargs.pop('survey', None)
@@ -45,7 +45,7 @@ class WellCreateForm(forms.ModelForm):
 class LayerCreateForm(forms.ModelForm):
     class Meta:
         model = Layer
-        fields = ('number', 'power', 'non_consolidated', 'debris', 'sand_vs_clay', 'sand', 'porosity', 'IL',)
+        fields = ('number', 'power', 'non_consolidated', 'debris', 'W','WP','WL', 'Ros', 'Rod', 'm', 'm250', 'm125', 'm063', 'm0315', 'm016')
 
     # def __init__(self, *args, **kwargs):
     #     self.well = kwargs.pop('well', None)

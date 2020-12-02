@@ -3,12 +3,43 @@
 {% block content %}
 <h3>Скважина изыскания для участка: {{ well.survey.land.cadastral_number }}</h3>
 <a href="{% url 'well_delete' well.id %}">Удалить</a>
-<p>Несущая способность: {{ well.bearing_resistance_pile_2000_300 }}</p>
+<!-- <p>Скважина: {{ well.id }}</p> -->
+<p>Глубина скважины за вычетом разницы в высоте устий скважин: {{ depth }}</p>
+<p>Высота скважины: {{ height }}</p>
+<p>Уровень воды появившийся: {{ Hw0 }}</p>
+<p>Уровень воды установившийся: {{ Hw1 }}</p>
+
+<p>F_2000_300: {{ well.F_2000_300 }}</p>
+<p>F_2000_350: {{ well.F_2000_350 }}</p>
+<p>F_2000_400: {{ well.F_2000_400 }}</p>
+<p>F_2500_300: {{ well.F_2500_300 }}</p>
+<p>F_2500_350: {{ well.F_2500_350 }}</p>
+<p>F_2500_400: {{ well.F_2500_400 }}</p>
+<p>F_3000_300: {{ well.F_3000_300 }}</p>
+<p>F_3000_350: {{ well.F_3000_350 }}</p>
+<p>F_3000_400: {{ well.F_3000_400 }}</p>
+<br>
+<!-- <p>Для слоя на глубине дна скважины:</p>
+<p>lay2000_number: {{ lay2000_number }}</p>
+<p>lay2500_number: {{ lay2500_number }}</p>
+<p>lay3000_number: {{ lay3000_number }}</p>
+<p>IP: {{ IP }}</p>
+<p>IL: {{ IL }}</p>
+<p>Mk: {{ Mk }}</p>
+<p>K_porosity: {{ K_porosity }}</p>
+<p>R2: {{ R2 }}</p>
+<p>Sr: {{ Sr }}</p>
+<p>F_side_300: {{ F_side_300 }}</p>
+<p>F_side_350: {{ F_side_350 }}</p>
+<p>F_side_400: {{ F_side_400 }}</p>
+<p>F_side_list: {{ F_side_list }}</p> -->
+
+
 {% if my_layers_list %}
 <ul>
-  {% for el in my_layers_list %}
+  {% for lay in my_layers_list %}
   <li>
-    <a href="{{ el.get_absolute_url }}"> {{ el.number }}</a>
+    <a href="{{ lay.get_absolute_url }}"> {{ lay.number }}, мощность: {{ lay.power }}м</a>
   </li>
   {% endfor %}
 </ul>

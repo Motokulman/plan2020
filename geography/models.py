@@ -7,9 +7,9 @@ class City(models.Model):
                             help_text='Введите город')
     region = models.ForeignKey('Region', on_delete=models.CASCADE,
                             help_text='Регион', null=True, blank=True)
-    heating_period_duration = models.IntegerField(help_text='Продолжительность отопительного периода, сут. СНиП 23-01-99 "Строительная климатология и геофизика". См. Таблица 1, столбец 11', null=True, blank=True)  # СНиП 23-01-99 "Строительная климатология и геофизика". См. Таблица 1, столбец 11, https://www.teplo-info.com/snip/otopitelniy_period
-    heating_period_temperature = models.FloatField(help_text='РАЗДЕЛИТЕЛЬ - ТОЧКА. Средняя температура отопительного периода, град. C. столбец 12', null=True, blank=True)  # СНиП 23-01-99 "Строительная климатология и геофизика". См. Таблица 1, столбец 12, https://www.teplo-info.com/snip/otopitelniy_period
- 
+    heating_period_duration = models.IntegerField(help_text='Продолжительность отопительного периода, сут. СП 131.13330.2018 "СНиП 23-01-99* Строительная климатология". См. Таблица 1, столбец 11', null=True, blank=True)  # СНиП 23-01-99 "Строительная климатология и геофизика". См. Таблица 1, столбец 11, https://www.teplo-info.com/snip/otopitelniy_period
+    heating_period_temperature = models.FloatField(help_text='РАЗДЕЛИТЕЛЬ - ТОЧКА. Средняя температура отопительного периода, град. C. столбец 12', null=True, blank=True)  # СП 131.13330.2018 "СНиП 23-01-99* Строительная климатология". См. Таблица 1, столбец 12, https://www.teplo-info.com/snip/otopitelniy_period
+ # https://webdevblog.ru/logirovanie-izmeneniya-dannyh-v-modelyah-django/ - отследивание изменения БД, например, поменяли исходный показатель, пересчитаем расчетный
     class Meta:
         ordering = ('name',)
         verbose_name = 'Город'
