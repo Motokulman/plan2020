@@ -129,6 +129,7 @@ export function SpStageSten (par,  fun) {
     this.lineBasicMaterial2 = new THREE.LineBasicMaterial( { color: 0xff0000, linewidth: 10});
 
 
+
 	this.lineWord=new SPLineWord(this);
 	this.worldBlok=new WorldBlok(this);
 	this.group=new SPGroup(this);

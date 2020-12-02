@@ -3,13 +3,21 @@
 {% block content %}
 <h3>Грунтовый слой скважины изыскания для участка: {{ layer.well.survey.land.cadastral_number }}</h3>
 <a href="{% url 'layer_delete' layer.id %}">Удалить</a>
+<p><strong>id скважины:</strong> {{ layer.well.id }}</p>
 <p><strong>Номер слоя:</strong> {{ layer.number }}</p>
 <p><strong>Мощность слоя в метрах:</strong> {{ layer.power }}</p>
 <p><strong>Насыпной неконсолидированный:</strong> {{ layer.non_consolidated }}</p>
 <p><strong>Крупнообломочный строительный мусор:</strong> {{ layer.debris }}</p>
-<p><strong>Описание грунта инженерного слоя:</strong> {{ layer.sand_vs_clay }}</p>
-<p><strong>Описание песка:</strong> {{ layer.sand }}</p>
-<p><strong>Коэффициент пористости:</strong> {{ layer.porosity }}</p>
-<p><strong>Показатель текучести - для глинистых грунтов:</strong> {{ layer.IL }}</p>
+<p><strong>Плотность частиц грунта, г/см.куб:</strong> {{ layer.Ros }}</p>
+<p><strong>Плотность сухого грунта, г/см.куб:</strong> {{ layer.Rod }}</p>
+<p><strong>Естественная влажность грунта W, %:</strong> {{ layer.W }}</p>
+<p><strong>Влажность на границе раскатывания Wp, %:</strong> {{ layer.WP }}</p>
+<p><strong>Влажность на границе текучести WL, %:</strong> {{ layer.WL }}</p>
+<p><strong>Масса просеиваемой навески, грамм:</strong> {{ layer.m }}</p>
+<p><strong>Остаток на сите 2.5 мм, грамм:</strong> {{ layer.m250 }}</p>
+<p><strong>Остаток на сите 1.25 мм, грамм:</strong> {{ layer.m125 }}</p>
+<p><strong>Остаток на сите 0.63 мм, грамм:</strong> {{ layer.m063 }}</p>
+<p><strong>Остаток на сите 0.315 мм, грамм:</strong> {{ layer.m0315 }}</p>
+<p><strong>Остаток на сите 0.16 мм, грамм:</strong> {{ layer.m016 }}</p>
 
 {% endblock %}
