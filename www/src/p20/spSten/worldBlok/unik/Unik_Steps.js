@@ -61,7 +61,7 @@ export class Unik_Steps {
                 var b=false
                 for (var i = kolH*2; i < this._height1; i+=kolH) {
                     ii=hh-xz*kolW+dd/2
-                    
+    
                     if(ii<dd/2){
                         this.setP(0, i, dd/2 );
                         b=i
@@ -185,9 +185,7 @@ export class Unik_Steps {
                 }
                 
             }
-
             this.par.stAct.draw1(-ww/2, -dd/2, ww, hh+dd)
-
 
             this.graphics.endFill()
         }

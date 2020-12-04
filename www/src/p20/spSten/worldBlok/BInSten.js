@@ -64,7 +64,7 @@ export class BInSten extends Blok {
         
 
         if(this.typeStr1 == "Unik_Steps")this.unik = new Unik_Steps(self)  
-        if(this.typeStr1 == "Unik_Vent")this.unik = new Unik_Vent(self)  
+        if(this.typeStr1 == "Unik_Vent")this.unik1 = new Unik_Vent(self)  
                           
 
 
@@ -95,6 +95,11 @@ export class BInSten extends Blok {
 
             if(this.unik!=undefined){
                 this.unik.dragWHD(); 
+                return;
+            }
+
+            if(this.unik1!=undefined){
+                this.unik1.dragWHD(); 
                 return;
             }
             
