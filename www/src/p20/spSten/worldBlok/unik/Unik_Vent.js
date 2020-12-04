@@ -11,21 +11,36 @@ export class Unik_Vent {
 
         this.sizeLine = this.par.par._sizeLine
 
-        this.arrayInfo=[ 
+        this.aB=[ 
+
             {tipe:'DSliderBig', name: 'slider1', param: 'wh', title: 'wh', min: 1, max: 500, okrug: 10},
-            {tipe:'DSliderBig', name: 'slider2', param: 'numHeight', title: 'numHeight', min: -3000, max: -1, okrug: 10},
+            {tipe:'DSliderBig', name: 'slider2', param: 'numHeightGlav', title: 'numHeight', min: 1, max: 3000, okrug: 10},
             {tipe:'DCheckBox', name: 'check1', param: 'bool', title: 'bool'},
             {tipe:'DCheckBox', name: 'check2', param: 'bool1', title: 'bool1'},
             {tipe:'DCheckBox', name: 'check3', param: 'bool2', title: 'bool2'},
             {tipe:'DCheckBox', name: 'check4', param: 'bool3', title: 'bool3'},
         ];
 
+
+        this.arrayInfo=[ 
+            {tipe:'DSliderBig', name: 'slider1', param: 'wh', title: 'wh', min: 1, max: 500, okrug: 10},
+            {tipe:'DSliderBig', name: 'slider2', param: 'numHeightGlav', title: 'numHeight', min: 1, max: 3000, okrug: 10},
+            {tipe:'DCheckBox', name: 'check1', param: 'bool', title: 'bool'},
+            {tipe:'DCheckBox', name: 'check2', param: 'bool1', title: 'bool1'},
+            {tipe:'DCheckBox', name: 'check3', param: 'bool2', title: 'bool2'},
+            {tipe:'DCheckBox', name: 'check4', param: 'bool3', title: 'bool3'},
+        ];
+
+
+
+
         this._glavBool = true
         this._bool = false
-        this._bool1 = true
+        this._bool1 = false
         this._bool2 = false
         this._bool3 = false
-        this._numHeight = -2000
+        this._numHeightGlav = 2000
+        this._numHeight= -this._numHeightGlav
 
         this._bottom = 110
         this._height = -3000
@@ -114,6 +129,14 @@ export class Unik_Vent {
             if (p == 'wallMid') s.y = this._numHeight - (this.wh/2)
             if (p == 'wallTop') s.y = this._numHeight - this.wh
 
+            if (p == 'wallBot' && p1 == tower) s.z = s.z != this._delph ? -this._delph :  this._delph
+            if (p == 'wallTop' && p1 == tower) s.z = s.z != this._delph ? -this._delph :  this._delph
+
+            if (p == 'wallBot' && p1 == cube || p == 'wallTop' && p1 == cube) if (s.z == wh1/2) s.z = this._delph
+            if (p == 'wallBot' && p1 == cube || p == 'wallTop' && p1 == cube) if (s.z == -wh1/2) s.z = -this._delph
+
+            // if (p == 'wallTop' && p1 == cube) s.z = s.z != wh1/2 ? -this._delph :  this._delph
+
             if (p == 'path') s.z = s.z > 0 ? this._delph : -this._delph
             return s
         }
@@ -132,7 +155,7 @@ export class Unik_Vent {
             sah1++
 
             // Задаем высоту
-            if (_position != undefined) a = this.level(a, _position)
+            if (_position != undefined) a = this.level(a, _position, form)
             return a
         }
 
@@ -258,6 +281,29 @@ export class Unik_Vent {
             this.par.shape.setRect(this.par.rect);
             this.par.setReal(this.par._x,this.par._y,this.par._z);
         }
+
+
+        this.control=function (){
+                if(this._bool3 == true) {
+                    this.glavBool = false
+                    this.bool1 = false
+                } else {
+                    this.glavBool = true
+                }
+        }
+
+        var e;  
+        this.ddddd=function(){
+            this.arrayInfo = []
+            for (var i = 0; i < this.aB.length; i++) {
+                e = this.aB[i].param
+                if(this._bool3 == true) if (e == 'numHeight' || e == 'bool' || e == 'bool2' || e == 'bool3') this.arrayInfo.push(this.aB[i])
+                if(this._bool2 != true && this._bool3 != true) if (e != 'numHeight') this.arrayInfo.push(this.aB[i])
+                if(this._bool2 == true && this._bool3 != true) this.arrayInfo.push(this.aB[i])
+            }
+            this.control()
+        }
+
 	}
 
     set wh(value) {
@@ -266,6 +312,7 @@ export class Unik_Vent {
             this._wh1 = value;
             this._wh = value;
 
+            this.ddddd()
             if(this.korWit)this.korWit()
             this.par.dragWHD()
             this.par.par.render()
@@ -273,18 +320,22 @@ export class Unik_Vent {
     }    
     get wh() { return  this._wh;}
 
-    set numHeight(value) {
-        if(this._numHeight!=value){
-            this._numHeight = value;
+    set numHeightGlav(value) {
+        if(this._numHeightGlav!=value){
+            this._numHeightGlav = value;
+            this._numHeight= -value;
+            this.ddddd()
             this.par.dragWHD()
             this.par.par.render()
         }
     }    
-    get numHeight() { return  this._numHeight;}
+    get numHeightGlav() { return  this._numHeightGlav;}
 
     set glavBool(value) {
         if(this._glavBool!=value){
             this._glavBool = value;
+
+            this.ddddd()
             this.par.dragWHD()
             this.par.par.render()
         }
@@ -295,6 +346,7 @@ export class Unik_Vent {
         if(this._bool!=value){
             this._bool = value;
             this.getSize()
+            this.ddddd()
             if(this.korWit)this.korWit()
             this.par.dragWHD()
             this.par.par.render()
@@ -306,6 +358,7 @@ export class Unik_Vent {
     set bool1(value) {
         if(this._bool1!=value){
             this._bool1 = value;
+            this.ddddd()
             this.par.dragWHD()
             this.par.par.render()
         }
@@ -315,6 +368,7 @@ export class Unik_Vent {
     set bool2(value) {
         if(this._bool2!=value){
             this._bool2 = value;
+            this.ddddd()
             this.par.dragWHD()
             this.par.par.render()
         }
@@ -324,6 +378,7 @@ export class Unik_Vent {
     set bool3(value) {
         if(this._bool3!=value){
             this._bool3 = value;
+            this.ddddd()
             this.par.dragWHD()
             this.par.par.render()
         }

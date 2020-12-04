@@ -45,7 +45,7 @@ export class WorldBlok  {
         this.arrBD.push({id:3,icon:"resources/image/w2.png",rect:[-1000,-1000,-100,2000,2000,200,"1110011100","111",0], str:["BInSten",'Not','','','','']})        
         this.arrBD.push({id:4,icon:"resources/image/w0.png",rect:[-3000,-3000,-200,6000,6000,400,"1110011100","111",0], str:["BWord",'xz','','','','']})
         this.arrBD.push({id:5,icon:"resources/image/w4.png",rect:[-200,-100,-100,400,200,200,"1110011100","001",0], str:["BInSten",'Unik_Steps','','','','']})
-        this.arrBD.push({id:6,icon:"resources/image/w5.png",rect:[-60,-100,-100,120,200,200,"1110011100","001",0], str:["BInSten",'Unik_Vent','','','','']})
+        this.arrBD.push({id:6,icon:"resources/image/w5.png",rect:[-60,-100,-100,120,200,200,"1110001100","101",100], str:["BInSten",'Unik_Vent','','','','']})
 
         for (var i = 0; i < this.arrBD.length; i++) {
             this.arrObj[this.arrBD[i].id]=this.arrBD[i];
