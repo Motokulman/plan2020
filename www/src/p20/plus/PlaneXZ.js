@@ -29,6 +29,10 @@ export class PlaneXZ extends THREE.BufferGeometry {
             vertices.push(-wh,wh,0);
             vertices.push(wh,wh,0); 
             this.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+
+           /* this.computeBoundingBox();
+            this.computeBoundingSphere();
+            this.computeVertexNormals();*/
         }
 
         this.upNull();
@@ -42,6 +46,26 @@ export class PlaneXZ extends THREE.BufferGeometry {
             this.array.push(p,p1)
            // trace(p,p1)
             
+        }
+
+        this.clear=function(p){
+         
+            this.array.length=0;
+            vertices.length=[];
+        }
+
+        this.addTri=function(p,p1,p2){           
+            vertices.push(p.x,p.y,p.z);
+            vertices.push(p1.x,p1.y,p1.z);
+            vertices.push(p2.x,p2.y,p2.z);
+        }
+
+        this.redrag=function(){
+           
+            this.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+           /* this.computeBoundingBox();
+            this.computeBoundingSphere();
+            this.computeVertexNormals();*/
         }
 
         
@@ -62,6 +86,7 @@ export class PlaneXZ extends THREE.BufferGeometry {
                 
                 // indices.push(i+1, i+1, i);
             }
+
             // var rr=1
             // for (var i = 0; i < vertices.length; i+=9) { 
             //     indices.push((i+0)*rr,(i+1)*rr,(i+2)*rr);

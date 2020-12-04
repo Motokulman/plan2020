@@ -11,9 +11,9 @@ export class SobIndex3  extends SobIndex {
         this.fun=fun;
 
 
-        var pos={x:0,y:0,o:null,dist:0}
-        var sp={x:0,y:0,x1:0,y1:0,s:0,o:null}
-        var blok=undefined
+        var pos={x:0,y:0,o:null,dist:0};
+        var sp={x:0,y:0,x1:0,y1:0,s:0,o:null};
+        var blok=undefined;
 
 
 
@@ -32,10 +32,8 @@ export class SobIndex3  extends SobIndex {
                         if(pos.o.windows.isBlokPlace(blok)==true){                            
                             pos.o.addBlok(blok);
                             global.dragPic.stop()  
-                        }
-                                              
+                        }                                              
                     }
-
                 }else{
                     if(pos.o==undefined){
                         global.dragPic.start(48,blok.icon,blok,this.upDrag,1);
@@ -131,22 +129,13 @@ export class SobIndex3  extends SobIndex {
             }
 
             if(s=="creatObjDin"){
+                
+
                 blok=self.sp.worldBlok.getBlok(p.id);
                 global.dragPic.start(48,blok.icon,blok,this.upDrag,1)
-                
-               /* self.par.par.mObject.setObject(p) 
-                if( e.data.originalEvent.button==0){ 
-                    sp.x=p.position.x;
-                    sp.y=p.position.y;
-                    sp.x1 = e.data.originalEvent.clientX
-                    sp.y1 = e.data.originalEvent.clientY; 
-                    sp.s= self.sp._mashtab;
-                    sp.o=p
-                    document.addEventListener("mouseup", self.mouseup);
-                    document.addEventListener("mousemove", self.mousemove); 
-                    return;
-                }*/
 
+                
+               
                 document.addEventListener("mouseup", self.mouseup);
                 document.addEventListener("mousemove", self.mousemove);
                 return

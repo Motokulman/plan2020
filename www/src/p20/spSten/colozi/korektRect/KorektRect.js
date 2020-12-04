@@ -10,7 +10,7 @@ export class KorektRect  {
         this.type="KorektRect";        
         var self=this;
         this.fun=fun
-        
+        this.boolDebug=true    
         this.funRender=undefined
 
         this.pS={x:0,y:0,w:1000,h:1000}//Параметры текстурировнаия и начало энного
@@ -37,15 +37,15 @@ export class KorektRect  {
         
 
         this.arrLine=[
-            {p:{x:3000,y:-200},p1:{x:4900,y:1900}}/*,
-            {p:{x:4000,y:1000},p1:{x:1000,y:2000}}*/
+            {p:{x:0,y:-200},p1:{x:5900,y:400}}/*,
+           // {p:{x:4000,y:1000},p1:{x:1000,y:2000}}*/
         ];
 
    
         this.calc=new Calc();
 
 
-
+        this.boolVergDrag=false
 
 
 
@@ -54,8 +54,8 @@ export class KorektRect  {
 
         var w
         this.setSten=function(ohH1W,_x,_x1){
-            _x=-200
-            _x1=_x1||0
+            _x=-200;
+            _x1=_x1||0;
 
             w=ohH1W.width!=undefined?ohH1W.width : ohH1W._distans;
             this.rect.x=_x;
@@ -118,7 +118,9 @@ export class KorektRect  {
         }
 
 
-        this.korektGrid=function(){         
+        this.korektGrid=function(){ 
+            this.boolVergDrag=false
+
             this.clear(); //очищаем           
             this.naStart();//Наполняем базовыми ректами сцену
             this.reshik();//режим ректами ночало
@@ -138,8 +140,6 @@ export class KorektRect  {
         ///////режим ректами ночало///////////////////////////////////
         this.reshik=function(){
             this.krUColi.korectRect();
-
-
             for (var j = 0; j < this.arrWinDin.length; j++) {
                 for (var i = this.arrDin.length-1; i >=0 ; i--) {                
                     this.reshik2(i,this.arrDin[i],this.arrWinDin[j])
@@ -316,6 +316,7 @@ export class KorektRect  {
                 return;
             }
             
+            this.boolVergDrag=true
             if(rez.tip==3){//на линии
                 if(this.nafigRect(_i,_br, rd)==true)return                
             }
@@ -480,6 +481,8 @@ export class KorektRect  {
         /////////////////////////////
         //отрисовка дебага
         this.render=function(){
+            if(this.boolDebug==false)return
+          
             if(this.funRender!=undefined){
                 this.funRender()
             }
