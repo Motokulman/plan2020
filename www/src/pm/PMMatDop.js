@@ -37,8 +37,15 @@ export default function PMMatDop(par, visi3D, objbase) {
         if(o.str[1]!="null"){
             trace(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",o.str[0],o.str[1])
             //mat.color=new THREE.Color(0x00ff00); 
-            //mat.color=new THREE.Color(o.str[1]);   
-        }     
+            var cc=new THREE.Color(o.str[1]); 
+            var cc1=new THREE.Color(0xffffff*Math.random());
+            setTimeout(function() {
+                mat.color=cc
+                
+            }, 1000);
+             
+        } 
+
         this.aO[id]=mat;
         return this.aO[id];
     }

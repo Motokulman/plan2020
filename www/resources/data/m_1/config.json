@@ -4,7 +4,7 @@
     "key": "MeshPhongMaterial",
     "obj": {
         "type": "MeshPhongMaterial",
-        "color": "#911722",
+        "color": "#f9f9f9",
         "skinning": false,
         "flatShading": false,
         "depthFunc": 3,

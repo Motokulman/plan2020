@@ -109,7 +109,8 @@ export class Main  {
                 if(typeof data === "string") {
 					var conf = JSON.parse(data)
 					self.objectBase = conf;
-				} else self.objectBase = data;						
+				} else self.objectBase = data;
+				trace("$$$$$$",self.objectBase);						
 				self.start();	                                
             },
             error:function function_name(data) {
