@@ -10,7 +10,7 @@ export class MOWUnik{
         this.otstup = this.par.otstup
         this.dCont=new DCont(this.par.window.content); 
 
-        this.pObject=new DParamObject(this.dCont,2,2,function(){
+        this.pObject=new DParamObject(this.dCont,10,2,function(){
         },false);
 
 
@@ -24,18 +24,25 @@ export class MOWUnik{
                 this.active=false
                 return
             }
-            if(this.par.object.unik==undefined){
+            if(this.par.object.unik==undefined && this.par.object.unik1==undefined){
                 this.dCont.visible = false         
                 this.active=false        
             }else{
-                trace("this.pObject.usingShablon",this.pObject.usingShablon)
-                this.pObject.usingShablon=this.par.object.unik.arrayInfo;
-                this.pObject.addObject(this.par.object.unik);
+                if (this.par.object.unik!=undefined){
+                    this.pObject.usingShablon=this.par.object.unik.arrayInfo;
+                    this.pObject.addObject(this.par.object.unik);
+                }
+
+                if (this.par.object.unik1!=undefined){
+                    this.pObject.usingShablon=this.par.object.unik1.arrayInfo;
+                    this.pObject.addObject(this.par.object.unik1);
+                }
+
                 this.dCont.visible = true
                 this.active=true
             }
 
-        this.height = this.pObject.height
+        this.height = this.pObject.height+4
         }
 
     }
