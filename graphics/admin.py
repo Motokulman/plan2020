@@ -1,5 +1,5 @@
 from django.contrib import admin
 
-from .models import Texture
+from graphics.models import *
 
 admin.site.register(Texture)

@@ -4,7 +4,7 @@ class Texture(models.Model):
     """Текстуры"""
 
     json = models.TextField(blank=True, help_text="Файл JSON (тип Text) для хранения всего")
-    anyfile = models.ImageField(blank=True, help_text="Произвольный файл")
+    anyfile = models.FileField(blank=True, null=True, help_text="Произвольный файл")
     
     # px = models.FloatField(blank=True, null=True, help_text="Смещение X")
     # py = models.FloatField(blank=True, null=True, help_text="Смещение Y")

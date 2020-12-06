@@ -138,7 +138,7 @@
 
 		var  o={
 			name:"getTextursJSON",
-			help:"тоесть тут есть json который хранит все текстуры в полном виде, перезаписываеться если было созданна/эдоленна/изменена текстура. Нужен что бы не дергать бд всякий, короче часто вызываеться. ПС Метот получения не нужен))!!",
+			help:"Получение JSON текстуры по ее ID",
 			color:"#93c32f",
 			
 			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
@@ -146,6 +146,57 @@
 			}
 		}
 		array.push(o);
+
+		var  o={
+			name:"getTextureJSON",//имя кнопки
+			help:"Возвращает json текстуры по ее id",//пояснения
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'https://alphakp.ru/graphics/texture/1/set_texture',
+		        type: 'GET',
+		        data: {
+		        },
+		        cache: false,
+		        async: false,
+			}
+		}
+		array.push(o);
+
+		var  o={
+			name:"setTextureJSON",//имя кнопки
+			help:"Сохраняет JSON текстуры по ее id",//пояснения
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'https://alphakp.ru/graphics/texture/1/set_texture',
+		        type: 'POST',
+		        data: {
+                    json:"{\"test\":10}"
+		        },
+		        cache: false,
+		        async: false,
+			}
+		}
+		array.push(o);
+		
+
+		var  o={
+			name:"setTextureFile",//имя кнопки
+			help:"Сохраняет anyfile текстуры по ее id",//пояснения
+			file:true,
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'https://alphakp.ru/graphics/texture/1/set_texture',
+		        type: 'POST',
+				data: $(this).serialize(),
+		        // data: {
+		        // },
+		        cache: false,
+		        async: false,
+			}
+		}
+		array.push(o);
+
+
 
 
 		var  o={
@@ -218,7 +269,8 @@
 		for (var i = 0; i < aButton.length; i++) {
 			if(o.name==aButton[i].obj.name){
 				aButton[i].alpha=0.5;
-				history.pushState(null, null, serv+"?index="+i); 
+				history.pushState(null, null, serv); 
+				// history.pushState(null, null, serv+"?index="+i); 
 			}else{
 				aButton[i].alpha=1;
 			}		
