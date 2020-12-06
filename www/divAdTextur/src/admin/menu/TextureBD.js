@@ -1,3 +1,56 @@
+
+class MNXZ  {
+    constructor(dc, par, fun) {
+        var self=this;
+        this.type = "TextureBD";
+        this.par = par;
+        this._index = -1;
+
+        this.dCont = undefined;
+        
+        this.array=[]
+        this.init=function(){
+            if(this.dCont!=undefined)return
+            this.dCont = new DCont(dc);
+           
+            trace("##dfgdfgdfgdfg",aGlaf.objectBase.textures)
+            var ww=34
+            
+            for (var i = 0; i < aGlaf.objectBase.textures.length; i++) {
+                
+                var b=new DButton(this.dCont, this.par.widthBig+(this.par.margin*2)+ww*i, this.par.margin, aGlaf.objectBase.textures[i].id, function(){
+                    trace(this.idArr)
+                    self.par.index=this.idArr;
+
+                    let a=php.ser.split("?");
+                    history.pushState(null, null, a[0]+'?t='+self.par.gallery.array[this.idArr].object.id);
+
+                });
+                b.idArr=i;
+                b.width=ww-2;  
+                this.array.push(b);
+            }
+            
+
+
+        }
+    }
+    set index (value) {
+        if (this._index !== value) {
+            this._index = value;
+            for (var i = 0; i < this.array.length; i++) {
+                this.array[i].alpha=i==value?0.5:1
+            }
+        }
+    }
+
+    get index () {
+        return this._index;
+    }
+}
+
+
+
 class TextureBD  {
     constructor(menu, fun) {
         var self=this;
@@ -9,6 +62,8 @@ class TextureBD  {
         this.whv = aGlaf.whv;
         this.widthBig = aGlaf.widthBig;
         this.objectBase = this.par.objectBase;
+        this._active=false
+
 
         this._sort=-2
 
@@ -20,6 +75,12 @@ class TextureBD  {
         this.w.hasMinimizeButton = false;
 
 
+
+        this.mnXZ=new MNXZ(this.w,this,function(s,p){
+
+        })
+
+
         // this.mSort=new MSort(this, this.w);
         // this.mSort.dCont.y=287
 
@@ -29,7 +90,6 @@ class TextureBD  {
         let butOffset = 32;
 
         this.gallery = new DGallery(this.w, -2, 480, () => {
-
             this.par.dragPic.testDrag(15, this.clik.bind(this), this.drag.bind(this));
         });
         this.gallery.width = this.widthBig;
@@ -134,6 +194,7 @@ class TextureBD  {
 
     clik() {
         this.index = this.gallery.index;
+        history.pushState(null, null, a[0]+'?t='+self.gallery.array[self.index].object.id);
     }
 
     drag() {
@@ -209,6 +270,7 @@ class TextureBD  {
         }
 
         if (butId == 3) {//>>>>>>
+
             if (this.objDin != undefined) {
                 var a = this.index;
                 if (a < this.objectBase.textures.length - 1 && a != -1) {
@@ -313,17 +375,19 @@ class TextureBD  {
     }
 
     set index (value) {
-
         if (this._index !== value && this.gallery.array[value] != undefined) {
             this._index = value;
             this.gallery.index = value;
             this.objDin = this.gallery.array[value].object;
-            trace('this.gallery.array',this.gallery.array[value].object)
-            trace(this.gallery.array)
             this.texture.setObj(this.objDin);
 
+            this.mnXZ.init();
+             this.mnXZ.index=value;
+/*
+            aGlaf.menu.menuVerh.bIn[0].text = this.gallery.array[0].object.id
+            aGlaf.menu.menuVerh.bIn[1].text = this.gallery.array[1].object.id*/
+           
         }
-
     }
 
     get index () {
@@ -333,8 +397,10 @@ class TextureBD  {
     set active (value) {
         if (this._active != value) {
             this._active = value;
+
             if (value == true) {
                 this.dCont.add(this.w)
+                this.mnXZ.init();
             } else {
                 this.dCont.remove(this.w)
             }
@@ -377,29 +443,31 @@ class TextureObject {
 
         this._width = par._width;
         this.lineHeight = 32;
-        this.margin = 2;
+        this.margin = 4;
 
         this._height = 32;
         this._wh = 64;
+        this.allWh = this._width - (this.margin * 3);
+
 
         this._active = false;
 
         this.window = new DCont(null, 0, 0, this.name);
-        // this.window.hasMinimizeButton = false;
-        // this.window.dragBool = false;
-        this.window.width = this._width - this.margin * 2;
+        this.window.width = this._width - this.margin * 1;
+
 
         this.info = new DCont(this.window, 0, 0)
         this.info.visible = this._active;
         this.info.y = -32+this.margin;
-        this.info.width = this.window
+        this.info.width = this.allWh
 
 
-        this.panel = new DPanel(this.info, this.margin, this.margin);
-        this.panel.width = this.panel.height = this.window.width-(this.margin*2)//this._wh - this.margin;
+        this.panel = new DPanel(this.info, this.margin, 0);
+        this.panel.width = this.panel.height = this.allWh//this._wh - this.margin;
         this.panel.color1 = "#777777"
 
         this.image = new DImage(this.panel, 0, 0, null, function () {
+            trace('imageimageimage')
             self.image.width = self.image.height = self.panel.width;
 
             if (self.image.picWidth > self.image.picHeight) {
@@ -445,6 +513,7 @@ class TextureObject {
         //this.par.dragPic.start(32, aGlaf.resursData + "" + dragObj.id + "/64.png", dragObj);
 
         var yy = this.panel.height+(this.margin*2)
+
         this.size256But = new DButton(this.info, 0, yy, '256', async () => {
             const width = Math.min(2 ** Math.floor(Math.log2(this.image.picWidth)), 256);
             const height = Math.min(2 ** Math.floor(Math.log2(this.image.picHeight)), 256);
@@ -456,12 +525,12 @@ class TextureObject {
             this.setResizedImage(width, height);
         });
         this.resizeButton = new DButton(this.info, 0, yy, "res", async () => {
-            const width = 2 ** Math.floor(Math.log2(this.image.picWidth));
-            const height = 2 ** Math.floor(Math.log2(this.image.picHeight));
+            const width = 2 ** Math.floor(Math.log2(self.image.picWidth));
+            const height = 2 ** Math.floor(Math.log2(self.image.picHeight));
             this.setResizedImage(width, height);
         });
 
-        this.size256But.width = this.size512But.width = this.resizeButton.width =  this.panel.width / 3 - this.margin;
+        this.size256But.width = this.size512But.width = this.resizeButton.width =  (this.allWh-this.margin*2) / 3;
         this.size256But.height = this.size512But.height = this.lineHeight / 2 - this.margin * 2;
         this.resizeButton.height = this.lineHeight - this.margin * 2;
 
@@ -471,26 +540,24 @@ class TextureObject {
 
         this.size256But.visible = this.size512But.visible = this.resizeButton.visible = false;
 
-        yy +=  this.size256But.height;
+        yy +=  this.size256But.height+this.margin;
 
         this.resLabel = new DLabel(this.panel, this.margin, yy, "null")
         this.resLabel.fontSize = 12;
         this.colorT = this.resLabel.colorText1;
 
-        yy +=  this.size512But.height *2;
-        yy -=  this.margin *2;
-
+        yy -=  this.size512But.height+this.margin;
+        yy +=  this.resizeButton.height+this.margin;
 
         this.loadButton = new DButton(this.info, this.margin,  yy, "load", function (b) {
             self.uploadImage(this.files[0]);
         });
-        this.loadButton.width = this.panel.width - this.margin;
-        this.loadButton.x = this.margin;
+        this.loadButton.width = this.allWh;
         this.loadButton.height = this.lineHeight - this.margin * 2;
         this.loadButton.startFile();
 
 
-        yy+= this.loadButton.height+this.margin*3;
+        yy+= this.loadButton.height+this.margin;
 
 
         this.rxLabel = new DLabel(this.info, 0, yy, "rx:");
@@ -507,14 +574,14 @@ class TextureObject {
             self.fun(self.objDin);
             self.textXZ()
         });
-        this.rxInput.height = this.ryInput.height = this.loadButton.height;
 
+        this.rxInput.height = this.ryInput.height = this.loadButton.height;
         this.rxLabel.width = this.ryLabel.width = 23;
-        this.rxInput.width = this.ryInput.width = ((this.panel.width - (this.rxLabel.width * 2)) - (this.margin*7)) / 2;
+        this.rxInput.width = this.ryInput.width = ((this.allWh - (this.rxLabel.width * 2)) - (this.margin*7)) / 2;
         this.rxLabel.x = this.margin;
-        this.rxInput.x = this.rxLabel.x + this.rxLabel.width + this.margin;
-        this.ryLabel.x = this.rxInput.x + this.rxInput.width + this.margin*3;
-        this.ryInput.x = this.ryLabel.x + this.ryLabel.width + this.margin;
+        this.rxInput.x = this.rxLabel.x + this.rxLabel.width + this.margin*2;
+        this.ryLabel.x = this.rxInput.x + this.rxInput.width + this.margin*2;
+        this.ryInput.x = this.ryLabel.x + this.ryLabel.width + this.margin*2;
 
         this.rxInput.setNum(0.1);
         this.ryInput.setNum(0.1);
@@ -536,12 +603,12 @@ class TextureObject {
         });
 
         this.pxLabel.width = this.pyLabel.width = 23;
-        this.pxInput.width = this.pyInput.width =  ((this.panel.width - (this.pxLabel.width * 2)) - (this.margin*7)) / 2;
+        this.pxInput.width = this.pyInput.width =   ((this.allWh - (this.pxLabel.width * 2)) - (this.margin*7)) / 2;
         this.pxInput.height = this.pyInput.height = this.loadButton.height;
         this.pxLabel.x = this.margin;
-        this.pxInput.x = this.pxLabel.x + this.pxLabel.width + this.margin;
-        this.pyLabel.x = this.pxInput.x + this.pxInput.width + this.margin*3;
-        this.pyInput.x = this.pyLabel.x + this.pyLabel.width + this.margin;
+        this.pxInput.x = this.pxLabel.x + this.pxLabel.width + this.margin*2;
+        this.pyLabel.x = this.pxInput.x + this.pxInput.width + this.margin*2;
+        this.pyInput.x = this.pyLabel.x + this.pyLabel.width + this.margin*2;
 
         this.pxInput.setNum(0.1);
         this.pyInput.setNum(0.1);
@@ -564,23 +631,23 @@ class TextureObject {
 
         this.wNaLabel.fontSize = this.hNaLabel.fontSize = 12;
         this.wNaLabel.width = this.hNaLabel.width = 23;
-        this.wNaInput.width = this.hNaInput.width =  ((this.panel.width - (this.wNaLabel.width * 2)) - (this.margin*7)) / 2;
+        this.wNaInput.width = this.hNaInput.width =  ((this.allWh - (this.wNaLabel.width * 2)) - (this.margin*7)) / 2;
         this.wNaInput.height = this.hNaInput.height = this.loadButton.height;
         
         this.wNaLabel.x = this.margin;
-        this.wNaInput.x = this.wNaLabel.x + this.wNaLabel.width + this.margin;
-        this.hNaLabel.x = this.wNaInput.x + this.wNaInput.width + this.margin*3;
-        this.hNaInput.x = this.hNaLabel.x + this.hNaLabel.width + this.margin;
+        this.wNaInput.x = this.wNaLabel.x + this.wNaLabel.width + this.margin*2;
+        this.hNaLabel.x = this.wNaInput.x + this.wNaInput.width + this.margin*2;
+        this.hNaInput.x = this.hNaLabel.x + this.hNaLabel.width + this.margin*2;
 
         this.wNaInput.setNum(0.1);
         this.hNaInput.setNum(0.1);
 
 
         
-        yy += this.hNaInput.height + this.margin*2;
+        yy += this.hNaInput.height + this.margin;
 
         this.buttonLoadSous = new DButton(this.info, this.margin, yy, "Load Sous");
-        this.buttonLoadSous.width =  this.loadButton.width
+        this.buttonLoadSous.width =  this.allWh
 
         yy += this.buttonLoadSous.height 
 
@@ -599,37 +666,37 @@ class TextureObject {
         var check = []
         var boolXZ=["map",null,"alphaMap",null,"bumpMap",null,"normalMap",null,"displacementMap",null,"ligthMap",null,"aoMap",null,"emissiveMap",null]
         for (var i = 1; i < boolXZ.length; i+=2) {
-                c = new DCheckBox(this.panel, n, yy, ' ', function () {
+                c = new DCheckBox(this.info, n, yy, ' ', function () {
                     self.redragTextur(this.idArr);
                 });
                 c.idArr = i;
-                c.height = (this.panel.width - this.margin)/8
-                n += c.height
+                c.height = (this.allWh-(this.margin*7))/8
+                n += c.height+this.margin
                 check.push(c)
         }   
         check[0].value=true;
 
-        yy += c.height + this.margin*4
+        yy += c.height + this.margin*2
 
 
-        this.titleInput = new DTextArea(this.panel, this.margin,yy,'', function () {
+        this.titleInput = new DTextArea(this.info, this.margin,yy,'', function () {
             
         });
-        this.titleInput.width = this.panel.width  - this.margin * 4;
+        this.titleInput.width = this.allWh
         this.titleInput.height = 200;
 
-        yy += this.titleInput.height + this.margin*2
+        yy += this.titleInput.height + this.margin
 
 
 
        
-        this.buttonSet = new DButton(this.panel, 0, yy, "Set", function(){
+        this.buttonSet = new DButton(this.info, this.margin, yy, "Set", function(){
             let p = JSON.parse(self.titleInput.value)
             if(p!=null){
                 self.setObj(p)
             }
         });
-        this.buttonSet.width = (this.panel.width - this.margin*4)/2
+        this.buttonSet.width = this.allWh
 
       
 
@@ -651,6 +718,7 @@ class TextureObject {
 
 
         var boolCheck=undefined
+        var id=undefined
         this.texturXZ=undefined
         this.matXZ=undefined
         this.redragTextur=function(){
@@ -659,11 +727,10 @@ class TextureObject {
 
                 this.matXZ=aGlaf.s3d.sMaterial.mesh.material;
                 this.texturXZ=aGlaf.s3d.pm.tex.getById(this.objDin.id);
-                trace('this.objDin.id', this.objDin.id, this.objDin)
-                trace('this.objDin.id', this.matXZ)
                 boolCheck = false
                 for (var i = 0; i < boolXZ.length; i+=2) {
                     if(check[i/2].value==true){
+                        id = i/2
                         boolCheck = true
                         this.matXZ[boolXZ[i]]=this.texturXZ
                     }
@@ -673,7 +740,7 @@ class TextureObject {
                     
                 }
                 if (boolCheck != true){
-                    check[0].value=true
+                    check[id].value=true
                     this.redragTextur()
                 }
                 this.matXZ.needsUpdate=true
@@ -698,7 +765,6 @@ class TextureObject {
     }
 
     setObj(objDin) {
-        trace(objDin)
         this.objDin = objDin;
         console.warn('this.objDin', objDin)
 
@@ -711,18 +777,30 @@ class TextureObject {
 
     redraw() {
         let l= aGlaf.resursData + this.objDin.id + '/' + 'pic.' + this.objDin.type;
-        trace("$$",l)
         this.image._link = '';
         this.image.link = l;
     }
 
     async setResizedImage(width, height) {
+
         const type = this.image.link.split('.').pop();
+
         const img = await resizeImage(this.image.link, width, height, type);
-        const resp = await uploadFile(img, this.image.link);
+
+        const resp = await uploadFile(img,  '../' + this.image.link);
+
+        console.warn(resp)
+        trace()
+        trace('img', img)
+        trace('this.image.link', this.image.link)
+
+
+
+
         if (resp === 'ok') {
             this.fun(this.objDin, true, true);
             this.redraw();
+
         }
     }
 
@@ -742,7 +820,7 @@ class TextureObject {
         var dest = '../' + aGlaf.resursData + this.objDin.id + '/' + '64.png';
 
         var resp = await uploadFile(imageMin, dest);
-        trace("@@@@@!!@@",resp); 
+        trace("@@@@@!!@@",dest); 
         if (resp !== 'ok') {
             return;
         }
@@ -781,7 +859,7 @@ class TextureObject {
         }
 
 
-
+        type = image.name.split('.').pop();
         dest = '../' + aGlaf.resursData + this.objDin.id + '/' + 'pic.' + type;
         resp = await uploadFile(image, dest);
         if (resp !== 'ok') {
@@ -868,12 +946,15 @@ function resizeImage(src, width, height, type = 'png', fileName = '_') {
 
 function uploadFile(file, dest) {
     let serverURL = php.server + "src/phpBase.php";
+
+    trace('serverURL', serverURL)
     let data = new FormData();
+
     data.append('tip', 'saveFile');
     data.append('file', file);
     data.append('dest', dest);
 
-    trace(serverURL)    
+    console.warn('>>>>>>>>>>>>>', dest)
 
     return $.ajax({
         url: serverURL,
@@ -882,6 +963,9 @@ function uploadFile(file, dest) {
         contentType: false,
         processData: false,
         data: data,
-        type: 'post'
+        type: 'post',
+        success: function function_name(data) {  
+            trace(data)
+        }
     });
 }

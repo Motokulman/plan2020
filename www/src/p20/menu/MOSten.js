@@ -83,6 +83,45 @@ export class MOSten extends MOBaza {
             this.msUi=new MsUi(this,this.dCont,this.otstup1,yy)
 
             yy+=(this.otstup1+this.msUi.height)
+
+
+            var sah=0
+            /////////////////////////////////////////
+            var a=this.par.par.objectBase.three
+            for (var i = 0; i < a.length; i++) {                
+                if(a[i].keyName=="test"){
+                    var aa=a[i].array
+                    for (var j = 0; j < aa.length; j++) {
+                        var b=new DButton(this.window.content,2+34*j,yy,"",function(){
+                            if(sah==0)self.object.color=this.obj.id;
+                            else{
+                                self.object["color"+sah]=this.obj.id;
+                            }
+
+
+                        },"resources/data/"+aa[j].id+"/128.png");
+                        b.width=32
+                        b.obj=aa[j];                        
+                    }
+                    yy+=36
+                    for (var j = 0; j < 5; j++) {
+                        var b=new DButton(this.window.content,2+34*j,yy,j+"",function(){
+                            sah=this.idArr;
+                        })
+                        b.width=32
+                        b.idArr=j;                        
+                    }
+                }
+            }
+
+            trace("@@",a)
+            
+            
+            /////////////////////////////
+
+
+
+
             this.window.height=yy+32;
         }        
         

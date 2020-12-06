@@ -234,15 +234,13 @@ function MenuVerh(menu, fun) {
         }
         if(self.ab[ii])self.ab[ii].alpha=0.5;       
         if(ii==2){//сцена
-            // aGlaf.menu.menuScene.active=false; 
-            // aGlaf.menu.menuBD.active=false;                  
-            // aGlaf.menu.menuThree.active=false;
-            // aGlaf.menu.menuObject.active=false;
-            // aGlaf.menu.matObject.active=false;;
-            // aGlaf.menu.matBD.active=false;
-            // aGlaf.menu.menuScene.active=true;
             aGlaf.menu.menuScene.active = aGlaf.menu.menuScene.active == true ? false : true;
             aGlaf.menu.matObject.mVuborGeom.active = aGlaf.menu.matObject.mVuborGeom.active == true ? false : true;  
+        }
+
+        if(ii==3){//материал
+            aGlaf.menu.matObject.active = aGlaf.menu.matObject.active == true ? false : true;
+            aGlaf.menu.matBD.active = aGlaf.menu.matBD.active == true ? false : true;  
         }
     }
 
@@ -270,48 +268,19 @@ function MenuVerh(menu, fun) {
 ////////////////////////////////////////////////////////////////////////
 
     var b;
-    b=new DButton(this.panel,aGlaf.widthBig+(this.otstup+ww*3)*0+(this.otstup*2), this.otstup, " ",this.down);
+    b=new DButton(this.panel, (this.otstup+(ww*3))*0+(this.otstup*2), this.otstup, " ",this.down);
     b.idArr=2;
     b.text="scene";
     b.width=ww*3;
     b.height=ww;      
     this.ab.push(b);
         
-    var b=new DButton(this.panel,290, this.otstup, " ",function(){
-        aGlaf.menu.matObject.active=true;
-        aGlaf.menu.matBD.active=true;
-        if(this.alpha==1){
-            this.alpha=0.5
-            aGlaf.menu.matObject.active=true;
-            aGlaf.menu.matBD.active=true;
-        }else{
-            this.alpha=1
-            aGlaf.menu.matObject.active=false;
-            aGlaf.menu.matBD.active=false;
-        }
-    });
+    var b=new DButton(this.panel, (this.otstup+(ww*3))*1+(this.otstup*3), this.otstup, " ", this.down);
     b.idArr=3;
     b.text="material";
     b.width=ww*3;
     b.height=ww;      
     this.ab.push(b)
-
-
-    this.bIndex = function(){  
-        aGlaf.menu.textureBD.index = this.idArr
-    }
-
-    var bIn1, bIn2;
-    bIn1=new DButton(this.panel, this.otstup, this.otstup, "0", this.bIndex);
-    bIn1.idArr=0;
-    bIn1.height=ww; 
-    bIn1.width=ww;  
-
-
-    bIn2=new DButton(this.panel, this.otstup+ww+this.otstup, this.otstup, "1", this.bIndex);
-    bIn2.idArr=1;
-    bIn2.height=ww; 
-    bIn2.width=ww;  
 
 
 

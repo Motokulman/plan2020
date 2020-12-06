@@ -14,6 +14,9 @@ export class WorldBlok  {
         this._sizeLine=this.par._sizeLine
         this._colorLine_=this.par._colorLine_
 
+        this.objectBase=par.objectBase;
+
+
         this.uuid=calc.generateRendom(2);
 
         this.planeXZ=par.planeXZ;
@@ -37,6 +40,8 @@ export class WorldBlok  {
         0-xz
         */
 
+
+/*
         this.arrBD=[];
         this.arrObj={};
         this.arrBD.push({id:0,icon:"resources/image/w0.png",rect:[-501,-801,-100,1002,1602,200,"1110011100","100",200], str:["BInSten",'Window','','','','']})
@@ -45,18 +50,31 @@ export class WorldBlok  {
         this.arrBD.push({id:3,icon:"resources/image/w2.png",rect:[-1000,-1000,-100,2000,2000,200,"1110011100","111",0], str:["BInSten",'Not','','','','']})        
         this.arrBD.push({id:4,icon:"resources/image/w0.png",rect:[-3000,-3000,-200,6000,6000,400,"1110011100","111",0], str:["BWord",'xz','','','','']})
         this.arrBD.push({id:5,icon:"resources/image/w4.png",rect:[-200,-100,-100,400,200,200,"1110011100","001",0], str:["BInSten",'Unik_Steps','','','','']})
+        this.arrBD.push({id:6,icon:"resources/image/w5.png",rect:[-60,-100,-100,120,200,200,"1110001100","101",100], str:["BInSten",'Unik_Vent','','','','']})
 
-        for (var i = 0; i < this.arrBD.length; i++) {
-            this.arrObj[this.arrBD[i].id]=this.arrBD[i];
+
+
+*/
+
+
+        
+        this.arrObj={};
+        for (var i = 0; i < this.objectBase.bd.length; i++) {
+            this.arrObj[this.objectBase.bd[i].id]=this.objectBase.bd[i]
         }
 
+
+
+
+       
        
         this.sobBlok=function(s,p,p1){
 
         }
 
 
-        this.getBlok=function(id){  
+        this.getBlok=function(id){
+
             let o=   this.arrObj[id]             
             for (var i = 0; i < this.array.length; i++) {
                 if(this.array[i].life==true)continue;
@@ -66,11 +84,13 @@ export class WorldBlok  {
                 }
             } 
 
+     
+
             let blok=undefined;            
-            if(o.str[0]=="BInSten")blok= new BInSten(this,o,this.sobBlok);
+            if(o.obj.str[0]=="BInSten")blok= new BInSten(this,o,this.sobBlok);
             if(blok==undefined)blok= new Blok(this,o,this.sobBlok);
 
-           
+            
             blok.idArr=this.array.length;
             this.array.push(blok);
 

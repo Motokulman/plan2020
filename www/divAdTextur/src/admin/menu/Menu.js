@@ -37,10 +37,6 @@ function Menu(aGlaf, fun) {
 
 
 
-
-
-
-
     var script = document.createElement('script');
     // мы можем загрузить любой скрипт с любого домена
     

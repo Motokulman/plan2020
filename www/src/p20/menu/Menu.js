@@ -23,6 +23,8 @@ export class Menu  {
 		this.fun=fun;
 		this._mashtab=1;
 		this.wh=48;
+
+		this.objectBase=par.par.objectBase
 		this.otstup=5;
 		this.otstup1=10;
 		this.sizeMax=this.par.sizeMax;
@@ -34,7 +36,8 @@ export class Menu  {
 	    
 	    this.array=[];
 
-		this.array[this.array.length] = this.mGridDrag = new MGridDrag(this, function(s,p,p1){             
+		this.array[this.array.length] = this.mGridDrag = new MGridDrag(this, function(s,p,p1){ 
+
            	self.fun(s,p,p1)
         });
 
@@ -53,6 +56,8 @@ export class Menu  {
 	    this.array[this.array.length]=this.mLeft=new MLeft(this, function(s,p,p1){             
            	if(s=="index")self.menuIndex=p;
            	if(s=="gIndex")self.mDragScane.sobMenu(s,p,p1);
+
+           	//trace("$$>>",s,p,p1)
         });
 
 		this.array[this.array.length]=this.mDragScane=new MDragScane(this, function(s,p){             

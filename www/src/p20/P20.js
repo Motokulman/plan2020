@@ -4,6 +4,8 @@ import { SpStageSten } from './spSten/SpStageSten.js';
 import { PGrid,Grid } from './plus/PGrid.js';//сетка
 
 import { KorektRect } from './spSten/colozi/korektRect/KorektRect.js';
+
+import { PM } from '../pm/PM.js';
 export class P20  {
     constructor(par,fun) {
     	this.type="P20";
@@ -24,8 +26,8 @@ export class P20  {
 
         this._activObject=undefined;
 
+        this.objectBase=this.par.par.objectBase;
 
-  
 
         this.content3d= new THREE.Object3D();        
         this.content2d = new PIXI.Container();
@@ -33,6 +35,34 @@ export class P20  {
         this.rulimActivSP=new RulimActivSP(this);
         this.korektRect = new KorektRect();
 
+        this.pm=new PM(par.visi3D,this.objectBase)
+
+
+      /*  var m=this.pm.matDop.getIDReturn(13)
+        this.content3d.add(new THREE.Mesh(new THREE.BoxBufferGeometry( 1000, 1000, 10000 ),m))
+        var m2=this.pm.matDop.getIDReturn(13)
+        this.content3d.add(new THREE.Mesh(new THREE.BoxBufferGeometry( 1000, 10000, 1000 ),m2))
+        trace("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+        trace(m)
+        trace(m2)*/
+
+        this.aDefolt=[13,13,13]
+
+
+
+        for (var i = 0; i < this.objectBase.three.length; i++) {                
+            if(this.objectBase.three[i].keyName=="defolt"){
+                let a=this.objectBase.three[i].array;
+                for (var j = 0; j < a.length; j++) {
+                    let aa=a[j].keyName.split("_")
+                    if(aa[1]&&aa[0]=="defolt"){                        
+                        this.aDefolt[aa[1]*1]=a[j].id
+                    }                    
+                }                
+            }
+        } 
+     
+        
 
         this.sobSP=function(s,p,p1){
             self.fun(s,p,p1)

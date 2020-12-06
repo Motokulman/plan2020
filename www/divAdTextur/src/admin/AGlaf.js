@@ -88,7 +88,19 @@ function AGlaf(main) {
 
         this.menu.matBD.index=0
         setTimeout(function() {
-            self.menu.textureBD.index=0 
+            var p=0;
+            let a=php.ser.split("?");
+            var tt=php.getURLParameters("t")
+
+            trace(tt)
+            for (var i = 0; i < self.par.objectBase.textures.length; i++) {
+                if(self.par.objectBase.textures[i].id==tt){
+                    p=i;
+                    break;
+                }
+            }
+
+            self.menu.textureBD.index=p 
         }, 10);
         
              
