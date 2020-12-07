@@ -5,6 +5,7 @@ from catalog.models import *
 from brands.models import *
 from standards.models import *
 from names.models import *
+from graphics.models import *
 
 
 class MaterialUse(models.Model):
@@ -283,7 +284,7 @@ class WallType(models.Model):
 
 
 class RockWallMaterialUnit(models.Model): 
-    """ НЕ НУЖНО БОЛЬШЕ?? Модель описывает единицу стенового каменного материала, конкретное изделие конкретного производителя. Но без цены."""
+    """ Модель описывает единицу стенового каменного материала, конкретное изделие конкретного производителя. Но без цены."""
 
     NAME = (
         ('brick', 'Кирпич'),
@@ -334,32 +335,38 @@ class RockWallMaterialUnit(models.Model):
 
     wall_type = models.ManyToManyField(WallType, help_text='Типы стен, куда можно применить этот материал')
 
-    YN = (
-        ('no', 'Нет'),
-        ('yes', 'Да'),
-    )
+    designed_for_backing = models.BooleanField(default=True, help_text="Предназначен для забутовки")
+    designed_for_backing_with_decorative_face = models.BooleanField(default=True, help_text="Предназначен для забутовки, но с декоративной гранью")
+    designed_for_facing = models.BooleanField(default=True, help_text="Предназначен для облицовки")
 
-    PURPOSE = (
-        ('wall', 'Рядовой '),
-        ('fasade', 'Лицевой'),
-    )
+    # YN = (
+    #     ('no', 'Нет'),
+    #     ('yes', 'Да'),
+    # )
 
-    purpose = models.CharField(
-        max_length=6,
-        choices=PURPOSE,
-        default='wall',
-        help_text='Назначение: рядовой, лицевой',
-    )
+    # PURPOSE = (
+    #     ('wall', 'Рядовой '),
+    #     ('fasade', 'Лицевой'),
+    # )
 
-    decorative_face = models.CharField(
-        max_length=3,
-        choices=YN,
-        default='no',
-        help_text='Наличие декоративной грани (для рядового кирпича)',
-    )    
+    # purpose = models.CharField(
+    #     max_length=6,
+    #     choices=PURPOSE,
+    #     default='wall',
+    #     help_text='Назначение: рядовой, лицевой',
+    # )
 
-    face = models.ForeignKey(
-        DecorativeBrickFace, help_text='Выберите название рисунка декоратьивной грани', on_delete=models.SET_NULL, null=True, blank=True)
+    # decorative_face = models.CharField(
+    #     max_length=3,
+    #     choices=YN,
+    #     default='no',
+    #     help_text='Наличие декоративной грани (для рядового кирпича)',
+    # )    
+
+    texture = models.ForeignKey(
+        Texture, help_text='Текстура материала', on_delete=models.SET_NULL, null=True, blank=True)
+
+    texture_settings = models.TextField(help_text='Индивидуальные настройки текстуры данного материала', null=True, blank=True)
 
     BODY_TYPE = (
         ('solid', 'Полнотелый'),
@@ -592,7 +599,7 @@ class RockWallMaterialUnit(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.id}, {self.manufacturer.name}, {self.name}, {self.material}, {self.purpose}'
+        return f'{self.id}, {self.manufacturer.name}, {self.name}, {self.material}'
 
     def get_absolute_url(self):
         """Returns the url to access a detail record for this material."""
