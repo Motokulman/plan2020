@@ -4,7 +4,7 @@
     "key": "MeshPhongMaterial",
     "obj": {
         "type": "MeshPhongMaterial",
-        "color": "#1b4adf",
+        "color": "#ffffff",
         "skinning": false,
         "flatShading": false,
         "depthFunc": 3,
@@ -16,7 +16,12 @@
         "wireframe": false,
         "reflectivity": 1,
         "refractionRatio": 0.98,
-        "textur": [],
+        "textur": [
+            {
+                "id": "t_2",
+                "name": "map"
+            }
+        ],
         "emissive": "#000000",
         "specular": "#111111",
         "shininess": 30

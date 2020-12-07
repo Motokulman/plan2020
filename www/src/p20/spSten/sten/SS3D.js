@@ -100,7 +100,7 @@ export class SS3D  {
 		this.arrGrani[1]=new SGrani(this,1,this.par.par.pm.matDop.getIDReturn(this._color1));
 		this.arrGrani[2]=new SGrani(this,0,this.par.par.pm.matDop.getIDReturn(this._color2));
 		this.arrGrani[3]=new SGrani(this,1,this.par.par.pm.matDop.getIDReturn(this._color3));
-
+		for (var i = 0; i < this.arrGrani.length; i++)this.arrGrani[i].idArr=i
 
 
 		
@@ -244,11 +244,10 @@ export class SGrani{
 		this._distans=0;
 		this._material=material
 		this.korektRect=this.par.korektRect
-
 		this.cont3d = new THREE.Object3D();
 	    this.par.cont3d.add(this.cont3d);
-
-	  	this.boolVergDrag=false  
+	  	this.boolVergDrag=false 
+	  	this.idArr=-1 
 
 
 	    this.arrP=[new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3()]
@@ -347,13 +346,15 @@ export class SGrani{
 		
 			for (var i = 0; i < 5; i++) {
 				if(this.arr[i].dist!=0){
-					if(i==2){						
+					if(i==2){	
+						if(this.par.par.idArr==1)if(this.idArr==0)	this.korektRect.boolDebug=true;				
 						this.korektRect.colizX=0//-this.arrP[i].x;
-						
+
 						this.arr[i].setNaRect(
 						0,this.par.par.windows.world,
 						this.h,
 						this.y,null,this.arrP[i].x);
+						this.korektRect.boolDebug=false;	
 					}
 					else{
 						this.arr[i].setNaRect(
@@ -506,7 +507,7 @@ export class VergLittel{
 		this.mesh=new THREE.Mesh(this.geometry,this._material)
 		this.par.cont3d.add(this.mesh)
 
-
+		this.normalPosit=new THREE.Vector3(0,1,0)
 
 		this.setGrani=function(gran,gran1){			
 			if(gran.boolVergDrag==false&&gran1.boolVergDrag==false){
@@ -517,7 +518,7 @@ export class VergLittel{
 				for (var i = gran1.arrP.length-2; i >=1 ; i--) {				
 					this.geometry.addTri(gran1.arrP[gran1.arrP.length-1],gran1.arrP[i],gran1.arrP[i-1])
 				}
-				this.geometry.redrag()
+				this.geometry.redrag(this.normalPosit)
 
 
 				if(this.mesh.visible==false)this.mesh.visible=true

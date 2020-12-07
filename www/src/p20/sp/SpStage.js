@@ -7,6 +7,8 @@ import { KorektSplice } from './KorektSplice.js';
 import { Splice } from './Splice.js';
 import { SpPol } from './SpPol.js';
 import { SpPoint } from './SpPoint.js';
+import { SpVP } from './SpVP.js';
+
 import { Rectangle, Calc, PositionFun, Position, LinePosition} from './Calc.js';
 /**
 * мир для сращалок
@@ -56,6 +58,8 @@ export function SpStage () {
 	this.arrClear = [];
 	this.arrClearState = [];
 
+	this.avp = [];
+
 	/** базовый конфиг который пришел в setConfig чтоб задать параметры для configData
 	* @member {Object}
 	*/
@@ -103,6 +107,8 @@ export function SpStage () {
 	this.getSplice=function(){ return new Splice(this);}
 	this.getPol=function(){ return new SpPol(this);}
 
+	this.getVP=function(){ return new SpVP(this);}
+
 	this.render=function(){}
 	
 
@@ -136,6 +142,24 @@ SpStage.prototype = {
 		this.arrPoint.push(comand);
 		this.arrPoint[this.arrPoint.length - 1].idArr = this.arrPoint.length - 1;
 		return this.arrPoint[this.arrPoint.length - 1];
+	},
+
+
+	/**
+	* Создать точку это мира(определенного типа this.tipPoint)
+	* @return {SpPoint} точка
+	*/
+	craetVP: function () {
+		for (var i = 0; i < this.avp.length; i++) {
+			if (this.avp[i].life == false) {
+				this.avp[i].life = true;
+				return this.avp[i];
+			}
+		}
+		var comand = this.getVP();//'new ' + this.tipPoint + '(this)';eval(comand)
+		this.avp.push(comand);
+		this.avp[this.avp.length - 1].idArr = this.avp.length - 1;
+		return this.avp[this.avp.length - 1];
 	},
 
 	// --------------------------метода стен--------------

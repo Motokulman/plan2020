@@ -5,9 +5,11 @@ import { Windows } from './Windows.js';
 import { Sten3D } from './Sten3D.js';
 */
 import { Splice } from './../../sp/Splice.js';
+import { SpVLines } from './../../sp/SpVLines.js';
 import { SPLWindow } from './SPLWindow.js';
 import { SS2D } from './SS2D.js';
 import { SS3D } from './SS3D.js';
+
 
 import { SSMatematik} from './SSMatematik.js';
 /**
@@ -19,7 +21,7 @@ export function SpliceSten (_stage) {
 	Splice.call(this,_stage);
 	var self = this;
 	this.type = 'SpliceSten';
-	this.tipe = 'SpliceSten';
+	this.tipe = 'Splice';
 	this.stage = _stage;
 	this.par = _stage;
 	this._boolText = true;
@@ -78,6 +80,13 @@ export function SpliceSten (_stage) {
 	//смещеная над
     this.cont2dOfset = new PIXI.Container();
 	
+	//нулевой приметив
+	this.cont2d0 = new PIXI.Container();
+	_stage.cont2dVerh.addChild(this.cont2d0);
+
+    this.graph0 = new PIXI.Graphics();
+   	this.cont2d0.addChild(this.graph0);
+
 
 
 	this.content3d = new THREE.Object3D();
@@ -87,7 +96,9 @@ export function SpliceSten (_stage) {
 
 
 	this.matematik=new SSMatematik(this);
-	
+
+
+	this.vLines=new SpVLines(this)
 
 
 
@@ -150,7 +161,9 @@ export function SpliceSten (_stage) {
 		this.content3d.rotation.z=this._rotation;
 
 		
-		
+		this.vLines.upDate()
+		this.graph0.clear()
+		this.vLines.drawDebug(this.graph0)
 		
 		this.ss3d.dragPost();
 		this.draw1();

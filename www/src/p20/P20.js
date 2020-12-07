@@ -46,6 +46,7 @@ export class P20  {
         trace(m)
         trace(m2)*/
 
+
         this.aDefolt=[13,13,13]
 
 
@@ -269,8 +270,8 @@ export class P20  {
             return s.getRect()
         }
 
-        this.korektHeight()
-        this.fun("complit")
+        this.korektHeight();
+        this.fun("complit");
     }
 
 

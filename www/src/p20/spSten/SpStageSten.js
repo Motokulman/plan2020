@@ -2,6 +2,7 @@
 //import { TriangulateShape } from './TriangulateShape.js';
 import { SpliceSten } from './sten/SpliceSten.js';
 import { SpPointSten } from './SpPointSten.js';
+import { SpVPXz } from './SpVPXz.js';
 import { SpDebugPixi } from './SpDebugPixi.js';
 //import { Pol3D } from './Pol3D.js';
 import { SpStage } from './../sp/SpStage.js';
@@ -178,7 +179,7 @@ export function SpStageSten (par,  fun) {
 	this.getPoint=function(){ return new SpPointSten(this);}
 	this.getSplice=function(){return new SpliceSten(this);}
 	this.getPol=function(){ return new SpPolygon(this);}
-
+	this.getVP=function(){ return new SpVPXz(this);}
 
 
 

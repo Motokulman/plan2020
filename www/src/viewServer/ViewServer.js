@@ -12,7 +12,7 @@ export class ViewServer  {
 
         this.openId=function(_id) {
             this.id=_id;
-            trace(_id)
+            
             var obj={//то что посылаем через аякс на сервер, собственно тут сам запрос
                 url: 'https://alphakp.ru/catalog/plan/'+_id+'/edit_scheme/set_scheme',
                 type: 'GET',
