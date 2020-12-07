@@ -12,12 +12,12 @@ export class Unik_Vent {
         this.sizeLine = this.par.par._sizeLine
 
         this.aB=[ 
+            {tipe:'DCheckBox', name: 'check1', param: 'bool', title: 'bool'},
+            {tipe:'DCheckBox', name: 'check3', param: 'bool2', title: 'bool2'},
 
             {tipe:'DSliderBig', name: 'slider1', param: 'wh', title: 'wh', min: 1, max: 500, okrug: 10},
             {tipe:'DSliderBig', name: 'slider2', param: 'numHeightGlav', title: 'numHeight', min: 1, max: 3000, okrug: 10},
-            {tipe:'DCheckBox', name: 'check1', param: 'bool', title: 'bool'},
             {tipe:'DCheckBox', name: 'check2', param: 'bool1', title: 'bool1'},
-            {tipe:'DCheckBox', name: 'check3', param: 'bool2', title: 'bool2'},
             {tipe:'DCheckBox', name: 'check4', param: 'bool3', title: 'bool3'},
         ];
 
@@ -86,8 +86,8 @@ export class Unik_Vent {
             wh = this._wh - this. sizeLine
             wh1 = this._wh1 - this. sizeLine
 
-            whT = this._wh*0.9
-            whT1 = this._wh1*0.9    
+            whT = this._wh
+            whT1 = this._wh1
 
             height = this._height
             bottom = this._bottom
@@ -101,9 +101,11 @@ export class Unik_Vent {
 
             // Треугольник
             sah=0
+            this.setP( whT/2, bottom,  whT1/2, triangle); 
+
             this.setP( whT/2, bottom, -whT1/2, triangle); 
             this.setP(-whT/2, bottom, -whT1/2, triangle);  
-            this.setP(-whT/2, bottom,  whT1/2, triangle); 
+            // this.setP(-whT/2, bottom,  whT1/2, triangle); 
 
             // Башня
             sah=0
@@ -125,17 +127,13 @@ export class Unik_Vent {
             if (p == 'bot') s.y = this._bottom
             if (p == 'mid') s.y = this._height/2
             if (p == 'top') s.y = this._height
+                
             if (p == 'wallBot') s.y = this._numHeight          
             if (p == 'wallMid') s.y = this._numHeight - (this.wh/2)
             if (p == 'wallTop') s.y = this._numHeight - this.wh
 
-            if (p == 'wallBot' && p1 == tower) s.z = s.z != this._delph ? -this._delph :  this._delph
-            if (p == 'wallTop' && p1 == tower) s.z = s.z != this._delph ? -this._delph :  this._delph
-
             if (p == 'wallBot' && p1 == cube || p == 'wallTop' && p1 == cube) if (s.z == wh1/2) s.z = this._delph
             if (p == 'wallBot' && p1 == cube || p == 'wallTop' && p1 == cube) if (s.z == -wh1/2) s.z = -this._delph
-
-            // if (p == 'wallTop' && p1 == cube) s.z = s.z != wh1/2 ? -this._delph :  this._delph
 
             if (p == 'path') s.z = s.z > 0 ? this._delph : -this._delph
             return s
@@ -199,7 +197,7 @@ export class Unik_Vent {
 
         // Отрисовываем объект в 2D
         this.getStructures2D=function(_structures, _position){
-            sah=this.array[_structures].length;
+            sah=this.array[_structures].length+1;
             sah1=0;
             this.graphics.beginFill(0xff2222, 0);
             this.graphics.lineStyle(this.sizeLine, 0x222222, 1);
@@ -297,8 +295,8 @@ export class Unik_Vent {
             this.arrayInfo = []
             for (var i = 0; i < this.aB.length; i++) {
                 e = this.aB[i].param
-                if(this._bool3 == true) if (e == 'numHeight' || e == 'bool' || e == 'bool2' || e == 'bool3') this.arrayInfo.push(this.aB[i])
                 if(this._bool2 != true && this._bool3 != true) if (e != 'numHeight') this.arrayInfo.push(this.aB[i])
+                if(this._bool3 == true) if (e == 'numHeight' || e == 'bool' || e == 'bool2' || e == 'bool3') this.arrayInfo.push(this.aB[i])
                 if(this._bool2 == true && this._bool3 != true) this.arrayInfo.push(this.aB[i])
             }
             this.control()

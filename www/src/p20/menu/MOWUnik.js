@@ -11,6 +11,7 @@ export class MOWUnik{
         this.dCont=new DCont(this.par.window.content); 
 
         this.pObject=new DParamObject(this.dCont,10,2,function(){
+            self.postSO()
         },false);
 
 
@@ -48,6 +49,13 @@ export class MOWUnik{
     }
 
     set active(value) {
+        if(this._active!=value){
+            this._active= value;            
+            
+        }
+    }    
+    get active() { return  this._active;} 
+        set active(value) {
         if(this._active!=value){
             this._active= value;            
             
