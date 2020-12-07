@@ -7,14 +7,17 @@ export class Blok  {
         this.type="Blok";
         var self=this;
         this.par=par;
-        this.obj=obj;
+        this.objBase=obj;
+        this.obj=obj.obj;
         this.fun=fun;
 
         this.id=obj.id;
-        this.icon=obj.icon;
+        this.icon="resources/data/"+this.id+"/128.png";
 
-        this.typeStr=obj.str[0]
-        this.typeStr1=obj.str[1]
+        trace(obj.icon)
+
+        this.typeStr=this.obj.str[0]
+        this.typeStr1=this.obj.str[1]
 
         this.idArr=-1;
 
@@ -47,25 +50,23 @@ export class Blok  {
         this.body=undefined;
         this.shape=undefined;
 
-
+        
         this.rect={}
-        this.rect.x= this.obj.rect[0];
-        this.rect.y= this.obj.rect[1];
-        this.rect.z= this.obj.rect[2];
-        this.rect.w= this.obj.rect[3];
-        this.rect.h= this.obj.rect[4];
-        this.rect.d= this.obj.rect[5];
+        this.rect.x= this.obj.mod.r[0];
+        this.rect.y= this.obj.mod.r[1];
+        this.rect.z= this.obj.mod.r[2];
+        this.rect.w= this.obj.mod.r[3];
+        this.rect.h= this.obj.mod.r[4];
+        this.rect.d= this.obj.mod.r[5];
 
         this._width=this.rect.w;
         this._height=this.rect.h;
         this._delph=this.rect.d;        
 
-        this.col=parseInt(this.obj.rect[6],2)
-        this.col1=parseInt(this.obj.rect[7],2)
-        this.offset=this.obj.rect[8];
-
+        this.col=parseInt(this.obj.str[2],2)
+        this.col1=parseInt(this.obj.str[3],2)
+        this.offset=this.obj.num[0];       
         
-        trace("^^^",this._width)
        
 
         this.init = function(){            
@@ -79,9 +80,9 @@ export class Blok  {
             this.body.col1=this.col1
             this.body.offset=this.offset
 
-            this._width=obj.rect[3];
-            this._height=obj.rect[5];
-            this._delph=obj.rect[4];
+            this._width=this.obj.mod.r[3];
+            this._height=this.obj.mod.r[5];
+            this._delph=this.obj.mod.r[4];
             this.dragWHD();
 
             if(this.funInit!=undefined)this.funInit()

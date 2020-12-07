@@ -1,10 +1,10 @@
 {
     "id": "m_2",
     "title": "title_m_2",
-    "key": "MeshPhongMaterial",
+    "key": "MeshPhysicalMaterial",
     "obj": {
-        "type": "MeshPhongMaterial",
-        "color": "#ffffff",
+        "type": "MeshPhysicalMaterial",
+        "color": "#ff4178",
         "skinning": false,
         "flatShading": false,
         "depthFunc": 3,
@@ -15,10 +15,14 @@
         "alphaTest": 0,
         "wireframe": false,
         "reflectivity": 1,
-        "refractionRatio": 0.98
+        "refractionRatio": 0.98,
+        "emissive": "#000000",
+        "specular": "#111111",
+        "shininess": 117.24
     },
     "mirro": false,
     "resurs": {
         "array": []
-    }
+    },
+    "orig": "xz.png"
 }

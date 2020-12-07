@@ -33,7 +33,7 @@ export class KRUColi  {
                 for (var i = 0; i < this.par.coliz.array.length; i++) {
                     for (var j = 0; j < this.par.coliz.array[i].array.length; j++) {
                         br=this.getW(); 
-                        br.setShape(this.par.coliz.array[i].array[j],this.par.coliz.array[i].position);
+                        br.setShape(this.par.coliz.array[i].array[j],this.par.coliz.array[i].position,this.par.colizX);
                         this.par.arrWinDin.push(br);   
                     }
                 }
@@ -70,10 +70,10 @@ export class KRBodyRect  {
         }
 
 
-        this.setShape=function(_shape,_p) {
+        this.setShape=function(_shape,_p,_colizX) {
             
-
-            this.x=_shape.rect.x+_p.x;
+            
+            this.x=_shape.rect.x+_p.x+_colizX;
             this.y=//-_shape.rect.y+_p.y;
             this.w=_shape.rect.w;
             this.h=_shape.rect.h;

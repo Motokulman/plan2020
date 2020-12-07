@@ -39,6 +39,15 @@ export function SpliceSten (_stage) {
 	this._out = _stage.out;// несущия
 	this._adjacent = _stage.adjacent;// несущия
 
+
+	this._color=this.par.aDefolt[1];
+	this._color1=this.par.aDefolt[1];
+	this._color2=this.par.aDefolt[2];
+	this._color3=this.par.aDefolt[2];
+	this._color4=this.par.aDefolt[0];
+
+
+
 	
 
 	if(this._carrier==true)this._delph =_stage._delphC1;
@@ -202,6 +211,13 @@ SpliceSten.prototype.getObj = function () {
 	o.carrier=this.carrier;
 	o.out=this.out;
 	o.adjacent=this.adjacent;
+
+	o.color=this.color;
+	o.color1=this.color1;
+	o.color2=this.color2;
+	o.color3=this.color3;
+	o.color4=this.color4;
+
 	return o;
 };
 SpliceSten.prototype.setObj = function (o) {
@@ -218,6 +234,14 @@ SpliceSten.prototype.setObj = function (o) {
 	if (o.carrier!== undefined ) this.carrier=o.carrier;
 	if (o.out!== undefined ) this.out=o.out;
 	if (o.adjacent!== undefined ) this.adjacent=o.adjacent;	
+
+	if (o.color!== undefined ) this.color=o.color;
+	if (o.color1!== undefined ) this.color1=o.color1;
+	if (o.color2!== undefined ) this.color2=o.color2;
+	if (o.color3!== undefined ) this.color3=o.color3;
+	if (o.color4!== undefined ) this.color4=o.color4;
+	
+	
 	
 };
 SpliceSten.prototype.compare = function (_sten) {
@@ -371,6 +395,78 @@ Object.defineProperties(SpliceSten.prototype, {
 		},
 		get: function () { return this._bChaz; }
 	},
+
+	color: {
+		set: function (value) {
+			if (this._color === value) return;
+
+			this._color = value;	
+		
+			this._setAllParam('color', this._color);
+			if(this.funDragMenu!=undefined)this.funDragMenu();
+			this.stage.render()
+		},
+		get: function () { return this._color; }
+	},
+
+	color1: {
+		set: function (value) {
+			if (this._color1 === value) return;
+
+			this._color1 = value;	
+		
+			this._setAllParam('color1', this._color1);
+			if(this.funDragMenu!=undefined)this.funDragMenu();
+			this.stage.render()
+		},
+		get: function () { return this._color1; }
+	},
+
+	color2: {
+		set: function (value) {
+			if (this._color2 === value) return;
+			this._color2 = value;	
+		
+			this._setAllParam('color2', this._color2);
+			if(this.funDragMenu!=undefined)this.funDragMenu();
+			this.stage.render()
+		},
+		get: function () { return this._color2; }
+	},
+
+	color3: {
+		set: function (value) {
+			if (this._color3 === value) return;
+			this._color3 = value;	
+		
+			this._setAllParam('color3', this._color3);
+			if(this.funDragMenu!=undefined)this.funDragMenu();
+			this.stage.render()
+		},
+		get: function () { return this._color3; }
+	},
+
+	color4: {
+		set: function (value) {
+			if (this._color4 === value) return;
+			//trace("%%%%%",this.idArr,this._color,value);
+			this._color4 = value;	
+		
+			this._setAllParam('color4', this._color4);
+			if(this.funDragMenu!=undefined)this.funDragMenu();
+			this.stage.render()
+		},
+		get: function () { return this._color4; }
+	},
+
+
+
+
+//this._color
+
+
+
+
 });
 
 

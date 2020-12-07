@@ -102,22 +102,23 @@ export class Main  {
   		} 
 
 
-  		/*//грузим базовый фаил
+  		//грузим базовый фаил
   		$.ajax({
             url: "resources/config.json",
             success: function function_name(data) {                         
                 if(typeof data === "string") {
 					var conf = JSON.parse(data)
 					self.objectBase = conf;
-				} else self.objectBase = data;						
+				} else self.objectBase = data;
+				trace("$$$$$$",self.objectBase);						
 				self.start();	                                
             },
             error:function function_name(data) {
                 console.log("Что то случилось с конфигом")
             }
-        });*/
+        });
 
-        self.start();
+        //self.start();
   	}
 }
 

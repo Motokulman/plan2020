@@ -1,5 +1,5 @@
 
-
+import { PlaneXZ } from '../../plus/PlaneXZ.js';
 
 export class SS3D  {
   	constructor(par,fun) {  		
@@ -7,7 +7,8 @@ export class SS3D  {
         var self=this;
         this.par=par;
 
-
+        this._height=par._height;
+		this._height1=par._height1;
         this._life= par._life;
 
         var sahh=0
@@ -17,6 +18,12 @@ export class SS3D  {
         this._distans=0;
         this._delph=0;
 		this._rotation=0;
+
+		this._color=this.par._color;
+		this._color1=this.par._color1;
+		this._color2=this.par._color2;
+		this._color3=this.par._color3;
+		this._color4=this.par._color4;
 
 		this._boolLitel=true;
 
@@ -58,7 +65,6 @@ export class SS3D  {
    		
        	this.pS={x:0,y:0,w:1000,h:1000}//Параметры текстурировнаия и начало энного
 
-    	
         this.dragPost=function(){
         	this.draw1();
         }
@@ -69,208 +75,96 @@ export class SS3D  {
 			this._distans=this.par._distans;
 			this._delph=this.par._delph;
 			this._rotation=this.par._rotation;
-	
-            
-            //this.drawBig()
+
+            this.cont3d.position.z=-(this._height+this._height1)
+       		
             this.drawGrani();
-            this.drawLittel()
-			
-			//this.mesh.position.x=this._distans/2;						
+            this.drawLittel();
+            this.drawVerg();
 		}
 
 
 		this.drawLittel = function () {
-			this.lineSegments.scale.set(this._distans,this.par._height,1);
+			this.lineSegments.scale.set(this._distans,(this._height+this._height1),1);
 			this.lineSegments.position.x=this._distans/2;
-			this.lineSegments.position.z=-this.par._height/2;
+			this.lineSegments.position.z=-(this._height+this._height1)/2;
 		}
 
-		this.arrP=[new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3()]
-		this.arrP1=[new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3()]
-
-		this.arr=[];//этажа
-		this.arr1=[];//этажа
-
-		for (var i = 0; i < 5; i++) {
-			this.arr[i]=new GronSten(this);
-			this.arr[i].idArr=i;
-
-			this.arr1[i]=new GronSten(this);
-			this.arr1[i].idArr=i;
-		}
+		this.vergLittel=new VergLittel(this,this.par.par.pm.matDop.getIDReturn(this._color4))
 
 
+
+		
 		this.arrGrani=[];//этажа
-		this.arrGrani[0]=new SGrani(this,0)
-		this.arrGrani[1]=new SGrani(this,1)
-		this.arrGrani[2]=new SGrani(this,0)
-		this.arrGrani[3]=new SGrani(this,1)
+		this.arrGrani[0]=new SGrani(this,0,this.par.par.pm.matDop.getIDReturn(this._color));
+		this.arrGrani[1]=new SGrani(this,1,this.par.par.pm.matDop.getIDReturn(this._color1));
+		this.arrGrani[2]=new SGrani(this,0,this.par.par.pm.matDop.getIDReturn(this._color2));
+		this.arrGrani[3]=new SGrani(this,1,this.par.par.pm.matDop.getIDReturn(this._color3));
+
+
+
+		
+		this.drawVerg= function () {
+			this.vergLittel.setGrani(this.arrGrani[0],this.arrGrani[1]);
+		}
+
+
 
 		this.drawGrani = function () {
-			if(this.par.idArr!=0)return
+			//if(this.par.idArr!=0)return;
+			
+			//Порядок важен	
 			this.arrGrani[0].dragPost();
-			this.arrGrani[0].dragGeometry();
+			this.arrGrani[1].dragPost();
+			this.arrGrani[0].setGrani1(this.arrGrani[1]);//!!! переворачиваем 
+			this.arrGrani[0].dragGeometry();			
+			this.arrGrani[1].dragGeometry();
+			/////////////////////////
+
+			this.arrGrani[2].dragPost();
+			this.arrGrani[3].dragPost();
+			this.arrGrani[2].setGrani1(this.arrGrani[3]);//!!! переворачиваем 
+			this.arrGrani[2].dragGeometry();			
+			this.arrGrani[3].dragGeometry();
 		}
 
 
-
-/*
-
-		this.plusVor(-this.arrPosit[0].x,this.arrPosit[0].y)
-
-			this.plusVor(this.arrPosit1[5].x+this._distans,this.arrPosit1[5].y)*/
-	
-
-		this.rect={x:0,y:0,w:7000,h:3000};
-		var ss,ss1,ss2
-		this.drawBig = function () {
-			
-			//if(this.par.idArr!=0)return
-
-
-
-
-
-
-				
-			this.arrP[0].set(-this.par.arrPosit[2].x,this.par.arrPosit[2].y,0);
-			this.arrP[1].set(-this.par.arrPosit[1].x,this.par.arrPosit[1].y,0);
-			this.arrP[2].set(-this.par.arrPosit[0].x,this.par.arrPosit[0].y,0);
-
-			this.arrP[3].set(this.par.arrPosit1[5].x+this.par._distans, this.par.arrPosit1[5].y,0);
-			this.arrP[4].set(this.par.arrPosit1[4].x+this.par._distans, this.par.arrPosit1[4].y,0);
-			this.arrP[5].set(this.par.arrPosit1[3].x+this.par._distans, this.par.arrPosit1[3].y,0);
-
-
-			for (var i = 0; i <5; i++) {					
-				this.arr[i].setPosit(this.arrP[i],this.arrP[i+1])
-			}
-
-
-			this.arrP1[5].set(this.par.arrPosit1[2].x+this.par._distans,this.par.arrPosit1[2].y,0);
-			this.arrP1[4].set(this.par.arrPosit1[1].x+this.par._distans,this.par.arrPosit1[1].y,0);
-			this.arrP1[3].set(this.par.arrPosit1[0].x+this.par._distans,this.par.arrPosit1[0].y,0);
-
-
-			this.arrP1[2].set(-this.par.arrPosit[4].x,this.par.arrPosit[4].y,0);
-			this.arrP1[1].set(-this.par.arrPosit[5].x,this.par.arrPosit[5].y,0);
-			this.arrP1[0].set(-this.par.arrPosit[3].x,this.par.arrPosit[3].y,0);
-		
-			
-
-
-
-			
-			
-			
-
-			
-			
-			
-
-
-			for (var i = 0; i <5; i++) {					
-				this.arr1[i].setPosit(this.arrP1[i],this.arrP1[i+1])
-			}
-
-			
-/*
-			this.arr[2].setNaRect(
-			0,this.par.windows.world,
-			this.par._height,
-			this.pS,0, this.arr[2].p.x)
-
-
-			return
-*/
-			ss=0
-			var sahh
-			var sasa
-			var bb
-			for (var i = 0; i <5; i++) {				
-				sasa=0;
-			
-				bb=false;
-
-				if(i==0 || i==1 ){
-					this.arr[i].redragP()
-					this.arr[i].setNaRect(
-					ss,null,
-					this.par._height,
-					this.pS,1,0)
-					bb=true
-				}
-				if(i==2){
-					this.arr[i].setNaRect(
-					ss,this.par.windows.world,
-					this.par._height,
-					this.pS,0,this.arr[i].p.x)
-					bb=true
-				}
-
-
-				if(bb==false){
-					this.arr[i].setNaRect(
-					ss,null,
-					this.par._height,
-					this.pS,0,0)
-				}			
-
-				if(i==2){						
-					if(this.arr[i].dist!=0){
-						ss=(this.arr[i].dist-(Math.floor(this.arr[i].dist/this.pS.w)*this.pS.w))							
-					}
-				}
-				if(i==3){
-					ss1=ss;
-					if(this.arr[i].dist!=0){
-						ss1=(this.arr[i].dist-(Math.floor(this.arr[i].dist/this.pS.w)*this.pS.w))+ss;							
-					}
-				}
-				if(i==4){
-					ss2=ss1;
-					if(this.arr[i].dist!=0){
-						ss2=(this.arr[i].dist-(Math.floor(this.arr[i].dist/this.pS.w)*this.pS.w))+ss1;							
-					}
-				}
-				
-			}
-
-			
-			
-
-
-			for (var i = 0; i <5; i++) {
-				bb=false;
-				if(i==4 || i==3 ){
-					if(this.arr1[i].dist!=0){					
-						this.arr1[i].redragP()					
-						this.arr1[i].setNaRect(
-						ss2,null,
-						this.par._height,
-						this.pS,0)
-						bb=true;
-					}
-				}
-
-				if(i==2){				
-					this.arr1[i].setNaRect(
-					0,this.par.windows.world,
-					this.par._height,
-					this.pS,1,this.arr1[i].p.x)
-					bb=true;
-				}
-
-				if(bb==false){	
-					this.arr1[i].setNaRect(
-					0,null,
-					this.par._height,
-					this.pS,1)
-				}				
-			}
-			
+		this.redrahHHH = function () {			
+			this.arrGrani[0].h=this.arrGrani[1].h=this._height
+			this.arrGrani[1].y=this.arrGrani[0].y = 0//-this._height1
+			this.arrGrani[2].h=this._height1
+			this.arrGrani[2].y=this._height
+			this.arrGrani[3].h=this._height1
+			this.arrGrani[3].y=this._height
 		}
+		this.redrahHHH()
+
+
+		this.testMaterial= function () {	
+			
+		}  
+		this.testMaterial();
+
     }
+
+    set height(value) {
+        if(this._height!=value){
+            this._height= value;
+        	this.redrahHHH()
+        }
+    }    
+    get height() { return  this._height;}  
+
+    set height1(value) {
+        if(this._height1!=value){
+            this._height1= value;
+        	this.redrahHHH()
+        }
+    }    
+    get height1() { return  this._height1;}  
+
+
+     
 
     set active(value) {
         if(this._active!=value){
@@ -287,23 +181,75 @@ export class SS3D  {
     }    
     get life() { return  this._life;}
 
+
+    set color(value) {
+        if(this._color!=value){
+            this._color= value;
+            this.arrGrani[0].material=this.par.par.pm.matDop.getIDReturn(this._color)
+            this.testMaterial()                      
+        }
+    }    
+    get color() { return  this._color;}
+
+    set color1(value) {
+        if(this._color1!=value){
+            this._color1= value;
+            this.arrGrani[1].material=this.par.par.pm.matDop.getIDReturn(this._color1)
+            this.testMaterial()                      
+        }
+    }    
+    get color1() { return  this._color1;}
+
+    set color2(value) {
+        if(this._color2!=value){
+            this._color2= value;
+            this.arrGrani[2].material=this.par.par.pm.matDop.getIDReturn(this._color2)
+            this.testMaterial()                      
+        }
+    }    
+    get color2() { return  this._color2;}
+
+    set color3(value) {
+        if(this._color3!=value){
+            this._color3= value;
+            this.arrGrani[3].material=this.par.par.pm.matDop.getIDReturn(this._color3)
+            this.testMaterial()                      
+        }
+    }    
+    get color3() { return  this._color3;}
+
+    set color4(value) {
+        if(this._color4!=value){
+            this._color4= value;
+            this.vergLittel.material=this.par.par.pm.matDop.getIDReturn(this._color3)
+            this.testMaterial()                      
+        }
+    }    
+    get color4() { return  this._color4;}
+
+
+
 }
 
 
 export class SGrani{
-	constructor( par , sahTextur) {
+	constructor( par , sahTextur, material) {
 		this.type = 'SGrani';	
 		this.par=par;
 		this.sahTextur=sahTextur;//Повороты текстур
 		this.y=0;
-		this.h=1000;
+		this.h=3000;
 		this.arrPosit=this.par.par.arrPosit;
 		this.arrPosit1=this.par.par.arrPosit1;
 		this._distans=0;
+		this._material=material
 		this.korektRect=this.par.korektRect
 
 		this.cont3d = new THREE.Object3D();
 	    this.par.cont3d.add(this.cont3d);
+
+	  	this.boolVergDrag=false  
+
 
 	    this.arrP=[new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3()]
 	    this.arr=[];	
@@ -327,20 +273,66 @@ export class SGrani{
 				this.arrP[5].set(this.arrPosit1[2].x+this._distans,this.arrPosit1[2].y,0);
 				this.arrP[4].set(this.arrPosit1[1].x+this._distans,this.arrPosit1[1].y,0);
 				this.arrP[3].set(this.arrPosit1[0].x+this._distans,this.arrPosit1[0].y,0);
-				this.arrP[2].set(-this.arrPosit[4].x,this.arrPosit[4].y,0);
-				this.arrP[1].set(-this.arrPosit[5].x,this.arrPosit[5].y,0);
+				this.arrP[2].set(-this.arrPosit[5].x,this.arrPosit[5].y,0);
+				this.arrP[1].set(-this.arrPosit[4].x,this.arrPosit[4].y,0);				
 				this.arrP[0].set(-this.arrPosit[3].x,this.arrPosit[3].y,0);
 			}
-
+			this.sahW=0;
 			for (var i = 0; i < 5; i++) {
 				this.arr[i].setPosit(this.arrP[i],this.arrP[i+1])
+				
 				if(this.arr[i].dist==0){
-					if(this.arr[i].mesh.visible!=false)this.arr[i].mesh.visible=true					
+					if(this.arr[i].mesh.visible!=false)this.arr[i].mesh.visible=false					
 				}else{
-					if(this.arr[i].mesh.visible!=true)this.arr[i].mesh.visible=false
+					if(this.arr[i].mesh.visible!=true)this.arr[i].mesh.visible=true
 				}
-			}	
+				this.arr[i].rendSahTextur=this.sahTextur
+			}
+
+			if(this.sahTextur==0){
+				for (var i = 0; i < 5; i++) {
+					this.arr[i].pS.y=0;
+					this.arr[i].pS.w=1000;
+					this.arr[i].pS.h=1000;
+					this.arr[i].pS.x=this.sahW;										
+					if(i>=2)this.sahW+=this.arr[i].dist					
+					
+				}
+			}
+
+			if(this.sahTextur==1){
+				for (var i =4 ; i >=0; i--) {
+					if(i<=1){
+						this.sahW+=(this.arr[i].dist)//%this.arr[i].pS.w;
+					
+					}					
+					this.arr[i].pS.y=0;
+					this.arr[i].pS.w=1000;
+					this.arr[i].pS.h=1000;
+					this.arr[i].pS.x=-this.sahW;	
+				}
+			}
 		}
+
+		this.setGrani1=function(grani){
+			grani.arr[3].redragP();
+			grani.arr[4].redragP();
+			grani.arr[3].rendSahTextur=this.sahTextur;
+			grani.arr[4].rendSahTextur=this.sahTextur;
+			grani.arr[3].pS.x=this.sahW;
+			grani.arr[4].pS.x=this.sahW+grani.arr[3].dist;
+
+
+			this.arr[0].redragP();
+			this.arr[1].redragP();
+
+			this.arr[0].rendSahTextur=grani.sahTextur;
+			this.arr[1].rendSahTextur=grani.sahTextur;
+
+			this.arr[0].pS.x=-this.arr[0].dist-grani.sahW;
+			this.arr[1].pS.x=-this.arr[0].dist-this.arr[1].dist-grani.sahW;
+		}
+		this.sahW=0
 
 		this.dragGeometry=function(){
 			if(this.h==0){
@@ -349,20 +341,44 @@ export class SGrani{
 			}else{
 				this.cont3d.visible=true
 			}
+
+			this.korektRect.boolDebug=false;
+			this.boolVergDrag=false;
+		
 			for (var i = 0; i < 5; i++) {
 				if(this.arr[i].dist!=0){
-					this.arr[i].setNaRect(
-					0,null,
-					this.h,
-					this.par.pS,0,0);
-
-
-				}				
-			}
-
-			
+					if(i==2){						
+						this.korektRect.colizX=0//-this.arrP[i].x;
+						
+						this.arr[i].setNaRect(
+						0,this.par.par.windows.world,
+						this.h,
+						this.y,null,this.arrP[i].x);
+					}
+					else{
+						this.arr[i].setNaRect(
+						0,null,
+						this.h,
+						this.y,null,0);
+					}
+					if(this.arr[i].boolVergDrag==true)this.boolVergDrag=true;
+				}
+			}			
 		}
 	}
+	set material(value) {		
+        if(this._material!==value){
+            this._material= value;
+            for (var i = 0; i < 5; i++) {
+                this.arr[i].material= value;
+            }          
+        }
+    }    
+    get material() { return  this._material;}
+
+
+
+
 }
 
 
@@ -372,10 +388,15 @@ export class GronSten {
     constructor( par ) {
     	var self = this;
 		this.type = 'GronSten';	
-		this.par=par
-		this.geometry=new PlXZ()	
-		this.mesh=new THREE.Mesh(this.geometry,this.par.par.par.par.mat);	
+		this.par=par;
+		this.geometry=new PlaneXZ();	
+		this.rendSahTextur=0
+
+		this._material=par._material
+
+		this.mesh=new THREE.Mesh(this.geometry,this._material)//this.par.par.par.par.mat);	
 		this.mesh.rotation.x=Math.PI/2;
+
 
 		this.cont3d = new THREE.Object3D();
 	    this.par.cont3d.add(this.cont3d);
@@ -385,6 +406,14 @@ export class GronSten {
 		this.p=new THREE.Vector3();
 		this.p1=new THREE.Vector3();
 		
+
+		this.arrLine=[{p:{x:0,y:-200},p1:{x:5900,y:-400}}];
+	
+		
+		if(this.par.par.par.idArr==0){
+			this.arrLine=[{p:{x:22,y:-200},p1:{x:5900,y:200}}];
+		}
+
 
 		this.rect={x:0,y:0,w:7000,h:3000};
 
@@ -405,56 +434,115 @@ export class GronSten {
 			pp=this.p
 			this.p=this.p1
 			this.p1= pp
-			this.setPRed()
+			this.setPRed();
 		}
 
 		this.setPRed=function(){
 			this.angel=calc.getAngle(this.p,this.p1);
 			this.dist=calc.getDistance(this.p,this.p1);
-
 			this.cont3d.position.x=this.p.x;
 			this.cont3d.position.y=this.p.y;
 			this.cont3d.rotation.z=this.angel;
 		}
 
-
+		this.boolVergDrag=false
 		
 
 		var xSm
-		this.setNaRect=function(_x,_coliz,_h,pS,_nGeom,_xSm){
-		
+		this.setNaRect=function(_x,_coliz,_h,_y,_nGeom,_xSm){		
+			this.boolVergDrag=false	
+			if(this.par.par.par.idArr==0&&this.arrLine[0].p1.y!=2200){
+				this.arrLine=[{p:{x:22,y:-200},p1:{x:5900,y:2200}}];
+			}
+
 			xSm=0;
 			if(_xSm!=undefined)xSm=_xSm;
 		
-			this.rect.y=0;
+			this.rect.y=_y;
 			this.rect.h=_h;
 			this.rect.x=xSm;
 			this.mesh.position.x=-xSm;
 			this.rect.w=this.dist;
-		
 
-			this.mesh.position.z=-_h;
+			//this.mesh.position.z=-_h;
 			this.par.korektRect.rect=this.rect;	
 			this.par.korektRect.coliz=_coliz	
 
-
-			this.pS.x=_x;
-			this.pS.w=pS.w;		
-			this.pS.h=pS.h;	
+			this.par.korektRect.arrLine=this.arrLine
+			
 			this.par.korektRect.pS=this.pS
-
 			this.par.korektRect.korektGrid();
-			this.par.korektRect.setGeom(this.geometry, _nGeom);
+			this.par.korektRect.setGeom(this.geometry, this.rendSahTextur);
 
-			trace(this.rect)
+			this.boolVergDrag=this.par.korektRect.boolVergDrag;
+
+			
 		}
 
     }
+
+
+    set material(value) {		
+        if(this._material!==value){
+            this._material= value;
+            this.mesh.material=this._material;            
+        }
+    }    
+    get material() { return  this._material;}
+
+}
+
+
+
+export class VergLittel{
+    constructor( par , material) {
+    	var self = this;
+		this.type = 'VergLittel';	
+		this.par=par;
+		this.geometry=new PlaneXZ();	
+		this.rendSahTextur=0;
+
+		this._material=material;
+		this.mesh=new THREE.Mesh(this.geometry,this._material)
+		this.par.cont3d.add(this.mesh)
+
+
+
+		this.setGrani=function(gran,gran1){			
+			if(gran.boolVergDrag==false&&gran1.boolVergDrag==false){
+				this.geometry.clear()
+				for (var i = 1; i < gran.arrP.length-1; i++) {				
+					this.geometry.addTri(gran.arrP[0],gran.arrP[i],gran.arrP[i+1])
+				}
+				for (var i = gran1.arrP.length-2; i >=1 ; i--) {				
+					this.geometry.addTri(gran1.arrP[gran1.arrP.length-1],gran1.arrP[i],gran1.arrP[i-1])
+				}
+				this.geometry.redrag()
+
+
+				if(this.mesh.visible==false)this.mesh.visible=true
+			}else{
+				if(this.mesh.visible==true)this.mesh.visible=false
+			}		
+		}		
+	}
+	set material(value) {		
+        if(this._material!==value){
+            this._material= value;
+            this.mesh.material=this._material;            
+        }
+    }    
+    get material() { return  this._material;}
 }
 
 
 
 
+
+
+
+
+/*
 //отрисовывает активную хрень над
 export function STAct (par) {
 	var self = this;
@@ -509,6 +597,12 @@ STAct.prototype = {
 		return this._sahPlus;
 	},
 }
+*/
+
+
+
+
+/*
 
 export class PlXZ extends THREE.BufferGeometry {
     constructor( ) {
@@ -531,10 +625,10 @@ export class PlXZ extends THREE.BufferGeometry {
             vertices.push(-wh,wh,0);
             vertices.push(-wh,wh,0);
             vertices.push(wh,wh,0); 
-            this.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+            this.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3));
         }
         this.upNull();
     }
-}
+}*/
 
 

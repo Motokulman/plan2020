@@ -14,8 +14,8 @@ export class KRUmnik  {
         var ww,hh,b,b1,b2,b3,ww1,ww2,rrr,hh1,hh2,xz,xz1,rect
         this.naStart=function(){
             
-            hh1= this.par.rect.h + this.par.rect.y;
-            hh2=this.par.rect.y;
+            hh1= this.par.rect.h + this.par.rect.y; // 2000
+            hh2=this.par.rect.y;                    // 0
 
             b=false;
             b1=false;
@@ -25,18 +25,27 @@ export class KRUmnik  {
             if(this.par.pS.y!=0){
                 b=true;
                 hh = Math.abs(this.par.pS.y) % this.par.pS.h;
+                xz1=1;
+                xz=1-(hh/this.par.pS.h)
+
+                
+                if(this.par.pS.y>0){
+                    xz=1-xz
+                    xz1=1
+                    hh=(xz1-xz)*this.par.pS.h
+                }
                 if(hh>this.par.rect.h){
                     hh=this.par.rect.h;
-                    b2=true;
-                }         
-                xz=1//hh/this.par.pS.h; 
-
-                this.naVV(hh2,hh,b,b2,1-(hh/this.par.pS.h),xz);
+                    xz1 =(hh + xz*this.par.pS.h )/this.par.pS.h                 
+                }
+                
+                this.naVV(hh2,hh,b,b2,xz,xz1);
 
                 hh2+=hh;
             }
 
-            for (var j = hh2;  j< this.par.rect.h; j+=this.par.pS.h) {
+
+            for (var j = hh2;  j < hh1; j+=this.par.pS.h) {
                 b=false;
                 b1=false;
                 b2=false;
@@ -44,14 +53,16 @@ export class KRUmnik  {
                 if(j==0)if(this.par.pS.y==0)b=true;
 
                 hh=this.par.pS.h;    
-                if(j+hh>this.par.rect.h){
-                    hh=this.par.rect.h-j;
+                if(j+hh>hh1){
+                    hh=hh1-j;
                     b2=true;
                 }                    
-                if(j+hh==this.par.rect.h) b2=true
+                if(j+hh==hh1) b2=true
 
-                xz=hh/this.par.pS.h;    
-                this.naVV(j,hh,b,b2,0,xz);
+                xz = 0;
+                xz1 = hh/this.par.pS.h;
+                
+                this.naVV(j,hh,b,b2,xz,xz1);
 
             }
             this.par.arrDin.length=0
@@ -60,28 +71,78 @@ export class KRUmnik  {
             }
         }
 
-
+        var wwww
         this.naVV = function(_y,_hh,_b,_b2,_sy,_fy){
-            ww1= this.par.rect.w+ this.par.rect.x;
-            ww2=this.par.rect.x;          
+            ww1=this.par.rect.w + this.par.rect.x;//общие растояние
+            ww2=this.par.rect.x; //ночальный шаг                   
+
 
             if(this.par.pS.x!=0){
+               
                 b3=true;
                 ww = Math.abs(this.par.pS.x) % this.par.pS.w;
                 xz1=1;
+
                 xz=1-(ww/this.par.pS.w)
-                if(ww>this.par.rect.w){
-                    ww=this.par.rect.w;
-                    b1=true;
-                    
-                    xz=Math.abs(this.par.pS.x)/this.par.pS.w;
-                    xz1=1;
+
+                if(this.par.pS.x>0){
+                    xz=1-xz
+                    xz1=1
+                    ww=(xz1-xz)*this.par.pS.w
                 }
 
-                this.creatNS(ww2,_y,ww,_hh,_b,b1,_b2,b3,xz,_sy,xz1,_fy)
+                if(ww>this.par.rect.w){
+                    ww=this.par.rect.w;
+                    xz1=(ww+xz*this.par.pS.w )/this.par.pS.w 
+                }
+                
+               
+/**/
+                
+                
+                //if(this.par.sah==0){                    
+                   
+                    /*if(ww>this.par.rect.w){
+                        ww=this.par.rect.w;                     
+                    }*/
+
+           
+
+                /*}else{
+                    xz=1-(ww/this.par.pS.w)
+
+                    if(ww>this.par.rect.w){
+                        ww=this.par.rect.w;
+                        
+                        /*b1=true;
+                        wwww=Math.abs((this.par.rect.w-this.par.pS.x)/(this.par.pS.w));
+                        xz1 = 1 - wwww                   
+                        if (wwww > 1) {
+                            xz1 = 1 - (wwww % Math.trunc(wwww))
+                        }*/
+                   /* }
+
+
+
+                }*/
+                
+                /**/
+
+
+
+            
+                // trace("yz :: yz1 =", _sy, "::", _fy)
+                
+
+
+                this.creatNS(ww2,_y,ww,_hh,_b,b1,_b2,b3, xz,_sy, xz1,_fy)
+                
+               // trace(ww)
                 ww2+=ww;
-            }
-              
+
+                //return
+        }
+
             for (var i = ww2; i < ww1; i+=this.par.pS.w) {
                 b3=false
                 if(i == ww2){
@@ -94,8 +155,9 @@ export class KRUmnik  {
                     b1=true;
                 }                    
                 if(i+ww==ww1) b1=true;
-                xz1=ww/this.par.pS.w;     
-                rrr=this.creatNS(i,_y,ww,_hh,_b,b1,_b2,b3,0,_sy,xz1,_fy);                
+                xz1=ww/this.par.pS.w; 
+
+                rrr=this.creatNS(i,_y,ww,_hh,_b,b1,_b2,b3, 0,_sy, xz1,_fy);                
             }
         }
         this.creatNS=function(x,y,w,h,b,b1,b2,b3,_x,_y,_x1,_y1){
@@ -129,10 +191,10 @@ export class KRUmnik  {
         var sah
         this.isRectLine=function(_rect,rd){ 
             //загоняем в опорные точки           
-            pl0.x=rd.o.p.x
-            pl0.y=rd.o.p.y
-            pl1.x=rd.o.p1.x
-            pl1.y=rd.o.p1.y           
+            pl0.x=rd.o.p.x  // 0
+            pl0.y=rd.o.p.y  // 0
+            pl1.x=rd.o.p1.x // 3000
+            pl1.y=rd.o.p1.y  // 3000
             
             //точки ректа
             aR[0].x=_rect.x;
@@ -151,6 +213,7 @@ export class KRUmnik  {
             rezult.pBool=true
             if(_point.z>0)rezult.pBool=false
             
+
             //номальная в ректе    
             rezult.inBool=false;
             if(_rect.x<rd.o.p.x&&_rect.x1>rd.o.p.x)if(_rect.y<rd.o.p.y&&_rect.y1>rd.o.p.y){
@@ -161,6 +224,7 @@ export class KRUmnik  {
             if(_rect.x<rd.o.p1.x&&_rect.x1>rd.o.p1.x)if(_rect.y<rd.o.p1.y&&_rect.y1>rd.o.p1.y){
                 rezult.inBool1=true;
             }
+
             //обе точки в ректе
             if(rezult.inBool==true &&rezult.inBool1==true){
                 rezult.tip=3;//обе точки внутри
@@ -378,6 +442,7 @@ export class KRUmnik  {
         }
 
         var uv = [];
+        //var norval = [];
       
         var nGeom//0-на 1- от 2 на обоих
         //наполняем геометрию с текстурированием
@@ -387,12 +452,15 @@ export class KRUmnik  {
 
             vertices.length=0
             uv.length=0  
-         
+        
             for (var i = 0; i < this.par.arrDin.length; i++) {
                 this.setGeomB(this.par.arrDin[i]);
             }            
             geometry.setAttribute( 'uv', new THREE.Float32BufferAttribute( uv, 2 ) );          
             geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+            geometry.computeBoundingBox();
+            geometry.computeBoundingSphere();
+            geometry.computeVertexNormals();
         }
 
 

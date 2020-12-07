@@ -35,6 +35,15 @@ export function SpStageSten (par,  fun) {
 	this.tipPoint = 'SpPointSten';
 	this.fun = fun;
 	this.uuid=calc.generateRendom(2);
+	this.objectBase=par.objectBase;
+	this.pm=par.pm;
+	
+	this.aDefolt=par.aDefolt;
+
+
+
+	//var ooo=this.pm.matDop.getIDReturn(15);
+
 
 
 	this.name='xzStart';
@@ -406,6 +415,7 @@ Object.defineProperties(SpStageSten.prototype, {
 		 	return this._status;
 		}
 	},
+
 
 
 

@@ -56,6 +56,7 @@ export  function MInfo(dC) {
     }) 
 
     this.closeTime= function(time){ 
+        
         this.tween.to({alpha:0},time).start();
 
 

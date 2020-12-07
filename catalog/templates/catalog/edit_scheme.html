@@ -1,7 +1,7 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-
+{% load static %}
 <!-- стили для модальных окон-->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="//ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
@@ -11,6 +11,7 @@
 
 <h3>Проект: {{ plan_title }}</h3>
 <h4>Тест: {{ test }}</h4>
+<iframe src="{% static 'iframe/index.html' %}"  height="500px" width="500px"></iframe>
 
 <div class="container-fluid">
   <div class="row">
@@ -239,7 +240,7 @@
 </div> -->
 
 
-{% load static %}
+
 <script type="text/javascript" src="{% static 'js/three.module.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/OrbitControls.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/delaunay.js' %}"></script>
