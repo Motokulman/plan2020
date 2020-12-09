@@ -63,7 +63,7 @@ export class SS3D  {
        	var p= parseInt("11100001000", 2);
        	var p1=parseInt("00011111111", 2);
    		
-       	this.pS={x:0,y:0,w:1000,h:1000}//Параметры текстурировнаия и начало энного
+       	this.pS={x:0,y:0,w:100,h:100}//Параметры текстурировнаия и начало энного
 
         this.dragPost=function(){
         	this.draw1();
@@ -238,7 +238,7 @@ export class SGrani{
 		this.par=par;
 		this.sahTextur=sahTextur;//Повороты текстур
 		this.y=0;
-		this.h=3000;
+		this.h=300;
 		this.arrPosit=this.par.par.arrPosit;
 		this.arrPosit1=this.par.par.arrPosit1;
 		this._distans=0;
@@ -291,8 +291,8 @@ export class SGrani{
 			if(this.sahTextur==0){
 				for (var i = 0; i < 5; i++) {
 					this.arr[i].pS.y=0;
-					this.arr[i].pS.w=1000;
-					this.arr[i].pS.h=1000;
+					this.arr[i].pS.w=100;
+					this.arr[i].pS.h=100;
 					this.arr[i].pS.x=this.sahW;										
 					if(i>=2)this.sahW+=this.arr[i].dist					
 					
@@ -306,8 +306,8 @@ export class SGrani{
 					
 					}					
 					this.arr[i].pS.y=0;
-					this.arr[i].pS.w=1000;
-					this.arr[i].pS.h=1000;
+					this.arr[i].pS.w=100;
+					this.arr[i].pS.h=100;
 					this.arr[i].pS.x=-this.sahW;	
 				}
 			}
@@ -408,20 +408,20 @@ export class GronSten {
 		this.p1=new THREE.Vector3();
 		
 
-		this.arrLine=[{p:{x:0,y:-200},p1:{x:5900,y:-400}}];
+		this.arrLine=[{p:{x:0,y:-20},p1:{x:590,y:-40}}];
 	
 		
 		if(this.par.par.par.idArr==0){
-			this.arrLine=[{p:{x:22,y:-200},p1:{x:5900,y:200}}];
+			this.arrLine=[{p:{x:22,y:-20},p1:{x:590,y:20}}];
 		}
 
 
-		this.rect={x:0,y:0,w:7000,h:3000};
+		this.rect={x:0,y:0,w:700,h:300};
 
 		this.dist=0;
 		this.angel=0;
 
-		this.pS={x:0,y:0,w:1000,h:1000}
+		this.pS={x:0,y:0,w:100,h:100}
 
 		this.setPosit=function(_p,_p1){
 			this.p=_p;
@@ -452,8 +452,8 @@ export class GronSten {
 		var xSm
 		this.setNaRect=function(_x,_coliz,_h,_y,_nGeom,_xSm){		
 			this.boolVergDrag=false	
-			if(this.par.par.par.idArr==0&&this.arrLine[0].p1.y!=2200){
-				this.arrLine=[{p:{x:22,y:-200},p1:{x:5900,y:2200}}];
+			if(this.par.par.par.idArr==0&&this.arrLine[0].p1.y!=220){
+				this.arrLine=[{p:{x:22,y:-20},p1:{x:590,y:220}}];
 			}
 
 			xSm=0;

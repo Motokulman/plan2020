@@ -261,7 +261,7 @@ export class SobIndex2  extends SobIndex {
             if(b==true){
                 _p.x=self.sp.arrSplice[num].arrGran[num1].x;
                 _p.y=self.sp.arrSplice[num].arrGran[num1].y;
-                self.debug.dPoint(self.sp.arrSplice[num].arrGran[num1],20,self.color,20); 
+               // self.debug.dPoint(self.sp.arrSplice[num].arrGran[num1],20,self.color,20); 
                 _p.o=self.sp.arrSplice[num]
             }else{
                 po=calc.isPointInLin(self.sp.arrSplice[ee].arrGran[e*2+0],self.sp.arrSplice[ee].arrGran[e*2+1],_p,10000000,0)
@@ -289,7 +289,7 @@ export class SobIndex2  extends SobIndex {
                 self.sp.getRect();//не рект а драгим позиции стен
 
                 //this.oP=self.p20.sp.lineWord.getPositionS();
-                this.debug=self.sp.lineWord.debugPixi;
+                //this.debug=self.sp.lineWord.debugPixi;
                 //this.debug.clearD();
 
                 

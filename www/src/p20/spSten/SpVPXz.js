@@ -17,6 +17,7 @@ export function SpVPXz (_stage) {
 	this.par = _stage;
 	this._height = 300;
 
+
 	this._active=false
 	this._activMouse=_stage._amPoint
 
@@ -28,16 +29,17 @@ export function SpVPXz (_stage) {
     this.content2d.addChild(this.graphics);
     this.graphics.interactive = true;
     
-  //  this.stAct=new PTAct(this)
+  	this.stAct=new PTAct(this)
+
 
     this.graphics.beginFill(0x00ff00, 0.5);    
-    this.graphics.drawCircle(0,0,100);
+    this.graphics.drawCircle(0,0,10);
 
     this.funDragMenu=undefined;
 
 
-   /* this.onDragStart=function(e){
-    	if(_stage.par.sobSP!=undefined)_stage.par.sobSP("downPoint",self,e)
+    this.onDragStart=function(e){
+    	if(_stage.par.sobSP!=undefined)_stage.par.sobSP("downVP",self,e)
     }
 
     this.graphics.interactive = this._activMouse;            
@@ -48,7 +50,7 @@ export function SpVPXz (_stage) {
     });
     this.graphics.on('mouseout', function(e){    	
     	self.stAct.sahPlus=0;    
-    });*/
+    });
 
 
     this.funDragVokrug=function(a,a1){   
@@ -62,6 +64,12 @@ export function SpVPXz (_stage) {
     this.drawpositVP = function () {
     	
     	this.doFunRend();
+    	for (var i = 0; i < this.arrayObj.length; i++) {    		
+    		if(this.arrayObj[i].tipe=="SpPolygon"){
+    			this.par.addObjFun(this.arrayObj[i])
+    		}
+       	}
+    	
 	}
 
 
@@ -72,6 +80,7 @@ export function SpVPXz (_stage) {
     	this.content2d.x=this.position.x;
 		this.content2d.y=this.position.y;
 
+		
     	/*this.dragVokrug();    	 	
 		this.content2d.x=this.position.x;
 		this.content2d.y=this.position.y;*/
@@ -105,13 +114,11 @@ SpVPXz.prototype = Object.create(SpVP.prototype);
 SpVPXz.prototype.constructor = SpVPXz;
 
 SpVPXz.prototype.getObj = function () {
-	var o = SpPoint.prototype.getObj.call(this);
-	o.type = this.type;
-
+	var o = SpVP.prototype.getObj.call(this);
 	return o;
 };
 SpVPXz.prototype.setObj = function (o) {
-	SpPoint.prototype.setObj.call(this, o);
+	SpVP.prototype.setObj.call(this, o);
 
 	// if(o.type != undefined) this.type = o.type;
 };
@@ -169,7 +176,7 @@ Object.defineProperties(SpVPXz.prototype, {
 
 });
 
-/*
+
 export function PTAct (par) {
 
 	var self = this;
@@ -185,12 +192,11 @@ export function PTAct (par) {
     this.graphics.alpha=this._sahAct/100;
 
     this.graphics.beginFill(par.par.colorUI);    
-    this.graphics.drawCircle(0,0,150);
+    this.graphics.drawCircle(0,0,15);
 
     
 
     this.corektSetGet=function(){
-
 		this.graphics.alpha = (this._sahAct+this._sahPlus)/100;	
 		this.par.par.render()
 
@@ -219,4 +225,4 @@ PTAct.prototype = {
 
 		return this._sahPlus;
 	},
-}*/
+}

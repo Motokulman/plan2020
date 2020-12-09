@@ -14,11 +14,17 @@ export function SpVLines (obj) {
 	var gron	
 	this.add = function (p,p1) {
 		gron=new GronVL(this)
+		gron.idArr=this.array.length
+		gron.os=this.array.length
 		if(p)gron.p.setPoint(p)
 		if(p1)gron.p1.setPoint(p1)	
 		this.array.push(gron);	
 	}
-	//
+
+
+	
+
+
 
 	this.object	
 	this.setObject=function(object){
@@ -26,7 +32,8 @@ export function SpVLines (obj) {
 		if(this.object.tipe=="Splice"){			
 			for (var i = 0; i < 3; i++) this.add();
 		}
-	}	
+	}
+
 
 
 	this.upDate=function(){
@@ -43,8 +50,8 @@ export function SpVLines (obj) {
 			this.array[2].setPoisit1(this.object.arrPosit1[0].x+this.object._distans,this.object.arrPosit1[0].y);
 			this.array[2].corectLocel(this.object.position, this.object._rotation)
 		}
-		this.ractLocal.x=this.ractLocal.y=999999999
-		this.ractLocal.x1=this.ractLocal.y1=-999999999
+		this.ractLocal.x=this.ractLocal.y=999999999;
+		this.ractLocal.x1=this.ractLocal.y1=-999999999;
 		for (var i = 0; i < this.array.length; i++){
 			this.array[i].setMinMax(this.ractLocal)		
 		}
@@ -57,7 +64,7 @@ export function SpVLines (obj) {
 
 		
 		for (var i = 0; i < this.array.length; i++) {			
-			g.lineStyle(10, 0xffffff*Math.random(), 1);
+			g.lineStyle(1, 0xffffff*Math.random(), 0.5);
 			g.moveTo(this.array[i].pLoacel.x,this.array[i].pLoacel.y);
 			g.lineTo(this.array[i].pLoacel1.x,this.array[i].pLoacel1.y);
 		}
@@ -114,20 +121,27 @@ export function SpVLines (obj) {
 							ePL.dist=dd;
 							ePL.os=i;
 							ePL.pros=ddd;
+							ePL.uuid=this.array[i].uuid
+							ePL.targetGron=this.array[i]
 						}						
 					}
 				}			
 			}			
 		}
 		if(ePL.dist!=9999999999)return ePL
-
 		return null
 	}
 
 
 
 
-	this.setObject(obj)	;
+	this.getGronVP = function(uuid){
+		trace("$",uuid,this.array)
+    	for (var i = 0; i < this.array.length; i++) {
+    		if(this.array[i].uuid==uuid)return this.array[i];
+    	}
+    	return null
+    }
 
 
 
@@ -214,6 +228,47 @@ export function SpVLines (obj) {
 	var rez3 = new THREE.Vector3(0, 0, 0);
 	var rez4 = new THREE.Vector3(0, 0, 0);
 	var rezNull = new THREE.Vector3(0, 0, 0);
+
+	this.generateRendom =  function (n){
+		if(n==undefined)n=2;		
+		let s='';
+		let s1='';
+		let d0;
+		for (var i = 0; i < n; i++) {			
+			d0=Math.random() * 0xffffffff | 0;
+			s1=(d0 & 0xff).toString(16) + (d0 >> 8 & 0xff).toString(16)+ (d0 >> 16 & 0xff).toString(16)+ (d0 >> 24 & 0xff).toString(16)			
+			if(s1.length<8){
+				for (var j = 0; j < 8-s1.length+1; j++) {
+					s1+="Z";
+				}
+			}
+			s+= s1 
+			if(i!=n-1)s+="-";
+		}		
+		return s
+	}
+
+
+	this.setObject(obj);
+
+
+
+	this.setObj =  function (o){
+		for (var i = 0; i < o.array.length; i++) {			
+			if(this.array[i])this.array[i].setObj(o.array[i])
+		}
+	}
+
+	this.getObj =  function (){
+		var o={}
+		o.array=[]
+		for (var i = 0; i < this.array.length; i++) {
+			o.array[i]=this.array[i].getObj()
+		}
+		return o
+	}
+
+
 }
 
 SpVLines.prototype = {	
@@ -234,6 +289,9 @@ SpVLines.prototype = {
 export function GronVL (par) {
 	var self = this;
 	this.par = par;
+	this.uuid=this.par.generateRendom(2);
+	this.idArr=-1;
+	this.os=-1;
 	this.type = 'GronVL';
 	this.pNull=new Position(0,0)
 	this.p=new Position(0,0)
@@ -242,6 +300,9 @@ export function GronVL (par) {
 	this.pLoacel=new Position(0,0)
 	this.pLoacel1=new Position(1000,0)
 	this.distans=1000
+
+	this.array=[]
+	this.arrayChesh=[]
 
 	this.setPoisit=function(x,y){
 		this.p.x=x
@@ -252,7 +313,7 @@ export function GronVL (par) {
 		this.p1.y=y
 	}
 
-	var a,d
+	var a,d;
 
 	this.corectLocel=function(p,a1){
 		a=this.par.getAngle(this.pNull,this.p);
@@ -267,7 +328,7 @@ export function GronVL (par) {
 		this.pLoacel1.x+=p.x;
 		this.pLoacel1.y+=p.y;
 		this.distans=this.par.getDistance(this.p,this.p1);
-			
+		this.dragPoint()	
 	}
 
 	this.setMinMax=function(rect){
@@ -282,9 +343,88 @@ export function GronVL (par) {
 		if(this.pLoacel1.y>rect.y1)rect.y1=this.pLoacel1.y;
 	}
 
+	var xx,yy
+	this.dragPoint=function(p){
+		
+		for (var i = 0; i < this.array.length; i++) {
+
+			if(this.array[i].life==false)continue;
+						
+			xx=this.pLoacel.x*(1-this.array[i].pros)+this.pLoacel1.x*this.array[i].pros;
+			yy=this.pLoacel.y*(1-this.array[i].pros)+this.pLoacel1.y*this.array[i].pros;			
+			this.array[i].obj.position.set(xx,yy);
+		}
+	}
+	
+	this.remove=function(p){
+		if(p.gronVL!=undefined){
+			if(p.gronVL.uuid==this.uuid){				
+				for (var i = this.array.length-1; i >=0; i--) {					
+					if(this.array[i].obj.uuid==p.uuid){
+						this.array[i].remove(p);
+						this.array.splice(i,1);
+						return true
+					}
+				}
+			}
+		}
+		return false
+	}
+
+	var box
+	this.add=function(p){
+
+		box=this.getBox();
+		box.add(p);		
+		this.array.push(box);
+				
+		return box;
+	}
+
+	this.getBox=function(){
+		for (var i = 0; i < this.arrayChesh.length; i++) {
+			if(this.arrayChesh[i].life==false){
+				return this.arrayChesh[i]
+			}
+		}
+		this.arrayChesh.push(new GronVLBox(this))
+		this.arrayChesh[this.arrayChesh.length-1].idArr=this.arrayChesh.length-1
+		return this.arrayChesh[this.arrayChesh.length-1]
+	}
+
+	this.setObj =  function (o){
+		this.uuid=o.uuid
+	}
+
+	this.getObj =  function (){
+		var o={}
+		o.uuid=this.uuid;
+		return o
+	}
 
 
 
 
+}
 
+export function GronVLBox (par) {
+	var self = this;
+	this.life=false;
+	this.type = 'GronVLBox';
+	this.par=par
+	this.pros=0
+	this.os=0
+	this.obj
+	this.add=function(p){
+		
+		this.life=true;		
+		this.obj=p;		
+		this.obj.gronVL = this;		
+	}
+
+	this.remove = function(p){
+		this.life=false;
+		this.obj.gronVL=undefined;		
+		this.obj=undefined;		
+	}	
 }

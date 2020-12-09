@@ -128,7 +128,11 @@ export function SpliceSten (_stage) {
 
 
 
-
+    this.getGronVP = function(uuid){
+    	trace("$uuid")
+    	if(this.vLines.getGronVP(uuid)!=null) return this.vLines.getGronVP(uuid)
+    	return null
+    }
 
  
 
@@ -231,6 +235,8 @@ SpliceSten.prototype.getObj = function () {
 	o.color3=this.color3;
 	o.color4=this.color4;
 
+	o.vLines=this.vLines.getObj();
+
 	return o;
 };
 SpliceSten.prototype.setObj = function (o) {
@@ -254,7 +260,7 @@ SpliceSten.prototype.setObj = function (o) {
 	if (o.color3!== undefined ) this.color3=o.color3;
 	if (o.color4!== undefined ) this.color4=o.color4;
 	
-	
+	if(o.vLines)this.vLines.setObj(o.vLines);
 	
 };
 SpliceSten.prototype.compare = function (_sten) {

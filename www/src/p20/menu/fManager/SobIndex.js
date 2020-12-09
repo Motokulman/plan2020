@@ -129,7 +129,7 @@ export class SobIndex  {
             
 
             
-            po=calc.isPointInLin(sten.position,sten.position1,po1,100,100)
+            po=calc.isPointInLin(sten.position,sten.position1,po1,10,10)
 
             rezult.z=2
             rezult.x=po.x;
@@ -211,8 +211,8 @@ export class SobIndex  {
         var r
         var mX,mXI,mY,mYI,b,pp,mXY,mYX;
         this.korektAP=function(_p,_o){
-            _p.x=Math.round(_p.x/100)*100;
-            _p.y=Math.round(_p.y/100)*100;
+            _p.x=Math.round(_p.x/10)*10;
+            _p.y=Math.round(_p.y/10)*10;
             _p.o=null;
             _p.oy=null;
             _p.ox=null;
@@ -283,7 +283,7 @@ export class SobIndex  {
                 if (!self.p20.sp.arrPoint[i].life) continue;
                 if (_o && self.p20.sp.arrPoint[i]._uuid==_o._uuid)continue;
                 let d=calc.getDistance(self.p20.sp.arrPoint[i].position,_p)
-                if(d<300){
+                if(d<30){
                     _p.x=self.p20.sp.arrPoint[i].position.x;
                     _p.y=self.p20.sp.arrPoint[i].position.y;
                     _p.o=self.p20.sp.arrPoint[i];
@@ -301,7 +301,7 @@ export class SobIndex  {
                 
                 r=this.getDistSten(self.p20.sp.arrSplice[i], _p)
                 
-                if(po&&r!=-1&&r<600){
+                if(po&&r!=-1&&r<60){
                     
                     _p.x=po.x;
                     _p.y=po.y;

@@ -43,13 +43,30 @@ export class SobIndex4  extends SobIndex {
 
         this.mouseup=function(e){
 
-            if(sp.o==undefined){
-               
+            if(sp.o==undefined){               
                 return
-
             }
-            self.stopUp()
-            return
+
+
+            if( e.button==2){ 
+                self.stopUp()  
+                return
+            }
+
+            if(self._tool=="Pol"){//стена 
+                self.korekt2222(); 
+                point=self.p20.sp.craetVP();
+                sp.o=point;
+                if(positDin.ePL!=null){ 
+                    positDin.ePL.targetGron.add(point).pros=positDin.ePL.pros;
+                }
+                activObject.addPoint(point);
+            }
+
+            if(self._tool=="vp"){//стена 
+                self.stopUp(); 
+            }
+            
             /*
             pos.x=sp.o.position.x;
             pos.y=sp.o.position.y;
@@ -119,13 +136,11 @@ export class SobIndex4  extends SobIndex {
         }
 
 
-        this.sobMenu=function(s,p,e){      
-        
+        this.sobMenu=function(s,p,e){
             if(s=="gIndex"){//переключаем инструмент
                 self.tool=self.aTool[p.index]               
                 return;
-            }
-            
+            }            
         }
 
 
@@ -141,7 +156,7 @@ export class SobIndex4  extends SobIndex {
             self.boolUp=false; 
 
             if(self._tool=="Pol"){
-               /* activObject.removePoint(point)               
+                activObject.removePoint(point)               
                 for (var i = 0; i < activObject.array.length; i++) {
                     trace(i+"  "+activObject.array[i].idArr)
                 }
@@ -149,23 +164,25 @@ export class SobIndex4  extends SobIndex {
                 if(activObject.array.length<=2)activObject.clear();
 
 
-                point.clear();*/
-                sp.o=undefined
+                point.clear();/**/
+                
             }
-
+            sp.o=undefined
             console.warn("<<<<<<<<<<<<<<stopUp********<<<<<<<<<<<<<<<<<")
             document.addEventListener("mouseup", self.mouseup);
         }
 
         this.sobSP=function(s,p,e){
            
-            
+
 
             if( e.data.originalEvent.button==1){ 
                 self.downFont(e); 
                 return;
             }
             
+            
+
 
             if(self.boolUp==true && self._tool=="Pol"){                
                 if( e.data.originalEvent.button==2){                    
@@ -175,22 +192,47 @@ export class SobIndex4  extends SobIndex {
             }
 
 
+            trace("###################",s,p,e ) 
+            if(s=="downVP"){ 
+                self._tool="vp";
+                sp.o=p;
+                self.par.par.mObject.setObject(p)   
+                self.startUp()
+
+                return
+            }
+
+
+            self._tool="Pol";
+            point=self.p20.sp.craetVP();
+            point1=self.p20.sp.craetVP();
+
+            self.korekt2222();                
+            point.position.set(positDin.x,positDin.y);               
+            point1.position.set(positDin.x,positDin.y);
+
+
+
+            sp.o=point;
+            if(positDin.ePL!=null){ 
+                positDin.ePL.targetGron.add(point).pros=positDin.ePL.pros;
+                positDin.ePL.targetGron.add(point1).pros=positDin.ePL.pros;
+            }
+           
+            if(self._tool=="Pol"){//полигон
+                activObject=self.p20.sp.craetPol();
+                activObject.activMouse=false; 
+                activObject.activMouse=false;  
+                activObject.addPoint(point1);
+                activObject.addPoint(point);
+                point.activMouse=false;
+            }
+            self.startUp()
+
             
-            
-           // return;
-
-            if(s=="downFont"){
-
-
-                point=self.p20.sp.craetVP();
-                point1=self.p20.sp.craetVP(); 
-                sp.o=point;
 
 
 
-
-
-                trace(point);
 
                 
 /*
@@ -205,40 +247,7 @@ export class SobIndex4  extends SobIndex {
                 }
                 */
                 
-                if(self._tool=="Pol"){//полигон
-                    activObject=self.p20.sp.craetPol();
-                    activObject.activMouse=false; 
-                    activObject.activMouse=false;  
-                    activObject.addPoint(point1);
-                    activObject.addPoint(point);
-                    point.activMouse=false;
-                    
-                    for (var i = 0; i < activObject.array.length; i++) {
-                        trace(i+"@@"+activObject.array[i].idArr)
-                    }
-                }
-
-/*
-                
-                point.position.set(positDin.x,positDin.y);
-                point1.position.set(positDin.x,positDin.y);
-                point1.dragPost()
-                self.par.par.mObject.setObject(activObject); 
-
-                
-                sp.x=positDin.x;
-                sp.y=positDin.y;
-
-                sp.x1 = e.data.originalEvent.clientX//+self.cont.x;
-                sp.y1 = e.data.originalEvent.clientY; 
-                sp.s = self.sp._mashtab;
-                
-                sp.o = point;
-
-                self.pointOld={x:positDin.x,y:positDin.y,uuidArr:[point.uuid,point1.uuid]}
-                */
-                self.startUp()
-            }
+           // }
 
             if(s=="downSten"){ 
 
@@ -348,25 +357,48 @@ export class SobIndex4  extends SobIndex {
                      */         
             }                     
         }
+
+
+        this.korekt2222=function(){
+            self.par.par.mGridDrag.getPositPlan(positDin);
+            positDin.ePL=null
+            ePL=self.p20.sp.metod.getPL(positDin,50)
+            if(ePL!=null){
+                positDin.x=ePL.x;
+                positDin.y=ePL.y;
+                positDin.ePL=ePL;
+            }
+        }
+
+
         var colorActiv=0xf28044
         var swh=1
         var swh1=5        
         var wwwh,wwwh1
         var positDin={x:0,y:0,x1:0,y1:0,s:0,o:null,oy:null,ox:null}
-        var ePL=null
+        var ePL=null;
+
         this.mouseMoveAll=function(e){ 
           
             if(sp.o!=undefined){
-                self.par.par.mGridDrag.getPositPlan(positDin);
 
-                ePL=self.p20.sp.metod.getPL(positDin,500)
-               // trace(ePL)
-                if(ePL!=null){
-                    positDin.x=ePL.x;
-                    positDin.y=ePL.y;
+                
+                self.korekt2222();
+
+                // ePL=self.p20.sp.metod.getPL(positDin,500)
+                // trace(ePL)
+                
+                
+               // trace(positDin.ePL)
+               
+                if(sp.o.gronVL!=undefined){
+                    sp.o.gronVL.par.remove(sp.o)                    
                 }
-                sp.o.position.setPoint(positDin);
+                if(positDin.ePL!=null){ 
+                    positDin.ePL.targetGron.add(sp.o).pros=positDin.ePL.pros;
+                }
 
+                sp.o.position.setPoint(positDin);
 
                 
                 //trace(sp.o,self.p20.sp.metod)

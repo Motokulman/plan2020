@@ -17,11 +17,11 @@ export class P20  {
 
 
 
-        this.startFund='{"colorC0":"#ffc0b0","colorC1":"#3a11b5","delphC0":262.33,"delphC1":744.91, "delphPlus":150, "sizeLine":10,"colorLine":"#000000"}'
+        this.startFund='{"colorC0":"#ffc0b0","colorC1":"#3a11b5","delphC0":27,"delphC1":75, "delphPlus":15, "sizeLine":1,"colorLine":"#000000"}'
         this.sOFund=JSON.parse(this.startFund);
         
-        this.startStyle='{"colorC0":"#ffe4d4","colorC1":"#b0dfee","delphC0":200,"delphC1":500,"delphPlus":100,"sizeLine":10, "colorLine":"#000000"}'
-        this.startObject=JSON.parse(this.startStyle)
+        this.startStyle='{"colorC0":"#ffe4d4","colorC1":"#b0dfee","delphC0":20,"delphC1":50,"delphPlus":10,"sizeLine":1, "colorLine":"#000000"}'
+        this.startObject=JSON.parse(this.startStyle);
 
 
         this._activObject=undefined;
@@ -323,7 +323,7 @@ export class RulimActivSP  {
         this._index=this.par._index;
 
         //2d-------------
-        this.grid = new PGrid(null,this.par.sizeMax, 20);
+        this.grid = new PGrid(null,this.par.sizeMax, 200);
 
         this.graphics = new PIXI.Graphics();      
         this.graphics.name="xz";
@@ -333,7 +333,7 @@ export class RulimActivSP  {
         this.graphics.interactive = true;
 
         //3d-------------
-        this.grid3d = new Grid(this.par.sizeMax,100,'resources/image/fill.png',0.9);
+        this.grid3d = new Grid(this.par.sizeMax,1000,'resources/image/fill.png',0.9);
     }
 
     set index(value) {       

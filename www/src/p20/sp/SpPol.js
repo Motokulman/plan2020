@@ -105,7 +105,8 @@ SpPol.prototype = {
 		for (var i = 0; i < this.array.length; i++) {
 			o.array.push({
 				x:this.array[i].position.x,
-				y:this.array[i].position.y
+				y:this.array[i].position.y,
+				tipe:this.array[i].tipe
 			})			
 		}
 		/*o.type = this.type;
@@ -115,14 +116,11 @@ SpPol.prototype = {
 	},
 	setObj: function (o) {
 		
-		for (var i = 0; i < o.array.length; i++) {
+		for (var i = 0; i < o.array.length; i++) {			
 			var p=this.stage.getPointXY(o.array[i]);
 			this.addPoint(p);
-
 		}
 		this.drag();
-
-
 	},
 
 
