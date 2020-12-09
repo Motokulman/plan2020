@@ -22,13 +22,15 @@ export class Blok  {
         this.idArr=-1;
 
         this._active=false;
+        this.sizeLine = this.par.par.sizeLine
+       
 
         this._width=100;
         this._height=100;
         this._delph=100;
         
         this._boolSten=false;
-        this._rotation=0
+        this._rotation=0    
         this.boxHelper=undefined
         this._life=true;
         this._parent=undefined
@@ -122,7 +124,7 @@ export class Blok  {
             self.content2d.y=0;
 
             self.content3d.position.x=self.body.position.x;
-            //self.content2d.position.y=0;
+            
             self.content3d.position.z=self.rect.y;
         }
 
@@ -230,12 +232,13 @@ export class Blok  {
     set parent(value) {
         if(this._parent!=value){
             this.parentOld=this._parent
-
-            this._parent= value;
+                        this._parent= value;
             if(value==undefined){
                 this._life=false;
             }else{
                 this._life=true;
+                if(this._parent.sizeLine)this.sizeLine=this._parent.sizeLine
+
             }
             this.par.render();
           

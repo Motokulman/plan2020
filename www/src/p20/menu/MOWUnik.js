@@ -10,7 +10,7 @@ export class MOWUnik{
         this.otstup = this.par.otstup
         this.dCont=new DCont(this.par.window.content); 
 
-        this.pObject=new DParamObject(this.dCont,this.otstup,0,function(){
+        this.pObject=new DParamObject(this.dCont,this.otstup+0.5,0,function(){
             self.postSO()
         },false);
 

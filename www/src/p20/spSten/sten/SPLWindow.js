@@ -16,7 +16,7 @@ export class SPLWindow  {
   		this._delph = par._delph;
   		this._height=par._height;
 		this._height1=par._height1;
-
+		this.sizeLine=par._sizeLine;
   		this.content2d = new PIXI.Container();
   		this.par.cont2dOfset.addChild(this.content2d);
 

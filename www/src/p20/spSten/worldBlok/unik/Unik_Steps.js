@@ -9,7 +9,6 @@ export class Unik_Steps {
         this.par.planeXZ=new PlaneXZ();
         this.par.lineSegments.geometry=this.par.planeXZ    
 
-        this.sizeLine = this.par.par._sizeLine
 
         this.arrayInfo=[ 
             {tipe:'DSliderBig', name: 'slider1', param: 'w', title: 'width', min: 1, max: 5000, okrug: 10},
@@ -18,13 +17,13 @@ export class Unik_Steps {
             // {tipe:'DSliderBig', name: 'slider4', param: 'height1', title: 'height1', min: 1, max: 5000, okrug: 10},
         ];
 
-        this._w = 1000
-        this._h = 1000
-        this._d = 500
-        this._height1 = 500
+        this._w = 100
+        this._h = 100
+        this._d = 50
+        this._height1 = 50
 
-        var kolH = 150 
-        var kolW = 500 
+        var kolH = 15
+        var kolW = 50
 
         var sah1=0;
         var sah=0;
@@ -46,6 +45,7 @@ export class Unik_Steps {
         var ww,hh,dd, ddd
         this.upStart=function(){
             sah=0
+            this.sizeLine = this.par.par._sizeLine
             ww=this.par._width-this.sizeLine
             hh=this.par._height
             dd=this.par._delph
@@ -157,7 +157,7 @@ export class Unik_Steps {
 
 
             //this.graphics.drawRect(0, dd/2, this._height1, hh);  
-            this.graphics.lineStyle(10, 0x000000, 1);  
+            this.graphics.lineStyle(this.sizeLine, 0x000000, 1);  
             for (var i = 0; i < sah; i++) {
 
                 // this.graphics.drawRect(this.array[i].y, this.array[i].z,50+i*20,50+i*20)

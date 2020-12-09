@@ -170,6 +170,10 @@ export function BTAct (par) {
     this.par.content2d.addChild(this.graphics);
     this.graphics.alpha=this._sahAct/100;
 
+    this.clear=function(){
+        this.graphics.clear();
+    }
+
     this.draw1=function(x,y,w,h){
         this.graphics.clear();
         this.graphics.beginFill(par.par.par.colorUI);
@@ -178,19 +182,31 @@ export function BTAct (par) {
         }else{
             this.graphics.drawRect(x,y,w,h);
         }
-
-
-
-        
-        
         this.graphics.endFill()
-            
-        
-
     }
 
-    this.corektSetGet=function(){
 
+    this.drawRect1=function(x,y,w,h){
+        this.graphics.beginFill(par.par.par.colorUI);
+        if(w!=undefined){
+            this.graphics.drawRect(x,y,w,h);
+        }
+        this.graphics.endFill()
+    }
+    this.drawTriangle=function(x, y, x1, y1, x2, y2){
+        this.graphics.lineStyle(0, 0x222222, 1);
+        this.graphics.beginFill(par.par.par.colorUI);
+        if(x!=undefined){
+            this.graphics.moveTo(x, y)
+            this.graphics.lineTo(x1, y1)
+            this.graphics.lineTo(x2, y2)
+            this.graphics.lineTo(x, y)
+        }
+        this.graphics.endFill()
+    }
+
+
+    this.corektSetGet=function(){
         this.graphics.alpha = (this._sahAct+this._sahPlus)/100; 
         this.par.par.render()
 
