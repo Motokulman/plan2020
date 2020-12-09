@@ -64,7 +64,7 @@ export class BInSten extends Blok {
         
 
         if(this.typeStr1 == "Unik_Steps")this.unik = new Unik_Steps(self)  
-        if(this.typeStr1 == "Unik_Vent")this.unik1 = new Unik_Vent(self)  
+        if(this.typeStr1 == "Unik_Vent")this.unik = new Unik_Vent(self)  
                           
 
 
@@ -98,11 +98,6 @@ export class BInSten extends Blok {
                 return;
             }
 
-            if(this.unik1!=undefined){
-                this.unik1.dragWHD(); 
-                return;
-            }
-            
 
 
             this.graphics.clear();
@@ -148,9 +143,10 @@ export class BInSten extends Blok {
             this.lineSegments.scale.set(this.rect.w,this.rect.h,1);
         }
 
-        this.postParent=function(){
+        this.postParent=function(){            
             if(this.unik!=undefined)if(this.unik.postParent!=undefined)this.unik.postParent()
         }
+        
 
         this.drawActive=function(){            
             this.stAct.sahAct=this._active ? 40: 0;

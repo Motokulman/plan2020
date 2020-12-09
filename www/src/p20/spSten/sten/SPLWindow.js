@@ -13,8 +13,9 @@ export class SPLWindow  {
   		this.par=par;	
   		this.fun=fun;
 
-  		this._delph=par._delph;
-
+  		this._delph = par._delph;
+  		this._height=par._height;
+		this._height1=par._height1;
 
   		this.content2d = new PIXI.Container();
   		this.par.cont2dOfset.addChild(this.content2d);
@@ -269,6 +270,26 @@ export class SPLWindow  {
         }
     }    
     get delph() { return  this._delph;}
+
+    set height(value) {
+        if(this._height!=value){
+            this._height= value;
+            for (var i = 0; i < this.array.length; i++) {
+                this.array[i].redrahHHH();
+            }        	
+        }
+    }    
+    get height() { return  this._height;}  
+
+    set height1(value) {
+        if(this._height1!=value){
+            this._height1= value;
+            for (var i = 0; i < this.array.length; i++) {
+                this.array[i].redrahHHH();
+            }        	
+        }
+    }    
+    get height1() { return  this._height1;}  
 
 }
 

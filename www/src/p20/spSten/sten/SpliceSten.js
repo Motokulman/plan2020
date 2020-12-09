@@ -178,6 +178,10 @@ export function SpliceSten (_stage) {
 
 	///////////////////////////////
 	
+    // setTimeout(function() {
+    // 	self.height=1000+Math.random()*3000
+    // 	self.height1=100+Math.random()*1000
+    // }, 3000);
 	
     
 	this.animat=function(time){

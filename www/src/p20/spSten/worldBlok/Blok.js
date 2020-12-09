@@ -126,6 +126,11 @@ export class Blok  {
             self.content3d.position.z=self.rect.y;
         }
 
+
+        this.redrahHHH=function(){  
+            trace("#redrahHHH##");
+        }
+
         
         this.render=function(){  
             this.par.render()
@@ -233,6 +238,7 @@ export class Blok  {
                 this._life=true;
             }
             this.par.render();
+          
             if(this.postParent!=undefined)this.postParent()
         }
     }    

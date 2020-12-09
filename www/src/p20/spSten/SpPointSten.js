@@ -51,6 +51,7 @@ export function SpPointSten (_stage) {
     });
 
 
+
     this.funDragVokrug=function(a,a1){   
    
     	for (var i = 0; i < a1.length; i++) {

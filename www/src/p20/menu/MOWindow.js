@@ -20,6 +20,9 @@ export class MOWindow extends MOBaza {
         this.slid
         this.slid1
         this.bool=true
+
+        this.arrBut = []
+        this.arrButLink = ["resources/image/p1.png", "resources/image/p1.png", "resources/image/p1.png", "resources/image/p0.png"]
         this.postIn=function(){           
             this.window.title="Blok";
             var yy=this.otstup1
@@ -37,17 +40,33 @@ export class MOWindow extends MOBaza {
             this.slid.okrug=100;
             yy+=(this.otstup1+this.wh)*/
 
-            
-            this.button=new DButton(this.window.content,this.otstup1,this.otstup1,"",function(){
-                self.bool=false
-                self.object.clear();                
-            },"resources/image/p0.png");
-            this.button.width=this.button.height=this.wh;
+
+            // this.button=new DButton(this.window.content,this.otstup1,this.otstup1,"",function(){
+            //     self.bool=false
+            //     self.object.clear();                
+            // },"resources/image/p0.png");
+            // this.button.width=this.button.height=this.wh;
+            this.window.width = 200+(this.otstup1*2)
+            this.wh = ((this.window.width - this.otstup1) / this.arrButLink.length) - this.otstup1
+
+            var xx = this.otstup1
+            for (var i = 0; i < this.arrButLink.length; i++) {
+                this.arrBut[i] = new DButton(this.window.content, xx, this.otstup1, "", undefined, this.arrButLink[i]);
+
+                this.arrBut[i].width = this.arrBut[i].height = this.wh
+                this.arrBut[i].idArr=i;
+                if (i == 3) this.arrBut[i].fun=function(){
+                    self.bool=false
+                    self.object.clear();                
+                }
+                xx += this.otstup1+this.wh
+            }
 
             this.mowUnik=new MOWUnik(this,function(s,p){})
-            this.mowUnik.dCont.y=this.button.y+this.wh+this.otstup1
+            this.mowUnik.dCont.y=this.arrBut[0].y+this.wh+this.otstup1
+            // this.mowUnik.dCont.width = 100
 
-            this.yy = this.button.y+this.wh+this.otstup1*2 + 32
+            this.yy = this.arrBut[0].y+this.wh+this.otstup1*2 + 32
             this.window.height=this.yy;
         }
 
@@ -81,7 +100,7 @@ export class MOWindow extends MOBaza {
             if(this.object._parent)this.object._parent.par.par.setActive(this.object);
             if(self.mowUnik.postSO != undefined)this.mowUnik.postSO();
 
-            this.yy =this.button.y+this.wh+this.otstup1*2 + 32+ this.mowUnik.height
+            this.yy =this.arrBut[0].y+this.wh+this.otstup1*2 + 32+ this.mowUnik.height
             this.window.height=this.yy;
             //this.object.par.par.setActive(this.object);
         }
