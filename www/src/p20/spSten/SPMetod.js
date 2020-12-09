@@ -85,6 +85,37 @@ export class SPMetod  {
 
 			return false
 		}
+
+
+		var ePL={
+			x:0,
+			y:0,
+			dist:0,
+			os:0,
+			pros:0,
+			target:null
+		}
+		var ePLOt
+		var b 
+		this.getPL=function(point,dist){
+			b=false;
+			ePL.dist=9999999999;
+			//trace("####",this.par.arrSplice);
+			for (var i = 0; i < this.par.arrSplice.length; i++) {
+				if (this.par.arrSplice[i].life == false) continue;
+				ePLOt=this.par.arrSplice[i].vLines.getPL(point,dist);
+				
+				if(ePLOt!=null){
+					if(ePLOt.dist<ePL.dist){
+						ePL=ePLOt;
+					}
+				}
+			}
+
+			if(ePL.dist!=9999999999)return ePL;
+			return null;
+		}
+
 	}
 
 }

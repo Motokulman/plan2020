@@ -5,7 +5,7 @@ import { SobIndex } from './SobIndex.js';
 export class SobIndex3  extends SobIndex {
     constructor(par,fun) {
         super();            
-        this.type="SobIndex0";
+        this.type="SobIndex3";
   		var self=this;
         this.par=par;
         this.fun=fun;
@@ -48,12 +48,7 @@ export class SobIndex3  extends SobIndex {
                 if(blok.parent!=undefined){
                     blok.setPosition(pos.x, pos.y, 0);
                 }
-
-            } 
-
-            
-            
-
+            }
         }
    
 
@@ -114,10 +109,6 @@ export class SobIndex3  extends SobIndex {
 
         }
 
-
-
-
-
         this.sobSP=function(s,p,e){
             if(p)self.par.par.mObject.setObject(p)    
             
@@ -128,8 +119,7 @@ export class SobIndex3  extends SobIndex {
                 return
             }
 
-            if(s=="creatObjDin"){
-                
+            if(s=="creatObjDin"){               
 
                 blok=self.sp.worldBlok.getBlok(p.id);
                 global.dragPic.start(48,blok.icon,blok,this.upDrag,1)

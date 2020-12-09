@@ -31,7 +31,7 @@ export function SpPointSten (_stage) {
     this.stAct=new PTAct(this)
 
     this.graphics.beginFill(0xff0000, 0.3);    
-    this.graphics.drawCircle(0,0,150);
+    this.graphics.drawCircle(0,0,15);
 
     this.funDragMenu=undefined;
 
@@ -181,15 +181,12 @@ export function PTAct (par) {
     this.graphics.alpha=this._sahAct/100;
 
     this.graphics.beginFill(par.par.colorUI);    
-    this.graphics.drawCircle(0,0,150);
-
+    this.graphics.drawCircle(0,0,15);
     
 
     this.corektSetGet=function(){
-
 		this.graphics.alpha = (this._sahAct+this._sahPlus)/100;	
 		this.par.par.render()
-
     }
 
 }

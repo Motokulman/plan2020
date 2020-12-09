@@ -178,7 +178,7 @@ export class MLButGal  {
                     },this)
                 }    
 
-                if(this.idArr==0||this.idArr==1||this.idArr==3) {
+                if(this.idArr==0||this.idArr==1||this.idArr==3||this.idArr==4) {
                     this.gallery=new DGallery(this.dCGal,0,0,function(){
                         var o={}
                         o.idArr=self.idArr;
