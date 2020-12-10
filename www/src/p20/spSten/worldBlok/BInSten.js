@@ -64,7 +64,7 @@ export class BInSten extends Blok {
         
 
         if(this.typeStr1 == "Unik_Steps")this.unik = new Unik_Steps(self)  
-        if(this.typeStr1 == "Unik_Vent")this.unik1 = new Unik_Vent(self)  
+        if(this.typeStr1 == "Unik_Vent")this.unik = new Unik_Vent(self)  
                           
 
 
@@ -98,11 +98,6 @@ export class BInSten extends Blok {
                 return;
             }
 
-            if(this.unik1!=undefined){
-                this.unik1.dragWHD(); 
-                return;
-            }
-            
 
 
             this.graphics.clear();
@@ -148,9 +143,10 @@ export class BInSten extends Blok {
             this.lineSegments.scale.set(this.rect.w,this.rect.h,1);
         }
 
-        this.postParent=function(){
+        this.postParent=function(){            
             if(this.unik!=undefined)if(this.unik.postParent!=undefined)this.unik.postParent()
         }
+        
 
         this.drawActive=function(){            
             this.stAct.sahAct=this._active ? 40: 0;
@@ -174,6 +170,10 @@ export function BTAct (par) {
     this.par.content2d.addChild(this.graphics);
     this.graphics.alpha=this._sahAct/100;
 
+    this.clear=function(){
+        this.graphics.clear();
+    }
+
     this.draw1=function(x,y,w,h){
         this.graphics.clear();
         this.graphics.beginFill(par.par.par.colorUI);
@@ -182,19 +182,31 @@ export function BTAct (par) {
         }else{
             this.graphics.drawRect(x,y,w,h);
         }
-
-
-
-        
-        
         this.graphics.endFill()
-            
-        
-
     }
 
-    this.corektSetGet=function(){
 
+    this.drawRect1=function(x,y,w,h){
+        this.graphics.beginFill(par.par.par.colorUI);
+        if(w!=undefined){
+            this.graphics.drawRect(x,y,w,h);
+        }
+        this.graphics.endFill()
+    }
+    this.drawTriangle=function(x, y, x1, y1, x2, y2){
+        this.graphics.lineStyle(0, 0x222222, 1);
+        this.graphics.beginFill(par.par.par.colorUI);
+        if(x!=undefined){
+            this.graphics.moveTo(x, y)
+            this.graphics.lineTo(x1, y1)
+            this.graphics.lineTo(x2, y2)
+            this.graphics.lineTo(x, y)
+        }
+        this.graphics.endFill()
+    }
+
+
+    this.corektSetGet=function(){
         this.graphics.alpha = (this._sahAct+this._sahPlus)/100; 
         this.par.par.render()
 

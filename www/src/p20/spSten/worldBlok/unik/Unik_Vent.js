@@ -9,42 +9,33 @@ export class Unik_Vent {
         this.par.planeXZ=new PlaneXZ();
         this.par.lineSegments.geometry=this.par.planeXZ    
 
-        this.sizeLine = this.par.par._sizeLine
-
-        this.aB=[ 
-            {tipe:'DCheckBox', name: 'check1', param: 'bool', title: 'bool'},
-            {tipe:'DCheckBox', name: 'check3', param: 'bool2', title: 'bool2'},
-
-            {tipe:'DSliderBig', name: 'slider1', param: 'wh', title: 'wh', min: 1, max: 500, okrug: 10},
-            {tipe:'DSliderBig', name: 'slider2', param: 'numHeightGlav', title: 'numHeight', min: 1, max: 3000, okrug: 10},
-            {tipe:'DCheckBox', name: 'check2', param: 'bool1', title: 'bool1'},
-            {tipe:'DCheckBox', name: 'check4', param: 'bool3', title: 'bool3'},
-        ];
-
-
-        this.arrayInfo=[ 
-            {tipe:'DSliderBig', name: 'slider1', param: 'wh', title: 'wh', min: 1, max: 500, okrug: 10},
-            {tipe:'DSliderBig', name: 'slider2', param: 'numHeightGlav', title: 'numHeight', min: 1, max: 3000, okrug: 10},
-            {tipe:'DCheckBox', name: 'check1', param: 'bool', title: 'bool'},
-            {tipe:'DCheckBox', name: 'check2', param: 'bool1', title: 'bool1'},
-            {tipe:'DCheckBox', name: 'check3', param: 'bool2', title: 'bool2'},
-            {tipe:'DCheckBox', name: 'check4', param: 'bool3', title: 'bool3'},
-        ];
-
-
-
+        this._delph = this.par._delph/2;   
+        this._wh = this.par._width
+        this._wh1 = this._bool == true ? this.par._width/2 : this.par._width
 
         this._glavBool = true
         this._bool = false
         this._bool1 = false
         this._bool2 = false
         this._bool3 = false
-        this._numHeightGlav = 2000
-        this._numHeight= -this._numHeightGlav
+        this._numHeightGlav = 200;
+        this._numHeight= -200;
 
-        this._bottom = 110
-        this._height = -3000
-        this._wh=undefined;
+        this._bottom = 0;
+        this._height = 300;
+        this._height1 = 100;
+        this._wh=this.par._width;
+        this.wh_but = (200-(2*4))/4
+
+        this.arrayInfo=[ 
+            {tipe:'DCheckBox', name: 'check1', param: 'bool', title: '', width:this.wh_but, height:this.wh_but, color1:"#008CBA", link0: "resources/image/unikVent_0_0.png", link1: "resources/image/unikVent_0_1.png", activMouse: true },
+            {tipe:'DCheckBox', name: 'check4', param: 'bool3', title: '', width:this.wh_but, height:this.wh_but, color1:"#008CBA", link0: "resources/image/unikVent_3_0.png", link1: "resources/image/unikVent_3_1.png", activMouse: true, _param:{boolX:true}},
+            {tipe:'DCheckBox', name: 'check2', param: 'bool1', title: '', width:this.wh_but, height:this.wh_but, color1:"#008CBA", link0: "resources/image/unikVent_1_0.png", link1: "resources/image/unikVent_1_1.png", activMouse: true, _param:{boolX:true}},
+            {tipe:'DCheckBox', name: 'check3', param: 'bool2', title: '', width:this.wh_but, height:this.wh_but, color1:"#008CBA", link0: "resources/image/unikVent_2_0.png", link1: "resources/image/unikVent_2_1.png", activMouse: true,  _param:{boolX:true}},
+            {tipe:'DSliderBig', name: 'slider1', param: 'wh', title: 'wh', min: 1, max: this._delph, okrug: 10, activMouse: true},
+            {tipe:'DSliderBig', name: 'slider2', param: 'numHeightGlav', title: 'numHeight', min: self._height1, max: self._height-self._wh, okrug: 10, activMouse: true},
+        ];
+
 
         var sah=0;
         var sah1=0;
@@ -67,7 +58,7 @@ export class Unik_Vent {
                 this._wh = this.par._width
                 this._wh1 = this.par._width
             }
-                this.korWit()
+            this.korWit()
         }
 
         this.array = [[],[],[],[]]
@@ -78,10 +69,14 @@ export class Unik_Vent {
             sah++
         }
 
+        // задаем начальные точки
         this.upStart=function(){
+            this.control()
             this._delph = this.par._delph/2;   
             this._wh = this.par._width
             this._wh1 = this._bool == true ? this.par._width/2 : this.par._width
+
+            this.sizeLine = this.par.par._sizeLine
 
             wh = this._wh - this. sizeLine
             wh1 = this._wh1 - this. sizeLine
@@ -101,10 +96,9 @@ export class Unik_Vent {
 
             // Треугольник
             sah=0
-            this.setP( whT/2, bottom,  whT1/2, triangle); 
-
-            this.setP( whT/2, bottom, -whT1/2, triangle); 
-            this.setP(-whT/2, bottom, -whT1/2, triangle);  
+            this.setP( wh/2, bottom,  wh1/2, triangle); 
+            this.setP( wh/2, bottom, -wh1/2, triangle); 
+            this.setP(-wh/2, bottom, -wh1/2, triangle);  
             // this.setP(-whT/2, bottom,  whT1/2, triangle); 
 
             // Башня
@@ -117,20 +111,21 @@ export class Unik_Vent {
             // Стрелочка
             sah=0
             this.setP(  0, bottom,  this._delph*1.1, arrow); 
-            this.setP( 50, bottom,  this._delph+100, arrow); 
-            this.setP(-50, bottom,  this._delph+100, arrow); 
+            this.setP( wh1/4, bottom,  this._delph+(wh1/2), arrow); 
+            this.setP(-wh1/4, bottom,  this._delph+(wh1/2), arrow); 
         }
 
         // Задаем высоту
         this.level=function(_s, p, p1){
-            let s = {x: _s.x, y: _s.y, z: _s.z}
+            let s = {x: _s.x, y: _s.y, z: -_s.z}
+
             if (p == 'bot') s.y = this._bottom
             if (p == 'mid') s.y = this._height/2
             if (p == 'top') s.y = this._height
                 
-            if (p == 'wallBot') s.y = this._numHeight          
-            if (p == 'wallMid') s.y = this._numHeight - (this.wh/2)
-            if (p == 'wallTop') s.y = this._numHeight - this.wh
+            if (p == 'wallBot') s.y = this._numHeight 
+            if (p == 'wallMid') s.y = this._numHeight - (this.wh/4)
+            if (p == 'wallTop') s.y = this.bool == true ? this._numHeight - (this.wh/2) : this._numHeight - (this.wh)
 
             if (p == 'wallBot' && p1 == cube || p == 'wallTop' && p1 == cube) if (s.z == wh1/2) s.z = this._delph
             if (p == 'wallBot' && p1 == cube || p == 'wallTop' && p1 == cube) if (s.z == -wh1/2) s.z = -this._delph
@@ -206,7 +201,7 @@ export class Unik_Vent {
                 this.graphics.beginFill(0x808080 , 1);
             }
 
-            this.graphics.moveTo(this.array[_structures][1].x, this.array[_structures][1].z)
+            this.graphics.moveTo(this.array[_structures][0].x, this.array[_structures][0].z)
             for (var i = 0; i < sah+1; i++) {
                 var p0=this.getP(_structures, _position)
                 this.graphics.lineTo(p0.x, p0.z)
@@ -215,39 +210,45 @@ export class Unik_Vent {
         }
 
 
+        // Задаем что нужно отрисовать в 3D
         this.drag3D=function(){
             this.par.planeXZ.clearPoint()
-            if (this._bool1 == true) this.getStructures3D(triangle, undefined, undefined, 1, 1, 0 )
-            if (this._bool2 == true) {
-                this.getStructures3D(tower, 'wallBot', 'wallTop')
-                this.getStructures3D(arrow, 'wallMid', 'wallMid', 1, 0, 0)
-            }
+
             if (this._bool3 == true) this.getStructures3D(cube, 'wallBot', 'wallTop')
-            if (this.glavBool == true) this.getStructures3D(cube)
+
+            if (this._bool3 != true) {
+                if (this._bool1 == true) this.getStructures3D(triangle, undefined, undefined, 1, 1, 0 )
+                if (this._bool2 == true) {
+                    this.getStructures3D(tower, 'wallBot', 'wallTop')
+                    this.getStructures3D(arrow, 'wallMid', 'wallMid', 1, 0, 0)
+                }
+                if (this.glavBool == true) this.getStructures3D(cube)
+            }
+
             this.par.planeXZ.upDate()
         }
 
-        var n;
+
+        // Задаем что нужно отрисовать в 2D
         this.drag2D=function(){
+            let n;
             this.graphics.clear();
-            this.graphics.beginFill(0x222222, 0.01);
-            this.graphics.drawRect(-this.wh/2, -this._delph, this.wh, this._delph*2);
-            this.graphics.endFill()
+            this.par.stAct.clear()
 
             if (this._bool3 == true) this.getStructures2D(cube, 'path')
 
-            if (this._bool2 == true){
-                this.getStructures2D(tower, n = this._bool3 == true ? 'path' : undefined)
-                this.getStructures2D(arrow)
+            if (this._bool3 != true) {
+                if (this._bool1 == true)this.getStructures2D(triangle)
+                if (this._bool2 == true){
+                    this.getStructures2D(tower, n = this._bool3 == true ? 'path' : undefined)
+                    this.getStructures2D(arrow)
+                    this.par.stAct.drawTriangle(0, this._delph*1.1, this._wh1/4, this._delph+(this._wh1/2), -this._wh1/4, this._delph+(this._wh1/2));
+                }
+                if (this.glavBool == true) this.getStructures2D(cube)
             }
 
-            if (this._bool1 == true)this.getStructures2D(triangle)
+            this.par.stAct.drawRect1(-this.wh/2, -this._delph, this.wh, this._delph*2);
 
-            if (this.glavBool == true) this.getStructures2D(cube)
-
-
-
-            this.par.stAct.draw1(-this.wh/2, -this._delph, this.wh, this._delph*2);
             this.graphics.endFill()
         }
 
@@ -256,6 +257,7 @@ export class Unik_Vent {
             this.upStart()
             this.drag2D()
             this.drag3D()
+            this.ddddd()
 
         }    
 
@@ -281,23 +283,64 @@ export class Unik_Vent {
         }
 
 
+
+        this.par.redrahHHH=function(){ 
+            if(self.par.parent!=undefined){
+                self._height=-(self.par.parent._height+self.par.parent._height1)
+                self._height1=-(self.par.parent._height1)
+                // self._delph=-(self.par.parent._delph)
+                self.par.dragWHD()
+            }
+        }
+
+
+        this.postParent=function (){            
+            if(this.par.parent!=undefined){
+                this.par.redrahHHH()
+                
+            }
+        }
+
         this.control=function (){
-                if(this._bool3 == true) {
-                    this.glavBool = false
-                    this.bool1 = false
-                } else {
-                    this.glavBool = true
+                for (var i = 0; i <  this.arrayInfo.length; i++) {
+                    let e = this.arrayInfo[i].param
+                    if (e == 'numHeightGlav') {
+                        this.arrayInfo[i].min = Math.abs(this._height1)
+                        if (this.numHeightGlav < this.arrayInfo[i].min) this.numHeightGlav = this.arrayInfo[i].min
+                    }
+
+                    if (e == 'numHeightGlav') {
+                        this.arrayInfo[i].max = Math.abs(this._height)-this._wh
+                        if (this.numHeightGlav > this.arrayInfo[i].max) this.numHeightGlav = this.arrayInfo[i].max
+                    }
+
+                    if (e == 'wh') {
+                        this.arrayInfo[i].max = Math.abs(this._delph)
+                        if (this.wh > this.arrayInfo[i].max) this.wh = this._delph
+                    }
                 }
+
         }
 
         var e;  
         this.ddddd=function(){
-            this.arrayInfo = []
-            for (var i = 0; i < this.aB.length; i++) {
-                e = this.aB[i].param
-                if(this._bool2 != true && this._bool3 != true) if (e != 'numHeight') this.arrayInfo.push(this.aB[i])
-                if(this._bool3 == true) if (e == 'numHeight' || e == 'bool' || e == 'bool2' || e == 'bool3') this.arrayInfo.push(this.aB[i])
-                if(this._bool2 == true && this._bool3 != true) this.arrayInfo.push(this.aB[i])
+            for (var i = 0; i < this.arrayInfo.length; i++) {
+                if(this.bool2 != true && this._bool3 != true) {
+                    if (this.arrayInfo[i].param == 'numHeightGlav') this.arrayInfo[i].activMouse = false
+                    if(this.bool3 != true) if (this.arrayInfo[i].param == 'bool1') this.arrayInfo[i].activMouse = true
+                    if(this.bool3 != true) if (this.arrayInfo[i].param == 'bool2') this.arrayInfo[i].activMouse = true
+
+                } else {
+                    if(this.bool3 == true) {
+                        if (this.arrayInfo[i].param == 'bool1') this.arrayInfo[i].activMouse = false
+                        if (this.arrayInfo[i].param == 'bool2') this.arrayInfo[i].activMouse = false
+                    } else {
+                        if (this.arrayInfo[i].param == 'bool1') this.arrayInfo[i].activMouse = true
+                        if (this.arrayInfo[i].param == 'bool2') this.arrayInfo[i].activMouse = true
+                    }
+
+                    if (this.arrayInfo[i].param == 'numHeightGlav') this.arrayInfo[i].activMouse = true
+                }
             }
             this.control()
         }
