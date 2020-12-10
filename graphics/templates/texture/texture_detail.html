@@ -3,7 +3,7 @@
 {% block content %}
 <h3>Имя текстуры: {{ texture.name }}</h3>
 <h4>id: {{ texture.id }}</h4>
-<h4>author: {{ texture.author.name }}</h4>
+<h4>author: {{ texture.author }}</h4>
 <h4>json: {{ texture.json }}</h4>
 <h4>anyfile: {{ texture.anyfile }}</h4>
 <a href="{% url 'texture_delete' texture.id %}">Удалить</a>

@@ -7,7 +7,7 @@
   <ul>
     {% for t in texture_list %}
       <li>
-        <a href="{{ t.get_absolute_url }}">{{ t.name }}</a>
+        <a href="{{ t.get_absolute_url }}">{{ t.name }}, id: {{ t.id }}</a>
       </li>
     {% endfor %}
   </ul>

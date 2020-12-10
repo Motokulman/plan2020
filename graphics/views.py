@@ -16,6 +16,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from graphics.forms import TextureCreateForm, TextureTypeCreateForm
 from django.contrib.auth.models import User
 
+
 def set_texture(request, texture_id):
     """Сохранение, изменение texture"""
     return_dict = dict()
@@ -31,7 +32,9 @@ def set_texture(request, texture_id):
             return_dict = {"id": texture_id, "status": "false"}
     else:
         t = Texture.objects.get(id=texture_id)
-        return_dict={"id":texture_id,"json":t.json}
+        url = t.anyfile.url
+        path = t.anyfile.path
+        return_dict={"id":texture_id,"json":t.json,"anyfile url":url,"anyfile path":path}
     return JsonResponse(return_dict)
 
 # создание тектуры методами django
