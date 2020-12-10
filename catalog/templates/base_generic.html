@@ -21,12 +21,16 @@
         <div id="nav">
           <a href="{% url 'index' %}" class="btn ">Главная</a>
           <a href="{% url 'index'%}?next={{request.path}}" class="btn ">Пользователь: {{ user.get_username }}</a>
+          <a href="{% url 'dashboard' %}" class="btn "> Личный кабинет</a>
+          <a href="{% url 'graphics' %}" class="btn "> Графика</a>
           {% if user.is_authenticated %}
           {% if request.user.is_authenticated %}
           <ul class="menu">
-            <li {% if section == "dashboard" %} class="selected" {% endif %}>
-              <a href="{% url 'dashboard' %}">Личный кабинет</a>
-            </li>
+            <!-- <a href="{% url 'dashboard' %}" {% if section == "dashboard" %} class="selected" {% endif %}></a>> Личный кабинет</a> -->
+
+
+
+
 
           </ul>
           {% endif %}

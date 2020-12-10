@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Текстуры</h1>
+  <a href="{% url 'texture_create' %}">Создать текстуру</a>
+  {% if texture_list %}
+  <ul>
+    {% for t in texture_list %}
+      <li>
+        <a href="{{ t.get_absolute_url }}">{{ t.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>Пока нет ни одной текстуры...</p>
+  {% endif %}
+{% endblock %}
