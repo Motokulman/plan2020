@@ -210,27 +210,29 @@ export class SobIndex  {
         var pos={x:0,y:0,o:null}
         var r
         var mX,mXI,mY,mYI,b,pp,mXY,mYX;
-        this.korektAP=function(_p,_o){
+        var _ot
+        this.korektAP=function(_p,_o,boolAvp){
             _p.x=Math.round(_p.x/10)*10;
             _p.y=Math.round(_p.y/10)*10;
             _p.o=null;
             _p.oy=null;
             _p.ox=null;
 
-            this._otstup=25;
+            _ot=25;
             if(self.pointOld!=undefined){
-                if(Math.abs(_p.x-this.pointOld.x)<this._otstup/this._mashtab)_p.x=this.pointOld.x
-                if(Math.abs(_p.y-this.pointOld.y)<this._otstup/this._mashtab)_p.y=this.pointOld.y
+                if(Math.abs(_p.x-this.pointOld.x)<_ot/this._mashtab)_p.x=this.pointOld.x
+                if(Math.abs(_p.y-this.pointOld.y)<_ot/this._mashtab)_p.y=this.pointOld.y
             }
 
-            mX=this._otstup/this._mashtab;
+            mX=_ot/this._mashtab;
             mXI=null;
-            mY=this._otstup/this._mashtab;
+            mY=_ot/this._mashtab;
             mYI=null;
 
             for (var i = 0; i < self.p20.sp.arrPoint.length; i++) {
                 if (!self.p20.sp.arrPoint[i].life) continue;
                 if (_o && self.p20.sp.arrPoint[i]._uuid==_o._uuid)continue;
+                if (self.p20.sp.arrPoint[i].activMouse==false)continue;
                 if (this.pointOld){
                     if (this.pointOld.uuidArr!=undefined){
                         b=true;
@@ -239,26 +241,55 @@ export class SobIndex  {
                         }
                         if(!b)continue;
                     }
-                }
-                
+                }        
 
-                pp=Math.abs(_p.x-self.p20.sp.arrPoint[i].position.x)
-                
+                pp=Math.abs(_p.x-self.p20.sp.arrPoint[i].position.x);                
                 if(pp<mX){
-
                     mX=pp;
                     mXI=self.p20.sp.arrPoint[i].position.x
                     mXY=self.p20.sp.arrPoint[i].position.y
                 }
 
-                pp=Math.abs(_p.y-self.p20.sp.arrPoint[i].position.y)
+                pp=Math.abs(_p.y-self.p20.sp.arrPoint[i].position.y);
                 if(pp<mY){
                     mY=pp;
                     mYI=self.p20.sp.arrPoint[i].position.y
                     mYX=self.p20.sp.arrPoint[i].position.x
+                }                
+            }
+
+
+            if(boolAvp==true){
+                for (var i = 0; i < self.p20.sp.avp.length; i++) {
+                    if (!self.p20.sp.avp[i].life) continue;
+                    if (_o && self.p20.sp.avp[i]._uuid==_o._uuid)continue;
+                    if (self.p20.sp.avp[i].activMouse==false)continue;
+                    if (this.pointOld){
+                        if (this.pointOld.uuidArr!=undefined){
+                            b=true;
+                            for (var j = 0; j < this.pointOld.uuidArr.length; j++) {
+                                if(this.pointOld.uuidArr[j]==self.p20.sp.avp[i]._uuid)b=false;
+                            }
+                            if(!b)continue;
+                        }
+                    }        
+
+                    pp=Math.abs(_p.x-self.p20.sp.avp[i].position.x);                
+                    if(pp<mX){
+                        mX=pp;
+                        mXI=self.p20.sp.avp[i].position.x
+                        mXY=self.p20.sp.avp[i].position.y
+                    }
+
+                    pp=Math.abs(_p.y-self.p20.sp.avp[i].position.y);
+                    if(pp<mY){
+                        mY=pp;
+                        mYI=self.p20.sp.avp[i].position.y
+                        mYX=self.p20.sp.avp[i].position.x
+                    }                
                 }
-                
-            } 
+            }
+
 
             
             if(mXI!=null){
@@ -268,22 +299,14 @@ export class SobIndex  {
             if(mYI!=null){
                 _p.y=mYI;
                 _p.ox=mYX;
-            }
-                
-            
-            
-           /* for (var i = 0; i < self.p20.sp.arrSplice.length; i++) {
-                if (!self.p20.sp.arrSplice[i].life) continue;
-                r=this.getDistSten(self.p20.sp.arrSplice[i],_p)
-               
-            }*/
+            } 
 
 
             for (var i = 0; i < self.p20.sp.arrPoint.length; i++) {
                 if (!self.p20.sp.arrPoint[i].life) continue;
                 if (_o && self.p20.sp.arrPoint[i]._uuid==_o._uuid)continue;
                 let d=calc.getDistance(self.p20.sp.arrPoint[i].position,_p)
-                if(d<30){
+                if(d<_ot){
                     _p.x=self.p20.sp.arrPoint[i].position.x;
                     _p.y=self.p20.sp.arrPoint[i].position.y;
                     _p.o=self.p20.sp.arrPoint[i];
@@ -301,8 +324,7 @@ export class SobIndex  {
                 
                 r=this.getDistSten(self.p20.sp.arrSplice[i], _p)
                 
-                if(po&&r!=-1&&r<60){
-                    
+                if(po&&r!=-1&&r<_ot*2){                    
                     _p.x=po.x;
                     _p.y=po.y;
                     _p.o=self.p20.sp.arrSplice[i];

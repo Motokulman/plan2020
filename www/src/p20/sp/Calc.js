@@ -933,11 +933,14 @@ export function LinePosition (_p, _p1) {
  */
 export function Position (_x, _y, _z) {
 	/** {number} кордината */
-	this._x = _x || 0;
+	this._x =  0;
 	/** {number} кордината */
-	this._y = _y || 0;
+	this._y =  0;
 	/** {number} кордината */
-	this._z = _z || 0;
+	this._z =  0;
+	if(_x!=undefined)this._x =_x;
+	if(_y!=undefined)this._y =_y;
+	if(_z!=undefined)this._z =_z;
 
 	/** Установка значений.
      * @param [_z=0] {number} _x - Центр первой окружности.
@@ -1005,21 +1008,22 @@ export function PositionFun (_x, _y, _z, _fun) {
 	/** {number} кордината */
 	this._y = _y || 0;
 	/** {number} кордината */
-	this._z = typeof _z !== 'function' ? (_z || 0) : 0;
+	this._z =0// typeof _z !== 'function' ? (_z || 0) : 0;
 
 	this.fun = typeof _z === 'function' ? _z : _fun;
 
 	this.set = function (_x, _y, _z) {
 		this._x = _x || 0;
 		this._y = _y || 0;
-		this._z = _z || 0;
+		if(_z!=undefined)this._z = _z;
 		if (this.fun) this.fun();
 
 	};
 	this.setPoint = function (p) {
 		this._x = p.x;
 		this._y = p.y;
-		this._z = p.z;
+	
+		if( p.z!=undefined)this._z =  p.z;
 		if (this.fun) this.fun();
 	};
 
@@ -1055,6 +1059,7 @@ PositionFun.prototype = {
 	},
 	set z (v) {
 		// if(this._z==v)return;
+		trace("zxzx=",v)
 		this._z = v;
 		if (this.fun) this.fun();
 	},

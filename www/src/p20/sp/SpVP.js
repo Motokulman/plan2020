@@ -46,7 +46,9 @@ export function SpVP (_stage) {
 
 	this.removePol = function (pol) {
 		var r=null
+		trace(this.arrayObj)
 		for (var i = 0; i < this.arrayObj.length; i++) {
+
 			if(pol.uuid==this.arrayObj[i].uuid){
 				this.arrayObj.splice(i,1)
 				if(r==null)r=0
@@ -55,19 +57,19 @@ export function SpVP (_stage) {
 				i=0;
 			}
 		}
-
+		if(this.arrayObj.length==0)this.clear()
 		this.stage.render()		
 		return r;
 	};
 
 	this.clear= function () {
-
+		
 		for (var ii = 0; ii < this.arrayClass.length; ii++) {
 			if (typeof (this.arrayClass[ii].clear) === 'function') this.arrayClass[ii].clear();
 		}
 
-		for (var i = 0; i < this.arrayObj.length; i++) {		
-			if(this.arrayObj[i])this.removePol(this.arrayObj[i])
+		for (var i = this.arrayObj.length-1; i >=0; i--) {			
+			if(this.arrayObj[i]!=undefined)this.removePol(this.arrayObj[i])
 		}
 
 		this.life = false;
@@ -75,32 +77,22 @@ export function SpVP (_stage) {
 	}
 	
 
-	this.removePol= function (pol) {
-		for (var i = self.arrayObj.length-1; i >=0; i--) {
-			if(self.arrayObj[i].uuid){
-				if(self.arrayObj[i].uuid==pol.uuid){
-					self.arrayObj.splice(i,1)
-					return
-				}
-			}
-		}
-	}
-
-
+	
 
 
 
 	this.drawposit = function () {	
+		trace("zzzzzzzzzzzz=",self.position.z)
 		for (var i = 0; i < self.array.length; i++) {
 			if(self.array[i].drawpositVP)self.array[i].drawpositVP(self);
 		}
 		self.drawpositVP();		
 	}
 
-	this.position = new PositionFun(0,0,this.drawposit);
+	this.position = new PositionFun(0,0,0,this.drawposit);
 
 
-
+	trace("zzzzzzzzzzzzzzzzzzz=",this.position.z)
 
 
 }
@@ -133,7 +125,7 @@ SpVP.prototype = {
 			o.gronVL.pros=this.gronVL.pros;
 			o.gronVL.os=this.gronVL.par.os;
 
-			trace(o.gronVL)
+			
 		}		
 
 		return o;
@@ -141,10 +133,8 @@ SpVP.prototype = {
 	setObj: function (o) {		
 		if(o.uuid)this.uuid=this._uuid=o.uuid
 		this.position.setPoint(o.position);
-		if(o.gronVL!=undefined){
-			trace("$$$$$$$",o.gronVL.uuid,o,oo);
-			var oo = this.par.getGronVP(o.gronVL.uuid);
-			trace("$$$$$$$====",oo);
+		if(o.gronVL!=undefined){			
+			var oo = this.par.getGronVP(o.gronVL.uuid);			
 			if(oo!=null){
 				var oo1 = oo.add(this)
 				oo1.pros=o.gronVL.pros

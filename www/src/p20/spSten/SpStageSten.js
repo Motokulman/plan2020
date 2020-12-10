@@ -52,6 +52,7 @@ export function SpStageSten (par,  fun) {
 	this._delph = 50;
 	
 	this._colorUI=0x008cba;
+	this._colorUI1=0xf3f3f3;
 	this._colorUIActive=0xf28044;
 
 
@@ -287,6 +288,12 @@ export function SpStageSten (par,  fun) {
 			if(this.testSetActive(this.arrPol[i])==true)this.arrPol[i].active=true
 			else this.arrPol[i].active=false;
 		}
+		for (var i = 0; i < this.avp.length; i++) {			
+			if (this.avp[i].life==false) continue;
+			if(this.testSetActive(this.avp[i])==true)this.avp[i].active=true
+			else this.avp[i].active=false;
+		}
+
 		this.render();
 	}
 	this.testSetActive=function(o){

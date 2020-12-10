@@ -22,13 +22,18 @@ export class MOVP extends MOBaza {
         this.postIn=function(){
            
             this.window.title=this.type
-            this.button=new DButton(this.window.content,this.otstup1,this.otstup1,"",function(){
-                self.bool=false
+
+            var yy=this.otstup1
+            this.button=new DButton(this.window.content,this.otstup1,yy,"",function(){
+                self.bool=false;
                 self.object.clear();                
             },"resources/image/p0.png");
             this.button.width=this.button.height=this.wh;
 
-            this.slid=new DSliderBig(this.window.content, this.otstup1,this.otstup1+ (this.otstup1+this.wh)*1, function(s){ 
+            yy+=this.wh+this.otstup1;
+            
+
+            this.slid=new DSliderBig(this.window.content, this.otstup1,yy, function(s){ 
                 self.bool=false
                 self.object.position.x=self.slid.value
             }, "x",  -this.whSize/2, this.whSize/2)
@@ -39,32 +44,58 @@ export class MOVP extends MOBaza {
                 self.bool=true
                 self.drag()
             }
+            yy+=this.otstup1+this.wh
 
-            this.slid1=new DSliderBig(this.window.content, this.otstup1,this.otstup1+ (this.otstup1+this.wh)*2, function(s){ 
+
+            this.slid1=new DSliderBig(this.window.content, this.otstup1,yy, function(s){ 
                 self.bool=false
                 self.object.position.y=self.slid1.value
             }, "y",  -this.whSize/2, this.whSize/2)
-            this.slid1.width=this.width-this.otstup1*2
-            this.window.height=210;
+            this.slid1.width=this.width-this.otstup1*2          
             this.slid1.okrug=1;
 
             this.slid1.funChange=function(){
                 self.bool=true
                 self.drag()
             }
+            yy+=this.otstup1+this.wh
+
+            this.slid2=new DSliderBig(this.window.content, this.otstup1,yy, function(s){ 
+                self.bool=false
+                trace(self.slid2.value,self.object.position.z)
+                self.object.position.z=self.slid2.value
+                trace(self.slid2.value,"==",self.object.position.z)
+            }, "z",  -this.whSize/2, this.whSize/2)
+            this.slid2.width=this.width-this.otstup1*2
+            
+            this.slid2.okrug=1;
+
+            this.slid2.funChange=function(){
+                self.bool=true
+                self.drag()
+            }
+            yy+=this.otstup1+this.wh
+
+            this.window.height=yy+32;
         }
 
         
         
         this.drag=function(){
             if(self.bool!=false){
-                self.slid.min=self.object.position.x-500
-                self.slid.max=self.object.position.x+500
-                self.slid.value=Math.round(self.object.position.x)
+                self.slid.min=self.object.position.x-500;
+                self.slid.max=self.object.position.x+500;
+                self.slid.value=Math.round(self.object.position.x);
                 
-                self.slid1.min=self.object.position.y-500
-                self.slid1.max=self.object.position.y+500
-                self.slid1.value=Math.round(self.object.position.y)                
+                self.slid1.min=self.object.position.y-500;
+                self.slid1.max=self.object.position.y+500;
+                self.slid1.value=Math.round(self.object.position.y);
+                
+                self.slid2.min=self.object.position.z-500;
+                self.slid2.max=self.object.position.z+500;
+                
+                self.slid2.value=Math.round(self.object.position.z); 
+
             }            
         }
 

@@ -131,8 +131,10 @@ export class SobIndex0  extends SobIndex {
                 }
             }
 
+
+
             self.sp.group.active = false
-            trace(s,p,e);
+           
             if(p)self.par.par.mObject.setObject(p) 
             if(s=="downPoint"){
                 self.sp.group.active=false;
@@ -148,6 +150,13 @@ export class SobIndex0  extends SobIndex {
                     document.addEventListener("mousemove", self.mousemove); 
                     return;
                 }
+            }
+
+            if(s=="downVP"){
+                self.sp.group.active=false;
+                self.par.par.mObject.setObject(p) 
+                self.par.sobIndex[4].dragVP(p)  
+                return;  
             }
             self.downFont(e);            
         }

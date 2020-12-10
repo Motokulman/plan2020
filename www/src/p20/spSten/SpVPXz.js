@@ -1,6 +1,6 @@
 
 import { SpVP } from './../sp/SpVP.js';
-
+import { PTButton } from './PTButton.js';
 //import {PointSten3D } from './PointSten3D.js';
 
 /**
@@ -25,7 +25,7 @@ export function SpVPXz (_stage) {
 	this.stage.content2dPoint.addChild(this.content2d);
 
 
-	this.graphics = new PIXI.Graphics();
+	/*this.graphics = new PIXI.Graphics();
     this.content2d.addChild(this.graphics);
     this.graphics.interactive = true;
     
@@ -33,9 +33,15 @@ export function SpVPXz (_stage) {
 
 
     this.graphics.beginFill(0x00ff00, 0.5);    
-    this.graphics.drawCircle(0,0,10);
+    this.graphics.drawCircle(0,0,10);*/
 
     this.funDragMenu=undefined;
+
+
+    this.button=new PTButton(this,this.stage._colorUIActive,this.stage._colorUI,this.stage._colorUI1,8);
+    this.content2d.addChild(this.button.graphics)
+    this.graphics=this.button.graphics
+	this.graphics.interactive = true;
 
 
     this.onDragStart=function(e){
@@ -46,10 +52,12 @@ export function SpVPXz (_stage) {
     this.graphics.on('mousedown', this.onDragStart);
 
     this.graphics.on('mouseover', function(e){    	
-    	self.stAct.sahPlus=10;    	
+    	//self.stAct.sahPlus=10; 
+    	self.button.activOver=true;
     });
     this.graphics.on('mouseout', function(e){    	
-    	self.stAct.sahPlus=0;    
+    	//self.stAct.sahPlus=0; 
+    	self.button.activOver=false;
     });
 
 
@@ -69,7 +77,7 @@ export function SpVPXz (_stage) {
     			this.par.addObjFun(this.arrayObj[i])
     		}
        	}
-    	
+    	if(this.funDragMenu!=undefined)this.funDragMenu()
 	}
 
 
@@ -131,7 +139,8 @@ Object.defineProperties(SpVPXz.prototype, {
 		set: function (value) {
 			if (this._active == value) return;
 			this._active = value;
-			this.stAct.sahAct=value ? 40: 0;
+			//this.stAct.sahAct=value ? 40: 0;
+			this.button.active=this._active
 			for (var ii = 0; ii < this.arrayClass.length; ii++) {
 				if ('active' in this.arrayClass[ii]) this.arrayClass[ii].active = this._active;
 			}
@@ -156,7 +165,7 @@ Object.defineProperties(SpVPXz.prototype, {
 			if (this._activMouse == value) return;
 			this._activMouse = value;
 			this.graphics.interactive = value; 
-			console.warn(this.idArr+"   "+this._activMouse+"   "+this._life)
+			this.button.activMouse = value;	
 			for (var ii = 0; ii < this.arrayClass.length; ii++) {
 				if ('activMouse' in this.arrayClass[ii]) this.arrayClass[ii].activMouse = this._activMouse;
 			}
@@ -176,53 +185,3 @@ Object.defineProperties(SpVPXz.prototype, {
 
 });
 
-
-export function PTAct (par) {
-
-	var self = this;
-	this.type = 'PTAct';
-	this.par = par;
-	this._sahAct=0;
-
-	this._sahPlus=0;
-
-	this.arrVorur=this.par.arrVorur;	
-	this.graphics = new PIXI.Graphics();
-    this.par.content2d.addChild(this.graphics);
-    this.graphics.alpha=this._sahAct/100;
-
-    this.graphics.beginFill(par.par.colorUI);    
-    this.graphics.drawCircle(0,0,15);
-
-    
-
-    this.corektSetGet=function(){
-		this.graphics.alpha = (this._sahAct+this._sahPlus)/100;	
-		this.par.par.render()
-
-    }
-
-}
-PTAct.prototype = {
-
-
-	set sahAct (v) {
-		if (this._sahAct === v) return;			
-		this._sahAct = v;
-		this.corektSetGet()
-	},
-	get sahAct () {
-
-		return this._sahAct;
-	},
-
-	set sahPlus (v) {
-		if (this._sahPlus === v) return;		
-		this._sahPlus = v;
-		this.corektSetGet()
-	},
-	get sahPlus () {
-
-		return this._sahPlus;
-	},
-}

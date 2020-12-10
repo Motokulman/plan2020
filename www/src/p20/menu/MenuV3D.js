@@ -10,7 +10,7 @@ export class MenuV3D  {
         this.otstup=this.par.otstup
         this.wh=this.par.wh
 
-        this.whMin=400
+        this.whMin=200
 
 
 		this.dCont=new DCont(par.dCont);
@@ -23,8 +23,7 @@ export class MenuV3D  {
 
         this.panel
 		this.init=function(){
-            if(this.panel!=undefined)return;          
-                    
+            if(this.panel!=undefined)return;                   
             this.button=new DButton(this.dCont,this.otstup*2,0,"",function(){
                 self.activeSah = 1
             },"resources/image/not3d.png")

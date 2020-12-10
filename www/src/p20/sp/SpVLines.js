@@ -87,22 +87,52 @@ export function SpVLines (obj) {
 		target:this
 	}
 
-	var ddd,dd
+	var ddd,ddd1,ddd2,dd
 	var rr,rr1
 	var rr2 = new THREE.Vector3(0, 0, 0);
+	var rrCent = new THREE.Vector3(0, 0, 0);
+
+
+
 	this.getPL=function(point,dist){
 		ePL.dist=9999999999	
 		if(this.ractLocal.x-dist<point.x&&this.ractLocal.x1+dist>point.x){
-			if(this.ractLocal.y-dist<point.y&&this.ractLocal.y1+dist>point.y){			
+			if(this.ractLocal.y-dist<point.y&&this.ractLocal.y1+dist>point.y){	
+
+
+
 
 				for (var i = 0; i < this.array.length; i++) {
+					
+
 					rr=this.isPointInLin(this.array[i].pLoacel,this.array[i].pLoacel1,point,dist,dist)
 					if(rr!=null){
 						rr2.x=rr.x;
 						rr2.y=rr.y;
+						rrCent.x=(this.array[i].pLoacel.x+this.array[i].pLoacel1.x)/2
+						rrCent.y=(this.array[i].pLoacel.y+this.array[i].pLoacel1.y)/2
 
-						rr1=this.isPointInLin(this.array[i].pLoacel,this.array[i].pLoacel1,point,dist,0)
+						ddd=this.getDistance(rr2,this.array[i].pLoacel)
+						ddd1=this.getDistance(rr2,this.array[i].pLoacel1)
+						ddd2=this.getDistance(rr2,rrCent)
+
+						if(ddd<=dist){
+							rr2.x=this.array[i].pLoacel.x;
+							rr2.y=this.array[i].pLoacel.y;
+						}
+						if(ddd1<=dist){
+							rr2.x=this.array[i].pLoacel1.x;
+							rr2.y=this.array[i].pLoacel1.y;
+						}
+						if(ddd2<=dist){
+							rr2.x=rrCent.x;
+							rr2.y=rrCent.y;
+						}
+
+
+						/*rr1=this.isPointInLin(this.array[i].pLoacel,this.array[i].pLoacel1,point,dist,0)
 						if(rr1==null){													
+							
 							ddd=this.getDistance(this.array[i].pLoacel, point)
 							if(ddd>this.getDistance(this.array[i].pLoacel1, point)){
 								rr2.x=this.array[i].pLoacel1.x
@@ -111,9 +141,14 @@ export function SpVLines (obj) {
 								rr2.x=this.array[i].pLoacel.x
 								rr2.y=this.array[i].pLoacel.y
 							}
+
+
 						}
+*/
 						
-						dd=this.getDistance(point,rr2);						
+						dd=this.getDistance(point,rr2);	
+
+
 						if(ePL.dist>dd){
 							ddd=this.getProsent3Point(this.array[i].pLoacel,this.array[i].pLoacel1,rr2);
 							ePL.x=rr2.x;
@@ -356,28 +391,28 @@ export function GronVL (par) {
 		}
 	}
 	
+	let bb
 	this.remove=function(p){
+		bb=false;
+		//trace("remove",p.uuid)
 		if(p.gronVL!=undefined){
-			if(p.gronVL.uuid==this.uuid){				
-				for (var i = this.array.length-1; i >=0; i--) {					
-					if(this.array[i].obj.uuid==p.uuid){
-						this.array[i].remove(p);
-						this.array.splice(i,1);
-						return true
-					}
+			for (var i = this.array.length-1; i >=0; i--) {					
+				if(this.array[i].obj.uuid==p.uuid){
+					this.array[i].remove(p);
+					this.array.splice(i,1);
+					bb= true
 				}
-			}
+			}			
 		}
 		return false
 	}
 
 	var box
 	this.add=function(p){
-
+		trace("add",p.uuid)
 		box=this.getBox();
 		box.add(p);		
-		this.array.push(box);
-				
+		this.array.push(box);			
 		return box;
 	}
 
@@ -387,9 +422,9 @@ export function GronVL (par) {
 				return this.arrayChesh[i]
 			}
 		}
-		this.arrayChesh.push(new GronVLBox(this))
-		this.arrayChesh[this.arrayChesh.length-1].idArr=this.arrayChesh.length-1
-		return this.arrayChesh[this.arrayChesh.length-1]
+		this.arrayChesh.push(new GronVLBox(this));
+		this.arrayChesh[this.arrayChesh.length-1].idArr=this.arrayChesh.length-1;
+		return this.arrayChesh[this.arrayChesh.length-1];
 	}
 
 	this.setObj =  function (o){
@@ -423,8 +458,10 @@ export function GronVLBox (par) {
 	}
 
 	this.remove = function(p){
+
 		this.life=false;
-		this.obj.gronVL=undefined;		
+		this.obj.gronVL=undefined;	
+		this.par.remove(p)	
 		this.obj=undefined;		
 	}	
 }

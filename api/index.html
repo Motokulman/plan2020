@@ -336,7 +336,7 @@
 		var b=new DButton(wind.content,pObject.x+pObject.width+2,2,"Посылаем",function(){
 			objectBase.obj.success=successMy
 			objectBase.obj.error=errorMy
-			trace(objectBase.obj)
+			
 			$.ajax(objectBase.obj)
 		});
 		b.width=whB2
