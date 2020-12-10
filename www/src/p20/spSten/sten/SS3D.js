@@ -78,9 +78,9 @@ export class SS3D  {
 
             this.cont3d.position.z=-(this._height+this._height1)
        		
-            // this.drawGrani();
+            this.drawGrani();
             this.drawLittel();
-            // this.drawVerg();
+            this.drawVerg();
 		}
 
 
@@ -509,7 +509,9 @@ export class VergLittel{
 
 		this.normalPosit=new THREE.Vector3(0,1,0)
 
-		this.setGrani=function(gran,gran1){			
+		this.setGrani=function(gran,gran1){		
+		// trace('gran', gran)	
+		// trace('gran1', gran1)	
 			if(gran.boolVergDrag==false&&gran1.boolVergDrag==false){
 				this.geometry.clear()
 				for (var i = 1; i < gran.arrP.length-1; i++) {				

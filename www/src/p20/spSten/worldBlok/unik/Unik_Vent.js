@@ -37,6 +37,14 @@ export class Unik_Vent {
         ];
 
 
+
+        this.t3D = new Tr3D(this)
+
+
+
+
+
+
         var sah=0;
         var sah1=0;
 
@@ -345,6 +353,15 @@ export class Unik_Vent {
             this.control()
         }
 
+
+        
+        
+        this.t3D.setGrani()
+
+        // this.drawVerg= function () {
+        //     this.vergLittel.setGrani(this.arrGrani[0],this.arrGrani[1]);
+        // }
+
 	}
 
     set wh(value) {
@@ -427,3 +444,61 @@ export class Unik_Vent {
     get bool3() { return  this._bool3;}
 }
 
+
+
+
+
+
+export class Tr3D {
+    constructor(par) {  
+        var self=this;
+        this.type="tr3D";
+        this.par = par;
+        this.geometry=new PlaneXZ();    
+        this.rendSahTextur=0;
+
+        this.texture = new THREE.TextureLoader().load('resources/image/pic.png');  
+        this.texture.wrapS = THREE.RepeatWrapping;
+        this.texture.wrapT = THREE.RepeatWrapping;
+        this.texture.repeat.y=-1
+        this._material=new THREE.MeshBasicMaterial( {color: 0xffffff, map:this.texture } )
+        
+        this.mesh=new THREE.Mesh(this.geometry,this._material)
+
+        this.par.par.cont3d.add(this.mesh)
+
+       // this.normalPosit=new THREE.Vector3(0,1,0)
+
+
+        var arr= {x:1, y:1, z:1}
+        var arr1= {x:0, y:0, z:0}
+        var arr2= {x:3, y:3, z:3}
+
+        this.setGrani=function(){         
+            this.geometry.clear()
+
+            var r=33
+            var r1=2
+            var r2=1
+            for (var i = 0; i < 400; i++) {
+                this.geometry.addTri(
+                    new THREE.Vector3(Math.random()*r-r/2,Math.random()*r-r/2,Math.random()*r-r/2),
+                    new THREE.Vector3(Math.random()*r-r/2,Math.random()*r-r/2,Math.random()*r-r/2),
+                    new THREE.Vector3(Math.random()*r-r/2,Math.random()*r-r/2,Math.random()*r-r/2),
+
+                    new THREE.Vector3(Math.random()*r1-r1/2,Math.random()*r1-r1/2,Math.random()*r1-r1/2),
+                    new THREE.Vector3(Math.random()*r1-r1/2,Math.random()*r1-r1/2,Math.random()*r1-r1/2),
+                    new THREE.Vector3(Math.random()*r1-r1/2,Math.random()*r1-r1/2,Math.random()*r1-r1/2),
+
+                    new THREE.Vector2(Math.random()*r2,Math.random()*r2),
+                    new THREE.Vector2(Math.random()*r2,Math.random()*r2)
+
+                    )
+               /* this.geometry.addTri(arr-i,arr1,arr2)
+                this.geometry.addTri(arr2+i,arr1,arr)*/
+            }
+
+            this.geometry.redrag(true)
+        }       
+    }
+}
