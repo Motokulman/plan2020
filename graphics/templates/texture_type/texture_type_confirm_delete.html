@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h1>Удалить тип текстуры</h1>
+
+<p>Будет удален теп текстуры: {{ texturetype.name }} (id: {{ texturetype.id }}). Продолжить?</p>
+
+<form action="" method="POST">
+  {% csrf_token %}
+  <input type="submit" value="Да, удалить">
+</form>
+
+{% endblock %}

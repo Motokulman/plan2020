@@ -99,6 +99,7 @@ export class Menu  {
 			this.mGridDrag.setSP(sp)
 			this.mCont2dHelp.setSP(sp)
 			this.mObject.setSP(sp)
+			this.mStart.setSP(sp)
 		}
 
 

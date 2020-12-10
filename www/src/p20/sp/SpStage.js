@@ -433,7 +433,11 @@ SpStage.prototype = {
 		}
 		for (var i = 0; i < this.arrPol.length; i++) {
 			this.arrPol[i].clear();
-		}		
+		}
+		for (var i = 0; i < this.avp.length; i++) {
+			this.avp[i].clear();
+		}
+				
 	},
 };
 // гет сет

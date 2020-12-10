@@ -76,14 +76,19 @@ export class MStart  {
 		    var sahh=0
 
 
+		    var b2 = new DButton(this.w, this.par.otstup+(par.wh+this.par.otstup)*sahh, this.par.otstup, "clear",function(){
+		        trace(self.sp)
+		        self.sp.clear()
+		    })
+		    b2.width=b2.height=par.wh;
+		    sahh++
+
 		    var b2 = new DButton(this.w, this.par.otstup+(par.wh+this.par.otstup)*sahh, this.par.otstup, "rect",function(){
 		        let r=self.par.par.p20.getRect(self.par.par.p20.index)
 		        self.par.mGridDrag.setRect(r,self.par.otstup, true);
 		    })
 		    b2.width=b2.height=par.wh;
 		    sahh++
-
-		    
 
 		    var b5 = new DButton(this.w, this.par.otstup+(par.wh+this.par.otstup)*sahh, this.par.otstup, "style",function(){
 		      	self.sStyle.active=true;
@@ -193,10 +198,14 @@ export class MStart  {
 		self.dev=undefined
 		this.p20=undefined
 		this.setP20=function(p20){
-
 			this.p20=p20;		
 		}
 
+		this.sp=undefined
+		this.setSP=function(sp){
+			this.sp=sp			
+		}
+		
 		
     	this.setObj=function(o){
 	    	if(self.textArea==undefined)return   	

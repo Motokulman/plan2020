@@ -1,0 +1,9 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h3>Тип текстуры: {{ texturetype.name }}</h3>
+<h4>id: {{ texturetype.id }}</h4>
+<a href="{% url 'texture_type_delete' texturetype.id %}">Удалить</a>
+
+
+{% endblock %}

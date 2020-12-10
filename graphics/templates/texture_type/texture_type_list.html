@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Типы текстур</h1>
+  <a href="{% url 'texture_type_create' %}">Создать тип текстуры</a>
+  {% if texturetype_list %}
+  <ul>
+    {% for tt in texturetype_list %}
+      <li>
+        <a href="{{ tt.get_absolute_url }}">{{ tt.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>Пока нет ни одного типа текстур...</p>
+  {% endif %}
+{% endblock %}

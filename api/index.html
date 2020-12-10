@@ -179,22 +179,22 @@
 		array.push(o);
 		
 
-		var  o={
-			name:"setTextureFile",//имя кнопки
-			help:"Сохраняет anyfile текстуры по ее id",//пояснения
-			file:true,
+		// var  o={
+		// 	name:"setTextureFile",//имя кнопки
+		// 	help:"Сохраняет anyfile текстуры по ее id",//пояснения
+		// 	file:true,
 			
-			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'https://alphakp.ru/graphics/texture/1/set_texture',
-		        type: 'POST',
-				data: $(this).serialize(),
-		        // data: {
-		        // },
-		        cache: false,
-		        async: false,
-			}
-		}
-		array.push(o);
+		// 	obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+		// 		url: 'https://alphakp.ru/graphics/texture/1/set_texture',
+		//         type: 'POST',
+		// 		data: $(this).serialize(),
+		//         // data: {
+		//         // },
+		//         cache: false,
+		//         async: false,
+		// 	}
+		// }
+		// array.push(o);
 
 
 
@@ -336,7 +336,7 @@
 		var b=new DButton(wind.content,pObject.x+pObject.width+2,2,"Посылаем",function(){
 			objectBase.obj.success=successMy
 			objectBase.obj.error=errorMy
-			trace(objectBase.obj)
+			
 			$.ajax(objectBase.obj)
 		});
 		b.width=whB2
