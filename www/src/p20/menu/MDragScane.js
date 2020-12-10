@@ -5,6 +5,7 @@ import { SobIndex0 } from './fManager/SobIndex0.js';
 import { SobIndex1 } from './fManager/SobIndex1.js';
 import { SobIndex2 } from './fManager/SobIndex2.js';
 import { SobIndex3 } from './fManager/SobIndex3.js';
+import { SobIndex4 } from './fManager/SobIndex4.js';
 
 import { SpDebugPixi } from '../spSten/SpDebugPixi.js';
 
@@ -46,7 +47,7 @@ export class MDragScane  {
         this.sobIndex[1]=new SobIndex1(this);
         this.sobIndex[2]=new SobIndex2(this);
         this.sobIndex[3]=new SobIndex3(this);
-
+        this.sobIndex[4]=new SobIndex4(this);
 
 
 

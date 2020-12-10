@@ -2,6 +2,7 @@
 
 
 import { MOPoint } from './MOPoint.js';
+
 import { MOSten } from './MOSten.js';
 import { MOSp } from './MOSp.js';
 import { MOLine } from './MOLine.js';
@@ -10,7 +11,7 @@ import { MOP20 } from './MOP20.js';
 import { MOWindow } from './MOWindow.js';
 import { MOGroup } from './MOGroup.js';
 import { MOPolygon } from './MOPolygon.js';
-
+import { MOVP } from './MOVP.js';
 export class MObject  {
     constructor(par,fun) {          
         this.type="MObject";
@@ -27,14 +28,11 @@ export class MObject  {
         this.whSize=1000
 
         this.dCont=new DCont(par.dCont);
-        this.dCont.y=this.wh+this.otstup*4;
-        
+        this.dCont.y=this.wh+this.otstup*4;        
 
         this.perehvat
 
         this.array=[];
-
-
         this.dragPic=this.par.dragPic;
 
 
@@ -47,6 +45,7 @@ export class MObject  {
         this.array[5]=this.moWindow=new MOWindow(this, function(s,p){});
         this.array[6]=this.moGroup=new MOGroup(this, function(s,p){});
         this.array[7]=this.moPolygon=new MOPolygon(this, function(s,p){});
+        this.array[8]=this.moVP=new MOVP(this, function(s,p){});
 
 
         this.clear=function(){
@@ -80,8 +79,7 @@ export class MObject  {
                 }
             }
         }
-        this.keydown=function(e){
-            trace(e.keyCode)
+        this.keydown=function(e){            
             if(e.keyCode== 46){
                 for (var i = this.array.length - 1; i >= 0; i--) {
                     if(this.array[i].active == true)this.array[i].deleteObj();

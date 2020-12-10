@@ -12,7 +12,7 @@ export class SPLine  {
         this._visible=true;
 
         this._otstup=0;
-        this.sah=100;
+        this.sah=10;
         this.colol=0x3e575e
         this.colol_="#3e575e"
         this.array=[];
@@ -20,7 +20,7 @@ export class SPLine  {
 
         this._activeMouse=!this.par.activeMouse
         
-        this._mashtabText=8;
+        this._mashtabText=1;
         this.content2d = new PIXI.Container();
         par.content2d.addChild(this.content2d);
 
@@ -56,12 +56,12 @@ export class SPLine  {
         this.g = new PIXI.Graphics();
         this.g.name="0"
         this.g.beginFill(0xffffff, 0.01);
-        this.g.drawCircle(0,0,50)
+        this.g.drawCircle(0,0,5)
         //this.content2d.addChild(this.g);
 
         this.g1 = new PIXI.Graphics();
         this.g1.beginFill(0xffffff, 0.01);
-        this.g1.drawCircle(0,0,50)
+        this.g1.drawCircle(0,0,5)
         this.g1.name="1"
 
         //this.content2d.addChild(this.g1);
@@ -121,7 +121,7 @@ export class SPLine  {
 
             this.graphics.clear()
 
-            this.graphics.lineStyle(10, this.colol, 1);
+            this.graphics.lineStyle(1, this.colol, 1);
 
             this.graphics.moveTo(0,0); 
                   
@@ -132,7 +132,7 @@ export class SPLine  {
             this.graphics.moveTo(d,0);
             this.graphics.lineTo(d,this._otstup+(this._otstup>0 ? this.sah : -this.sah));
 
-            this.graphics.lineStyle(15, this.colol, 1);
+            this.graphics.lineStyle(1.5, this.colol, 1);
 
 
             this.graphics.moveTo(-this.sah/2,this._otstup+(this._otstup>0 ? this.sah*0.5 : -this.sah*0.5));
@@ -144,10 +144,7 @@ export class SPLine  {
 
 
 
-          /*  this.graphics.beginFill(0xff0000, 0.3);
-            this.graphics.drawCircle(0,0,30)*/
-
-
+  
             this.g2.clear()
             this.g2.beginFill(0xffffff, 0.01);
             this.g2.drawRect(0,0,d,32*this._mashtabText)

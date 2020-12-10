@@ -69,7 +69,7 @@ export  function MInfo(dC) {
         this.tween.stop()
         this.dC.alpha=1;
 
-        
+        console.warn(":::",title, text)
         
         this.window.text=title;
         this.label.text=text;

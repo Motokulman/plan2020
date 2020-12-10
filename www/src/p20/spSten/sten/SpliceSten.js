@@ -5,9 +5,11 @@ import { Windows } from './Windows.js';
 import { Sten3D } from './Sten3D.js';
 */
 import { Splice } from './../../sp/Splice.js';
+import { SpVLines } from './../../sp/SpVLines.js';
 import { SPLWindow } from './SPLWindow.js';
 import { SS2D } from './SS2D.js';
 import { SS3D } from './SS3D.js';
+
 
 import { SSMatematik} from './SSMatematik.js';
 /**
@@ -19,7 +21,7 @@ export function SpliceSten (_stage) {
 	Splice.call(this,_stage);
 	var self = this;
 	this.type = 'SpliceSten';
-	this.tipe = 'SpliceSten';
+	this.tipe = 'Splice';
 	this.stage = _stage;
 	this.par = _stage;
 	this._boolText = true;
@@ -78,6 +80,13 @@ export function SpliceSten (_stage) {
 	//смещеная над
     this.cont2dOfset = new PIXI.Container();
 	
+	//нулевой приметив
+	this.cont2d0 = new PIXI.Container();
+	_stage.cont2dVerh.addChild(this.cont2d0);
+
+    this.graph0 = new PIXI.Graphics();
+   	this.cont2d0.addChild(this.graph0);
+
 
 
 	this.content3d = new THREE.Object3D();
@@ -87,7 +96,9 @@ export function SpliceSten (_stage) {
 
 
 	this.matematik=new SSMatematik(this);
-	
+
+
+	this.vLines=new SpVLines(this)
 
 
 
@@ -117,7 +128,11 @@ export function SpliceSten (_stage) {
 
 
 
-
+    this.getGronVP = function(uuid){
+    	trace("$uuid")
+    	if(this.vLines.getGronVP(uuid)!=null) return this.vLines.getGronVP(uuid)
+    	return null
+    }
 
  
 
@@ -150,7 +165,9 @@ export function SpliceSten (_stage) {
 		this.content3d.rotation.z=this._rotation;
 
 		
-		
+		this.vLines.upDate()
+		this.graph0.clear()
+		this.vLines.drawDebug(this.graph0)
 		
 		this.ss3d.dragPost();
 		this.draw1();
@@ -178,6 +195,10 @@ export function SpliceSten (_stage) {
 
 	///////////////////////////////
 	
+    // setTimeout(function() {
+    // 	self.height=1000+Math.random()*3000
+    // 	self.height1=100+Math.random()*1000
+    // }, 3000);
 	
     
 	this.animat=function(time){
@@ -218,6 +239,8 @@ SpliceSten.prototype.getObj = function () {
 	o.color3=this.color3;
 	o.color4=this.color4;
 
+	o.vLines=this.vLines.getObj();
+
 	return o;
 };
 SpliceSten.prototype.setObj = function (o) {
@@ -241,7 +264,7 @@ SpliceSten.prototype.setObj = function (o) {
 	if (o.color3!== undefined ) this.color3=o.color3;
 	if (o.color4!== undefined ) this.color4=o.color4;
 	
-	
+	if(o.vLines)this.vLines.setObj(o.vLines);
 	
 };
 SpliceSten.prototype.compare = function (_sten) {

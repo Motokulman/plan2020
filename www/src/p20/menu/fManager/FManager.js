@@ -41,6 +41,7 @@ export class FManager  {
         this.sobIndex[1]=new SobIndex1(this);
         this.sobIndex[2]=new SobIndex2(this);
         this.sobIndex[3]=new SobIndex3(this);
+        this.sobIndex[4]=new SobIndex3(this);
 
 
      

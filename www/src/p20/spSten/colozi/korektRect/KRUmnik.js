@@ -442,7 +442,8 @@ export class KRUmnik  {
         }
 
         var uv = [];
-        //var norval = [];
+
+        var normal = [];
       
         var nGeom//0-на 1- от 2 на обоих
         //наполняем геометрию с текстурированием
@@ -452,15 +453,17 @@ export class KRUmnik  {
 
             vertices.length=0
             uv.length=0  
-        
+            normal.length=0  
             for (var i = 0; i < this.par.arrDin.length; i++) {
                 this.setGeomB(this.par.arrDin[i]);
-            }            
+            }        
+            //trace(normal.length+"   "+this.par.arrDin.length)
             geometry.setAttribute( 'uv', new THREE.Float32BufferAttribute( uv, 2 ) );          
             geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+            geometry.setAttribute( 'normal', new THREE.Float32BufferAttribute( normal, 3 ) );    
             geometry.computeBoundingBox();
             geometry.computeBoundingSphere();
-            geometry.computeVertexNormals();
+            //geometry.computeVertexNormals();
         }
 
 
@@ -566,28 +569,34 @@ export class KRUmnik  {
 
         this.sGm=function(p,p1,p2){
             if(nGeom==0){
-                this.sGmL(p)
-                this.sGmL(p1)
-                this.sGmL(p2)   
+                this.sGmL(p,false)
+                this.sGmL(p1,false)
+                this.sGmL(p2,false)   
             }
             if(nGeom==1){
-                this.sGmL(p1)
-                this.sGmL(p)                
-                this.sGmL(p2)   
+                this.sGmL(p1,true)
+                this.sGmL(p,true)                
+                this.sGmL(p2,true)   
             }
             if(nGeom==2){
-                this.sGmL(p)
-                this.sGmL(p1)
-                this.sGmL(p2)
+                this.sGmL(p,false)
+                this.sGmL(p1,false)
+                this.sGmL(p2,false)
 
-                this.sGmL(p1)
-                this.sGmL(p)                
-                this.sGmL(p2)   
+                this.sGmL(p1,true)
+                this.sGmL(p,true)                
+                this.sGmL(p2,true)   
             }
            
         }
 
-        this.sGmL=function(p){
+        this.sGmL=function(p,b){
+            if(b==true){
+               normal.push(0,0,1)
+            }else{
+               normal.push(0,0,-1) 
+            }
+
             if(p==0){
                 vertices.push(
                     dinBox.x,//0

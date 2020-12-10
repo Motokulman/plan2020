@@ -2,6 +2,7 @@
 //import { TriangulateShape } from './TriangulateShape.js';
 import { SpliceSten } from './sten/SpliceSten.js';
 import { SpPointSten } from './SpPointSten.js';
+import { SpVPXz } from './SpVPXz.js';
 import { SpDebugPixi } from './SpDebugPixi.js';
 //import { Pol3D } from './Pol3D.js';
 import { SpStage } from './../sp/SpStage.js';
@@ -48,9 +49,10 @@ export function SpStageSten (par,  fun) {
 
 	this.name='xzStart';
 
-	this._delph = 500;
+	this._delph = 50;
 	
 	this._colorUI=0x008cba;
+	this._colorUI1=0xf3f3f3;
 	this._colorUIActive=0xf28044;
 
 
@@ -85,7 +87,7 @@ export function SpStageSten (par,  fun) {
     this._colorLine_ = 0x000000;
 	this._sizeLine = 10;
 
-	this._height=3000;
+	this._height=300;
 	this._height1=0;
 
 
@@ -178,7 +180,7 @@ export function SpStageSten (par,  fun) {
 	this.getPoint=function(){ return new SpPointSten(this);}
 	this.getSplice=function(){return new SpliceSten(this);}
 	this.getPol=function(){ return new SpPolygon(this);}
-
+	this.getVP=function(){ return new SpVPXz(this);}
 
 
 
@@ -232,7 +234,8 @@ export function SpStageSten (par,  fun) {
 		if(r.y1<p.y)r.y1=p.y;	
 	}
 
-	this.dragStyleObj=function(o){		
+	this.dragStyleObj=function(o){
+		trace(this.idArr+"@@@",o)		
 		for (var s in o) {
 			if(this[s]!=undefined)this[s]=o[s]
 		}
@@ -285,6 +288,12 @@ export function SpStageSten (par,  fun) {
 			if(this.testSetActive(this.arrPol[i])==true)this.arrPol[i].active=true
 			else this.arrPol[i].active=false;
 		}
+		for (var i = 0; i < this.avp.length; i++) {			
+			if (this.avp[i].life==false) continue;
+			if(this.testSetActive(this.avp[i])==true)this.avp[i].active=true
+			else this.avp[i].active=false;
+		}
+
 		this.render();
 	}
 	this.testSetActive=function(o){
@@ -317,6 +326,7 @@ export function SpStageSten (par,  fun) {
 				return;
 			}
 		}
+		
 		this.arrObj.push(o);
 	}
 
@@ -344,7 +354,7 @@ SpStageSten.prototype.getObj = function (_activ) {
 	o.worldBlok=this.lineWord.getObj()
 
 	o.name=this.name
-	
+	trace(o)
 	return o;
 };
 SpStageSten.prototype.setObj = function (o) {	
@@ -382,6 +392,20 @@ SpStageSten.prototype.craetPol = function () {
 	s.activMouse=this._amSten;
 	s.col3d2=this.col3d2;
 	return s
+};
+
+SpStageSten.prototype.getGronVP = function (uuid) {
+	var o = SpStage.prototype.getGronVP.call(this, uuid);	
+	if(o!=null)return o;
+	trace("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",uuid,this.arrSplice)
+
+	for (var i = 0; i < this.arrSplice.length; i++) {
+		if (this.arrSplice[i].life==false) continue;							
+		if(this.arrSplice[i].getGronVP(uuid)!=null) return this.arrSplice[i].getGronVP(uuid);
+	}
+
+	
+	return null;
 };
 
 
@@ -550,7 +574,7 @@ Object.defineProperties(SpStageSten.prototype, {
 		set: function (value) {	
 			if(this._delphC0 == value)	return					
 			this._delphC0 = value;			
-						
+			this._delph=this.getDelphToBoolS(this._carrier,this._out,this._adjacent)				
 			for (var i = 0; i < this.arrSplice.length; i++) {
 				this.arrSplice[i].delph =this.getDelphToBoolS(this.arrSplice[i].carrier,this.arrSplice[i].out,this.arrSplice[i].adjacent)					
 			}
@@ -563,7 +587,8 @@ Object.defineProperties(SpStageSten.prototype, {
 	delphC1: {
 		set: function (value) {	
 			if(this._delphC1 == value)	return					
-			this._delphC1 = value;			
+			this._delphC1 = value;
+			this._delph=this.getDelphToBoolS(this._carrier,this._out,this._adjacent)		
 						
 			for (var i = 0; i < this.arrSplice.length; i++) {
 				this.arrSplice[i].delph =this.getDelphToBoolS(this.arrSplice[i].carrier,this.arrSplice[i].out,this.arrSplice[i].adjacent)					
@@ -578,7 +603,7 @@ Object.defineProperties(SpStageSten.prototype, {
 		set: function (value) {	
 			if(this._delphPlus == value)	return					
 			this._delphPlus = value;			
-						
+			this._delph=this.getDelphToBoolS(this._carrier,this._out,this._adjacent)				
 			for (var i = 0; i < this.arrSplice.length; i++) {								
 				if(this.arrSplice[i].carrier==true){
 					this.arrSplice[i].delph =this.getDelphToBoolS(this.arrSplice[i].carrier,this.arrSplice[i].out,this.arrSplice[i].adjacent)					

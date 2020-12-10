@@ -13,7 +13,7 @@ export class SS2D  {
 
         var sahh=0
         this.aVKol=0
-        this._mashtabText=8;
+        this._mashtabText=1;
 
         this._distans=0
         this._delph=0
@@ -127,7 +127,7 @@ export class SS2D  {
 
 
 			this.graphics.clear();
-			this.graphics.beginFill(this._adjacent == false ? this.par.par._colorC0_ : this.par.par._colorC1_, 0.3);
+			this.graphics.beginFill(this._adjacent == false ? this.par.par._colorC0_ : this.par.par._colorC1_, 0.93);
 			
 
 			if(numBlok.length==0){
@@ -180,7 +180,7 @@ export class SS2D  {
 
 
 			this.graphics.beginFill(0x0000ff, 0.1);
-			this.graphics.drawCircle(200,0,50)
+			this.graphics.drawCircle(20,0,5)
 
 
 
@@ -248,7 +248,7 @@ export class SS2D  {
 
 
 
-
+			
 
 
 
@@ -268,7 +268,7 @@ export class SS2D  {
 
 
 			var xx=this._distans-this.arrPosit[0].x+this.arrPosit1[5].x
-			if(xx<1000){
+			if(xx<100){
 				this.c2dt.visible=false				
 			}else{
 				this.c2dt.visible=true
@@ -284,7 +284,7 @@ export class SS2D  {
 				}				
 			}
 			xx=this._distans-this.arrPosit[5].x+this.arrPosit1[0].x;
-			if(xx<1000){
+			if(xx<100){
 				this.c2dt1.visible=false;				
 			}else{
 				this.c2dt1.visible=true;

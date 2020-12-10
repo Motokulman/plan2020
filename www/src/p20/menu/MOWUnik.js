@@ -10,9 +10,9 @@ export class MOWUnik{
         this.otstup = this.par.otstup
         this.dCont=new DCont(this.par.window.content); 
 
-        this.pObject=new DParamObject(this.dCont,10,2,function(){
+        this.pObject=new DParamObject(this.dCont,this.otstup+0.5,0,function(){
+            self.postSO()
         },false);
-
 
         this.drag=function(){
         }
@@ -48,6 +48,13 @@ export class MOWUnik{
     }
 
     set active(value) {
+        if(this._active!=value){
+            this._active= value;            
+            
+        }
+    }    
+    get active() { return  this._active;} 
+        set active(value) {
         if(this._active!=value){
             this._active= value;            
             

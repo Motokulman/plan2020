@@ -7,6 +7,8 @@ import { KorektSplice } from './KorektSplice.js';
 import { Splice } from './Splice.js';
 import { SpPol } from './SpPol.js';
 import { SpPoint } from './SpPoint.js';
+import { SpVP } from './SpVP.js';
+
 import { Rectangle, Calc, PositionFun, Position, LinePosition} from './Calc.js';
 /**
 * мир для сращалок
@@ -56,6 +58,8 @@ export function SpStage () {
 	this.arrClear = [];
 	this.arrClearState = [];
 
+	this.avp = [];
+
 	/** базовый конфиг который пришел в setConfig чтоб задать параметры для configData
 	* @member {Object}
 	*/
@@ -103,6 +107,8 @@ export function SpStage () {
 	this.getSplice=function(){ return new Splice(this);}
 	this.getPol=function(){ return new SpPol(this);}
 
+	this.getVP=function(){ return new SpVP(this);}
+
 	this.render=function(){}
 	
 
@@ -136,6 +142,25 @@ SpStage.prototype = {
 		this.arrPoint.push(comand);
 		this.arrPoint[this.arrPoint.length - 1].idArr = this.arrPoint.length - 1;
 		return this.arrPoint[this.arrPoint.length - 1];
+	},
+
+
+	/**
+	* Создать точку это мира(определенного типа this.tipPoint)
+	* @return {SpPoint} точка
+	*/
+	craetVP: function () {
+		for (var i = 0; i < this.avp.length; i++) {
+			if (this.avp[i].life == false) {
+				this.avp[i].life = true;
+				return this.avp[i];
+			}
+		}
+		var comand = this.getVP();//'new ' + this.tipPoint + '(this)';eval(comand)
+		this.avp.push(comand);
+		this.avp[this.avp.length - 1].idArr = this.avp.length - 1;
+		this.avp[this.avp.length - 1].life = true;
+		return this.avp[this.avp.length - 1];
 	},
 
 	// --------------------------метода стен--------------
@@ -229,6 +254,27 @@ SpStage.prototype = {
 	},
 
 	getPointXY: function (p) {
+		
+
+
+
+		if(p.tipe && p.tipe=="SpVP"){
+			
+			for (var i = 0; i < this.avp.length; i++) {				
+				if (!this.avp[i].life) continue;							
+				if(Math.round(p.x)==Math.round(this.avp[i].position.x)){
+					if(Math.round(p.y)==Math.round(this.avp[i].position.y)){
+
+						return this.avp[i]
+					}
+				}
+			}
+
+			var o = this.craetVP();
+			o.position.setPoint(p);	
+			return o
+		}
+
 		for (var i = 0; i < this.arrPoint.length; i++) {
 			if (!this.arrPoint[i].life) continue;			
 			if(Math.round(p.x)==Math.round(this.arrPoint[i].position.x)){
@@ -241,8 +287,15 @@ SpStage.prototype = {
 		var o = this.craetPoint();
 		o.position.setPoint(p);
 		return o
-
 	},
+
+	getGronVP: function (uuid) {
+		
+
+
+		return null;
+	},
+
 
 	// обворачивает стенку в точки
 	stenInPoint: function (sten) {
@@ -280,7 +333,7 @@ SpStage.prototype = {
 		o.arrPoint = [];
 		o.arrSplice = [];
 		o.arrPol = [];
-
+		o.avp = [];
 		for (var i = 0; i < this.arrPoint.length; i++) {
 			if (!this.arrPoint[i].life) continue;			
 			o.arrPoint.push(this.arrPoint[i].getObj());
@@ -290,13 +343,20 @@ SpStage.prototype = {
 			if (!this.arrSplice[i].life) continue;			
 			o.arrSplice.push(this.arrSplice[i].getObj());
 		}
+		
+		for (var i = 0; i < this.avp.length; i++) {
+			if (!this.avp[i].life) continue;			
+			o.avp.push(this.avp[i].getObj());
+		}
+
+		
 
 		for (var i = 0; i < this.arrPol.length; i++) {
 			if (!this.arrPol[i].life) continue;			
 			o.arrPol.push(this.arrPol[i].getObj());
 		}
 
-
+		trace(o.avp)
 
 		return o;
 	},
@@ -318,6 +378,9 @@ SpStage.prototype = {
 			}
 		}*/
 
+		
+
+
 		if (o.arrSplice != undefined) {
 			for (var i = 0; i < o.arrSplice.length; i++) {
 				newObj = this.craetSplice();
@@ -326,17 +389,24 @@ SpStage.prototype = {
 			}
 		}
 
-		if (o.arrPol != undefined) {
+		if (o.avp != undefined) {
+			for (var i = 0; i < o.avp.length; i++) {
+				newObj = this.craetVP();
+				newObj.setObj(o.avp[i]);				
+			}
+		}
+		
 
+
+		if (o.arrPol != undefined) {
 			for (var i = 0; i < o.arrPol.length; i++) {
 				newObj = this.craetPol();
-
 				newObj.setObj(o.arrPol[i]);
-				
-
 			}
-
 		}
+
+		
+		
 
 		//if (o.spMousePrefix != undefined) this.spMouse.prefix = o.spMousePrefix;
 
@@ -363,7 +433,11 @@ SpStage.prototype = {
 		}
 		for (var i = 0; i < this.arrPol.length; i++) {
 			this.arrPol[i].clear();
-		}		
+		}
+		for (var i = 0; i < this.avp.length; i++) {
+			this.avp[i].clear();
+		}
+				
 	},
 };
 // гет сет
