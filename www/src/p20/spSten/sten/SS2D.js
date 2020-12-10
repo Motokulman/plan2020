@@ -127,7 +127,7 @@ export class SS2D  {
 
 
 			this.graphics.clear();
-			this.graphics.beginFill(this._adjacent == false ? this.par.par._colorC0_ : this.par.par._colorC1_, 0.93);
+			this.graphics.beginFill(this._adjacent == false ? this.par.par._colorC0_ : this.par.par._colorC1_, 0.3);
 			
 
 			if(numBlok.length==0){
@@ -267,34 +267,36 @@ export class SS2D  {
 			if(this._rotation>-Math.PI/2&&this._rotation<Math.PI/2)bb=false;
 
 
-			var xx=this._distans-this.arrPosit[0].x+this.arrPosit1[5].x
+			var xx=this._distans-(-this.arrPosit[0].x-this.arrPosit1[5].x)
+
 			if(xx<100){
 				this.c2dt.visible=false				
 			}else{
 				this.c2dt.visible=true
-				this.text.text=Math.round(xx)+"";				
+				this.text.text=Math.round(xx)+"!";				
 				if(bb==false){
-					this.c2dt.x=(xx-this.text.width)/2;
+					this.c2dt.x=(xx/2)-this.arrPosit[0].x-this.text.width/2;
 					this.c2dt.y=this._delph/2
 					this.c2dt.rotation=0
-				}else{
-					this.c2dt.x=(xx)/2+this.text.width/2;
+				}else{	
+					this.c2dt.x=(xx/2)-this.arrPosit[0].x+(this.text.width/2);
 					this.c2dt.y=this._delph/2+32*this._mashtabText
 					this.c2dt.rotation=Math.PI
 				}				
 			}
-			xx=this._distans-this.arrPosit[5].x+this.arrPosit1[0].x;
+			xx=this._distans-(-this.arrPosit[5].x-this.arrPosit1[0].x);
 			if(xx<100){
 				this.c2dt1.visible=false;				
 			}else{
 				this.c2dt1.visible=true;
 				this.text1.text=Math.round(xx)+"";
 				if(bb==false){
-					this.c2dt1.x=(xx-this.text1.width)/2;
+					this.c2dt1.x=(xx/2)-this.arrPosit[5].x-this.text.width/2;
+
 					this.c2dt1.y=-this._delph/2-32*this._mashtabText;
 					this.c2dt1.rotation=0;
 				}else{
-					this.c2dt1.x=(xx)/2+this.text1.width/2;
+					this.c2dt1.x=(xx/2)-this.arrPosit[5].x+(this.text.width/2);
 					this.c2dt1.y=-this._delph/2;//-32*this._mashtabText
 					this.c2dt1.rotation=Math.PI;
 				}
