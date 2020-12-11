@@ -33,7 +33,7 @@ export class DebKR  {
         this.sss=function(){
         	date=new Date().getTime()
         	for (var i = 0; i < self.sliItar.value; i++) {
-        		
+        	
         		kr.korektGrid()
         	}
         	
@@ -42,7 +42,7 @@ export class DebKR  {
         }
 
         this.save1=function(){  
-            trace("@@@@") 
+             
             fun("saveLocal")      
         } 
         this.sah=0;
@@ -57,7 +57,6 @@ export class DebKR  {
 
         this.setObjLoc=function(o){ 
            	if(kr)if(o){
-           		trace(o);
            		kr.pS.x=o.pS.x
 				kr.pS.y=o.pS.y
 				kr.pS.w=o.pS.w
@@ -127,7 +126,8 @@ export class DebKR  {
 	            this.plXZ,
 	            this.lineBasicMaterial
 	        )
-	        this.cont3d.add(this.lineSegments);
+            this.cont3d.add(this.lineSegments);
+            
 	        this.texture = new THREE.TextureLoader().load('resources/image/pic.png');  
 	        this.texture.wrapS = THREE.RepeatWrapping;
 			this.texture.wrapT = THREE.RepeatWrapping;
@@ -142,8 +142,8 @@ export class DebKR  {
 
 
             this.window.width=222
-            this.slider = new DSliderBig (this.window.content, 2, 2, function(){kr.pS.x=this.value;self.sss()}, 'x', -1000, 10000);
-            this.slider1 = new DSliderBig (this.window.content, 2, 2+52*1, function(){kr.pS.y=this.value;self.sss()}, 'y', -1000, 1000);
+            this.slider = new DSliderBig (this.window.content, 2, 2, function(){kr.pS.x=this.value;self.sss()}, 'x', -10000, 10000);
+            this.slider1 = new DSliderBig (this.window.content, 2, 2+52*1, function(){kr.pS.y=this.value;self.sss()}, 'y', -10000, 10000);
             this.slider2 = new DSliderBig (this.window.content, 2, 2+52*2, function(){kr.pS.w=this.value;self.sss()}, 'w', 100, 10000);  
             this.slider3 = new DSliderBig (this.window.content, 2, 2+52*3, function(){kr.pS.h=this.value;self.sss()}, 'h', 100, 10000);
 
@@ -159,12 +159,12 @@ export class DebKR  {
             this.win.width=222;
             this.sli = new DSliderBig (this.win.content, 2, 2, function(){
             	kr.arrLine[0].p.x=this.value;
-            	//if(kr.arrLine[1])kr.arrLine[1].p.x=this.value;
+            	if(kr.arrLine[1])kr.arrLine[1].p.x=this.value;
             	self.sss()
         	}, 'x', -10000, 10000);
             this.sli1 = new DSliderBig (this.win.content, 2, 2+52*1, function(){
             	kr.arrLine[0].p.y=this.value;
-            	//if(kr.arrLine[1])kr.arrLine[1].p.y=this.value;
+            	if(kr.arrLine[1])kr.arrLine[1].p.y=this.value;
             	self.sss()
             }, 'y', -10000, 10000);
             this.sli2 = new DSliderBig (this.win.content, 2, 2+52*2, function(){                
@@ -222,8 +222,9 @@ export class DebKR  {
             }, 'кол. итораций', 1, 2000);
             this.sliItar.width=this.win1.width-4
             this.sliItar.okrug=1;
-            self.sliItar.value=1
+            self.sliItar.value=1;
             yy+=50
+
 
             this.b0 = new DButton(this.win1.content, 2, yy, '0', function(){
                 nGeom=0;
@@ -233,7 +234,7 @@ export class DebKR  {
                 nGeom=1;
                 self.sss()
             });
-            this.b0 = new DButton(this.win1.content, 2+34*2, yy, '2', function(){
+            this.b2 = new DButton(this.win1.content, 2+34*2, yy, '2', function(){
                 nGeom=2;
                 self.sss()
             });
@@ -244,7 +245,7 @@ export class DebKR  {
             yy+=34
 
 
-
+            
            	this.button = new DButton(this.win1.content, 2, yy, 'add Random Line', function(){
             	var ww=(1000+kr.rect.w)
             	var hh=(1000+kr.rect.h)
@@ -275,7 +276,6 @@ export class DebKR  {
             });
             yy+=34
            	this.button.width=this.button1.width=this.win1.width-4
-
             this.win1.height=yy+34;
 
            /*
@@ -361,7 +361,7 @@ export class DebKR  {
 	            kr.setGeomLine(self.plXZ);
 	            self.cont3d.position.x=-self.kr.rect.w/2;
 				self.cont3d.position.y=-self.kr.rect.h/2;
-				kr.setGeom(self.plXZ2);
+				kr.setGeom(self.plXZ2,nGeom);
 
 				self.par.visi3D.intRend=1
 			}
@@ -521,10 +521,14 @@ export class DebKR  {
 
 
 export class PlXZ extends THREE.BufferGeometry {
+
     constructor( ) {
+
         super();
+
         var vertices = [];
-        this.upNull=function(){            
+        this.upNull=function(){
+            
             var wh=1000;
             vertices.push(-wh,-wh,0);
             vertices.push(-wh,-wh,0);
@@ -543,6 +547,42 @@ export class PlXZ extends THREE.BufferGeometry {
             vertices.push(wh,wh,0); 
             this.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
         }
+
         this.upNull();
+
+        /*
+
+        this.clearPoint=function(){
+            this.array.length=0;
+        }
+
+        this.array=[]
+        this.addLine=function(p,p1){
+            this.array.push(p,p1)
+            trace(p,p1)
+            
+        }
+
+        
+        this.upDate=function(){
+            if(this.array.length==0){
+                this.upNull();
+            }
+            vertices.length=0;
+            trace(this.array.length+"   ",this.array)
+            for (var i = 0; i < this.array.length; i+=2) {                
+                
+                
+               
+                vertices.push(this.array[i].x,this.array[i].y,this.array[i].z);
+
+                vertices.push(this.array[i+1].x,this.array[i+1].y,this.array[i+1].z);
+                 vertices.push(this.array[i].x,this.array[i].y,this.array[i].z);
+            }
+
+            this.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+        } */   
+
     }
+
 }

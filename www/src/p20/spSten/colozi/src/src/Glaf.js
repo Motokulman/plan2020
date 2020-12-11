@@ -146,7 +146,8 @@ export class Glaf  {
                 this.devBig.minimize=o.devBig.minimize
                 this.devBig.x=o.devBig.x
                 this.devBig.y=o.devBig.y
-                this.devBig.index=o.devBig.index
+               
+                this.devBig.index=0//o.devBig.index
             }
             
 

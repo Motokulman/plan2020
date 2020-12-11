@@ -217,8 +217,7 @@ export class MOGObj{
                 }
                 self.par.object.korektRect(true)
             }, "y",  -this.whSize/2, this.whSize/2)
-            this.slid1.width=this.width-this.otstup1*3-this.wh
-          
+            this.slid1.width=this.width-this.otstup1*3-this.wh          
             this.slid1.okrug=1;
 
             this.slid1.funChange=function(){
@@ -226,6 +225,25 @@ export class MOGObj{
                 self.par.drag()
             }
 
+
+            this.slid2=new DSliderBig(this.panelPoint, this.otstup1,70+50, function(s){ 
+                /*self.par.bool=false
+                self.object.position.y=self.slid1.value*/
+                self.par.bool=false;              
+                for (var i = 0; i < self.arrPoint.length; i++) {
+                    self.arrPoint[i].position.z=this.value
+                    self.arrPoint[i].doFunRend()
+                }
+
+                self.par.object.korektRect(true)
+            }, "z",  -this.whSize/2, this.whSize/2)
+            this.slid2.width=this.width-this.otstup1*3-this.wh          
+            this.slid2.okrug=1;
+
+            this.slid2.funChange=function(){
+                self.par.bool=true
+                self.par.drag()
+            }
 
 
         }
@@ -245,7 +263,7 @@ export class MOGObj{
 
 
 
-        var bool,bool1, param,param1
+        var bool,bool1,bool2, param,param1,param2
         this.drag=function(){
             var yy=0
             this.init();
@@ -317,10 +335,13 @@ export class MOGObj{
             this.arrPoint.length=0;
 
             for (var i = 0; i < this.par.object.array.length; i++) {
-                if(this.par.object.array[i].type=="SpPointSten"){                    
+                if(this.par.object.array[i].type=="SpPointSten" ||this.par.object.array[i].type=="SpVPXz"){                    
                     this.arrPoint.push(this.par.object.array[i]);
                 }
             }
+
+
+
 
             if(this.arrPoint.length == 0){
                 this.panelPoint.visible=false;
@@ -330,64 +351,61 @@ export class MOGObj{
                 this.panelPoint.y=yy
 
                 param=Math.round(this.arrPoint[0].position.x);
-                param1=Math.round(this.arrPoint[0].position.y);                
+                param1=Math.round(this.arrPoint[0].position.y); 
+                param2=Math.round(this.arrPoint[0].position.z);               
                 bool=true;
                 bool1=true;
+                bool2=true;
                 for (var i = 1; i < this.arrPoint.length; i++) {
                     if(param!=Math.round(this.arrPoint[i].position.x))bool=false;
                     if(param1!=Math.round(this.arrPoint[i].position.y))bool1=false;
+                    if(param2!=Math.round(this.arrPoint[i].position.z))bool2=false;
                 }
 
-                if(bool==false&&bool1==false){
-                    this.slid.visible=false;
-                    this.slid1.visible=false;
-                    this.panelPoint.height=this.wh+this.otstup+20
-                }else{
 
-                    this.slid.visible=true;
-                    this.slid1.visible=true;
+                this.slid.alpha=bool==true?1:0.3
+                this.slid1.alpha=bool1==true?1:0.3
+                this.slid2.alpha=bool2==true?1:0.3
 
-                    this.slid.activMouse=bool;
-                    this.slid1.activMouse=bool1;
-                    this.panelPoint.height=this.slid1.y+50
+                // if(bool==false&&bool1==false&&bool2==false){
+                //     //this.slid.visible=false;
+                //     //this.slid1.visible=false;
+                //     this.slid.alpha=0.3
+                //     this.slid1.alpha=0.3
+                //     this.slid2.alpha=0.3
+                //   //  this.panelPoint.height=this.wh+this.otstup+20
+                // }else{
 
-                    self.slid.min=Math.round(param-1000)
-                    self.slid.max=Math.round(param+1000)
-                    self.slid.value=Math.round(param)
+                //    /* this.slid.visible=true;
+                //     this.slid1.visible=true;*/
+                //     this.slid.alpha=1
+                //     this.slid1.alpha=1
+                //     this.slid2.alpha=1
 
-                    self.slid1.min=Math.round(param1-1000)
-                    self.slid1.max=Math.round(param1+1000)
-                    self.slid1.value=Math.round(param1)
-                     
-                }
-                    
-                    
+                //     /*this.slid.activMouse=bool;
+                //     this.slid1.activMouse=bool1;
+                //     this.slid2.activMouse=bool1;*/
 
-                trace(this.arrPoint.length,this.arrWin.length,this.arrSt.length,this.par.object)
+                    self.slid.min=Math.round(param-100);
+                    self.slid.max=Math.round(param+100);
+                    self.slid.value=Math.round(param);
+
+                    self.slid1.min=Math.round(param1-100);
+                    self.slid1.max=Math.round(param1+100);
+                    self.slid1.value=Math.round(param1); 
+
+                    self.slid2.min=Math.round(param2-100);
+                    self.slid2.max=Math.round(param2+100);
+                    self.slid2.value=Math.round(param2); 
+
+                //}                    
+                this.panelPoint.height=this.slid2.y+50;    
+
+
                 if(this.arrPoint.length==0&&this.arrWin.length==0&&this.arrSt.length==0)this.par.object.active=false
-
-
                 yy+=this.panelPoint.height+this.otstup
-
-
             }
-
-
-
-
-
-
-
-
-
-
-
             this.height=yy;
         }
-
-
-
-
-
     }
 }

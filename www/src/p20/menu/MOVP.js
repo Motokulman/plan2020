@@ -62,9 +62,9 @@ export class MOVP extends MOBaza {
 
             this.slid2=new DSliderBig(this.window.content, this.otstup1,yy, function(s){ 
                 self.bool=false
-                trace(self.slid2.value,self.object.position.z)
+              
                 self.object.position.z=self.slid2.value
-                trace(self.slid2.value,"==",self.object.position.z)
+               
             }, "z",  -this.whSize/2, this.whSize/2)
             this.slid2.width=this.width-this.otstup1*2
             
@@ -105,6 +105,7 @@ export class MOVP extends MOBaza {
             this.bool=true           
             this.object.funDragMenu=this.drag
             this.object.par.setActive(this.object);
+            this.window.title="MOVP  "+this.object.idArr//+" : "+ this.object.uuid;
             this.drag()
         }
         this.clear=function(){

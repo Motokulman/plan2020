@@ -138,6 +138,7 @@ export class MStart  {
 		    sahh++
 
 		    var b8 = new DButton(this.w, this.par.otstup+(par.wh+this.par.otstup)*sahh, this.par.otstup+par.wh/2, "save",function(){
+		      	trace("###########################################")
 		      	self.fun("saveGetObjId");
 		    })
 		    b8.width=par.wh;

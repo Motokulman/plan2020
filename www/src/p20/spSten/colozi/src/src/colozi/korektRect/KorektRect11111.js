@@ -3,6 +3,8 @@ import { Calc } from './Calc.js';
 import { KRUmnik } from './KRUmnik.js';
 import { KRGronRect } from './KRGronRect.js';
 import { KRGronLine } from './KRGronLine.js';
+import { KRUColi } from './KRUColi.js';
+
 
 export class KorektRect  {
     constructor(fun) {         
@@ -27,21 +29,25 @@ export class KorektRect  {
         this.arrDin=[];
         this.arrDinL=[];
 
-        this.arrWin=[];
+        this.coliz=null
+      
+
+        this.arrWin=[
+            // {x:0,y:0,w:1000,h:1000}
+        ];
         this.arrLine=[
-            {p:{x:3000,y:-200},p1:{x:5000,y:2000}}/*,
+            {p:{x:3000,y:-200},p1:{x:7000,y:3000}}/*,
             {p:{x:4000,y:1000},p1:{x:1000,y:2000}}*/
         ];
 
-        trace(this.arrLine)
         this.calc=new Calc();
 
-        this.krUmnik=new KRUmnik(this);
-
+        this.krUmnik=new KRUmnik(this); 
+        this.krUColi=new KRUColi(this);
         var w
         this.setSten=function(ohH1W,_x,_x1){
             _x=-200
-            _x1=_x1||0
+            _x1=_x1||0;
 
             w=ohH1W.width!=undefined?ohH1W.width : ohH1W._distans;
             this.rect.x=_x;
@@ -122,7 +128,9 @@ export class KorektRect  {
 
 
         ///////режим ректами ночало///////////////////////////////////
-        this.reshik=function(){            
+        this.reshik=function(){  
+            this.krUColi.korectRect();
+
             for (var j = 0; j < this.arrWin.length; j++) {
                 for (var i = this.arrDin.length-1; i >=0 ; i--) {                
                     this.reshik2(i,this.arrDin[i],this.arrWin[j])
@@ -130,17 +138,27 @@ export class KorektRect  {
             } 
         }
 
+        this.testLine=function(ps,pf,ps1,pf1){        
+            if(ps1>=ps &&ps1<pf)return true;   //* окно.н >= блок.н && окно.н <= блок.к
+            if(ps>=ps1 &&ps<pf1)return true;   //* блок.н >= окно.н && блок.н <= окно.к
+            return false;
+        }
+
         var bx,by,bx1,by1,n,n1,br
         this.reshik2=function(_i,_br,_win){
-            _br.x1=_br.x+_br.w;
+            _br.x1=_br.x+_br.w;   //* определяем координаты конца блока
             _br.y1=_br.y+_br.h;
 
-            _win.x1=_win.x+_win.w;
-            _win.y1=_win.y+_win.h;
+            _win.x1=_win.x+_win.w;   //* опеределяем координаты конца окна
+            _win.y1=_win.y+_win.h;    
             //this.calc
            
-            bx=this.calc.testLine(_br.x,_br.x1,_win.x,_win.x1)
-            by=this.calc.testLine(_br.y,_br.y1,_win.y,_win.y1)
+            bx=this.testLine(_br.x,_br.x1,_win.x,_win.x1)
+            by=this.testLine(_br.y,_br.y1,_win.y,_win.y1)
+
+            // console.log("---------- ID: " + _br.idArr + " -----------");
+            // console.log("BX:" + bx, "[", _br.x, _br.x1, "]", "[", _win.x, _win.x1, "]");
+            // console.log("BY:" + by, "[", _br.y, _br.y1, "]", "[", _win.y, _win.y1, "]");
 
             
             bx1=false
@@ -157,7 +175,7 @@ export class KorektRect  {
                     return                                           
                 }
 
-                if(by1==true){                    
+                if(by1==true){                   
                     if(_br.x<_win.x&&_br.x1>_win.x){//лево свободный
                         br=null
                         if(_br.x1>_win.x1){//хрень большая
@@ -197,7 +215,7 @@ export class KorektRect  {
                         return
                     }                 
                 }
-                if(bx1==true){                    
+                if(bx1==true){                  
                     if(_br.y<_win.y&&_br.y1>_win.y){//лево свободный
                         br=null
                         if(_br.y1>_win.y1){//хрень большая
@@ -242,6 +260,7 @@ export class KorektRect  {
      
                 
                 //разрезаем на куски
+                // trace(_br, _win)
                 this.krUmnik.setBoxInRect(_br,_win)
                 this.arrDin.splice(_i,1)
                 return    
@@ -262,13 +281,11 @@ export class KorektRect  {
             var i,j
             for (j = 0; j < this.arrLine.length; j++) {
                 xzL=this.getL();
-                
                 xzL.setLine(this.arrLine[j]);
             }
             
             for (j = 0; j < this.sahL; j++) {
                 rdBig=this.arrayL[j]
-              
                 for (i = this.arrDin.length-1; i >=0 ; i--) {
                     this.reshikLine1(i,this.arrDin[i],rdBig)
                 }
@@ -281,18 +298,21 @@ export class KorektRect  {
             _br.x1=_br.x+_br.w;
             _br.y1=_br.y+_br.h;
 
-            if(rd.x>_br.x1)return;//с права
-            if(rd.x1<_br.x)return;//с лева
-            if(rd.y1<_br.y)return;//ниже
+            if(rd.x>=_br.x1)return;//с права
+            if(rd.y>=_br.y1)return;//выше
+            if(rd.x1<=_br.x)return;//с лева
+            if(rd.y1<=_br.y)return;//ниже
 
 
-            if(rd.y>_br.y1){
+            if(rd.y>=_br.y1){
                 if(this.nahVerh(_i,_br,rd)==true){
                     return
                 }                
             }
 
             rez=this.krUmnik.isRectLine(_br,rd);
+
+            console.log(rez.tip);
 
             if(rez.tip==0){ //в нутри           
                 if(rez.pBool==true)this.nahVerh(_i,_br,rd)
@@ -308,7 +328,6 @@ export class KorektRect  {
                 if(this.nafigRect(_i,_br, rrEE)==true)return 
             }
         }
-
         //Вписывам рект в рект
         var ze
         this.nafigRect=function(_i,_br, rd){
@@ -328,7 +347,7 @@ export class KorektRect  {
                 }
 
             }
-            if(rd.type==0){
+            if(rd.type==0){;
                 ze.arBig[ze.ry][ze.rx].boolPoli=false;
                 ze.arBig[ze.ry][ze.rx].boolNa=true;
                 
@@ -341,7 +360,7 @@ export class KorektRect  {
                    // this.nahVerh(null,ze.arBig[ze.ry+1][ze.rx],rd)
                 }
 
-                for (var i = 0; i < ze.arBig.length; i++) {                
+                for (var i = 0; i < ze.arBig.length; i++) {            
                     if(ze.arBig[i][ze.rx-1])this.nahVerh(null,ze.arBig[i][ze.rx-1], rdBig) 
                 }
             }
@@ -446,7 +465,6 @@ export class KorektRect  {
 
         this.finalPro=function(){
             this.krUmnik.finalPro();
-
         }
  
 
@@ -457,8 +475,8 @@ export class KorektRect  {
         }
 
         //наполняем геометрию с текстурированием
-        this.setGeom=function(geometry){
-            this.krUmnik.setGeom(geometry)
+        this.setGeom=function(geometry, _nGeom){
+            this.krUmnik.setGeom(geometry, _nGeom)
         }
 
         /////////////////////////////

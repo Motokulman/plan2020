@@ -104,7 +104,6 @@ SpVP.prototype = {
 		for (var ii = 0; ii < this.arrayClass.length; ii++) {
 			if (this.arrayClass[ii].life != undefined) this.arrayClass[ii].life = this._life;
 		}
-
 	},
 	get life () {
 		return this._life;

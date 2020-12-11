@@ -104,6 +104,13 @@ export function Calc () {
 		return null;
 	};
 
+	//поподает ли отрезки друг на друга
+    this.testLine=function(ps,pf,ps1,pf1){            
+        if(ps1>=ps &&ps1<=pf)return true;
+        if(ps>=ps1 &&ps<=pf1)return true;
+        return false;
+    }
+
 	this.okrugPoint = function (p, num) {
 		if (num == undefined) num = 100;
 		p.x = Math.round(p.x / num) * num;
@@ -134,7 +141,7 @@ export function Calc () {
 		return false;
 	};
 
-
+	//угол с 3х точек
 	this.getTreeAngel = function (p, p1, p2, bool) {
 		a = this.getAngle(p1, p);
 		a1 = this.getAngle(p1, p2);
@@ -155,7 +162,7 @@ export function Calc () {
 		y2 = c.y - b.y;
 		d1 = Math.sqrt(x1 * x1 + y1 * y1);
 		d2 = Math.sqrt(x2 * x2 + y2 * y2);
-		// res = calc.sign(a,  b,  c);
+
 		var res = (x1 * x2 + y1 * y2) / (d1 * d2);
 		if (res > 1.0) res = 1.0;
 		if (res < -1.0) res = -1.0;
@@ -352,10 +359,10 @@ export function Calc () {
 	*/
 	this.isPointInLine = function (p, p1, pTest) {
 		// пока реализация Точка принадлежит отрезку, если сумма расстояний от этой точки до конечных точек отрезка равна длине отрезка
-		var d = calc.getDistance(p, p1);
-		var d1 = calc.getDistance(p, pTest);
-		var d2 = calc.getDistance(p1, pTest);
-		return (calc.okrugNumber(d1 + d2) === calc.okrugNumber(d));// Math.abs(d - (d1 + d2)) < 0.001;//((d1 + d2) === d)//
+		var d = this.getDistance(p, p1);
+		var d1 = this.getDistance(p, pTest);
+		var d2 = this.getDistance(p1, pTest);
+		return (this.okrugNumber(d1 + d2) === this.okrugNumber(d));// Math.abs(d - (d1 + d2)) < 0.001;//((d1 + d2) === d)//
 	};
 
 	/**
@@ -363,8 +370,8 @@ export function Calc () {
 	* @return {number} растояние точки до прямой. Если дистанция p, p1 == 0 вернет 0
 	*/
 	this.getDistancePointToLine = function (p, p1, pTest) {
-		var res = ((p1.y - p.y) * pTest.x - (p1.x - p.x) * pTest.y + p1.x * p.y - p1.y * p.x) / calc.getDistance(p, p1);
-		return -calc.okrugNumber(Number.isFinite(res) ? res : 0);
+		var res = ((p1.y - p.y) * pTest.x - (p1.x - p.x) * pTest.y + p1.x * p.y - p1.y * p.x) / this.getDistance(p, p1);
+		return -this.okrugNumber(Number.isFinite(res) ? res : 0);
 	};
 	/**
      * Получение точек пересечения двох окружностей
@@ -406,6 +413,7 @@ export function Calc () {
 	var mArrPoint = [new Position(), new Position(), new Position(), new Position()];
 	// проверка на пересечение прямоугольников
 	this.isIntersectionRect = function (r, rect) { //   true - перечение false - непересекаются
+
 		arrPoint[0].set(r.x, r.y);
 		arrPoint[1].set(r.x + r.width, r.y);
 		arrPoint[2].set(r.x + r.width, r.y + r.height);
@@ -415,69 +423,9 @@ export function Calc () {
 		mArrPoint[1].set(rect.x + rect.width, rect.y);
 		mArrPoint[2].set(rect.x + rect.width, rect.y + rect.height);
 		mArrPoint[3].set(rect.x, rect.y + rect.height);
+
 		return this.isIntersectionFromPoint(arrPoint, mArrPoint);
 	};
-
-
-	//Сравнение прямоугольников
-	//0- прямоугольники на поподают
-	this.isRectS = function (r, r1) {
-		if(this.colisiLine2D(r.x,r.x+(r.w==undefined?r.width : r.w), r1.x,r1.x+(r1.w==undefined?r1.width : r1.w))==true){
-			if(this.colisiLine2D(r.y,r.y+(r.h==undefined?r.height : r.h), r1.y,r1.y+(r1.h==undefined?r1.height : r1.h))==true){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	//сверяем две полосы
-    this.colisiLine2D=function(ps,pf,ps1,pf1){            
-        if(ps1>=ps &&ps1<=pf)return true;
-        if(ps>=ps1 &&ps<=pf1)return true;
-        return false;
-    }
-    //чтока в ректе?
-    this.isRectPoint= function (rect, point) {
-    	if(point.x>=rect.x && point.y>=rect.y){
-    		if(point.x<=rect.x+(rect.w==undefined?rect.width : rect.w) && point.y<=rect.y+(rect.h==undefined?rect.height : rect.h)){
-    			return true;
-    		}
-    	}
-    	return false;	
-    }
-
-    //Линия в или пересекает рект
-    var ppS=new Position()
-    var ppS1=new Position()
-    this.isRectLine= function (rect, point,point1) {
-    	if(this.isRectPoint(rect,point)==true)return true;	
-    	if(this.isRectPoint(rect,point1)==true)return true;
-
-    	//0
-    	ppS.set(rect.x,rect.y)
-    	ppS1.set(rect.x+(rect.w==undefined?rect.width : rect.w),rect.y)
-    	if(this.getPointOfIntersection(ppS,ppS1,point,point1)!=null)return true;	
-
-    	//1   	
-    	ppS.set(rect.x+(rect.w==undefined?rect.width : rect.w),rect.y)
-    	ppS1.set(rect.x+(rect.w==undefined?rect.width : rect.w),rect.y+(rect.h==undefined?rect.height : rect.h))
-    	if(this.getPointOfIntersection(ppS,ppS1,point,point1)!=null)return true;
-
-    	//2  	
-    	
-    	ppS.set(rect.x+(rect.w==undefined?rect.width : rect.w),rect.y+(rect.h==undefined?rect.height : rect.h))
-		ppS1.set(rect.x,rect.y+(rect.h==undefined?rect.height : rect.h))
-    	if(this.getPointOfIntersection(ppS,ppS1,point,point1)!=null)return true;
-
-    	ppS.set(rect.x,rect.y+(rect.h==undefined?rect.height : rect.h))
-    	ppS1.set(rect.x,rect.y)
-    	if(this.getPointOfIntersection(ppS,ppS1,point,point1)!=null)return true;  
-       	return false;	
-    }
-
-
-
-
 
 	// пересечение полигонов
 	// arrPoint - обход ректа по часовой стрелки
@@ -485,7 +433,7 @@ export function Calc () {
 	this.isIntersectionFromPoint = function (arrPoint, arrPoint1) { //   true - перечение false - непересекаются
 		for (var i = 0; i < arrPoint.length - 2; i++) { // перечечение диагоналей
 			for (var j = 0; j < arrPoint1.length - 2; j++) {
-				if (calc.getPointOfIntersection(arrPoint[i], arrPoint[(i + 2) % arrPoint.length],
+				if (this.getPointOfIntersection(arrPoint[i], arrPoint[(i + 2) % arrPoint.length],
 					arrPoint1[j], arrPoint1[(j + 2) % arrPoint1.length])) {
 					return true;
 				}
@@ -493,19 +441,19 @@ export function Calc () {
 		}
 		for (var i = 0; i < arrPoint.length; i++) { // перечечение граней
 			for (var j = 0; j < arrPoint1.length; j++) {
-				if (calc.getPointOfIntersection(arrPoint[i], arrPoint[(i + 1) % arrPoint.length],
+				if (this.getPointOfIntersection(arrPoint[i], arrPoint[(i + 1) % arrPoint.length],
 					arrPoint1[j], arrPoint1[(j + 1) % arrPoint1.length])) {
 					return true;
 				}
 			}
 		}
 		for (var i = 0; i < arrPoint1.length; i += 2) { // в случае когда один в нутри другого и не пересекаются диагонали
-			if (calc.contains(arrPoint1[i].x, arrPoint1[i].y, arrPoint)) {
+			if (this.contains(arrPoint1[i].x, arrPoint1[i].y, arrPoint)) {
 				return true;
 			}
 		}
 		for (var i = 0; i < arrPoint.length; i += 2) { // в случае когда один в нутри другого и не пересекаются диагонали
-			if (calc.contains(arrPoint[i].x, arrPoint[i].y, arrPoint1)) {
+			if (this.contains(arrPoint[i].x, arrPoint[i].y, arrPoint1)) {
 				return true;
 			}
 
@@ -516,10 +464,10 @@ export function Calc () {
 	// паралельные ли линии ? eps - погрешность
 	this.isParalel = function (p, p1, p2, p3, eps) {
 		eps = eps || 0;
-		var angelFirstLine = Math.abs(calc.getAngle(p, p1) % Math.PI);
-		var angelFirstLine1 = Math.abs(calc.getAngle(p1, p) % Math.PI);
-		var angelSecondLine = Math.abs(calc.getAngle(p2, p3) % Math.PI);
-		var angelSecondLine1 = Math.abs(calc.getAngle(p3, p2) % Math.PI);
+		var angelFirstLine = Math.abs(this.getAngle(p, p1) % Math.PI);
+		var angelFirstLine1 = Math.abs(this.getAngle(p1, p) % Math.PI);
+		var angelSecondLine = Math.abs(this.getAngle(p2, p3) % Math.PI);
+		var angelSecondLine1 = Math.abs(this.getAngle(p3, p2) % Math.PI);
 		var dif = Math.min(
 			Math.abs(angelFirstLine - angelSecondLine),
 			Math.abs(angelFirstLine1 - angelSecondLine1),
@@ -546,11 +494,11 @@ export function Calc () {
 	// полотор точки по длинне
 	this.rotationPointByLength = function (point, lengthTo, centerPoint) {
 		centerPoint = centerPoint || rezNull;
-		var circleRadius = calc.getDistance(point, centerPoint);
-		var circleLen = calc.getLenghtCircle(circleRadius);
+		var circleRadius = this.getDistance(point, centerPoint);
+		var circleLen = this.getLenghtCircle(circleRadius);
 		var angleByOnePixel = (Math.PI * 2) / circleLen;
 		var angleToRotate = lengthTo * angleByOnePixel;
-		calc.rotationPoint(point, angleToRotate, centerPoint);
+		this.rotationPoint(point, angleToRotate, centerPoint);
 	};
 
 	// пересекаются ли треугольники true|false
@@ -561,18 +509,18 @@ export function Calc () {
 
 		for (var i = 0; i < ar.length; i++) {
 			if (isIntersect) break;
-			isIntersect = calc.isInTriangle(pt, pt1, pt2, ar[i]);
+			isIntersect = this.isInTriangle(pt, pt1, pt2, ar[i]);
 		}
 		for (var i = 0; i < ar1.length; i++) {
 			if (isIntersect) break;
-			isIntersect = calc.isInTriangle(p, p1, p2, ar1[i]);
+			isIntersect = this.isInTriangle(p, p1, p2, ar1[i]);
 		}
 
 		if (!isIntersect) {
 			for (var i = 0; i < ar.length; i++) { // перечечение граней
 				for (var j = 0; j < ar1.length; j++) {
 					if (isIntersect) break;
-					isIntersect = calc.getPointOfIntersection(ar[i], ar[(i + 1) % ar.length], ar1[j], ar1[(j + 1) % ar1.length]);
+					isIntersect = this.getPointOfIntersection(ar[i], ar[(i + 1) % ar.length], ar1[j], ar1[(j + 1) % ar1.length]);
 				}
 			}
 		}
@@ -591,8 +539,8 @@ export function Calc () {
 	* @return {Array<Position>} Масив точек на окнужности.
 	*/
 	this.getArrPointCircle = function (pointCenter, radius, pointAngleStart, pointAngleFinish, segment, anticlockwise, arrPoint) {
-		var startAngle = calc.getAngle(pointAngleStart, pointCenter) - Math.PI; // вычисляем углы начало
-		var endAngle = calc.getAngle(pointAngleFinish, pointCenter) - Math.PI; // конец
+		var startAngle = this.getAngle(pointAngleStart, pointCenter) - Math.PI; // вычисляем углы начало
+		var endAngle = this.getAngle(pointAngleFinish, pointCenter) - Math.PI; // конец
 
 		var points;
 		if (arrPoint) {
@@ -652,8 +600,8 @@ export function Calc () {
 	this.getLenghtCircle = function (radius, pointCenter, pointAngleStart, pointAngleFinish, anticlockwise) {
 		if (!pointCenter) pointCenter = pointAngleStart = pointAngleFinish = rezNull;
 
-		var startAngle = calc.getAngle(pointAngleStart, pointCenter) - Math.PI; // вычисляем углы начало
-		var endAngle = calc.getAngle(pointAngleFinish, pointCenter) - Math.PI; // конец
+		var startAngle = this.getAngle(pointAngleStart, pointCenter) - Math.PI; // вычисляем углы начало
+		var endAngle = this.getAngle(pointAngleFinish, pointCenter) - Math.PI; // конец
 		if (startAngle === endAngle && pointAngleStart !== pointAngleFinish) {
 			return 0;
 		}
@@ -674,11 +622,11 @@ export function Calc () {
 	this.getLengthByWidth = function (width, curvature) {
 		var p = new Position(0, 0);
 		var p1 = new Position(width, 0);
-		var p2 = calc.getVector(curvature, Math.PI * 0.5);
+		var p2 = this.getVector(curvature, Math.PI * 0.5);
 		p2.x = width / 2;
-		var pc = calc.getCenterCircle(p, p1, p2);
+		var pc = this.getCenterCircle(p, p1, p2);
 		if (!pc) return width;
-		return calc.getLenghtCircle(calc.getDistance(pc, p), pc, p, p1, (curvature > 0));
+		return this.getLenghtCircle(this.getDistance(pc, p), pc, p, p1, (curvature > 0));
 	};
 
 	/**
@@ -708,14 +656,14 @@ export function Calc () {
 	*/
 	this.getArcPoint = function (p, p2, offset, segment, arrPoint) {
 		segment = segment || 5;
-		var angle = calc.getAngle(p, p2) + (90 * calc.DEG2RAD);
-		var pp = calc.getVector(offset, angle);
+		var angle = this.getAngle(p, p2) + (90 * this.DEG2RAD);
+		var pp = this.getVector(offset, angle);
 		var p1 = new Position((p.x + p2.x) / 2, (p.y + p2.y) / 2);
 		p1.x += pp.x;
 		p1.y += pp.y;
-		var pc = calc.getCenterCircle(p, p1, p2);
+		var pc = this.getCenterCircle(p, p1, p2);
 		if (!pc) return [p, p2];
-		return calc.getArrPointCircle(pc, calc.getDistance(pc, p), p, p2, segment, offset > 0, arrPoint);
+		return this.getArrPointCircle(pc, this.getDistance(pc, p), p, p2, segment, offset > 0, arrPoint);
 	};
 
 	// Вкрнуть площадь
@@ -727,7 +675,8 @@ export function Calc () {
 		}
 		return (a * 0.5) || 0;
 	};
-
+	//C530830F-FB8C-4993-BA54-93A1CD501055
+	//42293BEF-1586-440D-A1C1-5D33266573AD
 	// возвращает уникальный id
 	this.generateUUID = (function () {
 		// http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/21963136#21963136
@@ -736,6 +685,8 @@ export function Calc () {
 			lut[ i ] = (i < 16 ? '0' : '') + (i).toString(16);
 		}
 		return function generateUUID () {
+			
+
 			var d0 = Math.random() * 0xffffffff | 0;
 			var d1 = Math.random() * 0xffffffff | 0;
 			var d2 = Math.random() * 0xffffffff | 0;
@@ -764,11 +715,10 @@ export function Calc () {
 			}
 			s+= s1 
 			if(i!=n-1)s+="-";
-		}
-		
+		}		
 		return s
-
 	}
+
 
 	this.diffNum = function (a, b) { // разница между числами diffNum(-1, 1) == 2
 		if (a >= 0 && b >= 0) return Math.abs(a - b);
@@ -933,14 +883,11 @@ export function LinePosition (_p, _p1) {
  */
 export function Position (_x, _y, _z) {
 	/** {number} кордината */
-	this._x =  0;
+	this._x = _x || 0;
 	/** {number} кордината */
-	this._y =  0;
+	this._y = _y || 0;
 	/** {number} кордината */
-	this._z =  0;
-	if(_x!=undefined)this._x =_x;
-	if(_y!=undefined)this._y =_y;
-	if(_z!=undefined)this._z =_z;
+	this._z = _z || 0;
 
 	/** Установка значений.
      * @param [_z=0] {number} _x - Центр первой окружности.
@@ -1008,22 +955,21 @@ export function PositionFun (_x, _y, _z, _fun) {
 	/** {number} кордината */
 	this._y = _y || 0;
 	/** {number} кордината */
-	this._z =0// typeof _z !== 'function' ? (_z || 0) : 0;
+	this._z = typeof _z !== 'function' ? (_z || 0) : 0;
 
 	this.fun = typeof _z === 'function' ? _z : _fun;
 
 	this.set = function (_x, _y, _z) {
 		this._x = _x || 0;
 		this._y = _y || 0;
-		if(_z!=undefined)this._z = _z;
+		this._z = _z || 0;
 		if (this.fun) this.fun();
 
 	};
 	this.setPoint = function (p) {
 		this._x = p.x;
 		this._y = p.y;
-	
-		if( p.z!=undefined)this._z =  p.z;
+		this._z = p.z;
 		if (this.fun) this.fun();
 	};
 
@@ -1059,7 +1005,6 @@ PositionFun.prototype = {
 	},
 	set z (v) {
 		// if(this._z==v)return;
-	
 		this._z = v;
 		if (this.fun) this.fun();
 	},
@@ -1067,80 +1012,3 @@ PositionFun.prototype = {
 		return this._z;
 	}
 };
-
-
-
-export function Rectangle (_x, _y, _width, _height, fun) {
-	this._x = _x || 0;
-	this._y = _y || 0;
-
-	this._width = _width !== undefined ? _width : 100;
-	this._height = _height !== undefined ? _height : 100;
-
-	this.angel = 0;
-	this.p = new Position();
-	this.fun;
-
-
-	this.set = function (_x, _y, _width, _height) {
-		this._x = _x || 0;
-		this._y = _y || 0;
-
-		this._width = _width !== undefined ? _width : 100;
-		this._height = _height !== undefined ? _height : 100;
-
-		// if( this.fun) this.fun();
-	};
-
-	this.setRect = function (_r) {
-		this._x = _r.x;
-		this._y = _r.y;
-
-		this._width = _r.width;
-		this._height = _r.height;
-
-		this.p.setPoint(_r.p);
-		this.angel = _r.angel;
-		// if( this.fun) this.fun();
-	};
-}
-Rectangle.prototype = {
-	set x (v) {
-		if (this._x === v) return;
-		this._x = v;
-		// if( this.fun) this.fun();
-	},
-	get x () {
-		return this._x;
-	},
-
-	set y (v) {
-		if (this._y === v) return;
-		this._y = v;
-		// if( this.fun) this.fun();
-	},
-	get y () {
-		return this._y;
-	},
-
-	set width (v) {
-		if (this._width === v) return;
-		this._width = v;
-		// if( this.fun) this.fun();
-	},
-	get width () {
-		return this._width;
-	},
-
-	set height (v) {
-		if (this._height === v) return;
-		this._height = v;
-		// if( this.fun) this.fun();
-	},
-	get height () {
-		return this._height;
-	}
-
-
-};
-

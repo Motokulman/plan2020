@@ -40,8 +40,8 @@ export class KRGronLine  {
             this.angel=this.getAngle(line.p,line.p1)*(180/Math.PI);
 
             a=Math.round(this.angel);
-            if(a>0&&a<90)this.type=1;
-            if(a>-180&&a<-90)this.type=1;
+            if(a>=0&&a<=90)this.type=1;
+            if(a>=-180&&a<=-90)this.type=1;
             if(line.p.x==line.p.x1)this.type=2;
             if(line.p.y==line.p.y1)this.type=3;
 

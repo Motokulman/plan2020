@@ -4,11 +4,18 @@ import { SpPol } from './../../sp/SpPol.js';
 import { SSPolygon2D } from './SSPolygon2D.js';
 import { SSP3D } from './SSP3D.js';
 
-export function SpPolygon (_stage) {
+import { PUnikBase } from './PUnikBase.js';
+
+
+export function SpPolygon (_stage, _unikName) {
 	SpPol.call(this,_stage);
 	var self = this;
 	this.type = 'SpPolygon';
 	this.tipe = 'SpPolygon';
+
+	this.unikName="PUnikBase";
+
+
 	this.stage = _stage;
 	this.par = _stage;
 	this._boolText = true;
@@ -22,6 +29,8 @@ export function SpPolygon (_stage) {
 
 	this._uuid=calc.generateRendom(2);
 	
+	
+
 	this.arrayClass=[]
     //хрень под
     this.content2d = new PIXI.Container();
@@ -30,14 +39,23 @@ export function SpPolygon (_stage) {
 
 	this.cont2dVerh = new PIXI.Container();
 	_stage.cont2dVerh.addChild(this.cont2dVerh);
-	this.cont2dVerh.visible=false
+	this.cont2dVerh.visible=false;
+
+
+	
+
+
 
 	this.ssPolygon2d=new SSPolygon2D(this);
 	this.ssP3d=new SSP3D(this);
 
-	this.arrayClass.push(this.ssPolygon2d);
-	this.draw1 = function (b) {
-		this.ssPolygon2d.draw1();
+	if(this.unikName=="PUnikBase")this.unik = new PUnikBase(this);
+
+	//this.arrayClass.push(this.ssPolygon2d);
+
+	this.draw1 = function () {
+		//this.ssPolygon2d.draw1();
+		this.unik.draw1();
 	}
 
 
@@ -48,7 +66,7 @@ export function SpPolygon (_stage) {
 
 	this.dragPost=function(){
 		this.draw1();
-		this.ssP3d.draw1();
+		
 	}
 
 
@@ -76,12 +94,11 @@ SpPolygon.prototype.constructor = SpPolygon;
 
 SpPolygon.prototype.getObj = function () {
 	var o = SpPol.prototype.getObj.call(this);
-	trace(">>>>>>>>>>",o)
+	
 	return o;
 };
 SpPolygon.prototype.setObj = function (o) {
 	SpPol.prototype.setObj.call(this, o);
-	trace("000000000",o)
 	
 };
 SpPolygon.prototype.compare = function (_sten) {
@@ -112,10 +129,7 @@ Object.defineProperties(SpPolygon.prototype, {
 			this._life = value;		
 			for (var ii = 0; ii < this.arrayClass.length; ii++) {
 				if ('life' in this.arrayClass[ii]) this.arrayClass[ii].life = this._life;
-			}
-
-
-			
+			}		
 
 			if(this._life==true)this.stage.cont2dVerh.addChild(this.cont2dVerh);
 			else if(this.cont2dVerh.parent!=undefined)this.cont2dVerh.parent.removeChild(this.cont2dVerh);

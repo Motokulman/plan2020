@@ -172,9 +172,12 @@ export class SPLine  {
 
         this.draw=function(){
             this.graphics.clear()
-            if(this._addPoint==undefined || this._addPoint==undefined){
+            if(this._addPoint!=undefined && this._addPoint1!=undefined){
+                
+            }else{
                 return
             }
+
             this.position._x=this._addPoint.position.x;
             this.position._y=this._addPoint.position.y;
 
@@ -202,19 +205,21 @@ export class SPLine  {
             this.position1.set(o.position1.x,o.position1.y)
             this.otstup=o.otstup
 
-            if(o.apUUID){
-                trace("###apUUID##",o);
+            if(o.apUUID)if(this.par.par.metod.getPLUUID(o.apUUID)!=null){               
+               this.addPoint=this.par.par.metod.getPLUUID(o.apUUID)
             }
-
+            
+            if(o.apUUID1)if(this.par.par.metod.getPLUUID(o.apUUID1)!=null)this.addPoint1=this.par.par.metod.getPLUUID(o.apUUID1)
+              
 
         }
         this.getObj=function(){
+            console.warn("@@@@@@@@@@@@@@@@@@@@@@@@@@")
             var o={}
             o.position={x:this.position.x,y:this.position.y}
             o.position1={x:this.position1.x,y:this.position1.y}
             o.otstup=this.otstup
-            if(this._addPoint!=undefined){
-                trace(this._addPoint)
+            if(this._addPoint!=undefined){                
                 o.apUUID=this._addPoint.uuid;
             }
             if(this._addPoint1!=undefined)o.apUUID1=this._addPoint1.uuid;

@@ -31,48 +31,7 @@ export class SSP3D  {
         )
         this.cont3dL.add(this.lineSegments);
 
-        this.kol=0
-        this.arrPoint=[];
-
-
-
-
-
-		this.draw1 = function () {
-            if(this.par.array.length>=2){
-                this.lineSegments.visible=true;
-
-                this.planeXZ.clearPoint()
-                this.kolPointDrag();
-                for (var i = 0; i < this.kol; i++) {
-         
-                    
-                    if(i!=this.kol-1){
-
-                        this.planeXZ.addLine(this.arrPoint[i],this.arrPoint[i+1]);
-                    }else{
-                        this.planeXZ.addLine(this.arrPoint[i],this.arrPoint[0]);
-                    }
-                }
-              
-
-                this.planeXZ.upDate()
-
-            }else{
-                this.lineSegments.visible=false;
-            }
-			
-		}
-
-        this.kolPointDrag = function () {
-            this.kol=this.par.array.length;
-            for (var i = 0; i < this.par.array.length; i++) {
-                if(this.arrPoint[i]==undefined)this.arrPoint[i]=new THREE.Vector3();
-                this.arrPoint[i].x=this.par.array[i].position.x;
-                this.arrPoint[i].y=this.par.array[i].position.y;
-                this.arrPoint[i].z=0;
-            }
-        }
+      
     }
 
 	set active(value) {

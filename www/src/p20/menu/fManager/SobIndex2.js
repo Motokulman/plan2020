@@ -27,8 +27,7 @@ export class SobIndex2  extends SobIndex {
             if( e.button==2){ 
                 self.stopUp()  
                 return
-            }
-       
+            }       
             if(self._tool=="vp"){//стена 
                 self.stopUp(); 
             }

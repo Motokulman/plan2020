@@ -21,19 +21,15 @@ export class SSPolygon2D  {
         this.graphics = new PIXI.Graphics();
     	this.content2d.addChild(this.graphics);
 
-
-
 		this.stAct=new STAct1(this)
 
     	
 	   	this.onDragStart=function(e){
-
 			if(self.par.par.par.sobSP!=undefined)self.par.par.par.sobSP("downPol",self.par,e)
 	    }
 
 	    this.graphics.interactive = true;            
 	    this.graphics.on('mousedown', this.onDragStart);
-
 
 	    this.graphics.on('mouseover', function(e){    	
 	    	self.stAct.sahPlus=10;    	
@@ -43,18 +39,13 @@ export class SSPolygon2D  {
 	    });
 
 
-	    this.color=Math.random()*0xffffff
+	   
 
-		this.draw1 = function () {
-
+		/*this.draw1 = function () {
 			this.stAct.draw1()
-
-
 			this.graphics.clear();
-			this.graphics.beginFill(this.color, 1);
-		
+			this.graphics.beginFill(this.color, 1);		
 			this.graphics.lineStyle( this.par.par._sizeLine, this.par.par._colorLine_, 1);
-
 			if(this.par.array.length!=0){
 				this.graphics.moveTo(this.par.array[0].position.x,this.par.array[0].position.y);
 				for (var i = 1; i < this.par.array.length; i++) {
@@ -62,7 +53,7 @@ export class SSPolygon2D  {
 				}
 				this.graphics.lineTo(this.par.array[0].position.x,this.par.array[0].position.y);
 			}
-		}	
+		}*/	
     }
 
 	set active(value) {

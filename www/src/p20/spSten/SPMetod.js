@@ -115,15 +115,19 @@ export class SPMetod  {
 
 		var rez
 		this.getPLUUID=function(uuid){
-			
-			rez=null
+			//trace(uuid, this.par.avp);
+			for (var i = 0; i < this.par.avp.length; i++) {
+				if(this.par.avp[i].uuid==uuid)return this.par.avp[i]
+				//trace(i+"   "+this.par.avp[i].uuid)
+			}
+			/*rez=null
 			for (var i = 0; i < this.par.arrSplice.length; i++) {
 				if (this.par.arrSplice[i].life == false) continue;
 				rez=this.par.arrSplice[i].vLines.getPLUUID(uuid);				
 				if(rez!=null){
 					return rez;
 				}
-			}			
+			}	*/		
 			return null;
 		}
 

@@ -45,7 +45,7 @@ export function SpPol (_stage) {
 
 	this.removePoint = function (point) {
 		var r=0
-		trace("removePoint",point,this.array)		
+		
 		for (var i = 0; i < this.array.length; i++) {
 			if (this.array[i].idArr == point.idArr) {
 				p = i;				

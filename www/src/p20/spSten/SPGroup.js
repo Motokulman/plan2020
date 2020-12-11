@@ -44,6 +44,7 @@ export class SPGroup  {
                     return false
                 }
             }
+            trace("####",o)
             this.array.push(o);
             this.korektRect()
             this.drawRect()
@@ -88,7 +89,8 @@ export class SPGroup  {
             }
 
             for (var i = 0; i < this.array.length; i++) {
-                if(this.array[i].type=="SpPointSten"){                    
+
+                if(this.array[i].type=="SpPointSten"||this.array[i].tipe=="SpVP"){                    
                     rr=this.array[i].position
                     if(this.rectBig.x>rr.x)this.rectBig.x=rr.x
                     if(this.rectBig.x1<rr.x)this.rectBig.x1=rr.x
@@ -108,7 +110,7 @@ export class SPGroup  {
 
         this.drawRect= function(){            
             this.graphicsBig.clear()    
-            this.graphicsBig.lineStyle(10, this._colorUI, 0.75);
+            this.graphicsBig.lineStyle(1, this._colorUI, 0.75);
             this.graphicsBig.beginFill(this._colorUI, 0.1);
             this.graphicsBig.drawRect(this.rectBig.x,this.rectBig.y,this.rectBig.w,this.rectBig.h)
 
@@ -132,7 +134,7 @@ export class SPGroup  {
 
         this.setPosOffset= function(x,y){ 
             for (var i = 0; i < this.array.length; i++) {
-                if(this.array[i].type=="SpPointSten"){                    
+                if(this.array[i].type=="SpPointSten"||this.array[i].tipe=="SpVP"){                    
                     rr=this.array[i].position
                     rr.set(rr.x+x,rr.y+y)
                     this.array[i].doFunRend()
@@ -147,7 +149,7 @@ export class SPGroup  {
 
         this.addRect = function(rect){ 
             r=this.par.getRect();
-            if(calc.isRectS(r,rect)==true){//попали в глявный рект
+            if(calc.isRectS(r,rect)==true){//попали в глявный рект               
                 for (var i = 0; i < this.par.arrSplice.length; i++) {
                     if (this.par.arrSplice[i].life == false) continue;                   
                     r1=this.par.arrSplice[i].isRect(rect, false)//Вернет все обьекты поподания  
@@ -157,14 +159,36 @@ export class SPGroup  {
                         }                        
                     }                    
                 }
+
+                for (var i = 0; i < this.par.avp.length; i++) {
+                    if (this.par.avp[i].life == false) continue;                 
+
+                    if(this.par.avp[i].position.x>=rect.x && this.par.avp[i].position.x<=rect.x+rect.w){
+                        if(this.par.avp[i].position.y>=rect.y && this.par.avp[i].position.y<=rect.y+rect.h){
+                            this.addObj(this.par.avp[i]);
+                        }                        
+                    }                    
+                }
+
+                for (var i = 0; i < this.par.arrPoint.length; i++) {
+                    if (this.par.arrPoint[i].life == false) continue;                
+
+                    if(this.par.arrPoint[i].position.x>=rect.x && this.par.arrPoint[i].position.x<=rect.x+rect.w){
+                        if(this.par.arrPoint[i].position.y>=rect.y && this.par.arrPoint[i].position.y<=rect.y+rect.h){
+                            this.addObj(this.par.arrPoint[i]);
+                        }                        
+                    }                    
+                }
             }
+
+
         }
 
 
         this.setRect = function(rect){        
             this.graphics.clear()  
             if(rect!=undefined){
-                this.graphics.lineStyle(10, this._colorUI, 0.3);
+                this.graphics.lineStyle(1, this._colorUI, 0.3);
                 this.graphics.beginFill(this._colorUI, 0.01);
                 this.graphics.drawRect(rect.x,rect.y,rect.w,rect.h)
             } 

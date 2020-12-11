@@ -105,6 +105,7 @@ export class SPLineWord  {
             }
         }
         this.getObj=function(){
+            console.warn("########1########");
             var o={}
             o.array=[];
             for (var i = 0; i < this.array.length; i++) {

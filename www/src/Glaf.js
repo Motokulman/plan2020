@@ -148,6 +148,7 @@ export class Glaf  {
             }
 
             if(s=="saveGetObjId"){
+                console.warn("saveGetObjId@@@@")
                 self.viewServer.saveGetObjId(self.p20.getObj())               
                 return
             }
