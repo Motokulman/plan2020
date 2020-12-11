@@ -15,14 +15,11 @@ export class P20  {
         this.sizeMax=this.par.sizeMax
         this.sobSP=undefined;
 
-
-
         this.startFund='{"colorC0":"#ffc0b0","colorC1":"#3a11b5","delphC0":27,"delphC1":75, "delphPlus":15, "sizeLine":1,"colorLine":"#000000"}'
         this.sOFund=JSON.parse(this.startFund);
         
         this.startStyle='{"colorC0":"#ffe4d4","colorC1":"#b0dfee","delphC0":20,"delphC1":50,"delphPlus":10,"sizeLine":1, "colorLine":"#000000"}'
         this.startObject=JSON.parse(this.startStyle);
-
 
         this._activObject=undefined;
 
