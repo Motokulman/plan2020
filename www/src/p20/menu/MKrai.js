@@ -576,7 +576,7 @@ export class MKPV extends DCont {
             self.moveIn1(); 
         }
 
-        var raz=200
+        var raz=20
         var pointDin=new Position()
         var p,p1
         this.move1 = function(e){ 
@@ -591,6 +591,7 @@ export class MKPV extends DCont {
                     zdvig=p1*raz/2
                 }
                 var zdvig1=self.smd.pp+zdvig;
+                if (zdvig1 <= 1) return
                 self.moveZdvig(self.arrX,self.smd.inArXY,-zdvig/2,zdvig)
                 self.smd.pp=zdvig1;
                 self.par.par.getPositPlan(self.smd);
@@ -800,6 +801,12 @@ export class MKPV extends DCont {
                 if (this.sp.arrPoint[i].life==false) continue;                 
                 this.testPosit1(this.sp.arrPoint[i],"x",arrX)
                 this.testPosit1(this.sp.arrPoint[i],"y",arrY) 
+            }
+
+            for (var i = 0; i < this.sp.avp.length; i++) {            
+                if (this.sp.avp[i].life==false) continue;                 
+                this.testPosit1(this.sp.avp[i],"x",arrX)
+                this.testPosit1(this.sp.avp[i],"y",arrY) 
             }
             
             this.param=null;

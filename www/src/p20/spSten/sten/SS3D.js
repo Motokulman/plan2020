@@ -78,9 +78,9 @@ export class SS3D  {
 
             this.cont3d.position.z=-(this._height+this._height1)
        		
-            this.drawGrani();
-            this.drawLittel();
-            this.drawVerg();
+            // this.drawGrani();
+            // this.drawLittel();
+            // this.drawVerg();
 		}
 
 
