@@ -24,6 +24,7 @@ coverage
 node_modules
 info
 save
+/src/p20/spSten/colozi
 
 # Remove some common IDE working directories
 .idea
