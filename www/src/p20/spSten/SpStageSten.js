@@ -234,13 +234,11 @@ export function SpStageSten (par,  fun) {
 		if(r.y1<p.y)r.y1=p.y;	
 	}
 
-	this.dragStyleObj=function(o){
-		trace(this.idArr+"@@@",o)		
+	this.dragStyleObj=function(o){				
 		for (var s in o) {
 			if(this[s]!=undefined)this[s]=o[s]
 		}
 		this.bigDrag()
-
 	}
 
 	this.getDelphToBoolS=function(b,b1,b2){	
@@ -396,8 +394,7 @@ SpStageSten.prototype.craetPol = function () {
 
 SpStageSten.prototype.getGronVP = function (uuid) {
 	var o = SpStage.prototype.getGronVP.call(this, uuid);	
-	if(o!=null)return o;
-	trace("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",uuid,this.arrSplice)
+	if(o!=null)return o;	
 
 	for (var i = 0; i < this.arrSplice.length; i++) {
 		if (this.arrSplice[i].life==false) continue;							
@@ -408,7 +405,11 @@ SpStageSten.prototype.getGronVP = function (uuid) {
 	return null;
 };
 
-
+SpStageSten.prototype.clear = function () {	
+	var s=SpStage.prototype.clear.call(this);
+	this.lineWord.clear()
+	return s
+};
 
 
 Object.defineProperties(SpStageSten.prototype, {

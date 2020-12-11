@@ -18,7 +18,7 @@ export class SPLine  {
         this.array=[];
         this.uuid = calc.generateUUID();
 
-        this._activeMouse=!this.par.activeMouse
+        this._activeMouse=!this.par.activeMouse;
         
         this._mashtabText=1;
         this.content2d = new PIXI.Container();
@@ -26,6 +26,9 @@ export class SPLine  {
 
         this.graphics = new PIXI.Graphics();
         this.content2d.addChild(this.graphics);
+
+        this._addPoint=undefined;
+        this._addPoint1=undefined;
 
 
  
@@ -62,14 +65,11 @@ export class SPLine  {
         this.g1 = new PIXI.Graphics();
         this.g1.beginFill(0xffffff, 0.01);
         this.g1.drawCircle(0,0,5)
-        this.g1.name="1"
+        this.g1.name="1";
 
-        //this.content2d.addChild(this.g1);
+        this.g2 = new PIXI.Graphics();    
+        this.g2.name="1";
 
-        this.g2 = new PIXI.Graphics();
-    
-        this.g2.name="1"
-        //this.content2d.addChild(this.g2);
 
 
         this.render=this.par.render;
@@ -77,12 +77,10 @@ export class SPLine  {
 
         this.activeMouse = this.par.activeMouse
 
-        this.clear = function () {
-            
+        this.clear = function () {            
             this.life = false
             this._otstup=0;
             if(this.render)this.render()
-
         }
 
 
@@ -168,12 +166,30 @@ export class SPLine  {
 
         };
 
+        this.dragPost=function(){
+            self.draw()
+        }
+
+        this.draw=function(){
+            this.graphics.clear()
+            if(this._addPoint==undefined || this._addPoint==undefined){
+                return
+            }
+            this.position._x=this._addPoint.position.x;
+            this.position._y=this._addPoint.position.y;
+
+            this.position1._x=this._addPoint1.position.x;
+            this.position1._y=this._addPoint1.position.y;
+
+            this.drag();
+           
+        }
+
+
         var po
         this.poiskOt=function(o){
             po=calc.isPointInLin(this.position1,this.position,o,111111111,111111111);
             if(po)this.otstup=po.z;
-            
-
         }
 
 
@@ -185,12 +201,23 @@ export class SPLine  {
             this.position.set(o.position.x,o.position.y)
             this.position1.set(o.position1.x,o.position1.y)
             this.otstup=o.otstup
+
+            if(o.apUUID){
+                trace("###apUUID##",o);
+            }
+
+
         }
         this.getObj=function(){
             var o={}
             o.position={x:this.position.x,y:this.position.y}
             o.position1={x:this.position1.x,y:this.position1.y}
             o.otstup=this.otstup
+            if(this._addPoint!=undefined){
+                trace(this._addPoint)
+                o.apUUID=this._addPoint.uuid;
+            }
+            if(this._addPoint1!=undefined)o.apUUID1=this._addPoint1.uuid;
             return  o
         }
 
@@ -247,10 +274,33 @@ export class SPLine  {
     set life(value) {      
         if(this._life!=value){
             this._life= value;
-
             if(this._life==true)this.par.content2d.addChild(this.content2d);
             else if(this.content2d.parent!=undefined)this.content2d.parent.removeChild(this.content2d); 
         }
     }    
     get life() { return  this._life;}
+
+     set addPoint(value) {      
+        if(this._addPoint!=value){
+
+            this._addPoint= value;
+            if(value!=undefined)value.addPol(this)
+            this.draw()
+        }
+    }    
+    get addPoint() { return  this._addPoint;}
+
+     set addPoint1(value) {      
+        if(this._addPoint1!=value){
+            this._addPoint1= value;
+            if(value!=undefined)value.addPol(this)
+            this.draw()
+            
+        }
+    }    
+    get addPoint1() { return  this._addPoint1;}
+
+
+
+    
 }

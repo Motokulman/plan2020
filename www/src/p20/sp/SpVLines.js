@@ -171,7 +171,7 @@ export function SpVLines (obj) {
 
 
 	this.getGronVP = function(uuid){
-		trace("$",uuid,this.array)
+		
     	for (var i = 0; i < this.array.length; i++) {
     		if(this.array[i].uuid==uuid)return this.array[i];
     	}
@@ -394,7 +394,7 @@ export function GronVL (par) {
 	let bb
 	this.remove=function(p){
 		bb=false;
-		//trace("remove",p.uuid)
+		
 		if(p.gronVL!=undefined){
 			for (var i = this.array.length-1; i >=0; i--) {					
 				if(this.array[i].obj.uuid==p.uuid){
@@ -409,7 +409,7 @@ export function GronVL (par) {
 
 	var box
 	this.add=function(p){
-		trace("add",p.uuid)
+		
 		box=this.getBox();
 		box.add(p);		
 		this.array.push(box);			

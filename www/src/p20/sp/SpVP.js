@@ -62,8 +62,7 @@ export function SpVP (_stage) {
 		return r;
 	};
 
-	this.clear= function () {
-		
+	this.clear= function () {		
 		for (var ii = 0; ii < this.arrayClass.length; ii++) {
 			if (typeof (this.arrayClass[ii].clear) === 'function') this.arrayClass[ii].clear();
 		}
@@ -82,7 +81,7 @@ export function SpVP (_stage) {
 
 
 	this.drawposit = function () {	
-		trace("zzzzzzzzzzzz=",self.position.z)
+		
 		for (var i = 0; i < self.array.length; i++) {
 			if(self.array[i].drawpositVP)self.array[i].drawpositVP(self);
 		}
@@ -92,7 +91,7 @@ export function SpVP (_stage) {
 	this.position = new PositionFun(0,0,0,this.drawposit);
 
 
-	trace("zzzzzzzzzzzzzzzzzzz=",this.position.z)
+
 
 
 }
@@ -114,10 +113,7 @@ SpVP.prototype = {
 	getObj: function () {
 		var o = {};
 		o.uuid = this._uuid;		
-		o.position = this.position.getObj();
-		/*o.pros=-1;
-		o.uuidObj=-1;
-		o.os=-1;*/
+		o.position = this.position.getObj();		
 
 		if(this.gronVL!=undefined){			
 			o.gronVL={};			
