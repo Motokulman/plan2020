@@ -194,7 +194,7 @@ export class MGridDrag  {
         var sahW=0.05;
         var hhh, www;
         this.mousewheel = function (e) {       
-            
+                trace('mousewheel')
             var delta=-1;
             var p=e.delta
             if(e.wheelDelta==undefined){
