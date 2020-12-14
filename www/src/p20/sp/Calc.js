@@ -1059,7 +1059,7 @@ PositionFun.prototype = {
 	},
 	set z (v) {
 		// if(this._z==v)return;
-		trace("zxzx=",v)
+	
 		this._z = v;
 		if (this.fun) this.fun();
 	},

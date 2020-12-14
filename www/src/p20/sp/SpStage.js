@@ -254,17 +254,11 @@ SpStage.prototype = {
 	},
 
 	getPointXY: function (p) {
-		
-
-
-
-		if(p.tipe && p.tipe=="SpVP"){
-			
+		if(p.tipe && p.tipe=="SpVP"){			
 			for (var i = 0; i < this.avp.length; i++) {				
 				if (!this.avp[i].life) continue;							
 				if(Math.round(p.x)==Math.round(this.avp[i].position.x)){
 					if(Math.round(p.y)==Math.round(this.avp[i].position.y)){
-
 						return this.avp[i]
 					}
 				}

@@ -31,24 +31,11 @@ export class SobIndex4  extends SobIndex {
             if(sp.o==undefined){               
                 return
             }
-
-
             if( e.button==2){ 
                 self.stopUp()  
                 return
             }
-
-
-          /*  if(self._tool=="Pol"){//стена 
-                self.korekt2222(); 
-                point=self.p20.sp.craetVP();
-                sp.o=point;
-                if(positDin.ePL!=null){ 
-                    positDin.ePL.targetGron.add(point).pros=positDin.ePL.pros;
-                }
-                activObject.addPoint(point);
-            }
-*/ 
+       
             if(self._tool=="vp"){//стена 
                 self.stopUp(); 
             }
@@ -104,32 +91,20 @@ export class SobIndex4  extends SobIndex {
             p.activMouse=false;
             self.par.par.mObject.setObject(p); 
             sp.o.active=true
-            self.startUp();
-            
+            self.startUp();            
         }
 
 
         this.sobSP=function(s,p,e){
-           
-            trace("###",s ) 
-
             if( e.data.originalEvent.button==1){ 
                 self.downFont(e); 
                 return;
-            }
-            
-            
-
-
+            }         
                    
             if( e.data.originalEvent.button==2){                    
                 self.stopUp();
                 return;
-            }
-            
-            
-
-            trace(self.boolUp,"###################",s,p,e ) 
+            }         
             
             self._tool="Pol";
             if(self.boolUp==false){
@@ -140,8 +115,6 @@ export class SobIndex4  extends SobIndex {
                 self.korekt2222();                
                 point.position.set(positDin.x,positDin.y);               
                 point1.position.set(positDin.x,positDin.y);
-
-
 
                 sp.o=point;
                 if(positDin.ePL!=null){ 

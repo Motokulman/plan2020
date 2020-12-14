@@ -194,7 +194,7 @@ export function SpStageSten (par,  fun) {
 	}
 
 	//возврощает габаритный контейнер
-	this.getRect=function(aPoint, aSten){ 
+	this.getRect=function(aPoint, aSten, avp){ 
 
 		if(aPoint==undefined){
 			aPoint=[];
@@ -211,7 +211,19 @@ export function SpStageSten (par,  fun) {
 			}
 		}
 
+		if(avp==undefined){
+			avp=[];
+			for (var i = 0; i < this.avp.length; i++) {
+				if (this.avp[i].life == false) continue;				
+				avp.push(this.avp[i])
+			}
+		}
+
 		var r={x:9999999,y:999999,x1:-9999999,y1:-9999999,w:0,h:0}
+		for (var i = 0; i < avp.length; i++) {
+			korRect(r,avp[i].position)	
+		}
+
 		for (var i = 0; i < aPoint.length; i++) {
 			korRect(r,aPoint[i].position)	
 		}
@@ -234,13 +246,11 @@ export function SpStageSten (par,  fun) {
 		if(r.y1<p.y)r.y1=p.y;	
 	}
 
-	this.dragStyleObj=function(o){
-		trace(this.idArr+"@@@",o)		
+	this.dragStyleObj=function(o){				
 		for (var s in o) {
 			if(this[s]!=undefined)this[s]=o[s]
 		}
 		this.bigDrag()
-
 	}
 
 	this.getDelphToBoolS=function(b,b1,b2){	
@@ -349,12 +359,13 @@ SpStageSten.prototype.getObj = function (_activ) {
 	var o = SpStage.prototype.getObj.call(this, _activ);	
 	o.height=this._height;
 	o.height1=this._height1;
+	
+	o.lineWord=this.lineWord.getObj();
 
-	o.lineWord=this.lineWord.getObj()
-	o.worldBlok=this.lineWord.getObj()
+	//o.worldBlok=this.lineWord.getObj()
 
 	o.name=this.name
-	trace(o)
+	
 	return o;
 };
 SpStageSten.prototype.setObj = function (o) {	
@@ -364,7 +375,7 @@ SpStageSten.prototype.setObj = function (o) {
 	if(o.name)this.name=o.name;	
 		
 	if(o.lineWord)this.lineWord.setObj(o.lineWord);
-	if(o.worldBlok)this.lineWord.setObj(o.worldBlok);	
+	//if(o.worldBlok)this.lineWord.setObj(o.worldBlok);	
 	
 	this.bigDrag()		
 };
@@ -383,6 +394,7 @@ SpStageSten.prototype.craetSplice1 = function () {
 SpStageSten.prototype.craetPoint = function () {	
 	var s=SpStage.prototype.craetPoint.call(this);
 	s.activMouse=this._amPoint;	
+	s.position._z=this.height+this.height1;	
 	return s
 };
 
@@ -394,10 +406,21 @@ SpStageSten.prototype.craetPol = function () {
 	return s
 };
 
+SpStageSten.prototype.craetVP = function () {
+	var s=SpStage.prototype.craetVP.call(this);
+	s.activMouse=this._amPoint;	
+	s.position._z=this.height+this.height1;	
+	return s
+};
+
+
+
+
+
+
 SpStageSten.prototype.getGronVP = function (uuid) {
 	var o = SpStage.prototype.getGronVP.call(this, uuid);	
-	if(o!=null)return o;
-	trace("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",uuid,this.arrSplice)
+	if(o!=null)return o;	
 
 	for (var i = 0; i < this.arrSplice.length; i++) {
 		if (this.arrSplice[i].life==false) continue;							
@@ -408,7 +431,11 @@ SpStageSten.prototype.getGronVP = function (uuid) {
 	return null;
 };
 
-
+SpStageSten.prototype.clear = function () {	
+	var s=SpStage.prototype.clear.call(this);
+	this.lineWord.clear()
+	return s
+};
 
 
 Object.defineProperties(SpStageSten.prototype, {
@@ -478,17 +505,45 @@ Object.defineProperties(SpStageSten.prototype, {
 	},*/
 
 	height: {
-		set: function (value) {			
-			this._height = value;
+		set: function (value) {	
+					
+			
 			for (var i = 0; i < this.arrSplice.length; i++) {
-				this.arrSplice[i].height = this._height;
-				this.arrSplice[i].draw1();
+				
+				if(this.arrSplice[i].height>=this._height){
+					this.arrSplice[i].height = value;
+					this.arrSplice[i].draw1();
+				}				
 			}
+			var pp,ppOld
+			ppOld=	Math.round(this._height+this._height1)	
+			pp=	Math.round(value+this._height1)
+			for (var i = 0; i < this.avp.length; i++) {				
+				if(this.avp[i].position.z>=ppOld){
+					this.avp[i].position.z=pp
+				}
+			}
+			for (var i = 0; i < this.arrPoint.length; i++) {				
+				if(this.arrPoint[i].position.z>=ppOld){
+					this.arrPoint[i].position.z=pp
+				}
+			}	
 
 			for (var i = 0; i < this.arrPoint.length; i++) {
-				if (!this.arrPoint[i].life) continue;					
+				//if(-Math.round(this.arrPoint[i].position.z)==Math.round(this._height+this._height1)){
+					//this.arrPoint[i].position.z=-Math.round(this._height+this._height1)
+				//}
+
+
+				if (!this.arrPoint[i].life) continue;
 				this.arrPoint[i].dragGG();								
 			}
+
+			this._height = value;
+
+
+
+
 
 		},
 		get: function () { return this._height; }

@@ -73,9 +73,9 @@ export function SpVPXz (_stage) {
     	
     	this.doFunRend();
     	for (var i = 0; i < this.arrayObj.length; i++) {    		
-    		if(this.arrayObj[i].tipe=="SpPolygon"){
+    		//if(this.arrayObj[i].tipe=="SpPolygon"){
     			this.par.addObjFun(this.arrayObj[i])
-    		}
+    		//}
        	}
     	if(this.funDragMenu!=undefined)this.funDragMenu()
 	}

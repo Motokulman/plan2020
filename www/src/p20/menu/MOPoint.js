@@ -74,6 +74,7 @@ export class MOPoint extends MOBaza {
             this.bool=true           
             this.object.funDragMenu=this.drag
             this.object.par.setActive(this.object);
+            this.window.title="MOPoint  "+this.object.idArr//+" : "+ this.object.uuid;
             this.drag()
         }
         this.clear=function(){

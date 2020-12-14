@@ -85,7 +85,12 @@ export class SPLineWord  {
             return null
         }
 
+        this.clear=function(){ 
+            for (var i = 0; i < this.array.length; i++) {
+                this.array[i].life=false
+            }
 
+        }
 
         
         this.render=function(){  
@@ -100,6 +105,7 @@ export class SPLineWord  {
             }
         }
         this.getObj=function(){
+            console.warn("########1########");
             var o={}
             o.array=[];
             for (var i = 0; i < this.array.length; i++) {

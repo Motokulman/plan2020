@@ -4,6 +4,192 @@ import { SobIndex } from './SobIndex.js';
 
 export class SobIndex2  extends SobIndex {
     constructor(par,fun) {
+       super(par,fun);            
+        this.type="SobIndex2";
+        var self=this;
+        this.par=par;
+        this.fun=fun;
+        this.aTool=["spLine","Pol"]
+        this._tool="spLine";
+
+        var pos={x:0,y:0,o:null}
+        var sp={x:0,y:0,x1:0,y1:0,s:0,o:null,oy:null,ox:null}
+        var point,point1,activObject;
+
+
+      
+
+        this.mouseup=function(e){
+
+            if(sp.o==undefined){               
+                return
+            }
+            if( e.button==2){ 
+                self.stopUp()  
+                return
+            }       
+            if(self._tool=="vp"){//стена 
+                self.stopUp(); 
+            }
+            if(self._tool=="spLine"){//стена 
+                self._tool="spLine2"
+                return
+            }
+            if(self._tool=="spLine2"){//стена 
+                self.stopUp(); 
+                return
+            }
+        }
+
+
+        this.sobMenu=function(s,p,e){
+            if(s=="gIndex"){//переключаем инструмент
+                self.tool=self.aTool[p.index]               
+                return;
+            }            
+        }
+
+
+        this.boolUp=false;
+        this.startUp=function(){
+            if(self.boolUp==true)return
+
+            self.boolUp=true; 
+            dcmParam.addFunMove(self.mouseMoveAll);
+            console.warn(">>>>>>>>>>>>startUp********>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+            document.addEventListener("mouseup", self.mouseup);
+        }
+        this.stopUp=function(){
+            if(self.boolUp==false)return
+            self.boolUp=false;
+            
+            sp.o.activMouse=true;
+            dcmParam.removeFunMove(self.mouseMoveAll);
+            sp.o=undefined;
+
+            self._tool="spLine"; 
+            console.warn("<<<<<<<<<<<<<<stopUp********<<<<<<<<<<<<<<<<<")
+            document.addEventListener("mouseup", self.mouseup);
+        }
+
+
+        
+
+        this.sobSP=function(s,p,e){
+            if( e.data.originalEvent.button==1){ 
+                self.downFont(e); 
+                return;
+            }         
+                   
+            if( e.data.originalEvent.button==2){                    
+                self.stopUp();
+                return;
+            }         
+            
+         
+            if(self.boolUp==false){
+                
+                point=self.p20.sp.craetVP();
+                point1=self.p20.sp.craetVP();
+
+                self.korekt2222();                
+                point.position.set(positDin.x,positDin.y);               
+                point1.position.set(positDin.x,positDin.y);
+
+                sp.o=point;
+                if(positDin.ePL!=null){ 
+                    positDin.ePL.targetGron.add(point).pros=positDin.ePL.pros;
+                    positDin.ePL.targetGron.add(point1).pros=positDin.ePL.pros;
+                }
+
+                activObject=self.p20.sp.lineWord.craetLine();
+                activObject.addPoint1=point1;
+                activObject.addPoint=point;     
+                
+               /* activObject=self.p20.sp.craetPol();
+                activObject.activMouse=false; 
+                activObject.activMouse=false;  
+                activObject.addPoint(point1);
+                activObject.addPoint(point);*/
+
+
+                point.activMouse=false;
+                point.position.setPoint(positDin);  
+                self._tool="spLine";             
+                self.startUp();                
+            }
+            else{
+             /*   point.activMouse=true
+                self.korekt2222(); 
+                point=self.p20.sp.craetVP();
+                point.activMouse=false
+                sp.o=point;
+                if(positDin.ePL!=null){ 
+                    positDin.ePL.targetGron.add(point).pros=positDin.ePL.pros;
+                }
+                activObject.addPoint(point);
+                point.position.setPoint(positDin); */ 
+            }                                       
+        }
+
+
+        this.korekt2222=function(){
+            self.par.par.mGridDrag.getPositPlan(positDin);
+            positDin.ePL=null
+            ePL=self.p20.sp.metod.getPL(positDin,50)
+            if(ePL!=null){
+                positDin.x=ePL.x;
+                positDin.y=ePL.y;
+                positDin.ePL=ePL;
+            }else{
+                self.korektAP(positDin,null,true)
+            }
+        }
+
+
+        var colorActiv=0xf28044
+        var swh=1
+        var swh1=5        
+        var wwwh,wwwh1
+        var positDin={x:0,y:0,x1:0,y1:0,s:0,o:null,oy:null,ox:null}
+        var ePL=null;
+
+        this.mouseMoveAll=function(e){  
+            trace(self._tool)         
+            if( self._tool=="spLine"){
+                if(sp.o!=undefined){                
+                    self.korekt2222();               
+                    if(sp.o.gronVL!=undefined){
+                        sp.o.gronVL.par.remove(sp.o)                    
+                    }
+                    if(positDin.ePL!=null){ 
+                        positDin.ePL.targetGron.add(sp.o).pros=positDin.ePL.pros;
+                    }
+                    sp.o.position.setPoint(positDin);              
+                }
+            }
+            if(self._tool=="spLine2"){
+                trace(sp.o)
+                self.korekt2222();
+                activObject.poiskOt(positDin)
+            }
+                        
+        }
+    }
+
+    set tool(v) {
+        if(this._tool!=v){
+            this._tool = v; 
+            this.stopUp()
+        }       
+    }   
+    get tool() { return  this._tool;}  
+}
+
+
+/*
+export class SobIndex2  extends SobIndex {
+    constructor(par,fun) {
         super(par,fun);            
         this.type="SobIndex2";
         var self=this;
@@ -19,8 +205,7 @@ export class SobIndex2  extends SobIndex {
         var or1={x:0,y:0,d:0,o:null};
         var line,pp
         this.mousemove=function(e){   
-            self.getPositPlan(pos);
-           
+            self.getPositPlan(pos);           
                        
             if(arrDrah[0]=="downLine"){
                 self.korektAP(pos,null,sp) 
@@ -48,7 +233,6 @@ export class SobIndex2  extends SobIndex {
                 if(or.d<222){                    
                     sp.o.poiskOt(or)
                 }
-
             }          
         } 
 
@@ -59,6 +243,7 @@ export class SobIndex2  extends SobIndex {
         }    
 
         this.clearSob=function(e){
+            
             arrDrah.length=0
             document.removeEventListener("mouseup", self.mouseup);
             document.removeEventListener("mousemove", self.mousemove); 
@@ -67,15 +252,12 @@ export class SobIndex2  extends SobIndex {
 
         this.mouseup=function(e){
             //self.debug.clearD();
+            trace(arrDrah)
             if(arrDrah.length==1){
                 self.clearSob();
             }
 
             arrDrah.splice(0,1)
-
-
-
-            
         }
         var arrDrah=[];
 
@@ -85,15 +267,11 @@ export class SobIndex2  extends SobIndex {
                 return;
             }
 
-
             if(arrDrah.length!=0)return            
             speee=this.getPositPlan();
             self.korektAP(speee);
             arrDrah.length=0;
-           /* if(s.indexOf("downLine")!=-1){
-                arrDrah.push(s);
-                sp.o = p;  
-            }else{*/
+         
 
                 line=self.p20.sp.lineWord.craetLine();            
                 line.position.set(speee.x,speee.y);
@@ -127,7 +305,6 @@ export class SobIndex2  extends SobIndex {
         this.korektAP=function(_p,_o,_p1){           
             _p.o=null;
 
-           // this.debug.clearD();
             p.o=null
             p1.o=null
             dd=999999999999999999
@@ -288,18 +465,7 @@ export class SobIndex2  extends SobIndex {
             if(this.active==true){
                 self.sp.getRect();//не рект а драгим позиции стен
 
-                //this.oP=self.p20.sp.lineWord.getPositionS();
-                //this.debug=self.sp.lineWord.debugPixi;
-                //this.debug.clearD();
-
                 
-               /* for (var i = 0; i < self.sp.arrSplice.length; i++) {
-                    if (!self.sp.arrSplice[i].life) continue;
-                    self.debug.dLine(self.sp.arrSplice[i].arrGran[0],self.sp.arrSplice[i].arrGran[1],0xff0000,20);
-                    self.debug.dPoint(self.sp.arrSplice[i].arrGran[2],33)
-                    self.debug.dPoint(self.sp.arrSplice[i].arrGran[3],63)
-                    self.debug.dLine(self.sp.arrSplice[i].arrGran[2],self.sp.arrSplice[i].arrGran[3],self.color,20); 
-                }*/
                 self.sp.render()
           
                
@@ -308,4 +474,4 @@ export class SobIndex2  extends SobIndex {
             }
         }
     }
-}
+}*/

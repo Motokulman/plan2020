@@ -18,7 +18,7 @@ export class SPMetod  {
 				p1=this.par.craetSplice1();
 
 				if(this.par.idArr==0){
-					trace(">>>>",p)
+					
 					p.windows.array=[]
 				}
 
@@ -99,20 +99,35 @@ export class SPMetod  {
 		var b 
 		this.getPL=function(point,dist){
 			b=false;
-			ePL.dist=9999999999;
-			//trace("####",this.par.arrSplice);
+			ePL.dist=9999999999;			
 			for (var i = 0; i < this.par.arrSplice.length; i++) {
 				if (this.par.arrSplice[i].life == false) continue;
-				ePLOt=this.par.arrSplice[i].vLines.getPL(point,dist);
-				
+				ePLOt=this.par.arrSplice[i].vLines.getPL(point,dist);				
 				if(ePLOt!=null){
 					if(ePLOt.dist<ePL.dist){
 						ePL=ePLOt;
 					}
 				}
 			}
-
 			if(ePL.dist!=9999999999)return ePL;
+			return null;
+		}
+
+		var rez
+		this.getPLUUID=function(uuid){
+			//trace(uuid, this.par.avp);
+			for (var i = 0; i < this.par.avp.length; i++) {
+				if(this.par.avp[i].uuid==uuid)return this.par.avp[i]
+				//trace(i+"   "+this.par.avp[i].uuid)
+			}
+			/*rez=null
+			for (var i = 0; i < this.par.arrSplice.length; i++) {
+				if (this.par.arrSplice[i].life == false) continue;
+				rez=this.par.arrSplice[i].vLines.getPLUUID(uuid);				
+				if(rez!=null){
+					return rez;
+				}
+			}	*/		
 			return null;
 		}
 

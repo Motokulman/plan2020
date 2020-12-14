@@ -117,9 +117,10 @@ export class SobIndex0  extends SobIndex {
                     }
                 }
             }else return
-           
+            trace(s,p,e)
             if(self.boolCTRL==true){
-                if(s=="downPoint"||s=="downSten"||s=="downBlok"){
+                //if(s=="downPoint"||s=="downSten"||s=="downBlok"){
+                if(p && p.uuid){
                     if(self.sp.group.active == false){
                         self.sp.group.active = true;
                         self.par.par.mObject.setObject(self.sp.group) 
@@ -129,6 +130,8 @@ export class SobIndex0  extends SobIndex {
                     if(r==false)self.sp.group.removeObj(p);
                     return;
                 }
+                    
+               // }
             }
 
 

@@ -129,7 +129,7 @@ export function SpliceSten (_stage) {
 
 
     this.getGronVP = function(uuid){
-    	trace("$uuid")
+    
     	if(this.vLines.getGronVP(uuid)!=null) return this.vLines.getGronVP(uuid)
     	return null
     }

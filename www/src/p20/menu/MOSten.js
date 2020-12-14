@@ -114,10 +114,21 @@ export class MOSten extends MOBaza {
                 }
             }
 
-            trace("@@",a)
+             yy+=(this.otstup1+70)
             
             
             /////////////////////////////
+            this.slidH=new DSliderBig(this.window.content, this.otstup1,yy, function(s){ 
+                self.object.height=this.value;
+                self.object.par.addObjFun(self.object)
+                self.object._addPoint.dragGG(); 
+                self.object._addPoint1.dragGG();
+
+            }, "height",  0, 500);
+            this.slidH.width=this.width-this.otstup1*2;
+            this.slidH.okrug=1;
+
+            yy+=(this.otstup1+70)
 
 
 
@@ -127,7 +138,7 @@ export class MOSten extends MOBaza {
         
         this.drag=function(){
             self.slid.value=self.object.delph;
-
+            self.slidH.value=self.object.height;
             self.msUi.drag(); 
             for (var s in oM) {
                 oM[s][0].visible=self.object[s]

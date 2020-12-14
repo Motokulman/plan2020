@@ -171,7 +171,7 @@ export function SpVLines (obj) {
 
 
 	this.getGronVP = function(uuid){
-		trace("$",uuid,this.array)
+		
     	for (var i = 0; i < this.array.length; i++) {
     		if(this.array[i].uuid==uuid)return this.array[i];
     	}
