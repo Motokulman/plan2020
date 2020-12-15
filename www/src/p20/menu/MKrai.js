@@ -88,6 +88,7 @@ export class MKrai  {
             }
 
             if(self._menuIndex==0){
+                trace('self._menuIndex==0()')
                 if(s=="mouseover"){
                     this.startActive()
                 }
@@ -103,7 +104,6 @@ export class MKrai  {
                 if(s=="mouseout"){
                     if(self.activeMove!="linesOtstup")self.activeMove = "null"
                 } 
-
                 if(s=="mousedown"){
                     self.sp.lineWord.visiLine.visiPoint(self.par.getPositPlan(),unSkrol==true ?-Math.PI/2 : -Math.PI, self.par.rectScane)
                     self.activeMove="linesOtstup";
@@ -379,6 +379,7 @@ export class MKPV extends DCont {
 
         // Срабатывает от пользовательского ввода с клавиатуры в поле нижней линейки 
         this.setPNew=function(p){            
+            self.helpDP.clear();
             if (p < 0) p = 10
             if(self.bool==true){
                 if(self.inArXY!=-1){ 
@@ -395,7 +396,6 @@ export class MKPV extends DCont {
                         }else{
                             self.arrX[i].zdwih("x",sd2+sd)
                         }
-                        
                     }
                     self.sp.bigDrag();
                     self.testPosit();
@@ -440,22 +440,24 @@ export class MKPV extends DCont {
         })
         this.panEvent.div.addEventListener("DOMMouseScroll", function(e){self.fun("mousewheel",e)})
         this.panEvent.div.addEventListener("mousedown", function(e){
-
+            trace('mouse mousedown == self.inArXY', self.inArXY)
             if(self.inArXY!=-1){ 
                 self.drag = true;
                 self.startDragMove();         
                 return
-            }       
+            } 
             self.fun("mousedown",e);
-
         })
+
         this.panEvent.div.addEventListener("mouseover", function(e){
+            trace('mouse mouseover')
             if(self.drag==true)return
             self.corektBattonX(-1,-1)
             self.fun("mouseover",e);
 
         })
         this.panEvent.div.addEventListener("mouseout", function(e){
+            trace('mouse mouseout')
             if(self.drag==true)return
             self.fun("mouseout",e);
         })
@@ -463,7 +465,7 @@ export class MKPV extends DCont {
         this.panEvent.div.addEventListener("mouseup", function(e){
             if(self.drag==true){
                 self.aaaa()
-            }               
+            }
         })    
 
 
@@ -521,8 +523,6 @@ export class MKPV extends DCont {
 
         
         this.move = function(e){           
-            
-
             self.helpDP.alpha=1  
             self.helpDP.clear();
             if(self.arrX.length==0)return
@@ -535,7 +535,7 @@ export class MKPV extends DCont {
             
             //рисуем базовую точку
             let dre=self.ooo*20
-            self.helpDP.dPoint(positStart,self.ooo*1,self.color3)
+            self.helpDP.dPoint(positStart,self.ooo*0.1,self.color3)
             self.helpDP.dLineParam(positStart.x-dre,positStart.y,positStart.x+dre,positStart.y,self.color3,2);
             self.helpDP.dLineParam(positStart.x,positStart.y-dre,positStart.x,positStart.y+dre,self.color3,2); 
             self.sp.render();
@@ -546,19 +546,16 @@ export class MKPV extends DCont {
         this.dragB1=false
 
         this.startDragMove=function(){
+            trace( 'startDragMove')
             if(self.arrX.length==0)return
             self.testPosit();
             self.moveIn(); 
-            
-            
+
             this.par.par.getPositPlan(this.smd);
             this.smd.inArXY=self.inArXY;
             this.smd.pp=self.arrPanel[self.inArXY].pp
            
-         
             self.dragB1=true
-
-
 
             dcmParam.addFunMove(this.move1);
             document.body.addEventListener("mouseup", this.funUp)
@@ -566,16 +563,11 @@ export class MKPV extends DCont {
 
 
         this.moveZdvig = function(a,_id,_p,_p1){  
-
-            trace('a', a, '_id', _id, ',_p', _p, ',_p1',_p1)
-
             for (var i = 0; i < a.length; i++) {
 
                 if(i <= _id){
-                    if (self.arrPanel[_id-1]) if (self.arrPanel[_id-1].pp >= self.arrPanel[_id].pp+_p1) return
                     a[i].zdwih(a[i].param,_p)
                 }else{
-                    if (self.arrPanel[_id-1]) if (self.arrPanel[_id-1].pp >= self.arrPanel[_id].pp+_p1) return
                     a[i].zdwih(a[i].param,_p+_p1)
                 }                   
             }
@@ -584,30 +576,43 @@ export class MKPV extends DCont {
             self.moveIn(); 
             self.moveIn1(); 
         }
-
+        
+            
         var raz=2
         var pointDin=new Position()
         var p,p1
+        var valid = true
         this.move1 = function(e){ 
+            self.helpDP.alpha=1  
+            self.helpDP.clear();
+
             if(self.arrX.length==0)return    
+
             var r=0;
             self.par.par.getPositPlan(pointDin);            
             p=pointDin.x-self.smd.x;
-            p1=Math.floor(p*2);
+            p1=Math.floor(p*raz);
             if(p1!=0){                
-                // var zdvig=p1*raz*2
                 var zdvig=p1
                 if(p1<0){
-                    // zdvig=p1*raz*1.9
                     zdvig=p1
                 }
                 var zdvig1=self.smd.pp+zdvig;
-                if (zdvig1 <= 1) return
-
-                self.moveZdvig(self.arrX, self.smd.inArXY, -zdvig/2, zdvig)
-                self.smd.pp=zdvig1;
-                self.par.par.getPositPlan(self.smd);
-                self.input.text=self.arrPanel[self.smd.inArXY].pp;
+                valid = true;
+                if (zdvig1 <= 1) valid = false;
+                if(self.bool!=true) if (self.arrPanel[self.smd.inArXY-1]) if (self.arrPanel[self.smd.inArXY-1].pp >= self.arrPanel[self.smd.inArXY].pp+zdvig) valid = false;
+                
+                if (valid == true) {   
+                    self.moveZdvig(self.arrX, self.smd.inArXY, -zdvig/2, zdvig)
+                    self.smd.pp=zdvig1;
+                    self.par.par.getPositPlan(self.smd);
+                    self.input.text=self.arrPanel[self.smd.inArXY].pp;
+                } else {                     
+                    self.sp.bigDrag();
+                    self.testPosit();
+                    self.moveIn(); 
+                    self.moveIn1(); 
+                }
             }
         }
 
@@ -615,7 +620,7 @@ export class MKPV extends DCont {
         this.funUp = function(e){   
             self.dragB1=false                     
             dcmParam.removeFunMove(self.move1);
-            document.body.removeEventListener("mouseup", self.funUp)             
+            document.body.removeEventListener("mouseup", self.funUp)
         }
 
         this.moveIn=function(){
@@ -727,7 +732,7 @@ export class MKPV extends DCont {
                 if(self.arrPanel[self.inArXY]!=undefined)  self.arrPanel[self.inArXY].active=false;                 
             }            
             self.inArXY=_inAr;
-            self.inPoXY=_inPo;            
+            self.inPoXY=_inPo;        
         }
 
 
@@ -900,9 +905,10 @@ export class MKPV extends DCont {
 
         this.bbbE=false
         this.aaaa=function(){ 
+            trace(' moused aaaa')
             self.input.object.focus(); 
             self.input.object.select(); 
-            setTimeout(function() {                
+            setTimeout(function() {
                 self.input.object.focus(); 
                 self.input.object.select(); 
                 if(self.bbbE==false){
@@ -915,16 +921,21 @@ export class MKPV extends DCont {
         this.moused=function(e){
             let sDown="null";
             if(e && e.target&& e.target.uuid && e.target.uuid==self.uuid){
-                sDown=e.target.tttt;                
+                sDown=e.target.tttt;     
+            trace(' moused 0', sDown)
+
             }
          
 
             if(sDown=="null"){
+            trace(' moused 1')
                 self.finalActive()
                 return
             }
             if(sDown=="panel"){
-                self.drag=false;
+            trace(' moused 2')
+                self.drag=false; 
+
             }
         }
 
@@ -1010,22 +1021,38 @@ export class MKPanelVisiH extends MKPV {
         var raz=2
         var pointDin=new Position()
         var p,p1
+        var valid = true
         this.move1 = function(e){     
+            self.helpDP.alpha=1  
+            self.helpDP.clear();
             var r=0;
             self.par.par.getPositPlan(pointDin);            
             p=pointDin.y-self.smd.y;
-            p1=Math.floor(p/raz);
+            p1=Math.floor(p*raz);
             if(p1!=0){                
-                var zdvig=p1*raz*2                
+                var zdvig=p1        
                 if(p1<0){
-                    zdvig=p1*raz*1.9
+                    zdvig=p1
                 }
                 var zdvig1=self.smd.pp+zdvig;
-                if (zdvig1 <= 1) return
-                self.moveZdvig(self.arrY,self.smd.inArXY,-zdvig/2,zdvig)
-                self.smd.pp=zdvig1;
-                self.par.par.getPositPlan(self.smd);
-                self.input.text=self.arrPanel[self.smd.inArXY].pp;
+
+                valid = true
+                if (zdvig1 <= 1) valid = false
+                if(self.bool!=true) if (self.arrPanel[self.smd.inArXY-1]) if (self.arrPanel[self.smd.inArXY-1].pp+(-zdvig/2) <= self.arrPanel[self.smd.inArXY].pp+zdvig) valid = false
+                if(self.bool!=true) if (self.arrPanel[self.smd.inArXY+1]) if (self.arrPanel[self.smd.inArXY+1].pp+(-zdvig/2) >= self.arrPanel[self.smd.inArXY].pp+zdvig) valid = false
+                
+                if (valid == true) {   
+                    self.moveZdvig(self.arrY,self.smd.inArXY,-zdvig/2,zdvig)
+                    self.smd.pp=zdvig1;
+                    self.par.par.getPositPlan(self.smd);
+                    self.input.text=self.arrPanel[self.smd.inArXY].pp;
+                } else {                     
+                    self.sp.bigDrag();
+                    self.testPosit();
+                    self.moveIn(); 
+                    self.moveIn1(); 
+                }
+
             }
         }
 
@@ -1044,11 +1071,7 @@ export class MKPanelVisiH extends MKPV {
             
                 
             for (var i = 0; i < self.arrY.length; i++) {
-                self.helpDP.dLineParam(
-                    self.arrY[i].array[0].position.x,self.arrY[i].array[0].position.y,
-                    self.rectScane.x1,self.arrY[i].array[0].position.y
-                );
-
+                self.helpDP.dLineParam(self.arrY[i].array[0].position.x,self.arrY[i].array[0].position.y,self.rectScane.x1,self.arrY[i].array[0].position.y, self.color1, self.ooo*2);
                 self.helpDP.dPoint(self.arrY[i].array[0].position,self.ooo,self.color1,self.ooo)                   
             }
 
@@ -1061,12 +1084,14 @@ export class MKPanelVisiH extends MKPV {
 
         
         // Срабатывает от пользовательского ввода с клавиатуры в поле левой линейки 
+        var valid = true;
         this.setPNew=function(p){       
+            self.helpDP.clear();
             if (p < 0) p = 10
             if(self.bool==true){
                 if(self.inArXY!=-1){ 
                     let sd = p-self.arrPanel[self.inArXY].pp;
-                    
+
                     if(sd<=-(self.arrPanel[self.inArXY].pp-1)){
                         sd=-(self.arrPanel[self.inArXY].pp-1)
                     }
@@ -1093,15 +1118,20 @@ export class MKPanelVisiH extends MKPV {
                         sd=-(self.arrPanel[self.inArXY].pp-1)
                     }
                     let sd2=-(sd/2)  
+                    
+                    valid = true;
+                    if (self.arrPanel[self.inArXY-1]) if (self.arrPanel[self.inArXY-1].pp >= self.arrPanel[self.inArXY].pp+sd) valid = false;
 
-                    if (self.arrPanel[self.inArXY-1]) if (self.arrPanel[self.inArXY-1].pp >= self.arrPanel[self.inArXY].pp+sd) return
+                    if (valid == true){
+                        for (var i = 0; i < self.arrY.length; i++) {
+                            if(i <= self.inArXY){
+                                self.arrY[i].zdwih("y",-sd)                    
 
-
-                    for (var i = 0; i < self.arrY.length; i++) {
-                        if(i <= self.inArXY){
-                            self.arrY[i].zdwih("y",-sd)
-                        }                        
+                            }                        
+                        }
                     }
+
+                    self.input.text=self.arrPanel[self.smd.inArXY].pp;
                     self.sp.bigDrag();
                     self.testPosit();
                     self.moveIn(); 
