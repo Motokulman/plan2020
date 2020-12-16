@@ -88,7 +88,7 @@ export class MKrai  {
             }
 
             if(self._menuIndex==0){
-                trace('self._menuIndex==0()')
+                
                 if(s=="mouseover"){
                     this.startActive()
                 }
@@ -440,24 +440,24 @@ export class MKPV extends DCont {
         })
         this.panEvent.div.addEventListener("DOMMouseScroll", function(e){self.fun("mousewheel",e)})
         this.panEvent.div.addEventListener("mousedown", function(e){
-            trace('mouse mousedown == self.inArXY', self.inArXY)
-            if(self.inArXY!=-1){ 
+            
+            if(self.inArXY!=-1){
                 self.drag = true;
-                self.startDragMove();         
+                self.startDragMove();
                 return
-            } 
+            }
             self.fun("mousedown",e);
         })
 
         this.panEvent.div.addEventListener("mouseover", function(e){
-            trace('mouse mouseover')
+            // 
             if(self.drag==true)return
-            self.corektBattonX(-1,-1)
+            // self.corektBattonX(-1,-1)
             self.fun("mouseover",e);
 
         })
         this.panEvent.div.addEventListener("mouseout", function(e){
-            trace('mouse mouseout')
+            // 
             if(self.drag==true)return
             self.fun("mouseout",e);
         })
@@ -546,7 +546,7 @@ export class MKPV extends DCont {
         this.dragB1=false
 
         this.startDragMove=function(){
-            trace( 'startDragMove')
+            
             if(self.arrX.length==0)return
             self.testPosit();
             self.moveIn(); 
@@ -583,6 +583,7 @@ export class MKPV extends DCont {
         var p,p1
         var valid = true
         this.move1 = function(e){ 
+            
             self.helpDP.alpha=1  
             self.helpDP.clear();
 
@@ -618,7 +619,8 @@ export class MKPV extends DCont {
 
 
         this.funUp = function(e){   
-            self.dragB1=false                     
+            
+            self.dragB1=false
             dcmParam.removeFunMove(self.move1);
             document.body.removeEventListener("mouseup", self.funUp)
         }
@@ -728,6 +730,7 @@ export class MKPV extends DCont {
         self.inArXY=-1;
         self.inPoXY=-1;
         this.corektBattonX = function(_inAr,_inPo){
+            
             if(self.inArXY!=_inAr){
                 if(self.arrPanel[self.inArXY]!=undefined)  self.arrPanel[self.inArXY].active=false;                 
             }            
@@ -739,6 +742,7 @@ export class MKPV extends DCont {
         var poi=new Position()
         var ii,ii1,max;
         this.poiskXY = function(a,p){ 
+            
             if(this.drag==true)return
             this.par.par.getPositPlan(poi)
             ii=-1;
@@ -905,12 +909,13 @@ export class MKPV extends DCont {
 
         this.bbbE=false
         this.aaaa=function(){ 
-            trace(' moused aaaa')
+            
             self.input.object.focus(); 
             self.input.object.select(); 
             setTimeout(function() {
                 self.input.object.focus(); 
                 self.input.object.select(); 
+                
                 if(self.bbbE==false){
                     document.body.addEventListener("mousedown", self.moused)
                     self.bbbE=true
@@ -919,21 +924,22 @@ export class MKPV extends DCont {
         }
 
         this.moused=function(e){
+            
             let sDown="null";
             if(e && e.target&& e.target.uuid && e.target.uuid==self.uuid){
                 sDown=e.target.tttt;     
-            trace(' moused 0', sDown)
+            
 
             }
          
 
             if(sDown=="null"){
-            trace(' moused 1')
+            
                 self.finalActive()
                 return
             }
             if(sDown=="panel"){
-            trace(' moused 2')
+            
                 self.drag=false; 
 
             }
@@ -966,7 +972,7 @@ export class MKPV extends DCont {
 
     set drag(value) {      
         if(this._drag!=value){
-            this._drag= value;
+            this._drag=value;
             if(value==true){
                 this.pInfo.alpha=1;
                 this.aaaa()
@@ -1066,7 +1072,7 @@ export class MKPanelVisiH extends MKPV {
 
 
         this.moveIn=function(){
-            
+            if(self.arrY.length==0)return
             self.poiskXY(self.arrY,"y"); 
             
                 
@@ -1161,7 +1167,7 @@ export class MKPanelVisiH extends MKPV {
                     www=self.arrY[i+1].posit1-self.arrY[i].posit1;
 
                     www1=Math.round(self.arrY[i+1].posit-self.arrY[i].posit);
-/*
+
                     www2+=www1; 
 
                     if(self._bool==true){
@@ -1171,8 +1177,8 @@ export class MKPanelVisiH extends MKPV {
                         ww3=www2
                         ww4=hh-ww3
 
-                        trace(i+"   "+self.arrY[i].posit+"  "+www2+"  "+www1+"   "+ww4+"  "+hh)
-                    }*/
+                        // 
+                    }
                     this.arrPanel[i].setParam(this._width-this.otstup*2,www,www1,self._bool,www1);
                     this.arrPanel[i].visible=true;                             
                 }  
