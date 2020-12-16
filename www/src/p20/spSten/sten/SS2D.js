@@ -273,7 +273,7 @@ export class SS2D  {
 				this.c2dt.visible=false				
 			}else{
 				this.c2dt.visible=true
-				this.text.text=Math.round(xx)+"!";				
+				this.text.text=Math.round(xx)+"";				
 				if(bb==false){
 					this.c2dt.x=(xx/2)-this.arrPosit[0].x-this.text.width/2;
 					this.c2dt.y=this._delph/2
