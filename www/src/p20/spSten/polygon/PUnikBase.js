@@ -6,7 +6,7 @@ export class PUnikBase  {
   		this.type="PUnikBase";
         var self=this;
         this.par=par;
-
+        this.triangulateShape = this.par.triangulateShape
 
         this.graphics=this.par.ssPolygon2d.graphics;
         this.color=0x999999;
@@ -24,19 +24,12 @@ export class PUnikBase  {
 			}
 
             this.text = this.par.ssPolygon2d.text;
-            // this.text.text=Math.abs(Math.round(this.triangulateShape.areaShape/1000))/10+" m?"
+            this.text.text=Math.abs(Math.round(this.triangulateShape.areaShape/1000))/10+" m²";
 
-            if (this.par.array) if (this.par.array.length > 1) {
-                var xx = (this.text.text.length*this.text.style.fontSize)/2
-                var xx1 = this.text.style.fontSize
-                this.text.x = this.searchCenter(this.par.array,'x') - (xx/2)
-                this.text.y = this.searchCenter(this.par.array,'y') - xx1
-            }
-            // this.text.scale.x=this.text.scale.y=500;
-            /* 
-            this.mpText.draw(this.triangulateShape.centerShape.x,this.triangulateShape.centerShape.y)
-            this._text1=Math.abs(Math.round(this.triangulateShape.areaShape/1000))/10+" m?";  
-            */
+            var xx = (this.text.text.length*this.text.style.fontSize)/2;
+            var xx1 = this.text.style.fontSize;
+            this.text.x = this.triangulateShape.centerShape.x - (xx/2);
+            this.text.y = this.triangulateShape.centerShape.y - (xx1/2);
         }
         ////////////////////////////////////////////////////
 
@@ -68,24 +61,7 @@ export class PUnikBase  {
                 this.arrPoint[i].y=this.par.array[i].position.y;
                 this.arrPoint[i].z=-this.par.array[i].position.z;
             }
-        }
-
-        this.searchCenter = function (_array, _posit) {
-            var array = _array
-            var min = array[0].position[_posit];
-            var max = array[0].position[_posit];
-
-            for (var i = 1; i < array.length; i++) {
-              if (array[i].position[_posit] < min) {
-                min = array[i].position[_posit];
-              }
-
-              if (array[i].position[_posit] > max) {
-                max = array[i].position[_posit];
-              }
-            }
-            return (min+max)/2
-        }   
+        } 
 
 		this.draw1 = function () {
         	this.draw2d();
