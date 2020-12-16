@@ -10,7 +10,7 @@ export class PUnikBase  {
 
         this.graphics=this.par.ssPolygon2d.graphics;
         this.color=0x999999;
-        this.draw2d = function () {	
+        this.draw2d = function () {	           
         	this.par.ssPolygon2d.stAct.draw1()
 			this.graphics.clear();
 			this.graphics.beginFill(this.color, 1);		
@@ -22,6 +22,21 @@ export class PUnikBase  {
 				}
 				this.graphics.lineTo(this.par.array[0].position.x,this.par.array[0].position.y);
 			}
+
+            this.text = this.par.ssPolygon2d.text;
+            // this.text.text=Math.abs(Math.round(this.triangulateShape.areaShape/1000))/10+" m?"
+
+            if (this.par.array) if (this.par.array.length > 1) {
+                var xx = (this.text.text.length*this.text.style.fontSize)/2
+                var xx1 = this.text.style.fontSize
+                this.text.x = this.searchCenter(this.par.array,'x') - (xx/2)
+                this.text.y = this.searchCenter(this.par.array,'y') - xx1
+            }
+            // this.text.scale.x=this.text.scale.y=500;
+            /* 
+            this.mpText.draw(this.triangulateShape.centerShape.x,this.triangulateShape.centerShape.y)
+            this._text1=Math.abs(Math.round(this.triangulateShape.areaShape/1000))/10+" m?";  
+            */
         }
         ////////////////////////////////////////////////////
 
@@ -54,6 +69,23 @@ export class PUnikBase  {
                 this.arrPoint[i].z=-this.par.array[i].position.z;
             }
         }
+
+        this.searchCenter = function (_array, _posit) {
+            var array = _array
+            var min = array[0].position[_posit];
+            var max = array[0].position[_posit];
+
+            for (var i = 1; i < array.length; i++) {
+              if (array[i].position[_posit] < min) {
+                min = array[i].position[_posit];
+              }
+
+              if (array[i].position[_posit] > max) {
+                max = array[i].position[_posit];
+              }
+            }
+            return (min+max)/2
+        }   
 
 		this.draw1 = function () {
         	this.draw2d();
