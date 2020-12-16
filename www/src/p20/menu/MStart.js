@@ -1,5 +1,7 @@
 import { MStyle} from './MStyle.js';
-import { DWStenColiz} from './Debag/DWStenColiz.js';
+//import { DWStenColiz} from './Debag/DWStenColiz.js';
+
+import { DebKR} from '../../p20/spSten/colozi/src/src/menu/DebKR.js';
 
 export class MStart  {
     constructor(par, fun) {
@@ -180,16 +182,19 @@ export class MStart  {
 			script.onload = function() {
 			  	// в скрипте создаётся вспомогательная функция с именем "_"
 			  	self.dev=new DCompDev(self.dCont, 64, 80,"DevWindow",function(){})
-			  	self.dev1=new DWStenColiz(self.dev.dCont);
+			  	//self.dev1=new DWStenColiz(self.dev.dCont);
+			  	self.dev1=new DebKR(self.dev.dCont);
+
 			  	self.dev.addCont(self.dev1, self.dev1.dCont,"DWS",undefined,undefined)
 				self.dev.active=false;	
 				
 				//////////////////////////////
-				/*self.dev1.setKR(self.p20.korektRect)			
+				self.dev1.setKR(self.p20.korektRect)
+				self.p20.korektRect.funRender=self.dev1.drag;			
 				setTimeout(function() {
 					self.dev.active=true;	
 					self.dev.index=2	
-				}, 1000);*/
+				}, 1000);/**/
 				/////////////////
 
 

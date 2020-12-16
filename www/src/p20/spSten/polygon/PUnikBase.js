@@ -32,7 +32,7 @@ export class PUnikBase  {
         		this.par.ssP3d.lineSegments.visible = true;
         		this.par.ssP3d.planeXZ.clearPoint()
         		this.kolPointDrag();
-        		trace("adsfasfasfasfd",this.kol)
+        		
         		for (var i = 0; i < this.kol; i++) {                    
                     if(i!=this.kol-1){
                         this.par.ssP3d.planeXZ.addLine(this.arrPoint[i],this.arrPoint[i+1]);
@@ -53,10 +53,7 @@ export class PUnikBase  {
                 this.arrPoint[i].y=this.par.array[i].position.y;
                 this.arrPoint[i].z=-this.par.array[i].position.z;
             }
-        }    
-        
-
-
+        }
 
 		this.draw1 = function () {
         	this.draw2d();

@@ -29,7 +29,7 @@ export function SpPolygon (_stage, _unikName) {
 
 	this._uuid=calc.generateRendom(2);
 	
-	
+	this.triangulateShape = this.stage.triangulateShape;
 
 	this.arrayClass=[]
     //хрень под
@@ -49,13 +49,18 @@ export function SpPolygon (_stage, _unikName) {
 	this.ssPolygon2d=new SSPolygon2D(this);
 	this.ssP3d=new SSP3D(this);
 
+
+
 	if(this.unikName=="PUnikBase")this.unik = new PUnikBase(this);
 
-	//this.arrayClass.push(this.ssPolygon2d);
+	
 
-	this.draw1 = function () {
-		//this.ssPolygon2d.draw1();
+	this.draw1 = function () {		
+		this.dragRect()
+		
+		trace(this.rectBig)
 		this.unik.draw1();
+		this.dragNaTriang()
 	}
 
 
@@ -73,7 +78,83 @@ export function SpPolygon (_stage, _unikName) {
 
 	var rez,bp,bp1,res
 	var arrayCol=[]
+	this.rectBig={x:0,y:0,z:0,x1:0,y1:0,z1:0,w:0,h:0,d:0,o:null}
+
+	this.dragRect=function(){
+		this.rectBig.x=99999999999;
+        this.rectBig.y=99999999999;
+        this.rectBig.x1=-29999999999;
+        this.rectBig.y1=-29999999999;
+        for (var i = 0; i < this.array.length; i++) {
+        	if(this.rectBig.x>this.array[i].position.x)this.rectBig.x=this.array[i].position.x;
+        	if(this.rectBig.x1<this.array[i].position.x)this.rectBig.x1=this.array[i].position.x;
+        	if(this.rectBig.y>this.array[i].position.y)this.rectBig.y=this.array[i].position.y;
+        	if(this.rectBig.y1<this.array[i].position.y)this.rectBig.y1=this.array[i].position.y;
+
+        	if(this.rectBig.z>this.array[i].position.z)this.rectBig.z=this.array[i].position.z;
+        	if(this.rectBig.z1<this.array[i].position.z)this.rectBig.z1=this.array[i].position.z;	
+        }
+    	this.rectBig.w=this.rectBig.x1-this.rectBig.x;
+        this.rectBig.h=this.rectBig.y1-this.rectBig.y;
+        this.rectBig.d=this.rectBig.z1-this.rectBig.z;
+        //this.rectBig.y-=this.rectBig.h;
+	}
+
+
+
+	this.arrPosition=[]
+	this.arrTiang=[]
+	var shTr
+	this.shTr
+	this.dragNaTriang=function(){
+		this.arrPosition.length = 0;	
+		for (var i = 0; i < this.array.length; i++) {			
+			this.arrPosition.push(this.array[i].position);
+		}
+		this.triangulateShape.segment.x = 0.5;
+		this.triangulateShape.segment.y = 0.5;
+		this.triangulateShape.segment.width = this.rectBig.w;
+		this.triangulateShape.segment.height = this.rectBig.h;
+		this.triangulateShape.segment.rotation = 0;
+		this.triangulateShape.start(this.arrPosition);// триангулируем
+		//self.arrTriangleBig = self.triangulate(self.arrPoint);
+		
+		var ar=this.triangulateShape.arrTriangleBig
+		shTr=0	
+		for (var i = 0; i < ar.length; i++) {
+
+			if(this.arrTiang[shTr]==undefined){
+				this.arrTiang[shTr]=[new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3()]
+			}
+			this.arrTiang[shTr][0].set(ar[i][0].x,ar[i][0].y,-ar[i][0].z);
+			this.arrTiang[shTr][1].set(ar[i][1].x,ar[i][1].y,-ar[i][1].z);
+			this.arrTiang[shTr][2].set(ar[i][2].x,ar[i][2].y,-ar[i][2].z);
+
+			/*this.arrTiang[shTr][0].set(ar[i][0].x,ar[i][0].y,ar[i][0].z);
+			this.arrTiang[shTr][1].set(ar[i][1].x,ar[i][1].y,ar[i][0].z);
+			this.arrTiang[shTr][2].set(ar[i][2].x,ar[i][2].y,ar[i][0].z);*/
+
+			
+			this.ssP3d.planeXZ.addLine(this.arrTiang[shTr][0],this.arrTiang[shTr][1])
+			this.ssP3d.planeXZ.addLine(this.arrTiang[shTr][1],this.arrTiang[shTr][2])
+			this.ssP3d.planeXZ.addLine(this.arrTiang[shTr][2],this.arrTiang[shTr][0])
+			
+			shTr++;	
+			this.shTr=shTr		
+		}
+
+
+		this.ssP3d.planeXZ.upDate()
+		/*this.par.ssP3d.planeXZ.addLine(this.arrPoint[i],this.arrPoint[0]);
+                    }
+                }
+                */
+	}
+
+
+
 	this.isRect=function(r,b){
+
 		//return this.matematik.isRect(r,b)
 	}
 

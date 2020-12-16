@@ -6,20 +6,16 @@ import { SpVPXz } from './SpVPXz.js';
 import { SpDebugPixi } from './SpDebugPixi.js';
 //import { Pol3D } from './Pol3D.js';
 import { SpStage } from './../sp/SpStage.js';
-import {  Calc } from './../Calc.js';
-
-
-import {  SPLineWord } from './SPLineWord.js';
-import {  WorldBlok } from './worldBlok/WorldBlok.js';
-
+import { Calc } from './../Calc.js';
+import { SPLineWord } from './SPLineWord.js';
+import { WorldBlok } from './worldBlok/WorldBlok.js';
 import { SPGroup} from './SPGroup.js';
-
 import { SpPolygon } from './polygon/SpPolygon.js';
-
 import { PlaneXZ } from '../plus/PlaneXZ.js';
-
 import { SPMetod } from './SPMetod.js';
+import {SPMetodRezolka} from './SPMetodRezolka.js';
 
+import {TriangulateShape} from './polygon/TriangulateShape.js';
 
 /**
 * Мир для сращалок дорог
@@ -156,9 +152,11 @@ export function SpStageSten (par,  fun) {
 	this.lineWord=new SPLineWord(this);
 	this.worldBlok=new WorldBlok(this);
 	this.group=new SPGroup(this);
-
-
 	this.metod=new SPMetod(this);
+
+	this.metodRezolk=new SPMetodRezolka(this);
+
+	this.triangulateShape=new TriangulateShape()
 
 	this.colorT=new THREE.Color()
 	this.convertC=function(c,a){
