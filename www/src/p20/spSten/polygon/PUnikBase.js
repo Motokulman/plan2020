@@ -24,7 +24,7 @@ export class PUnikBase  {
 			}
 
             this.text = this.par.ssPolygon2d.text;
-           //this.text.text=Math.abs(Math.round(this.triangulateShape.areaShape/1000))/10+" m?"
+           this.text.text=Math.abs(Math.round(this.triangulateShape.areaShape/1000))/10+" m?"
 
             if (this.par.array) if (this.par.array.length > 1) {
                 var xx = (this.text.text.length*this.text.style.fontSize)/2
