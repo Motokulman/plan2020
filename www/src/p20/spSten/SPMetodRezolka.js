@@ -55,11 +55,35 @@ export class SPMetodRezolka  {
 		this.setStenGrani=function(_sten, _arrGrani){
 			sten=_sten
 			arrGrani=_arrGrani
+			this.plane.clear()
+			this.plane1.clear()	
+			this.plane2.clear()	
+		
+
+
+
+			
+
+			trace("arrGrani   ",arrGrani)
+			for (var i = 0; i < arrGrani.length; i++) {
+				arrGrani[i].clearAL()
+			}
+
+
+			
 			for (var i = 0; i < this.par.arrPol.length; i++) {
 				if (this.par.arrPol[i].life==false) continue;
 				this.sort1(this.par.arrPol[i])
 			}
 
+
+
+
+
+
+			this.plane.upDate();
+			this.plane1.upDate();
+			this.plane2.upDate();
 		}
 
 
@@ -70,9 +94,9 @@ export class SPMetodRezolka  {
 		var gronSten,gronSten1
 		//Проврка на полигоны
 		this.sort1=function(_poli){
-			this.plane.clear()
+			
 			shTr=-1
-			this.plane2.clear()
+			
 			for (var i = 0; i < _poli.shTr; i++) {
 				shTr++;
 				if(this.arrTiang[shTr]==undefined){
@@ -82,27 +106,24 @@ export class SPMetodRezolka  {
 				this.arrTiang[shTr][1].set(_poli.arrTiang[i][1].x,_poli.arrTiang[i][1].y,_poli.arrTiang[i][1].z);
 				this.arrTiang[shTr][2].set(_poli.arrTiang[i][2].x,_poli.arrTiang[i][2].y,_poli.arrTiang[i][2].z);
 
-				this.plane.addLine(this.arrTiang[shTr][0],this.arrTiang[shTr][1])
-				this.plane.addLine(this.arrTiang[shTr][1],this.arrTiang[shTr][2])
-				this.plane.addLine(this.arrTiang[shTr][2],this.arrTiang[shTr][0])				
+				this.plane.addLine(this.arrTiang[shTr][0].clone(),this.arrTiang[shTr][1].clone())
+				this.plane.addLine(this.arrTiang[shTr][1].clone(),this.arrTiang[shTr][2].clone())
+				this.plane.addLine(this.arrTiang[shTr][2].clone(),this.arrTiang[shTr][0].clone())				
 			}
 			
-			this.plane.upDate();
+			
 
 			shTr++
 
-
 			gronSten=arrGrani[0].arr[2];
 			gronSten1=arrGrani[2].arr[2];
+			
 
-			gronSten.clearAL()
-			gronSten1.clearAL()
-
-			this.sort2(arrGrani[0].arrPGlob[2],arrGrani[0].arrPGlob[3],sten.height+sten.height1)	
+			this.sort2(arrGrani[0].arrPGlob[2],arrGrani[0].arrPGlob[3], sten.height+sten.height1)	
 
 			
 
-			this.plane2.upDate()
+		
 			
 			this.par.render()
 			
@@ -111,8 +132,8 @@ export class SPMetodRezolka  {
 		this.arrLine3D=[]
 		var sah3
 
-		this.sort2=function(p,p1,z,g,g1){
-			//trace(p,p1,z)
+		this.sort2=function(p,p1,z){
+			
 
 			this.mesh1.position.copy(p1)
 			this.mesh.position.copy(p)
@@ -126,7 +147,7 @@ export class SPMetodRezolka  {
 			this.aTSten[1][2].set(p1.x,p1.y,0);
 
 
-			this.plane1.clear()
+			
 
 			this.plane1.addLine(this.aTSten[0][0],this.aTSten[0][1])
 			this.plane1.addLine(this.aTSten[0][1],this.aTSten[0][2])
@@ -139,7 +160,7 @@ export class SPMetodRezolka  {
 
 
 
-			this.plane1.upDate();
+		
 
 
 			sah3=0;
@@ -157,13 +178,13 @@ export class SPMetodRezolka  {
 
 
 			//this.sort4(paska[0],paska1[0])
-			trace("$$$$$")
+			
 			for (var i = 0; i < k; i++) {				
 				for (var j = 0; j < k1; j++) {					
 					this.sort4(paska[i],paska1[j])
 				}
 			}
-			trace("$$###$$$")
+			
 		}
 		var pt=new THREE.Vector3()
 		var pt1=new THREE.Vector3()
@@ -172,7 +193,7 @@ export class SPMetodRezolka  {
 		var ptR1=new THREE.Vector3()
 		var rez
 		this.sort4=function(tr,tr1){
-			//trace(tr,tr1)
+			
 			/*pt.set(tr[0].x,tr[0].y,tr[0].z);
 			pt1.set(tr[1].x*0.5+tr[0].x*0.5,tr[1].y*0.5+tr[0].y*0.5,tr[1].z*0.5+tr[0].z*0.5);
 			ptR=gronSten.isLocalToGlob(pt,pt1);			

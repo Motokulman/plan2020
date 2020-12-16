@@ -260,6 +260,9 @@ export class SGrani{
 
 	  	this.boolInvert=false
 
+	  	
+
+
 
 	    this.arrP=[new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3()]
 	    this.arrPGlob=[new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3()]
@@ -268,6 +271,15 @@ export class SGrani{
 			this.arr[i]=new GronSten(this);
 			this.arr[i].idArr=i;
 		}
+
+		this.clearAL=function(){
+			for (var i = 0; i < 5; i++) {
+				this.arr[i].clearAL()
+			}
+			
+		}
+
+
 
 		var a,d,a1
 		var poin=new THREE.Vector3()
@@ -391,7 +403,7 @@ export class SGrani{
 						this.y,null,this.arrP[i].x);
 						this.korektRect.boolDebug=false;
 
-						if(this.par.par.idArr==0)if(this.idArr==0)return	
+						//if(this.par.par.idArr==0)if(this.idArr==0)return	
 					}
 					else{
 						this.arr[i].setNaRect(
@@ -452,16 +464,16 @@ export class GronSten {
 
 		this.clearAL=function(){
 			this.arrLine.length=0;
-			console.warn("th$$ = clearAL@@",)
+			
 		}
 
 		this.getLine=function(){
 			if(this.arrLineCesh[this.arrLine.length]==undefined){
 				this.arrLineCesh[this.arrLine.length]={p:{x:0,y:0},p1:{x:0,y:-100}}
 			}
-			console.warn("th$$ = ",this.arrLine.length)
+		
 			this.arrLine.push(this.arrLineCesh[this.arrLine.length])
-			console.warn("this.arrLine  = ",this.arrLine.length)
+		
 			return this.arrLine[this.arrLine.length-1];
 
 		}
@@ -473,7 +485,7 @@ export class GronSten {
 
 		var a,d
 		this.isLocalToGlob=function(_p,_p1){
-			//trace(_p1)
+			
 			a=calc.getAngle(this.par.par.par.position,_p);
 			d=calc.getDistance(this.par.par.par.position,_p);
 			calc.getVector(d,a-this.par.par.par._rotation,pp)
@@ -481,7 +493,7 @@ export class GronSten {
 			pp.y+=/*-this.par.par.par.position.y*/-this.p.y;
 			pp.z=this.par.par.par._height+this.par.par.par._height1+_p.z
 
-			trace(pp,"::::",_p)
+			
 
 			a=calc.getAngle(this.par.par.par.position,_p1);
 			d=calc.getDistance(this.par.par.par.position,_p1);
@@ -490,9 +502,7 @@ export class GronSten {
 			pp1.y+=/*-this.par.par.par.position.y*/-this.p.y;
 			pp1.z=this.par.par.par._height+this.par.par.par._height1+_p1.z
 
-			//trace(pp1)
-
-			//trace(">>>>>",this.p,this.p1)
+			
 			return pRez
 		}
 
