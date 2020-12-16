@@ -59,8 +59,9 @@ export function SpPolygon (_stage, _unikName) {
 		this.dragRect()
 		
 		trace(this.rectBig)
-		this.unik.draw1();
 		this.dragNaTriang()
+		this.unik.draw1();
+		
 	}
 
 
