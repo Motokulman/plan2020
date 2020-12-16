@@ -64,9 +64,9 @@ export class SPMetodRezolka  {
 
 			
 
-			trace("arrGrani   ",arrGrani)
+			//trace("arrGrani   ",arrGrani)
 			for (var i = 0; i < arrGrani.length; i++) {
-				arrGrani[i].clearAL()
+				arrGrani[i].clearAL();
 			}
 
 
@@ -95,8 +95,7 @@ export class SPMetodRezolka  {
 		//Проврка на полигоны
 		this.sort1=function(_poli){
 			
-			shTr=-1
-			
+			shTr=-1			
 			for (var i = 0; i < _poli.shTr; i++) {
 				shTr++;
 				if(this.arrTiang[shTr]==undefined){
@@ -115,11 +114,29 @@ export class SPMetodRezolka  {
 
 			shTr++
 
-			gronSten=arrGrani[0].arr[2];
-			gronSten1=arrGrani[2].arr[2];
-			
 
-			this.sort2(arrGrani[0].arrPGlob[2],arrGrani[0].arrPGlob[3], sten.height+sten.height1)	
+/*
+			for (var i = 0; i < 5; i++) {
+
+				gronSten=arrGrani[0].arr[i];
+				gronSten1=arrGrani[2].arr[i];
+
+				this.sort2(arrGrani[0].arrPGlob[i],arrGrani[0].arrPGlob[i+1], sten.height+sten.height1)
+
+			}
+
+			for (var i = 0; i < 5; i++) {
+				gronSten=arrGrani[1].arr[i];
+				gronSten1=arrGrani[3].arr[i];
+				this.sort2(arrGrani[1].arrPGlob[i],arrGrani[1].arrPGlob[i+1], sten.height+sten.height1)
+
+			}
+			
+			*/
+			var i=4
+			gronSten=arrGrani[0].arr[i];
+			gronSten1=arrGrani[2].arr[i];
+			this.sort2(arrGrani[0].arrPGlob[i],arrGrani[0].arrPGlob[i+1], sten.height+sten.height1)
 
 			
 
@@ -149,13 +166,13 @@ export class SPMetodRezolka  {
 
 			
 
-			this.plane1.addLine(this.aTSten[0][0],this.aTSten[0][1])
-			this.plane1.addLine(this.aTSten[0][1],this.aTSten[0][2])
-			this.plane1.addLine(this.aTSten[0][2],this.aTSten[0][0])
+			this.plane1.addLine(this.aTSten[0][0].clone(),this.aTSten[0][1].clone())
+			this.plane1.addLine(this.aTSten[0][1].clone(),this.aTSten[0][2].clone())
+			this.plane1.addLine(this.aTSten[0][2].clone(),this.aTSten[0][0].clone())
 
-			this.plane1.addLine(this.aTSten[1][0],this.aTSten[1][1])
-			this.plane1.addLine(this.aTSten[1][1],this.aTSten[1][2])
-			this.plane1.addLine(this.aTSten[1][2],this.aTSten[1][0])
+			this.plane1.addLine(this.aTSten[1][0].clone(),this.aTSten[1][1].clone())
+			this.plane1.addLine(this.aTSten[1][1].clone(),this.aTSten[1][2].clone())
+			this.plane1.addLine(this.aTSten[1][2].clone(),this.aTSten[1][0].clone())
 
 
 

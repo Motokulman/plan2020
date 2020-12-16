@@ -297,11 +297,7 @@ export class SGrani{
 				this.arrPGlob[i].x+=poin.x;
 				this.arrPGlob[i].y+=poin.y;				
 			}
-
-			
-			
 		}
-
 		
 		this.dragPost=function(){
 			this._distans=this.par.par._distans;
@@ -391,9 +387,10 @@ export class SGrani{
 			this.boolVergDrag=false;
 		
 			for (var i = 0; i < 5; i++) {
+				if(this.par.par.idArr==0)if(this.idArr==0)if(i==4)	this.korektRect.boolDebug=true;	
 				if(this.arr[i].dist!=0){
 					if(i==2){	
-						if(this.par.par.idArr==0)if(this.idArr==0)	this.korektRect.boolDebug=true;	
+						
 									
 						this.korektRect.colizX=0//-this.arrP[i].x;
 
@@ -401,7 +398,7 @@ export class SGrani{
 						0,this.par.par.windows.world,
 						this.h,
 						this.y,null,this.arrP[i].x);
-						this.korektRect.boolDebug=false;
+						
 
 						//if(this.par.par.idArr==0)if(this.idArr==0)return	
 					}
@@ -413,6 +410,7 @@ export class SGrani{
 					}
 					if(this.arr[i].boolVergDrag==true)this.boolVergDrag=true;
 				}
+				this.korektRect.boolDebug=false;
 			}			
 		}
 	}
@@ -488,21 +486,21 @@ export class GronSten {
 			
 			a=calc.getAngle(this.par.par.par.position,_p);
 			d=calc.getDistance(this.par.par.par.position,_p);
-			calc.getVector(d,a-this.par.par.par._rotation,pp)
+			calc.getVector(d,a-this.par.par.par._rotation-this.angel,pp)
 			pp.x+=/*-this.par.par.par.position.x*/-this.p.x;
 			pp.y+=/*-this.par.par.par.position.y*/-this.p.y;
 			pp.z=this.par.par.par._height+this.par.par.par._height1+_p.z
-
+			trace(_p,_p1)
 			
 
 			a=calc.getAngle(this.par.par.par.position,_p1);
 			d=calc.getDistance(this.par.par.par.position,_p1);
-			calc.getVector(d,a-this.par.par.par._rotation,pp1)
-			pp1.x+=/*-this.par.par.par.position.x*/-this.p.x;
-			pp1.y+=/*-this.par.par.par.position.y*/-this.p.y;
+			calc.getVector(d,a-this.par.par.par._rotation-this.angel,pp1)
+			pp1.x+=/*-this.par.par.par.position.x*/-this.p1.x;
+			pp1.y+=/*-this.par.par.par.position.y*/-this.p1.y;
 			pp1.z=this.par.par.par._height+this.par.par.par._height1+_p1.z
 
-			
+			trace("::",pp,pp1)
 			return pRez
 		}
 
