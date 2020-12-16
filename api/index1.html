@@ -87,6 +87,26 @@
 
 
 
+		
+
+		var  o={
+			name:"setTextureJSON",//имя кнопки
+			help:"Возвращает json текстуры по ее id",//пояснения
+			color:"#93c32f",
+
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'https://alphakp.ru/graphics/texture/2/set_texture',
+		        type: 'POST',
+		        data: {
+                    json:"{\"test\":10}"
+		        },
+		        cache: false,
+		        async: false,
+			}
+		}
+		array.push(o);
+
+/*
 		var  o={
 			name:"creatFile",
 			help:"Я передаю file, он записывает в обьект линк на фаил и иди. возврощает {id:234,src:'полный линк общедоступный'}, причем у обТекстуры есть date:[{id:234,src:'по...'-то есть все файлы в проекте",
@@ -95,7 +115,7 @@
 			file:true,
 
 			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'https://alphakp.ru/api/texture_file/1/',
+				url: 'https://alphakp.ru/api/texture_file/2/',
 		        type: 'POST',
 		        cache: false,
                 contentType: false,
@@ -106,7 +126,9 @@
 		}
 		array.push(o);
 
-		/*///////////////////текстуры//////////////////////
+
+
+		///////////////////текстуры//////////////////////
 		var  o={
 			name:"creatTexture",
 			help:"Создаюм текстуру {id:234,type:'xz',..}, возврощаем обьект: id-иди проекта, доп параметры бд пока хз",
