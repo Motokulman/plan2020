@@ -24,7 +24,7 @@ export class PUnikBase  {
 			}
 
             this.text = this.par.ssPolygon2d.text;
-           //this.text.text=Math.abs(Math.round(this.triangulateShape.areaShape/1000))/10+" m²"
+           //this.text.text=Math.abs(Math.round(this.triangulateShape.areaShape/1000))/10+" m?"
 
             if (this.par.array) if (this.par.array.length > 1) {
                 var xx = (this.text.text.length*this.text.style.fontSize)/2
@@ -35,7 +35,7 @@ export class PUnikBase  {
             // this.text.scale.x=this.text.scale.y=500;
             /* 
             this.mpText.draw(this.triangulateShape.centerShape.x,this.triangulateShape.centerShape.y)
-            this._text1=Math.abs(Math.round(this.triangulateShape.areaShape/1000))/10+" m²";  
+            this._text1=Math.abs(Math.round(this.triangulateShape.areaShape/1000))/10+" m?";  
             */
         }
         ////////////////////////////////////////////////////
@@ -47,7 +47,7 @@ export class PUnikBase  {
         		this.par.ssP3d.lineSegments.visible = true;
         		this.par.ssP3d.planeXZ.clearPoint()
         		this.kolPointDrag();
-        		trace("adsfasfasfasfd",this.kol)
+        		
         		for (var i = 0; i < this.kol; i++) {                    
                     if(i!=this.kol-1){
                         this.par.ssP3d.planeXZ.addLine(this.arrPoint[i],this.arrPoint[i+1]);
@@ -68,8 +68,7 @@ export class PUnikBase  {
                 this.arrPoint[i].y=this.par.array[i].position.y;
                 this.arrPoint[i].z=-this.par.array[i].position.z;
             }
-        }    
-        
+        }
 
         this.searchCenter = function (_array, _posit) {
             var array = _array

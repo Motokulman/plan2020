@@ -3,7 +3,8 @@ import { SpStageSten } from './spSten/SpStageSten.js';
 
 import { PGrid,Grid } from './plus/PGrid.js';//сетка
 
-import { KorektRect } from './spSten/colozi/korektRect/KorektRect.js';
+//import { KorektRect } from './spSten/colozi/korektRect/KorektRect.js';
+import { KorektRect } from './spSten/colozi/src/src/colozi/korektRect/KorektRect.js';
 
 import { PM } from '../pm/PM.js';
 export class P20  {

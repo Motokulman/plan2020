@@ -1,0 +1,518 @@
+<!DOCTYPE html><html><head>
+<meta charset="UTF-8">
+<title>p20</title>	
+<script src='divLib.js'></script>
+<script src='jquery-1.11.3.js'></script>
+
+<script>
+	var trace = window.console.log.bind(window.console);
+
+	var dcmParam,scane,wind,object,pObject,ta,ta1
+	var array=[];
+	var aButton=[]
+	var objectBase
+
+
+
+
+
+
+	function creatArrApi(){
+		//создаюм обьекты отправки
+
+
+
+
+		var  o={
+			name:"getId",//имя кнопки
+			help:"Возврощает обьект плана типа: {id:234,url:'путь к j....",//пояснения
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'https://alphakp.ru/catalog/plan/20/edit_scheme/set_scheme',
+				// url: 'https://alphakp.ru/catalog/plan/20/edit_scheme/get_response',
+		        type: 'GET',
+		        data: {
+		        },
+		        cache: false,
+		        async: false,
+			}
+		}
+		array.push(o);
+
+
+		var  o={
+			name:"save",//имя кнопки
+			help:"По идишнику записывает json пална по ",//пояснения
+
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'https://alphakp.ru/catalog/plan/20/edit_scheme/set_scheme',
+				// url: 'https://alphakp.ru/catalog/plan/20/edit_scheme/get_response',
+		        type: 'POST',
+		        data: {
+                    json:"{\"test\":10}"
+		        },
+		        cache: false,
+		        async: false,
+			}
+		}
+		array.push(o);
+
+
+		///////////////////текстуры//////////////////////
+		var  o={
+			name:"textureList",
+			help:"Получаем весь лист",
+			color:"#93c32f",
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'https://alphakp.ru/api/texture/',
+		        type: 'GET'
+			}
+		}
+		array.push(o);
+		
+		var  o={
+			name:"textureGet",
+			help:"Получаем олбьект текстуры",
+			color:"#93c32f",
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'https://alphakp.ru/api/texture/2',
+		        type: 'GET'
+			}
+		}
+		array.push(o);
+
+
+
+
+		var  o={
+			name:"creatFile",
+			help:"Я передаю file, он записывает в обьект линк на фаил и иди. возврощает {id:234,src:'полный линк общедоступный'}, причем у обТекстуры есть date:[{id:234,src:'по...'-то есть все файлы в проекте",
+			color:"#93c32f",
+
+			file:true,
+
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'https://alphakp.ru/api/texture_file/1/',
+		        type: 'POST',
+		        cache: false,
+                contentType: false,
+                processData: false
+                
+			}
+
+		}
+		array.push(o);
+
+		/*///////////////////текстуры//////////////////////
+		var  o={
+			name:"creatTexture",
+			help:"Создаюм текстуру {id:234,type:'xz',..}, возврощаем обьект: id-иди проекта, доп параметры бд пока хз",
+			color:"#93c32f",
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'xz',
+		        type: 'GET'
+			}
+		}
+		array.push(o);
+
+		var  o={
+			name:"deleteTexture",
+			help:"ид даем, по ниму убиваем текстуру и все что с ней связанно, файлы",
+			color:"#93c32f",
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'xz',
+		        type: 'xz'
+			}
+		}
+		array.push(o);
+
+
+		var  o={
+			name:"getTexturs",
+			help:"возврощаем Список всех текстур. Возможность передать type, тогда только те что что имеют аналогичный type",
+			color:"#93c32f",
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'xz',
+		        type: 'GET'
+			}
+		}
+		array.push(o);
+
+
+		var  o={
+			name:"getTextursJSON",
+			help:"Получение JSON текстуры по ее ID",
+			color:"#93c32f",
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'этот путь ведет на джейсон кеша всех текстур'
+			}
+		}
+		array.push(o);
+
+		var  o={
+			name:"getTextureJSON",//имя кнопки
+			help:"Возвращает json текстуры по ее id",//пояснения
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'https://alphakp.ru/graphics/texture/3/set_texture',
+		        type: 'GET',
+		        data: {
+		        },
+		        cache: false,
+		        async: false,
+			}
+		}
+		array.push(o);
+
+		var  o={
+			name:"setTextureJSON",//имя кнопки
+			help:"Сохраняет JSON текстуры по ее id",//пояснения
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'https://alphakp.ru/graphics/texture/1/set_texture',
+		        type: 'POST',
+		        data: {
+                    json:"{\"test\":10}"
+		        },
+		        cache: false,
+		        async: false,
+			}
+		}
+		array.push(o);
+		
+
+		// var  o={
+		// 	name:"setTextureFile",//имя кнопки
+		// 	help:"Сохраняет anyfile текстуры по ее id",//пояснения
+		// 	file:true,
+			
+		// 	obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+		// 		url: 'https://alphakp.ru/graphics/texture/1/set_texture',
+		//         type: 'POST',
+		// 		data: $(this).serialize(),
+		//         // data: {
+		//         // },
+		//         cache: false,
+		//         async: false,
+		// 	}
+		// }
+		// array.push(o);
+
+
+
+
+		var  o={
+			name:"creatFileTextur",
+			help:"Я передаю file, он записывает в обьект линк на фаил и иди. возврощает {id:234,src:'полный линк общедоступный'}, причем у обТекстуры есть date:[{id:234,src:'по...'-то есть все файлы в проекте",
+			color:"#93c32f",
+
+			file:true,
+
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'xz',
+		        type: 'xz'
+			}
+		}
+		array.push(o);
+
+
+		var  o={
+			name:"deleteFileTextur",
+			help:"Я даю иди текстуры и иди файла, он убивает в бд и сам фаил, возврощаем обьект текстуцры измененый'}",
+			color:"#93c32f",
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'xz',
+		        type: 'xz'
+			}
+		}
+		array.push(o);*/
+
+
+
+
+
+
+
+
+
+	}
+
+
+
+
+	function init () {
+		dcmParam=new DCM();
+		scane= new DCont(document.body);	
+		creatArrApi();
+		initInterfes();
+
+		openObj(array[0])		
+	}
+
+
+	function successMy (e){//удачиный ответ
+		ta1.colorText1="#007700";
+		var s=JSON.stringify(e,null,4);
+		ta1.text=s;
+		console.log("success");
+	}
+	function errorMy (e){//не удачиный ответ		
+		ta1.colorText1="#ff0000";
+		var s=JSON.stringify(e,null,4);
+		ta1.text=s;
+		console.log("error");
+	}
+
+	
+
+
+	function openObj (o,file){		
+		for (var i = 0; i < aButton.length; i++) {
+			if(o.name==aButton[i].obj.name){
+				aButton[i].alpha=0.5;
+				history.pushState(null, null, serv); 
+				// history.pushState(null, null, serv+"?index="+i); 
+			}else{
+				aButton[i].alpha=1;
+			}		
+		}
+		objectBase = o;
+		labelHelp.text=objectBase.help
+		pObject.y=labelHelp.y+labelHelp.getRect().height+5
+		pObject.addObject(objectBase.obj);
+
+		dragObj()
+	}
+	function dragObj (){
+			
+		var s=JSON.stringify(objectBase.obj,null,4)		
+		ta.text=s
+	}
+
+	var serv=window.document.URL.toString()
+	function initInterfes (){
+		var whB=200
+		var whB1=550
+		var whB2=350
+		wind=new DWindow(scane,0,0,"API")		
+		wind.width=whB+whB1+whB2+2*5
+		wind.height=500
+		
+		for (var i = 0; i < array.length; i++) {
+			aButton[i]=new DButton(wind.content, 2,2+34*i,array[i].name,function(s){
+				if(s!=undefined){
+					var data = new FormData();           
+            		data.append('file', this.files[0]);
+            		
+            		this.obj.obj.data=data;
+
+            		trace(">>>>>",this.obj,this.files[0])
+				}
+				openObj(this.obj);
+			})
+			if(array[i].file!=undefined){
+				aButton[i].startFile();
+			}
+			aButton[i].obj=array[i]
+			aButton[i].width=whB
+			if(array[i].color!=undefined){
+				aButton[i].color=array[i].color
+			}
+		}
+
+		pObject=new DParamObject(wind.content,whB+4,2,function(){			
+			dragObj()
+		},1);
+		pObject.tipRide=true
+		pObject.arrType.push("object")
+		pObject.width=whB1
+		pObject.arrayLabel=["help"];
+
+		labelHelp=new DLabel(wind.content,whB+8,10,"Принимаем")
+		labelHelp.width=whB1-8;
+
+
+
+		let hh=(wind.height-20-4-32-36)/2
+		var b=new DButton(wind.content,pObject.x+pObject.width+2,2,"Посылаем",function(){
+			objectBase.obj.success=successMy
+			objectBase.obj.error=errorMy
+			trace(">>>>>",objectBase.obj)
+			$.ajax(objectBase.obj)
+		});
+		b.width=whB2
+
+		ta=new DTextArea(wind.content, pObject.x+pObject.width+2,36,"")
+		ta.textAlign = "left";
+		ta.width=whB2
+		ta.height=hh
+		ta.fontSize=12
+		ta.object.style.readonly="disabled";		
+		
+
+		new DLabel(wind.content,pObject.x+pObject.width,36+hh,"Принимаем")
+		ta1=new DTextArea(wind.content,pObject.x+pObject.width,36+20+hh,"")
+		ta1.width=whB2
+		ta1.height=hh;
+		ta1.textAlign = "left";
+		ta1.fontSize=12
+
+		var index=getURLParameters("index");
+		if(index!=undefined){
+
+		}
+		var aa=window.document.URL.toString().split("?")
+		serv=aa[0]
+		console.log(index)
+	}
+
+
+	//customDepth+trasparent
+    function getURLParameters(paramName, _sURL){
+        var sURL = window.document.URL.toString();
+        if(_sURL)sURL =_sURL
+        var arrParams = sURL.split("/");                        
+        if (sURL.indexOf("?") > 0) {
+            var arrParams = sURL.split("?");
+            var arrURLParams = arrParams[1].split("&");
+            var arrParamNames = new Array(arrURLParams.length);
+            var arrParamValues = new Array(arrURLParams.length);
+
+            arrParams = sURL.split("?");
+            arrURLParams = arrParams[1].split("&");
+            arrParamNames = new Array(arrURLParams.length);
+            arrParamValues = new Array(arrURLParams.length);
+
+
+            var i = 0;
+            for (i = 0; i < arrURLParams.length; i++) {
+
+                var sParam =  arrURLParams[i].split("=");
+                arrParamNames[i] = sParam[0];
+                if (sParam[1] != "")
+                    arrParamValues[i] = unescape(sParam[1]);
+                else
+                    arrParamValues[i] = null;
+            }
+
+            for (i=0; i<arrURLParams.length; i++) {
+                if (arrParamNames[i] == paramName) {
+
+                    return arrParamValues[i];
+                }
+            }
+            return null;
+        }
+    }
+
+
+/*
+
+
+	function init () {
+		dcmParam=new DCM();
+		scane= new DCont(document.body);	
+		creatArrApi();
+		initInterfes();
+
+		openObj(array[0])		
+	}
+
+
+	function successMy (e){//удачиный ответ
+		ta1.colorText1="#007700";
+		var s=JSON.stringify(e,null,4);
+		ta1.text=s;
+		console.log("success");
+	}
+	function errorMy (e){//не удачиный ответ
+		trace(e);
+		ta1.colorText1="#ff0000";
+		var s=JSON.stringify(e,null,4);
+		ta1.text=s;
+		console.log("error");
+	}
+
+	
+
+
+	function openObj (o){		
+		for (var i = 0; i < aButton.length; i++) {
+			aButton[i].alpha=o.name==aButton[i].obj.name ? 0.5 :1		
+		}
+		objectBase=o
+
+		pObject.addObject(objectBase);
+		dragObj()
+	}
+	function dragObj (){
+			
+		var s=JSON.stringify(objectBase.obj,null,4)		
+		ta.text=s
+	}
+
+
+	function initInterfes (){
+		wind=new DWindow(scane,0,0,"API")
+		wind.width=1000
+		wind.height=500
+		for (var i = 0; i < array.length; i++) {
+			aButton[i]=new DButton(wind.content, 2,2+34*i,array[i].name,function(){
+				openObj(this.obj)
+			})
+			aButton[i].obj=array[i]
+			if(array[i].color!=undefined){
+				aButton[i].color=array[i].color
+			}
+		}
+		pObject=new DParamObject(wind.content,106,2,function(){			
+			dragObj()
+		},1);
+		pObject.tipRide=true
+		pObject.arrType.push("object")
+		pObject.width=333
+		pObject.arrayLabel=["help"];
+
+		let hh=(wind.height-20-4-32-36)/2
+		var b=new DButton(wind.content,pObject.x+pObject.width+2,2,"Посылаем",function(){
+			objectBase.obj.success=successMy
+			objectBase.obj.error=errorMy
+			$.ajax(objectBase.obj)
+		});
+		b.width=wind.width-(pObject.x+pObject.width)-6
+
+		ta=new DTextArea(wind.content, pObject.x+pObject.width+2,36,"")
+		ta.textAlign = "left";
+		ta.width=wind.width-ta.x-2
+		ta.height=hh
+		ta.fontSize=12
+		ta.object.style.readonly="disabled";		
+		
+
+		new DLabel(wind.content,pObject.x+pObject.width,36+hh,"Принимаем")
+		ta1=new DTextArea(wind.content,pObject.x+pObject.width,36+20+hh,"")
+		ta1.width=wind.width-ta.x-2
+		ta1.height=hh;
+		ta1.textAlign = "left";
+		ta1.fontSize=12
+	}
+*/
+
+</script>
+
+<style type="text/css">
+	#stats { position: absolute; top:0; left: 200px; }	
+</style>
+</head>
+<meta name="viewport" content="width=device-width,height=device-height,user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+<body onload="init()">
+
+</body></html>

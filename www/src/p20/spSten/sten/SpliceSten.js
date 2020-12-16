@@ -66,7 +66,7 @@ export function SpliceSten (_stage) {
     this.arrVorur = [new Position(), new Position(), new Position(), new Position(), new Position(), new Position(), new Position(), new Position()];
 
     this.arrGran = [new Position(), new Position(), new Position(), new Position()];
-	this.rectBig={x:0,y:0,x1:0,y1:0,w:0,h:0,o:null}
+	this.rectBig={x:0,y:0,z:0,x1:0,y1:0,z1:0,w:0,h:0,d:0,o:null}
 
 
 
@@ -141,7 +141,9 @@ export function SpliceSten (_stage) {
     this.numBlok=0
     var numBlok
 	this.draw1 = function (b) {
-		if(b==undefined)this.windows.draw()		
+		
+		if(b==undefined)this.windows.draw()	
+
 		this.ss2d.draw1();
 		this.ss3d.draw1();
 		this.par.render();
@@ -302,7 +304,7 @@ Object.defineProperties(SpliceSten.prototype, {
 			this._height1 = value;
 			this._setAllParam('height1', this._height1);
 		},
-		get: function () { return this._height; }
+		get: function () { return this._height1; }
 	},
 
 	boolText: {

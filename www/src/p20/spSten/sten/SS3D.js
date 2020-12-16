@@ -65,6 +65,9 @@ export class SS3D  {
    		
        	this.pS={x:0,y:0,w:100,h:100}//Параметры текстурировнаия и начало энного
 
+
+
+
         this.dragPost=function(){
         	this.draw1();
         }
@@ -75,7 +78,7 @@ export class SS3D  {
 			this._distans=this.par._distans;
 			this._delph=this.par._delph;
 			this._rotation=this.par._rotation;
-
+			
             this.cont3d.position.z=-(this._height+this._height1)
        		
             this.drawGrani();
@@ -101,7 +104,8 @@ export class SS3D  {
 		this.arrGrani[2]=new SGrani(this,0,this.par.par.pm.matDop.getIDReturn(this._color2));
 		this.arrGrani[3]=new SGrani(this,1,this.par.par.pm.matDop.getIDReturn(this._color3));
 		for (var i = 0; i < this.arrGrani.length; i++)this.arrGrani[i].idArr=i
-
+		this.arrGrani[0].boolInvert	=true
+		this.arrGrani[1].boolInvert	=true
 
 		
 		this.drawVerg= function () {
@@ -116,14 +120,19 @@ export class SS3D  {
 			//Порядок важен	
 			this.arrGrani[0].dragPost();
 			this.arrGrani[1].dragPost();
-			this.arrGrani[0].setGrani1(this.arrGrani[1]);//!!! переворачиваем 
-			this.arrGrani[0].dragGeometry();			
-			this.arrGrani[1].dragGeometry();
-			/////////////////////////
+			this.arrGrani[0].setGrani1(this.arrGrani[1]);//!!! переворачиваем 			
 
 			this.arrGrani[2].dragPost();
 			this.arrGrani[3].dragPost();
 			this.arrGrani[2].setGrani1(this.arrGrani[3]);//!!! переворачиваем 
+
+			this.par.par.metodRezolk.setStenGrani(this.par,this.arrGrani);
+
+
+
+			this.arrGrani[0].dragGeometry();			
+			this.arrGrani[1].dragGeometry();
+			/////////////////////////
 			this.arrGrani[2].dragGeometry();			
 			this.arrGrani[3].dragGeometry();
 		}
@@ -249,12 +258,36 @@ export class SGrani{
 	  	this.boolVergDrag=false 
 	  	this.idArr=-1 
 
+	  	this.boolInvert=false
+
 
 	    this.arrP=[new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3()]
+	    this.arrPGlob=[new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3()]
 	    this.arr=[];	
 		for (var i = 0; i < 5; i++) {
 			this.arr[i]=new GronSten(this);
 			this.arr[i].idArr=i;
+		}
+
+		var a,d,a1
+		var poin=new THREE.Vector3()
+		var pNull=new THREE.Vector3()
+		this.invertToGlob=function(){
+			a=this.par._rotation;
+			poin.x=par.par.position._x;
+			poin.y=par.par.position._y;
+			
+			for (var i = 0; i < this.arrP.length; i++) {
+				a1=calc.getAngle(pNull,this.arrP[i])
+				d=calc.getDistance(pNull,this.arrP[i])
+
+				calc.getVector(d,a1+a, this.arrPGlob[i])
+				this.arrPGlob[i].x+=poin.x;
+				this.arrPGlob[i].y+=poin.y;				
+			}
+
+			
+			
 		}
 
 		
@@ -311,6 +344,7 @@ export class SGrani{
 					this.arr[i].pS.x=-this.sahW;	
 				}
 			}
+			if(this.boolInvert==true)this.invertToGlob()
 		}
 
 		this.setGrani1=function(grani){
@@ -347,14 +381,17 @@ export class SGrani{
 			for (var i = 0; i < 5; i++) {
 				if(this.arr[i].dist!=0){
 					if(i==2){	
-						if(this.par.par.idArr==1)if(this.idArr==0)	this.korektRect.boolDebug=true;				
+						if(this.par.par.idArr==0)if(this.idArr==0)	this.korektRect.boolDebug=true;	
+									
 						this.korektRect.colizX=0//-this.arrP[i].x;
 
 						this.arr[i].setNaRect(
 						0,this.par.par.windows.world,
 						this.h,
 						this.y,null,this.arrP[i].x);
-						this.korektRect.boolDebug=false;	
+						this.korektRect.boolDebug=false;
+
+						if(this.par.par.idArr==0)if(this.idArr==0)return	
 					}
 					else{
 						this.arr[i].setNaRect(
@@ -408,12 +445,60 @@ export class GronSten {
 		this.p1=new THREE.Vector3();
 		
 
-		this.arrLine=[{p:{x:0,y:-20},p1:{x:590,y:-40}}];
-	
+		this.arrLine=[];
+		this.arrLineCesh=[]
 		
-		if(this.par.par.par.idArr==0){
-			this.arrLine=[{p:{x:22,y:-20},p1:{x:590,y:20}}];
+		
+
+		this.clearAL=function(){
+			this.arrLine.length=0;
+			console.warn("th$$ = clearAL@@",)
 		}
+
+		this.getLine=function(){
+			if(this.arrLineCesh[this.arrLine.length]==undefined){
+				this.arrLineCesh[this.arrLine.length]={p:{x:0,y:0},p1:{x:0,y:-100}}
+			}
+			console.warn("th$$ = ",this.arrLine.length)
+			this.arrLine.push(this.arrLineCesh[this.arrLine.length])
+			console.warn("this.arrLine  = ",this.arrLine.length)
+			return this.arrLine[this.arrLine.length-1];
+
+		}
+
+		
+		var pp=new THREE.Vector3()
+		var pp1=new THREE.Vector3()
+		var pRez={p:pp,p1:pp1}
+
+		var a,d
+		this.isLocalToGlob=function(_p,_p1){
+			//trace(_p1)
+			a=calc.getAngle(this.par.par.par.position,_p);
+			d=calc.getDistance(this.par.par.par.position,_p);
+			calc.getVector(d,a-this.par.par.par._rotation,pp)
+			pp.x+=/*-this.par.par.par.position.x*/-this.p.x;
+			pp.y+=/*-this.par.par.par.position.y*/-this.p.y;
+			pp.z=this.par.par.par._height+this.par.par.par._height1+_p.z
+
+			trace(pp,"::::",_p)
+
+			a=calc.getAngle(this.par.par.par.position,_p1);
+			d=calc.getDistance(this.par.par.par.position,_p1);
+			calc.getVector(d,a-this.par.par.par._rotation,pp1)
+			pp1.x+=/*-this.par.par.par.position.x*/-this.p.x;
+			pp1.y+=/*-this.par.par.par.position.y*/-this.p.y;
+			pp1.z=this.par.par.par._height+this.par.par.par._height1+_p1.z
+
+			//trace(pp1)
+
+			//trace(">>>>>",this.p,this.p1)
+			return pRez
+		}
+
+
+
+
 
 
 		this.rect={x:0,y:0,w:700,h:300};
@@ -451,10 +536,11 @@ export class GronSten {
 
 		var xSm
 		this.setNaRect=function(_x,_coliz,_h,_y,_nGeom,_xSm){		
-			this.boolVergDrag=false	
-			if(this.par.par.par.idArr==0&&this.arrLine[0].p1.y!=220){
+			this.boolVergDrag=false
+
+			/*if(this.par.par.par.idArr==0&&this.arrLine[0].p1.y!=220){
 				this.arrLine=[{p:{x:22,y:-20},p1:{x:590,y:220}}];
-			}
+			}*/
 
 			xSm=0;
 			if(_xSm!=undefined)xSm=_xSm;
@@ -510,8 +596,7 @@ export class VergLittel{
 		this.normalPosit=new THREE.Vector3(0,1,0)
 
 		this.setGrani=function(gran,gran1){		
-		// trace('gran', gran)	
-		// trace('gran1', gran1)	
+			
 			if(gran.boolVergDrag==false&&gran1.boolVergDrag==false){
 				this.geometry.clear()
 				for (var i = 1; i < gran.arrP.length-1; i++) {				
