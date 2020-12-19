@@ -5,6 +5,7 @@ import { SSPolygon2D } from './SSPolygon2D.js';
 import { SSP3D } from './SSP3D.js';
 
 import { PUnikBase } from './PUnikBase.js';
+import { PubRoof } from './PubRoof.js';
 
 
 export function SpPolygon (_stage, _unikName) {
@@ -14,7 +15,8 @@ export function SpPolygon (_stage, _unikName) {
 	this.tipe = 'SpPolygon';
 
 	this.unikName="PUnikBase";
-
+	if(_unikName!=undefined)this.unikName=_unikName;
+	trace(">>>>>>>>>>>>>>>>>>>>>>>>>>>>",_unikName);
 
 	this.stage = _stage;
 	this.par = _stage;
@@ -52,15 +54,19 @@ export function SpPolygon (_stage, _unikName) {
 
 
 	if(this.unikName=="PUnikBase")this.unik = new PUnikBase(this);
+	if(this.unikName=="PubRoof")this.unik = new PubRoof(this);
 
 	
 
 	this.draw1 = function () {		
-		this.dragRect()
-		
-		trace(this.rectBig)
-		this.dragNaTriang()
+		this.dragRect();		
+		this.dragNaTriang();
 		this.unik.draw1();
+
+		trace("##")
+
+		//FIXE токо для крыш
+		this.par.metodRezolk.setPol(this);
 		
 	}
 
@@ -97,8 +103,7 @@ export function SpPolygon (_stage, _unikName) {
         }
     	this.rectBig.w=this.rectBig.x1-this.rectBig.x;
         this.rectBig.h=this.rectBig.y1-this.rectBig.y;
-        this.rectBig.d=this.rectBig.z1-this.rectBig.z;
-        //this.rectBig.y-=this.rectBig.h;
+        this.rectBig.d=this.rectBig.z1-this.rectBig.z;        
 	}
 
 
@@ -176,7 +181,7 @@ SpPolygon.prototype.constructor = SpPolygon;
 
 SpPolygon.prototype.getObj = function () {
 	var o = SpPol.prototype.getObj.call(this);
-	
+	o.unik=this.unikName
 	return o;
 };
 SpPolygon.prototype.setObj = function (o) {

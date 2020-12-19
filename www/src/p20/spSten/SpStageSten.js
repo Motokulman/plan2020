@@ -175,10 +175,10 @@ export function SpStageSten (par,  fun) {
 
 
 	
-	this.getPoint=function(){ return new SpPointSten(this);}
-	this.getSplice=function(){return new SpliceSten(this);}
-	this.getPol=function(){ return new SpPolygon(this);}
-	this.getVP=function(){ return new SpVPXz(this);}
+	this.getPoint=function(str){ return new SpPointSten(this);}
+	this.getSplice=function(str){return new SpliceSten(this);}
+	this.getPol=function(str){ return new SpPolygon(this,str);}
+	this.getVP=function(str){ return new SpVPXz(this);}
 
 
 
@@ -362,7 +362,7 @@ SpStageSten.prototype.getObj = function (_activ) {
 
 	//o.worldBlok=this.lineWord.getObj()
 
-	o.name=this.name
+	o.name=this.name;
 	
 	return o;
 };
@@ -397,8 +397,8 @@ SpStageSten.prototype.craetPoint = function () {
 };
 
 
-SpStageSten.prototype.craetPol = function () {	
-	var s=SpStage.prototype.craetPol.call(this);
+SpStageSten.prototype.craetPol = function (type) {	
+	var s=SpStage.prototype.craetPol.call(this,type);
 	s.activMouse=this._amSten;
 	s.col3d2=this.col3d2;
 	return s

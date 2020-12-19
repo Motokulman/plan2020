@@ -13,6 +13,14 @@ export class PUnikBase  {
         this.draw2d = function () {	           
         	this.par.ssPolygon2d.stAct.draw1()
 			this.graphics.clear();
+
+
+
+            this.graphics.lineStyle( 1, 0xffffff*Math.random(), 0.5);
+            this.graphics.drawRect( this.par.rectBig.x, this.par.rectBig.y, this.par.rectBig.w, this.par.rectBig.h)
+
+
+
 			this.graphics.beginFill(this.color, 1);		
 			this.graphics.lineStyle( this.par.par._sizeLine, this.par.par._colorLine_, 1);
 			if(this.par.array.length!=0){
@@ -23,6 +31,7 @@ export class PUnikBase  {
 				this.graphics.lineTo(this.par.array[0].position.x,this.par.array[0].position.y);
 			}
 
+
             this.text = this.par.ssPolygon2d.text;
             this.text.text=Math.abs(Math.round(this.triangulateShape.areaShape/1000))/10+" m²";
 
@@ -30,6 +39,10 @@ export class PUnikBase  {
             var xx1 = this.text.style.fontSize;
             this.text.x = this.triangulateShape.centerShape.x - (xx/2);
             this.text.y = this.triangulateShape.centerShape.y - (xx1/2);
+
+
+
+
         }
         ////////////////////////////////////////////////////
 
@@ -59,14 +72,18 @@ export class PUnikBase  {
                 if(this.arrPoint[i]==undefined)this.arrPoint[i]=new THREE.Vector3();
                 this.arrPoint[i].x=this.par.array[i].position.x;
                 this.arrPoint[i].y=this.par.array[i].position.y;
-                this.arrPoint[i].z=-this.par.array[i].position.z;
+                this.arrPoint[i].z=0;
             }
-        } 
+        }
+
 
 		this.draw1 = function () {
         	this.draw2d();
         	this.draw3d();
 		}
+
+
+        
 
 	}
 }
