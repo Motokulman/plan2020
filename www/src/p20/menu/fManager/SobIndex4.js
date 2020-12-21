@@ -18,6 +18,7 @@ export class SobIndex4  extends SobIndex {
         this.fun=fun;
         this.aTool=["Sten","Pol"]
         this._tool="Pol";
+        this._unikName="PubRoof";
 
         var pos={x:0,y:0,o:null}
         var sp={x:0,y:0,x1:0,y1:0,s:0,o:null,oy:null,ox:null}
@@ -123,7 +124,7 @@ export class SobIndex4  extends SobIndex {
                 }
                
                 
-                activObject=self.p20.sp.craetPol();
+                activObject=self.p20.sp.craetPol(self._unikName);
                 activObject.activMouse=false; 
                 activObject.activMouse=false;  
                 activObject.addPoint(point1);

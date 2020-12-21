@@ -103,11 +103,10 @@ export function SpStage () {
 
 
 	
-	this.getPoint=function(){ return new SpPoint(this);}
-	this.getSplice=function(){ return new Splice(this);}
-	this.getPol=function(){ return new SpPol(this);}
-
-	this.getVP=function(){ return new SpVP(this);}
+	this.getPoint=function(str){ return new SpPoint(this);}
+	this.getSplice=function(str){ return new Splice(this);}
+	this.getPol=function(str){ return new SpPol(this);}
+	this.getVP=function(str){ return new SpVP(this);}
 
 	this.render=function(){}
 	
@@ -209,7 +208,7 @@ SpStage.prototype = {
 		return this.hesh[uuid];
 	},
 
-	craetPol: function () {
+	craetPol: function (type) {
 		
 		for (var i = 0; i < this.arrPol.length; i++) {
 
@@ -218,7 +217,8 @@ SpStage.prototype = {
 				return this.arrPol[i];
 			}
 		}
-		var comand = this.getPol();//'new ' + this.tipSplice + '(this)';		
+
+		var comand = this.getPol(type);//'new ' + this.tipSplice + '(this)';		
 		this.arrPol.push(comand)//eval(comand));
 		this.arrPol[this.arrPol.length - 1].idArr = this.arrPol.length - 1;
 		this.hesh[this.arrPol[this.arrPol.length - 1].uuid] = this.arrPol[this.arrPol.length - 1];	
@@ -394,7 +394,7 @@ SpStage.prototype = {
 
 		if (o.arrPol != undefined) {
 			for (var i = 0; i < o.arrPol.length; i++) {
-				newObj = this.craetPol();
+				newObj = this.craetPol(o.arrPol[i].unik);
 				newObj.setObj(o.arrPol[i]);
 			}
 		}

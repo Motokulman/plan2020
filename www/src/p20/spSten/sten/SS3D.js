@@ -109,6 +109,13 @@ export class SS3D  {
 
 		
 		this.drawVerg= function () {
+			this.arrGrani[0].dragGeometry();			
+			this.arrGrani[1].dragGeometry();
+			/////////////////////////
+			this.arrGrani[2].dragGeometry();			
+			this.arrGrani[3].dragGeometry();
+
+
 			this.vergLittel.setGrani(this.arrGrani[0],this.arrGrani[1]);
 		}
 
@@ -126,15 +133,11 @@ export class SS3D  {
 			this.arrGrani[3].dragPost();
 			this.arrGrani[2].setGrani1(this.arrGrani[3]);//!!! переворачиваем 
 
-			this.par.par.metodRezolk.setStenGrani(this.par,this.arrGrani);
+			this.par.par.metodRezolk.setSten(this.par);
 
 
 
-			this.arrGrani[0].dragGeometry();			
-			this.arrGrani[1].dragGeometry();
-			/////////////////////////
-			this.arrGrani[2].dragGeometry();			
-			this.arrGrani[3].dragGeometry();
+			
 		}
 
 
@@ -258,7 +261,7 @@ export class SGrani{
 	  	this.boolVergDrag=false 
 	  	this.idArr=-1 
 
-	  	this.boolInvert=false
+	  	this.boolInvert=false;
 
 	  	
 
@@ -297,11 +300,7 @@ export class SGrani{
 				this.arrPGlob[i].x+=poin.x;
 				this.arrPGlob[i].y+=poin.y;				
 			}
-
-			
-			
 		}
-
 		
 		this.dragPost=function(){
 			this._distans=this.par.par._distans;
@@ -391,9 +390,10 @@ export class SGrani{
 			this.boolVergDrag=false;
 		
 			for (var i = 0; i < 5; i++) {
+				//if(this.par.par.idArr==0)if(this.idArr==1)if(i==4)	this.korektRect.boolDebug=true;	
 				if(this.arr[i].dist!=0){
 					if(i==2){	
-						if(this.par.par.idArr==0)if(this.idArr==0)	this.korektRect.boolDebug=true;	
+						
 									
 						this.korektRect.colizX=0//-this.arrP[i].x;
 
@@ -401,7 +401,7 @@ export class SGrani{
 						0,this.par.par.windows.world,
 						this.h,
 						this.y,null,this.arrP[i].x);
-						this.korektRect.boolDebug=false;
+						
 
 						//if(this.par.par.idArr==0)if(this.idArr==0)return	
 					}
@@ -413,6 +413,7 @@ export class SGrani{
 					}
 					if(this.arr[i].boolVergDrag==true)this.boolVergDrag=true;
 				}
+				this.korektRect.boolDebug=false;
 			}			
 		}
 	}
@@ -441,7 +442,7 @@ export class GronSten {
 		this.par=par;
 		this.geometry=new PlaneXZ();	
 		this.rendSahTextur=0
-
+		this.idArr=-1
 		this._material=par._material
 
 		this.mesh=new THREE.Mesh(this.geometry,this._material)//this.par.par.par.par.mat);	
@@ -479,30 +480,50 @@ export class GronSten {
 		}
 
 		
-		var pp=new THREE.Vector3()
-		var pp1=new THREE.Vector3()
-		var pRez={p:pp,p1:pp1}
+		var ppe=new THREE.Vector3()
+		var ppe1=new THREE.Vector3()
+		var ppzzz=new THREE.Vector3()
+		var ppNull=new THREE.Vector3()
 
-		var a,d
-		this.isLocalToGlob=function(_p,_p1){
+		var pRez={p:ppe,p1:ppe1}
+
+
+		var a,d, a1, d1
+		var t,t1,bbb
+		this.isLocalToGlob=function(_p,_p1){			
+			bbb=false;
+
+			if(this.par.sahTextur==1&&(this.idArr==4||this.idArr==3)){
+				bbb=true;
+			}
+			if(this.par.sahTextur==0&&(this.idArr==0||this.idArr==1)){
+				bbb=true;
+			}
+			if(bbb==true){	
+				t1=this.par.arrPGlob[this.idArr];
+				t=this.par.arrPGlob[this.idArr+1];
+			}else{
+				t=this.par.arrPGlob[this.idArr];
+				t1=this.par.arrPGlob[this.idArr+1];
+			}
 			
-			a=calc.getAngle(this.par.par.par.position,_p);
-			d=calc.getDistance(this.par.par.par.position,_p);
-			calc.getVector(d,a-this.par.par.par._rotation,pp)
-			pp.x+=/*-this.par.par.par.position.x*/-this.p.x;
-			pp.y+=/*-this.par.par.par.position.y*/-this.p.y;
-			pp.z=this.par.par.par._height+this.par.par.par._height1+_p.z
+
+			ppzzz.x=_p.x-t.x;
+			ppzzz.y=_p.y-t.y;
+
+			a=calc.getAngle(ppNull,ppzzz);
+			d=calc.getDistance(ppNull,ppzzz);
+			calc.getVector(d,0,ppe);
+			ppe.z=this.par.par.par._height+this.par.par.par._height1+_p.z;
 
 			
+			ppzzz.x=_p1.x-t.x;
+			ppzzz.y=_p1.y-t.y;
 
-			a=calc.getAngle(this.par.par.par.position,_p1);
-			d=calc.getDistance(this.par.par.par.position,_p1);
-			calc.getVector(d,a-this.par.par.par._rotation,pp1)
-			pp1.x+=/*-this.par.par.par.position.x*/-this.p.x;
-			pp1.y+=/*-this.par.par.par.position.y*/-this.p.y;
-			pp1.z=this.par.par.par._height+this.par.par.par._height1+_p1.z
-
-			
+			a=calc.getAngle(ppNull,ppzzz);
+			d=calc.getDistance(ppNull,ppzzz);
+			calc.getVector(d,0,ppe1);
+			ppe1.z=this.par.par.par._height+this.par.par.par._height1+_p1.z;		
 			return pRez
 		}
 

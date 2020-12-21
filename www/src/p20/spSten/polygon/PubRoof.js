@@ -1,15 +1,17 @@
 
 
 
-export class PUnikBase  {
+export class PubRoof  {
   	constructor(par,fun) {  		
-  		this.type="PUnikBase";
+  		this.type="PubRoof";
         var self=this;
         this.par=par;
         this.triangulateShape = this.par.triangulateShape
 
+
+
         this.graphics=this.par.ssPolygon2d.graphics;
-        this.color=0x999999;
+        this.color=0x99ff99;
         this.draw2d = function () {	           
         	this.par.ssPolygon2d.stAct.draw1()
 			this.graphics.clear();
@@ -18,8 +20,6 @@ export class PUnikBase  {
 
             this.graphics.lineStyle( 1, 0xffffff*Math.random(), 0.5);
             this.graphics.drawRect( this.par.rectBig.x, this.par.rectBig.y, this.par.rectBig.w, this.par.rectBig.h)
-
-
 
 			this.graphics.beginFill(this.color, 1);		
 			this.graphics.lineStyle( this.par.par._sizeLine, this.par.par._colorLine_, 1);
@@ -31,7 +31,6 @@ export class PUnikBase  {
 				this.graphics.lineTo(this.par.array[0].position.x,this.par.array[0].position.y);
 			}
 
-
             this.text = this.par.ssPolygon2d.text;
             this.text.text=Math.abs(Math.round(this.triangulateShape.areaShape/1000))/10+" m²";
 
@@ -39,10 +38,6 @@ export class PUnikBase  {
             var xx1 = this.text.style.fontSize;
             this.text.x = this.triangulateShape.centerShape.x - (xx/2);
             this.text.y = this.triangulateShape.centerShape.y - (xx1/2);
-
-
-
-
         }
         ////////////////////////////////////////////////////
 
@@ -66,24 +61,22 @@ export class PUnikBase  {
         		this.par.ssP3d.lineSegments.visible=false;
         	}
         }
+
+
 		this.kolPointDrag = function () {
             this.kol=this.par.array.length;
             for (var i = 0; i < this.par.array.length; i++) {
                 if(this.arrPoint[i]==undefined)this.arrPoint[i]=new THREE.Vector3();
                 this.arrPoint[i].x=this.par.array[i].position.x;
                 this.arrPoint[i].y=this.par.array[i].position.y;
-                this.arrPoint[i].z=0;
+                this.arrPoint[i].z=-this.par.array[i].position.z;
             }
-        }
-
+        } 
 
 		this.draw1 = function () {
         	this.draw2d();
         	this.draw3d();
 		}
-
-
-        
 
 	}
 }
