@@ -21,7 +21,7 @@
         "shininess": 30,
         "textur": [
             {
-                "id": "t_4",
+                "id": "t_1",
                 "name": "map"
             }
         ]
@@ -29,5 +29,6 @@
     "mirro": false,
     "resurs": {
         "array": []
-    }
+    },
+    "orig": "xz.png"
 }

@@ -4,7 +4,7 @@
     "key": "MeshPhysicalMaterial",
     "obj": {
         "type": "MeshPhysicalMaterial",
-        "color": "#ff4178",
+        "color": "#ffffff",
         "skinning": false,
         "flatShading": false,
         "depthFunc": 3,
@@ -18,7 +18,9 @@
         "refractionRatio": 0.98,
         "emissive": "#000000",
         "specular": "#111111",
-        "shininess": 117.24
+        "shininess": 117.24,
+        "roughness": 0.5,
+        "metalness": 0.5
     },
     "mirro": false,
     "resurs": {
