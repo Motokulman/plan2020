@@ -17,7 +17,7 @@ function Menu(aGlaf, fun) {
 
     this.array=[]
 
-    this.array.push(this.textureBD = new TextureBD(this, function (s, p) { self.fun(s, p) }));
+    this.array.push(this.textureBD = new TextureBD(this, null,function (s, p) { self.fun(s, p) }));
 
     this.array.push(this.menuVerh=new MenuVerh(this, function(s,p){ self.fun(s,p)}));
     this.array.push(this.menuBD=new MenuBD(this, function(s,p){ self.fun(s,p)}));  

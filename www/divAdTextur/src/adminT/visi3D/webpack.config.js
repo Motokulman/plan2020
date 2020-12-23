@@ -4,14 +4,12 @@ const path = require('path');
 const webpack = require('webpack');
 const bodyParser = require('body-parser');
  let conf = {
-  	entry: './src/adminT/index.js',
+  	entry: './src/libMy/visi3D/index.js',
   	output: {
-		path: path.resolve(__dirname, 'src/adminT/'),
-		filename: 'adminT.min.js',
-		publicPath: 'src/pm/',
-		hotUpdateChunkFilename: 'hot-update/hot-update.js',
-		hotUpdateMainFilename: 'hot-update/hot-update.json',
-	},
+    	path: path.resolve(__dirname, 'src/libMy/visi3D/'),
+		filename: 'visi3D.min.js',
+		publicPath: 'src/libMy/visi3D/'
+  	},
   	devServer: {       
         overlay: true,        
     },  
@@ -39,7 +37,7 @@ module.exports = (_env, _options) => {
 	let production = (_options.mode === 'production');
 
 	conf.devtool = production ? false : 'eval-sourcemap';
-	conf.watch = production ? false : true;
+	// conf.devtool = production ? 'source-map' : 'eval-sourcemap';
 
 	return conf;
 }

@@ -1,44 +1,58 @@
 
 
-class TextureBD  {
-    constructor(menu, fun) {
+import { TextureGallery } from './TextureGallery.js';
+import { TextureObject } from './TextureObject.js';
+
+export class TextureBD  {
+    constructor(par, fun) {
         var self=this;
         this.type = "TextureBD";
-        this.par = menu;
+        this.par = par;
+        this.fun=fun;
         window.selfTBD=this;
-        this.margin = aGlaf.otstup;
-        this.wh = aGlaf.wh;
-        this.whv = aGlaf.whv;
-        this.widthBig = aGlaf.widthBig;
-        this.objectBase = this.par.objectBase;
+        this.otstup = 2;
+        this.wh = 100
+        this.whv =30;
+        this.widthBig = 200;
+
         this._active=true
 
         this.linkO = 'https://alphakp.ru'
         this.objArray = []
-        
-        this.dCont = new DCont(this.par.dCont);
 
-        this.w = new DPanel(this.dCont, aGlaf.otstup, this.whv, '');
+        
+        this.dCont = new DCont();
+        if(this.par)if(this.par.dCont)this.par.dCont.add(this.dCont)
+
+        this.w = new DPanel(this.dCont, (this.otstup*2)+200, this.whv, '');
         this.w.width = this.widthBig;
 
-        this.w1 = new DPanel(this.dCont, aGlaf.otstup, this.whv, '');
+        this.w1 = new DPanel(this.dCont, this.otstup , this.whv, '');
         this.w1.width = this.widthBig;
 
 
 
-        this.gallery = new TextureGallery(this.dCont,0,30,function(s,p){
+        this.gallery = new TextureGallery(this.dCont, this.otstup,this.whv,function(s,p){
             self.textureObject.openId(p.id)
-            let a=php.ser.split("?");
+            let ser = window.location.href;
+            let a=ser.split("?");
             history.pushState(null, null, a[0]+'?t='+p.id);
+
+            if(self.fun) if(s === 'downObj') self.fun("gallery", p)
         });
 
 
-        this.textureObject = new TextureObject(this.w, ' ', (objDin) => {
-        });
+        this.textureObject = new TextureObject(this.w,function(s,p,p1){ 
+            if(self.fun) self.fun(s,p,p1)
+        })
+      /*      ' ', (objDin) => {
+            if(self.fun)self.fun("textureObject", objDin)
+        });*/
 
 
         window.textureObject = this.textureObject;
         this.textureObject.window.y = 32;
+        this.width = this.gallery._width + this.textureObject._width
 
         this.reDrag=function(){
             this.gallery.start(this.objArray);
@@ -76,11 +90,11 @@ class TextureBD  {
     sizeWindow (w, h) {
         this._width = w;
         this._height = h;
-        this.w.height = h - this.whv - this.margin;
-        this.w.x = this.margin+200;
+        this.w.height = h - this.whv - this.otstup;
+        this.w.x = this.otstup+200;
     
-        this.w1.height = h - this.whv - this.margin;
-        this.w1.x = this.margin;
+        this.w1.height = h - this.whv - this.otstup;
+        this.w1.x = this.otstup;
     }
 
     set active (value) {
