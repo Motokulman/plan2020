@@ -282,30 +282,26 @@ export class TextureObject {
             this.startTextur()
             this.saveTime()
         }
-
-        // this.redragTextur=function(){
-        //     this.matXZ=aGlaf.s3d.sMaterial.mesh.material;
-        //     this.texturXZ=aGlaf.s3d.pm.tex.getById(this.objDin.id);
-        //     boolCheck = false
-        //     for (var i = 0; i < boolXZ.length; i+=2) {
-        //         if(check[i/2].value==true){
-        //             id = i/2
-        //             boolCheck = true
-        //             this.matXZ[boolXZ[i]]=this.texturXZ
-        //         }
-        //         else {
-        //             this.matXZ[boolXZ[i]]=null
-        //         }
-                
-        //     }
-        //     if (boolCheck != true){
-        //         check[id].value=true
-        //         this.redragTextur()
-        //     }
-
-        //     self.fun("renderMat");
+        var id=undefined
+        var boolCheck=undefined
+        this.redragTextur=function(){
+            boolCheck = false
+            for (var i = 0; i < boolXZ.length; i+=2) {
+                if(check[i/2].value==true){
+                    id = i/2
+                    boolCheck = true
+                    self.fun("novaTexeurBig", boolXZ[i], self.texture);
+                    trace('boolXZ[i]',boolXZ[i])
+                } else {
+                     self.fun("novaTexeurBig", boolXZ[i], null);
+                }
+            }            
+            if (boolCheck != true){
+                check[id].value=true
+                this.redragTextur()
+            }
             
-        // }
+        }
 
 
         this.info.visible = true;

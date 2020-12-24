@@ -35,7 +35,6 @@ export  class TextureGallery extends DCont {
         this.gallery.kolII = 4;
         this.gallery.widthPic =  (this._width - (this.margin*this.gallery.kolII+1) - 7) / this.gallery.kolII;
         this.gallery.heightPic = this.gallery.widthPic;
-        this.gallery.visible = true;
 
         this.cSort=function() {        
         	let arrCont = []
@@ -64,11 +63,21 @@ export  class TextureGallery extends DCont {
         	this.cSort();
 		}
 
+        var aaa = 0
+        var sendR = false
 		this.openId=function(_id) {
-            self.gallery.index=_id-1
+            for (var i = 0; i < self.objArr.length; i++) {
+                if (self.objArr[i].id == _id){
+                    self._textureType = self.objArr[i].texture_type
+                    self.comboSort.index = self.objArr[i].texture_type-1
+                    self.cSort()
+                    if (self.gallery.arrayObj[i]) aaa = self.gallery.arrayObj.indexOf(self.objArr[i])
+                    self.gallery.index=aaa
+                    sendR = true
+                }            
+            }
+            return sendR
 		}
-
-
 	}
 
 
@@ -158,7 +167,6 @@ function BoxXZ(dCont, _x, _y, _fun, par) {
 
     this.startLoad = function (_obj) {
         this.object = _obj;
-        // var link=aGlaf.resursData+""+_obj.id+"/64.png"+aGlaf.plusLink
         var link= self.par.linkO + _obj.src
 
         this.dragColorGal()

@@ -12,10 +12,12 @@ export class TextureBD  {
         window.selfTBD=this;
         this.otstup = 2;
         this.wh = 100
-        this.whv =30;
+        this.whv = 62;
         this.widthBig = 200;
+        this.param=this.par.param
 
         this._active=true
+        this._activeGallery=false
 
         this.linkO = 'https://alphakp.ru'
         this.objArray = []
@@ -27,27 +29,29 @@ export class TextureBD  {
         this.w = new DPanel(this.dCont, (this.otstup*2)+200, this.whv, '');
         this.w.width = this.widthBig;
 
-        this.w1 = new DPanel(this.dCont, this.otstup , this.whv, '');
-        this.w1.width = this.widthBig;
 
+        this.getLocation=function(){
+            let ser = window.location.href;
+            trace('ser.split("?id=");',ser.split("?id="))
+            return ser.split("?id=");
+        }
+        this.setLocation=function(p, p1){
+            let a = self.getLocation()
+            history.pushState(null, null, a[0] + '?id=' + p);
+        }
 
 
         this.gallery = new TextureGallery(this.dCont, this.otstup,this.whv,function(s,p){
-            self.textureObject.openId(p.id)
-            let ser = window.location.href;
-            let a=ser.split("?");
-            history.pushState(null, null, a[0]+'?t='+p.id);
-
-            if(self.fun) if(s === 'downObj') self.fun("gallery", p)
+            if(s === 'downObj') {
+                self.textureObject.openId(p.id)
+                self.setLocation(p.id)
+            }
         });
-
+        this.gallery.visible = false
 
         this.textureObject = new TextureObject(this.w,function(s,p,p1){ 
             if(self.fun) self.fun(s,p,p1)
         })
-      /*      ' ', (objDin) => {
-            if(self.fun)self.fun("textureObject", objDin)
-        });*/
 
 
         window.textureObject = this.textureObject;
@@ -59,9 +63,12 @@ export class TextureBD  {
             if(this.objArray.length==0){
                 this.textureObject.visible=false
             }else{
-                this.textureObject.visible=true
-                this.textureObject.openId(this.objArray[0].id)
-                this.gallery.openId(this.objArray[0].id)
+                let a = self.getLocation()[self.getLocation().length-1]
+                if (a===undefined || a==='') a=1
+                let vvv = this.gallery.openId(a)
+                this.setLocation(a)
+                this.textureObject.visible=vvv
+                if (vvv) this.textureObject.openId(a)
             }
         }
 
@@ -83,18 +90,16 @@ export class TextureBD  {
                 self.reDrag()
             })
         }
-
         this.startrrr()
+        this.activeGallery = this.param.bool
     }
 
     sizeWindow (w, h) {
         this._width = w;
         this._height = h;
         this.w.height = h - this.whv - this.otstup;
-        this.w.x = this.otstup+200;
-    
-        this.w1.height = h - this.whv - this.otstup;
-        this.w1.x = this.otstup;
+        this.w.x = this.activeGallery == true ? (this.otstup*2)+200 : this.otstup;
+        this.width = this.activeGallery == true ? this.gallery._width + this.textureObject._width + this.otstup : this.textureObject._width + this.otstup
     }
 
     set active (value) {
@@ -103,15 +108,21 @@ export class TextureBD  {
 
             if (value == true) {
                 this.dCont.add(this.w)
-                this.dCont.add(this.w1)
                 this.mnXZ.init();
             } else {
                 this.dCont.remove(this.w)
-                this.dCont.remove(this.w1)
             }
         }           
     }
     get active () { return this._active; }
+
+    set activeGallery (value) {
+        if (this._activeGallery != value) {
+            this._activeGallery = value;
+            this.gallery.visible = value
+        }           
+    }
+    get activeGallery () { return this._activeGallery; }
 
     set index (value) {
     }
