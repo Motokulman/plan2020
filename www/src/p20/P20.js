@@ -5,6 +5,7 @@ import { PGrid,Grid } from './plus/PGrid.js';//сетка
 
 //import { KorektRect } from './spSten/colozi/korektRect/KorektRect.js';
 import { KorektRect } from './spSten/colozi/src/src/colozi/korektRect/KorektRect.js';
+import { KorektLine } from './spSten/colozi/src/src/colozi/korektRect/KorektLine.js';
 
 import { PM } from '../pm/PM.js';
 export class P20  {
@@ -32,6 +33,7 @@ export class P20  {
 
         this.rulimActivSP=new RulimActivSP(this);
         this.korektRect = new KorektRect();
+        this.korektLine = new KorektLine();
 
         this.pm=new PM(par.visi3D,this.objectBase)
 

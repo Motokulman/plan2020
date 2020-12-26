@@ -1,7 +1,7 @@
 
 
 import { PlaneXZ } from '../plus/PlaneXZ.js';
-import { GronTriangle } from './colozi/GronTriangle.js';
+import { GronTriangle } from './colozi/src/src/menu/GronTriangle.js';
 //Для отрезания граний	
 	
 export class SPMetodRezolka  {
@@ -257,7 +257,22 @@ export class SPMetodRezolka  {
 				gronSten=arrGrani[1].arr[i];
 				gronSten1=arrGrani[3].arr[i];
 				this.sort2(arrGrani[1].arrPGlob[i],arrGrani[1].arrPGlob[i+1], sten.height+sten.height1, _arrTiang, _shTr);
-			}			
+			}
+
+			/*for (var i = 3; i < 5; i++) {
+				gronSten=arrGrani[0].arr[i];
+				gronSten1=arrGrani[2].arr[i];
+				this.sort2(arrGrani[0].arrPGlob[i],arrGrani[0].arrPGlob[i+1], sten.height+sten.height1, _arrTiang, _shTr);
+			}*/
+
+
+/*
+			var i=4
+			var j=0
+			gronSten=arrGrani[j].arr[i];
+			gronSten1=arrGrani[j+2].arr[i];
+			this.sort2(arrGrani[j].arrPGlob[i],arrGrani[j].arrPGlob[i+1], sten.height+sten.height1)*/
+
 			sten.ss3d.drawVerg()			
 		}
 
@@ -301,7 +316,7 @@ export class SPMetodRezolka  {
 
 
 			/**/
-			for (var i = 0; i < 5; i++) {
+				for (var i = 0; i < 5; i++) {
 				gronSten=arrGrani[0].arr[i];
 				gronSten1=arrGrani[2].arr[i];
 				this.sort2(arrGrani[0].arrPGlob[i],arrGrani[0].arrPGlob[i+1], sten.height+sten.height1, _poli.arrTiang, _poli.shTr)
@@ -313,14 +328,14 @@ export class SPMetodRezolka  {
 				this.sort2(arrGrani[1].arrPGlob[i],arrGrani[1].arrPGlob[i+1], sten.height+sten.height1, _poli.arrTiang, _poli.shTr)
 			}
 
-			/*		
+			/*	
 			var i=4
 			var j=1
 			gronSten=arrGrani[j].arr[i];
 			gronSten1=arrGrani[j+2].arr[i];
 			this.sort2(arrGrani[j].arrPGlob[i],arrGrani[j].arrPGlob[i+1], sten.height+sten.height1)
-			*/
-
+			
+*/
 
 			this.par.render()			
 		}	
@@ -330,7 +345,7 @@ export class SPMetodRezolka  {
 		var dd
 		this.sort2=function(p,p1,z,_arrTri,_shTr){
 			dd=calc.getDistance(p,p1)
-			trace(dd)
+			
 			if(dd==0)return
 			if(debug==true){
 				this.mesh1.position.copy(p1)
@@ -394,11 +409,11 @@ export class SPMetodRezolka  {
 				if(debug==true)this.plane2.addLine({x:rez[0].x,y:rez[0].y,z:rez[0].z},{x:rez[1].x,y:rez[1].y,z:rez[1].z})
 			}
 			//моно взять треугольники
-			/*var json={}
+			var json={}
 			json.tr=tr
 			json.tr1=tr1
 			var s=JSON.stringify(json)
-			trace(s)*/
+			trace(s)
 		}
 
 

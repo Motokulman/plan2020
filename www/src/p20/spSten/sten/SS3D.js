@@ -28,6 +28,7 @@ export class SS3D  {
 		this._boolLitel=true;
 
 		this.korektRect=this.par.par.par.korektRect;
+		this.korektLine=this.par.par.par.korektLine;
 
 
        /* this.content3d = new THREE.Object3D();
@@ -108,7 +109,10 @@ export class SS3D  {
 		this.arrGrani[1].boolInvert	=true
 
 		
+
+
 		this.drawVerg= function () {
+			trace("@@@@@@@@@@@@@@@@@@@@@@");
 			this.arrGrani[0].dragGeometry();			
 			this.arrGrani[1].dragGeometry();
 			/////////////////////////
@@ -117,12 +121,19 @@ export class SS3D  {
 
 
 			this.vergLittel.setGrani(this.arrGrani[0],this.arrGrani[1]);
+
+
+
+
+			trace("@@@@@@@@@####@@@@@@@@@@@@@");
 		}
 
 
 
 		this.drawGrani = function () {
 			//if(this.par.idArr!=0)return;
+			
+
 			
 			//Порядок важен	
 			this.arrGrani[0].dragPost();
@@ -135,6 +146,8 @@ export class SS3D  {
 
 			this.par.par.metodRezolk.setSten(this.par);
 
+
+			
 
 
 			
@@ -388,22 +401,16 @@ export class SGrani{
 
 			this.korektRect.boolDebug=false;
 			this.boolVergDrag=false;
-		
+			
 			for (var i = 0; i < 5; i++) {
-				//if(this.par.par.idArr==0)if(this.idArr==1)if(i==4)	this.korektRect.boolDebug=true;	
+				if(this.par.par.idArr==0)if(this.idArr==1)if(i==2)	this.korektRect.boolDebug=true;	
 				if(this.arr[i].dist!=0){
-					if(i==2){	
-						
-									
+					if(i==2){									
 						this.korektRect.colizX=0//-this.arrP[i].x;
-
 						this.arr[i].setNaRect(
 						0,this.par.par.windows.world,
 						this.h,
 						this.y,null,this.arrP[i].x);
-						
-
-						//if(this.par.par.idArr==0)if(this.idArr==0)return	
 					}
 					else{
 						this.arr[i].setNaRect(
@@ -459,25 +466,60 @@ export class GronSten {
 		
 
 		this.arrLine=[];
-		this.arrLineCesh=[]
-		
-		
+		this.arrLineCesh=[]	
 
 		this.clearAL=function(){
-			this.arrLine.length=0;
-			
+			this.arrLine.length=0;			
 		}
 
 		this.getLine=function(){
 			if(this.arrLineCesh[this.arrLine.length]==undefined){
 				this.arrLineCesh[this.arrLine.length]={p:{x:0,y:0},p1:{x:0,y:-100}}
-			}
-		
-			this.arrLine.push(this.arrLineCesh[this.arrLine.length])
-		
+			}		
+			this.arrLine.push(this.arrLineCesh[this.arrLine.length])		
 			return this.arrLine[this.arrLine.length-1];
-
 		}
+
+
+
+		//////////////////////////////////////////1
+		this.arrLine1=[];
+		this.arrLineCesh1=[]	
+
+		this.clearAL1=function(){
+			this.arrLine1.length=0;			
+		}
+
+		this.getLine1=function(){
+			if(this.arrLineCesh1[this.arrLine1.length]==undefined){
+				this.arrLineCesh1[this.arrLine1.length]={p:{x:0,y:0,z:0},p1:{x:0,y:-100,z:0}}
+			}		
+			this.arrLine1.push(this.arrLineCesh1[this.arrLine1.length])		
+			return this.arrLine1[this.arrLine1.length-1];
+		}
+
+		//////////////////////////////////////////2
+		this.arrLine2=[];
+		this.arrLineCesh2=[]	
+
+		this.clearAL2=function(){
+			this.arrLine2.length=0;			
+		}
+
+		this.getLine2=function(){
+			if(this.arrLineCesh2[this.arrLine2.length]==undefined){
+				this.arrLineCesh2[this.arrLine2.length]={p:{x:0,y:0,z:0},p1:{x:0,y:-100,z:0}}
+			}		
+			this.arrLine2.push(this.arrLineCesh2[this.arrLine2.length])		
+			return this.arrLine2[this.arrLine2.length-1];
+		}
+
+		/////////////////////
+
+
+
+
+
 
 		
 		var ppe=new THREE.Vector3()
@@ -565,6 +607,9 @@ export class GronSten {
 		this.boolVergDrag=false
 		
 
+
+
+
 		var xSm
 		this.setNaRect=function(_x,_coliz,_h,_y,_nGeom,_xSm){		
 			this.boolVergDrag=false
@@ -591,11 +636,36 @@ export class GronSten {
 			this.par.korektRect.pS=this.pS
 			this.par.korektRect.korektGrid();
 			this.par.korektRect.setGeom(this.geometry, this.rendSahTextur);
-
+			this.korektLine()
 			this.boolVergDrag=this.par.korektRect.boolVergDrag;
 
 			
 		}
+		var line,ll
+		this.korektLine=function(){	
+			this.clearAL1();
+			this.clearAL2();
+
+			if(this.dist!=0 &&(this.idArr==2)){
+				line= this.par.korektRect.getLine1();
+
+				trace(this.idArr,this.p,this.angel,this.dist);
+				
+				for (var i = 0; i < line.length; i++) {
+					ll=this.getLine1()
+					ll.p.x=line[i].p.x+this.p.x;
+					ll.p.z=line[i].p.y;
+					ll.p.y= this.p.y;
+					ll.p1.x=line[i].p1.x+this.p.x;
+					ll.p1.z=line[i].p1.y;
+
+					ll.p1.y= this.p.y;
+
+				}
+				if(this.arrLine1.length!=0)trace("line==",this.arrLine1)
+			}
+		}
+
 
     }
 
@@ -620,15 +690,106 @@ export class VergLittel{
 		this.geometry=new PlaneXZ();	
 		this.rendSahTextur=0;
 
+		this.korektLine=this.par.korektLine;
+
 		this._material=material;
 		this.mesh=new THREE.Mesh(this.geometry,this._material)
 		this.par.cont3d.add(this.mesh)
 
 		this.normalPosit=new THREE.Vector3(0,1,0)
 
-		this.setGrani=function(gran,gran1){		
+
+		this.arrLine=[];
+		this.arrLineCesh=[]	
+
+		this.clearAL=function(){
+			this.arrLine.length=0;			
+		}
+
+		this.getLine=function(){
+			if(this.arrLineCesh[this.arrLine.length]==undefined){
+				this.arrLineCesh[this.arrLine.length]={p:{x:0,y:0,z:0},p1:{x:0,y:-100,z:0}}
+			}		
+			this.arrLine.push(this.arrLineCesh[this.arrLine.length])		
+			return this.arrLine[this.arrLine.length-1];
+		}
+
+
+
+
+		var i,j,k,line,ll,ggg
+		this.setGrani=function(gran,gran1){	
+			this.clearAL();
 			
 			if(gran.boolVergDrag==false&&gran1.boolVergDrag==false){
+				i=0
+				for (j = 0; j < this.par.arrGrani[i].arr.length; j++) {
+					line=this.par.arrGrani[i].arr[j];
+					
+					if(line.dist!=0){
+						ll=this.getLine()
+						ll.p.x=line.p.x
+						ll.p.y=line.p.y
+						ll.p.z=line.p.z
+						ll.p1.x=line.p1.x
+						ll.p1.y=line.p1.y
+						ll.p1.z=line.p1.z
+					}
+
+				}
+				i=1
+				for (j = 0; j < this.par.arrGrani[i].arr.length; j++) {
+					line=this.par.arrGrani[i].arr[j];
+					trace(line)
+					if(line.dist!=0){
+						ll=this.getLine()
+						ll.p.x=line.p.x
+						ll.p.y=line.p.y
+						ll.p.z=line.p.z
+						ll.p1.x=line.p1.x
+						ll.p1.y=line.p1.y
+						ll.p1.z=line.p1.z
+					}
+				}
+			}else{
+
+				for (i = 0; i < this.par.arrGrani.length; i++) {
+					for (j = 0; j < this.par.arrGrani[i].arr.length; j++) {
+
+						for (k = 0; k < this.par.arrGrani[i].arr[j].arrLine1.length; k++) {
+
+							line=this.par.arrGrani[i].arr[j].arrLine1[k]			
+							ll=this.getLine()
+							ll.p.x=line.p.x
+							ll.p.y=line.p.y
+							ll.p.z=line.p.z
+							ll.p1.x=line.p1.x
+							ll.p1.y=line.p1.y
+							ll.p1.z=line.p1.z
+						}
+					}
+				}
+
+			}
+
+			trace(this.arrLine)
+			this.korektLine.arrLine=this.arrLine;
+			this.korektLine.start()
+			this.korektLine.setGeom(this.geometry);/**/
+
+			
+
+
+
+			if(this.par.par.idArr==0){
+				var s=JSON.stringify(this.arrLine)
+				trace(s)
+				trace(this.par.par.idArr+">>>>>>>>>>",this.arrLine)
+				trace(this.korektLine.aTri);
+			}
+/*			*/
+			
+			/*if(gran.boolVergDrag==false&&gran1.boolVergDrag==false){
 				this.geometry.clear()
 				for (var i = 1; i < gran.arrP.length-1; i++) {				
 					this.geometry.addTri(gran.arrP[0],gran.arrP[i],gran.arrP[i+1])
@@ -642,7 +803,10 @@ export class VergLittel{
 				if(this.mesh.visible==false)this.mesh.visible=true
 			}else{
 				if(this.mesh.visible==true)this.mesh.visible=false
-			}		
+			}*/	
+
+
+
 		}		
 	}
 	set material(value) {		
