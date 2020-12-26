@@ -21,7 +21,7 @@ export class SSPolygon2D  {
         this.graphics = new PIXI.Graphics();
     	this.content2d.addChild(this.graphics);
 
-    	this.text= new PIXI.Text('345634634',{ fontFamily : 'Arial' })//,{ font: 'bold 200px Arial', fontFamily : 'Arial', fontSize: 24, fill : 0xff1010 }); 
+    	this.text= new PIXI.Text('345634634',{ fontFamily : 'Arial' })
         this.content2d.addChild(this.text);
 
 		this.stAct=new STAct1(this)

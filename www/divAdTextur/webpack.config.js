@@ -4,10 +4,10 @@ const path = require('path');
 const webpack = require('webpack');
 const bodyParser = require('body-parser');
  let conf = {
-  	entry: './src/pm/index.js',
+  	entry: './src/adminT/index.js',
   	output: {
-		path: path.resolve(__dirname, 'src/pm/'),
-		filename: 'pm.min.js',
+		path: path.resolve(__dirname, 'src/adminT/'),
+		filename: 'adminT.min.js',
 		publicPath: 'src/pm/',
 		hotUpdateChunkFilename: 'hot-update/hot-update.js',
 		hotUpdateMainFilename: 'hot-update/hot-update.json',

@@ -14,14 +14,14 @@
         "transparent": false,
         "alphaTest": 0,
         "wireframe": false,
-        "reflectivity": 1,
-        "refractionRatio": 0.98,
+        "reflectivity": 0.66,
+        "refractionRatio": 0.74,
         "emissive": "#000000",
         "specular": "#111111",
         "shininess": 30,
         "textur": [
             {
-                "id": "t_4",
+                "id": "t_1",
                 "name": "map"
             }
         ]
@@ -29,5 +29,6 @@
     "mirro": false,
     "resurs": {
         "array": []
-    }
+    },
+    "orig": "xz.png"
 }
