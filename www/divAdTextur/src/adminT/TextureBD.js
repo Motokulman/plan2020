@@ -32,7 +32,6 @@ export class TextureBD  {
 
         this.getLocation=function(){
             let ser = window.location.href;
-            trace('ser.split("?id=");',ser.split("?id="))
             return ser.split("?id=");
         }
         this.setLocation=function(p, p1){
