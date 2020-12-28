@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head>
 <meta charset="UTF-8">
-<title>p20</title>	
+<title>api2</title>	
 <script src='divLib.js'></script>
 <script src='jquery-1.11.3.js'></script>
 
@@ -12,225 +12,151 @@
 	var aButton=[]
 	var objectBase
 
+	var id="1";
+	var idFile="1";
+	var arrayList=["texture","xz"];
+	var nameList=arrayList[0];
+
+
+	var url='https://alphakp.ru/api'
 
 
 
 
 
 	function creatArrApi(){
-		//создаюм обьекты отправки
-
+		//создаюм обьекты отправки	
 		var  o={
 			name:"creat",//имя кнопки
-			help:"Создаюм план, хз кто, то есть клиент не залогинен, в ответ обьект планна. типа {id:234,url:'путь к json файлу',info:'asdhjf'...}, id-иди проекта, url-путь к моделе, по умолчанию сущесествует пустой, типа: '{}'",//пояснения
-			color:"#faca30",
-			
-			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'https://alphakp.ru/catalog/plan/20/edit_scheme/set_scheme',
-		        type: 'GET',
-		        data: {
-		        	d:JSON.stringify({test:10}),
-		        	checked:false,
-		        	csrfmiddlewaretoken:"xz Тут нужен ключь, который генериться под юзеров "
-		        },
-		        cache: false,
-		        async: false,
-			}
-		}
-		array.push(o);
-
-		var  o={
-			name:"creatV",//имя кнопки
-			help:"Создаюм план, для вирифицированного юзера, юзера который в бд, хз как его делать, может через токен, в ответ обьект планна. типа {id:234,url:'путь к json файлу',info:'asdhjf'...}, id-иди проекта, url-путь к моделе, по умолчанию сущесествует пустой, типа: '{}'",//пояснения
-			color:"#faca30",
-			
-			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'https://alphakp.ru/catalog/plan/20/edit_scheme/set_scheme',
-		        type: 'GET',
-		        data: {
-		        	d:JSON.stringify({test:10}),
-		        	checked:false,
-		        	csrfmiddlewaretoken:"xz Тут нужен ключь, который генериться под юзеров "
-		        },
-		        cache: false,
-		        async: false,
-			}
-		}
-		array.push(o);
-
-
-
-
-		var  o={
-			name:"getId",//имя кнопки
-			help:"Возврощает обьект плана типа: {id:234,url:'путь к j....",//пояснения
-			
-			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'https://alphakp.ru/catalog/plan/20/edit_scheme/set_scheme',
-				// url: 'https://alphakp.ru/catalog/plan/20/edit_scheme/get_response',
-		        type: 'GET',
-		        data: {
-		        },
-		        cache: false,
-		        async: false,
-			}
-		}
-		array.push(o);
-
-
-		var  o={
-			name:"save",//имя кнопки
-			help:"По идишнику записывает json пална по ",//пояснения
-
-			
-			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'https://alphakp.ru/catalog/plan/20/edit_scheme/set_scheme',
-				// url: 'https://alphakp.ru/catalog/plan/20/edit_scheme/get_response',
-		        type: 'POST',
-		        data: {
-                    json:"{\"test\":10}"
-		        },
-		        cache: false,
-		        async: false,
-			}
-		}
-		array.push(o);
-
-
-		///////////////////текстуры//////////////////////
-		var  o={
-			name:"creatTexture",
-			help:"Создаюм текстуру {id:234,type:'xz',..}, возврощаем обьект: id-иди проекта, доп параметры бд пока хз",
+			help:"создают обьект в базе данных, под него создаються папка с именем ид",
 			color:"#93c32f",
-			
+			param:"creat",
+			obj:{			
+				url: 'пофиг перезапишеться при отправке',
+				type: 'POST'//доп параметры на загрузку файла, беку видне что писать!!		       
+			}
+		}
+		array.push(o);
+
+		var  o={
+			name:"delete",
+			help:"убивает идишник, убивает директорию, чистит файлы в списках файлов",
+			color:"#93c32f",
+			param:"delete",
+			id:true,
+			obj:{			
+				url: 'пофиг перезапишеться при отправке',	
+				type: 'POST'	       
+			}
+		}
+		array.push(o);
+
+		var  o={
+			name:"getid",
+			help:"возврощает всю инфу про обьект",
+			color:"#93c32f",			
+			id:true,
+			obj:{			
+				url: 'пофиг перезапишеться при отправке',
+				type: 'GET'		       
+			}
+		}
+		array.push(o);
+
+
+		var  o={
+			name:"set",
+			help:"перезаписывает из data все пареметры обьекта",
+			color:"#93c32f",			
+			id:true,
+			obj:{			
+				url: 'пофиг перезапишеться при отправке',
+				type: 'POST',
+				data:{
+					json:'{"test":10} Запишу string',
+					notParam:"Error не тпараметра, если хотябы один не сушествет, то не записываем никакой",
+					notValid:"Error не верный тип данных, если хотябы один не верного типа, то не записываем никакой"
+				}
+			}
+		}
+		array.push(o);
+
+		var  o={
+			name:"setFile",
+			help:"Запишет фаил в директорию ид, запишет путь в список id обьекта, запишет в общий список файлов",
+			color:"#93c32f",			
+			id:true,
+			param:"setfile",
+			obj:{			
+				url: 'пофиг перезапишеться при отправке',
+				type: 'POST',
+				data:formData
+			}
+		}
+		array.push(o);
+
+
+		var  o={
+			name:"deleteFile",
+			help:"Запишет фаил в директорию ид, запишет путь в список id обьекта, запишет в общий список файлов",
+			color:"#93c32f",			
+			idFile:true,
+			param:"deletefile",
+			obj:{			
+				url: 'пофиг перезапишеться при отправке',
+				type: 'POST'
+			}
+		}
+		array.push(o);
+
+
+		var  o={
+			name:"getList",
+			help:"Получает список всех обьетов в неполной форме c тремя параметрвами{id(int),typeList(int),icon(string)}",
+			color:"#1a73e8",
+			param:"getList",			
 			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'xz',
+				url: 'пофиг перезапишеться при отправке',
 		        type: 'GET'
 			}
 		}
 		array.push(o);
 
 		var  o={
-			name:"deleteTexture",
-			help:"ид даем, по ниму убиваем текстуру и все что с ней связанно, файлы",
-			color:"#93c32f",
-			
+			name:"getListBig",
+			help:"Получает список всех обьетов в полной форме",
+			color:"#1a73e8",
+			param:"getListBig",			
 			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'xz',
-		        type: 'xz'
-			}
-		}
-		array.push(o);
-
-
-		var  o={
-			name:"getTexturs",
-			help:"возврощаем Список всех текстур. Возможность передать type, тогда только те что что имеют аналогичный type",
-			color:"#93c32f",
-			
-			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'xz',
+				url: 'пофиг перезапишеться при отправке',
 		        type: 'GET'
 			}
 		}
 		array.push(o);
 
-
 		var  o={
-			name:"getTextursJSON",
-			help:"Получение JSON текстуры по ее ID",
-			color:"#93c32f",
-			
+			name:"creatListJSON",
+			help:"Генерит фаил json, от getList после он доступен по: "+url+nameList+"/list.json",
+			color:"#1a73e8",
+			param:"creatListJSON",			
 			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'этот путь ведет на джейсон кеша всех текстур'
+				url: 'пофиг перезапишеться при отправке',
+		        type: 'POST'
 			}
 		}
 		array.push(o);
 
 		var  o={
-			name:"getTextureJSON",//имя кнопки
-			help:"Возвращает json текстуры по ее id",//пояснения
-			
+			name:"creatListBigJSON",
+			help:"Генерит фаил json,(МТБЕ), от getListBig после он доступен по: "+url+nameList+"/listbig.json",
+			color:"#1a73e8",
+			param:"creatListBigJSON",			
 			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'https://alphakp.ru/graphics/texture/3/set_texture',
-		        type: 'GET',
-		        data: {
-		        },
-		        cache: false,
-		        async: false,
+				url: 'пофиг перезапишеться при отправке',
+		        type: 'POST'
 			}
 		}
 		array.push(o);
-
-		var  o={
-			name:"setTextureJSON",//имя кнопки
-			help:"Сохраняет JSON текстуры по ее id",//пояснения
-			
-			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'https://alphakp.ru/graphics/texture/1/set_texture',
-		        type: 'POST',
-		        data: {
-                    json:"{\"test\":10}"
-		        },
-		        cache: false,
-		        async: false,
-			}
-		}
-		array.push(o);
-		
-
-		// var  o={
-		// 	name:"setTextureFile",//имя кнопки
-		// 	help:"Сохраняет anyfile текстуры по ее id",//пояснения
-		// 	file:true,
-			
-		// 	obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-		// 		url: 'https://alphakp.ru/graphics/texture/1/set_texture',
-		//         type: 'POST',
-		// 		data: $(this).serialize(),
-		//         // data: {
-		//         // },
-		//         cache: false,
-		//         async: false,
-		// 	}
-		// }
-		// array.push(o);
-
-
-
-
-		var  o={
-			name:"creatFileTextur",
-			help:"Я передаю file, он записывает в обьект линк на фаил и иди. возврощает {id:234,src:'полный линк общедоступный'}, причем у обТекстуры есть date:[{id:234,src:'по...'-то есть все файлы в проекте",
-			color:"#93c32f",
-
-			file:true,
-
-			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'xz',
-		        type: 'xz'
-			}
-		}
-		array.push(o);
-
-
-		var  o={
-			name:"deleteFileTextur",
-			help:"Я даю иди текстуры и иди файла, он убивает в бд и сам фаил, возврощаем обьект текстуцры измененый'}",
-			color:"#93c32f",
-			
-			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'xz',
-		        type: 'xz'
-			}
-		}
-		array.push(o);
-
-
-
-
-
-
 
 
 
@@ -238,8 +164,47 @@
 
 
 
+	function posulaem () {
+		objectBase.obj.success=successMy
+		objectBase.obj.error=errorMy		
+		$.ajax(objectBase.obj)
+	}
 
-	function init () {
+
+	function openObj (o,file){
+		
+
+		for (var i = 0; i < aButton.length; i++) {
+			if(o.name==aButton[i].obj.name){
+				aButton[i].alpha=0.5;
+				history.pushState(null, null, serv); 
+				// history.pushState(null, null, serv+"?index="+i); 
+			}else{
+				aButton[i].alpha=1;
+			}		
+		}
+
+		objectBase = o;
+		////собераем урл
+
+		o.obj.url=url+"/"+nameList;
+		if(o.id!=undefined)o.obj.url+="/"+id;
+		if(o.param!=undefined)o.obj.url+="/"+o.param;
+		if(o.idFile!=undefined)o.obj.url+="/"+idFile;
+
+		////
+
+		
+		labelHelp.text=objectBase.help
+		pObject.y=labelHelp.y+labelHelp.getRect().height+5
+		pObject.addObject(objectBase.obj);
+
+		dragObj()
+	}
+
+
+
+	function init1 () {
 		dcmParam=new DCM();
 		scane= new DCont(document.body);	
 		creatArrApi();
@@ -247,6 +212,30 @@
 
 		openObj(array[0])		
 	}
+	var imageFile
+	var formData
+	function init () {
+		var bmp=new DBitmapData(100,100);
+		for (var j = 0; j < 100; j++) {
+			for (var i = 0; i < 100; i++) {
+				bmp.setPixel(j,i,[Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255),Math.round(Math.random()*255)])
+			}			
+		}
+		bmp.upDate()
+		/*var down = document.createElement('a');
+        down.href = bmp.canvas.toDataURL();
+        down.download = 'pic.png';
+        down.click();*/		
+		bmp.canvas.toBlob((blob) => {
+            imageFile = new File([blob],  Math.round(Math.random()*255)+".png" );
+            formData= new FormData(); 
+            formData.append('file', imageFile);              
+            init1();
+        }, 'image/png');
+
+	}
+
+
 
 
 	function successMy (e){//удачиный ответ
@@ -265,25 +254,10 @@
 	
 
 
-	function openObj (o,file){		
-		for (var i = 0; i < aButton.length; i++) {
-			if(o.name==aButton[i].obj.name){
-				aButton[i].alpha=0.5;
-				history.pushState(null, null, serv); 
-				// history.pushState(null, null, serv+"?index="+i); 
-			}else{
-				aButton[i].alpha=1;
-			}		
-		}
-		objectBase = o;
-		labelHelp.text=objectBase.help
-		pObject.y=labelHelp.y+labelHelp.getRect().height+5
-		pObject.addObject(objectBase.obj);
+	
 
-		dragObj()
-	}
-	function dragObj (){
-			
+
+	function dragObj (){			
 		var s=JSON.stringify(objectBase.obj,null,4)		
 		ta.text=s
 	}
@@ -296,16 +270,41 @@
 		wind=new DWindow(scane,0,0,"API")		
 		wind.width=whB+whB1+whB2+2*5
 		wind.height=500
+
+		new DLabel(wind,100,10,"id:")
+		var iii=new DInput(wind,120,2,id,function(){
+			id=this.value
+			openObj(objectBase);
+		})
+		iii.width=50
+		iii.height=28
+
+
+		new DLabel(wind,200,10,"name:")
+		let ccc=new DComboBox(wind,250, 2, arrayList, function(){
+
+			nameList=arrayList[this.index]
+			openObj(objectBase);
+		});
+		ccc.height=28;
+
+
+		new DLabel(wind,400,10,"idFile:")
+		var iii=new DInput(wind,450,2,idFile,function(){
+			idFile=this.value
+			openObj(objectBase);
+		})
+		iii.width=50
+		iii.height=28
+
 		
 		for (var i = 0; i < array.length; i++) {
+			
 			aButton[i]=new DButton(wind.content, 2,2+34*i,array[i].name,function(s){
 				if(s!=undefined){
 					var data = new FormData();           
-            		data.append('file', this.files[0]);
-            		
-            		this.obj.obj.data=data;
-
-            		trace(">>>>>",this.obj,this.files[0])
+            		data.append('file', this.files[0]);            		
+            		this.obj.obj.data=data;            		
 				}
 				openObj(this.obj);
 			})
@@ -317,6 +316,7 @@
 			if(array[i].color!=undefined){
 				aButton[i].color=array[i].color
 			}
+
 		}
 
 		pObject=new DParamObject(wind.content,whB+4,2,function(){			
@@ -334,10 +334,8 @@
 
 		let hh=(wind.height-20-4-32-36)/2
 		var b=new DButton(wind.content,pObject.x+pObject.width+2,2,"Посылаем",function(){
-			objectBase.obj.success=successMy
-			objectBase.obj.error=errorMy
+			posulaem()
 			
-			$.ajax(objectBase.obj)
 		});
 		b.width=whB2
 

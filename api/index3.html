@@ -1,16 +1,16 @@
 <!DOCTYPE html><html><head>
 <meta charset="UTF-8">
-<title>api2</title>	
+<title>p20</title>	
 <script src='divLib.js'></script>
 <script src='jquery-1.11.3.js'></script>
 
 <script>
 	var trace = window.console.log.bind(window.console);
 
-	var dcmParam,scane,wind,object,pObject,ta,ta1;
+	var dcmParam,scane,wind,object,pObject,ta,ta1
 	var array=[];
-	var aButton=[];
-	var objectBase;
+	var aButton=[]
+	var objectBase
 
 
 
@@ -19,6 +19,48 @@
 
 	function creatArrApi(){
 		//создаюм обьекты отправки
+
+		var  o={
+			name:"creat",//имя кнопки
+			help:"Создаюм план, хз кто, то есть клиент не залогинен, в ответ обьект планна. типа {id:234,url:'путь к json файлу',info:'asdhjf'...}, id-иди проекта, url-путь к моделе, по умолчанию сущесествует пустой, типа: '{}'",//пояснения
+			color:"#faca30",
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'https://alphakp.ru/catalog/plan/20/edit_scheme/set_scheme',
+		        type: 'GET',
+		        data: {
+		        	d:JSON.stringify({test:10}),
+		        	checked:false,
+		        	csrfmiddlewaretoken:"xz Тут нужен ключь, который генериться под юзеров "
+		        },
+		        cache: false,
+		        async: false,
+			}
+		}
+		array.push(o);
+
+		var  o={
+			name:"creatV",//имя кнопки
+			help:"Создаюм план, для вирифицированного юзера, юзера который в бд, хз как его делать, может через токен, в ответ обьект планна. типа {id:234,url:'путь к json файлу',info:'asdhjf'...}, id-иди проекта, url-путь к моделе, по умолчанию сущесествует пустой, типа: '{}'",//пояснения
+			color:"#faca30",
+			
+			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
+				url: 'https://alphakp.ru/catalog/plan/20/edit_scheme/set_scheme',
+		        type: 'GET',
+		        data: {
+		        	d:JSON.stringify({test:10}),
+		        	checked:false,
+		        	csrfmiddlewaretoken:"xz Тут нужен ключь, который генериться под юзеров "
+		        },
+		        cache: false,
+		        async: false,
+			}
+		}
+		array.push(o);
+
+
+
+
 		var  o={
 			name:"getId",//имя кнопки
 			help:"Возврощает обьект плана типа: {id:234,url:'путь к j....",//пояснения
@@ -53,75 +95,6 @@
 			}
 		}
 		array.push(o);
-
-
-		///////////////////текстуры//////////////////////
-		var  o={
-			name:"textureList",
-			help:"Получаем весь лист",
-			color:"#93c32f",
-			
-			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'https://alphakp.ru/api/texture/',
-		        type: 'GET'
-			}
-		}
-		array.push(o);
-		
-		var  o={
-			name:"textureGet",
-			help:"Получаем олбьект текстуры",
-			color:"#93c32f",
-			
-			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'https://alphakp.ru/api/texture/2',
-		        type: 'GET'
-			}
-		}
-		array.push(o);
-
-
-
-
-		
-
-		var  o={
-			name:"setTextureJSON",//имя кнопки
-			help:"Возвращает json текстуры по ее id",//пояснения
-			color:"#93c32f",
-
-			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'https://alphakp.ru/graphics/texture/2/set_texture',
-		        type: 'POST',
-		        data: {
-                    json:"{\"test\":10}"
-		        },
-		        cache: false,
-		        async: false,
-			}
-		}
-		array.push(o);
-
-/*
-		var  o={
-			name:"creatFile",
-			help:"Я передаю file, он записывает в обьект линк на фаил и иди. возврощает {id:234,src:'полный линк общедоступный'}, причем у обТекстуры есть date:[{id:234,src:'по...'-то есть все файлы в проекте",
-			color:"#93c32f",
-
-			file:true,
-
-			obj:{//то что посылаем через аякс на сервер, собственно тут сам запрос
-				url: 'https://alphakp.ru/api/texture_file/2/',
-		        type: 'POST',
-		        cache: false,
-                contentType: false,
-                processData: false
-                
-			}
-
-		}
-		array.push(o);
-
 
 
 		///////////////////текстуры//////////////////////
@@ -251,7 +224,7 @@
 		        type: 'xz'
 			}
 		}
-		array.push(o);*/
+		array.push(o);
 
 
 
@@ -325,7 +298,7 @@
 		wind.height=500
 		
 		for (var i = 0; i < array.length; i++) {
-			aButton[i]=new DButton(wind.content, 2, 2+34*i, array[i].name, function(s){
+			aButton[i]=new DButton(wind.content, 2,2+34*i,array[i].name,function(s){
 				if(s!=undefined){
 					var data = new FormData();           
             		data.append('file', this.files[0]);
@@ -363,7 +336,7 @@
 		var b=new DButton(wind.content,pObject.x+pObject.width+2,2,"Посылаем",function(){
 			objectBase.obj.success=successMy
 			objectBase.obj.error=errorMy
-			trace(">>>>>",objectBase.obj)
+			
 			$.ajax(objectBase.obj)
 		});
 		b.width=whB2

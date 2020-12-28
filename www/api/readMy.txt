@@ -12,6 +12,8 @@ https://motokulman.github.io/plan2020/www/api/api.rar
 
 
 
+
+
 Я открываю https://motokulman.github.io/plan2020/www/api/
 тыкаю пошагово функуии и кнопку послылаем, в видим требуемый ответ.
 
