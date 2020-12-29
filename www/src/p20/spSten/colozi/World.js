@@ -66,14 +66,14 @@ export class World  {
         this.korektPosition=function(body){
 
             //this.line_x.set(this.rect, this.children, body);  
-            trace("$$$@@0--=",body.position.y)          
+                    
             this.line_x.korektPosition(body);
-            trace("$$$@@##-=",body.position.y) 
+            
             //self.korekt();
             //self.drawDeb();
 
             self.fun("korektPosition",body);
-            trace("$$$@@@@@@##-=",body.position.y) 
+          
         }
 
         var arr

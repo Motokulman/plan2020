@@ -347,25 +347,47 @@ export class KRUmnik  {
                     if(j==0)br.bool[0]=_br.bool[0]                         
                     if(i==0)br.bool[3]=_br.bool[3]   
                     if(j==ay.length-2)br.bool[2]=_br.bool[2]  
-
                     if(i==ax.length-2) br.bool[1]=_br.bool[1]; 
 
 
+                    if(j==0)br.bool1[0]=_br.bool1[0]                         
+                    if(i==0)br.bool1[3]=_br.bool1[3]   
+                    if(j==ay.length-2)br.bool1[2]=_br.bool1[2]  
+                    if(i==ax.length-2) br.bool1[1]=_br.bool1[1]; 
                     ////////////////////
 
 
+                    if(i==rx&&j==ry){                        
+                        if(bbb==true)ar.push(br) 
+                    }else{
+                        ar.push(br) 
+                        if(_win.tipe===undefined){
+                            if(j==ry){
+                                if(i+1==rx)br.bool1[1]=true;
+                                if(i-1==rx)br.bool1[3]=true;
+                            }
+                            if(i==rx){
+                                if(j+1==ry)br.bool1[2]=true;
+                                if(j-1==ry)br.bool1[0]=true;
+                            }
+
+                        }
+                        
+                    }
 
 
 
-                    if (_br.sides) {
+
+                   /* if (_br.sides) {
                         const {sides} = _br;
                         sides.forEach(item => {
                             const {size, side} = item;
                             
                         })
-                    }
+                    }*/
+
                     
-                    if(i==rx&&j==ry){                        
+                   /* if(i==rx&&j==ry){                        
                         if(bbb==true)ar.push(br) 
                     }else{
                         ar.push(br) 
@@ -373,7 +395,7 @@ export class KRUmnik  {
 
                     if (this.par.isAdjacent(br, _win)) {
                         this.par.getMatchEdges(br, _win)
-                    }  
+                    } */ 
                 }
             }
 
@@ -428,15 +450,18 @@ export class KRUmnik  {
 
         //линейная геометрия для отрисовки линий
         this.setGeomLine=function(geometry){                    
-            vertices.length=0           
+            vertices.length=0                       
             for (var i = 0; i < this.par.arrDin.length; i++) {
-                this.drawStroke(this.par.arrDin[i])
+               // this.drawStroke(this.par.arrDin[i])
+                this.setGeomLineB(this.par.arrDin[i])
                 //this.arrDin[i].setGLVert(vertices);
+                
             }
             geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
         
         }
-  
+
+        
        
         var nGeom//0-на 1- от 2 на обоих
         //наполняем геометрию с текстурированием
@@ -458,6 +483,159 @@ export class KRUmnik  {
             geometry.computeBoundingSphere();
             //geometry.computeVertexNormals();
         }
+
+
+        //наполняем геометрию с текстурированием
+        var distOt
+        this.setGeomBool1=function(geometry, dist, _nGeom){
+            distOt=dist/2
+
+            trace("distOt ",distOt)
+            vertices.length=0
+            uv.length=0  
+            normal.length=0  
+            for (var i = 0; i < this.par.arrDin.length; i++) {
+                this.setGB1(this.par.arrDin[i]);
+            }
+            /*var r=144
+            for (var i = 0; i < this.par.arrDin.length; i++) {
+                vertices.push(this.par.arrDin[i].x,Math.random()*r-r/2,Math.random()*r-r/2);
+                vertices.push(this.par.arrDin[i].x,Math.random()*r-r/2,Math.random()*r-r/2);
+                vertices.push(this.par.arrDin[i].x,Math.random()*r-r/2,Math.random()*r-r/2);
+
+                normal.push(Math.random()*r-r/2,Math.random()*r-r/2,Math.random()*r-r/2);
+                normal.push(Math.random()*r-r/2,Math.random()*r-r/2,Math.random()*r-r/2);
+                normal.push(Math.random()*r-r/2,Math.random()*r-r/2,Math.random()*r-r/2);
+
+                uv.push(Math.random(),Math.random());
+                uv.push(Math.random(),Math.random());
+            }*/
+
+
+            geometry.setAttribute( 'uv', new THREE.Float32BufferAttribute( uv, 2 ) );          
+            geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+            geometry.setAttribute( 'normal', new THREE.Float32BufferAttribute( normal, 3 ) );    
+            geometry.computeBoundingBox();
+            geometry.computeBoundingSphere();   
+        }
+        var poP=new THREE.Vector3()
+        var poP1=new THREE.Vector3()
+        var poP2=new THREE.Vector3()
+
+
+        this.setGB1 = function(box) {
+        
+            if(box.bool1[0]===true){
+
+                poP.set(box.x,0,box.y);
+                poP1.set(box.x+box.w,0,box.y); 
+                poP2.set(0,0,1); 
+                this.drawB1()
+            }
+            if(box.bool1[1]===true){
+                poP.set(box.x+box.w,0,box.y);
+                poP1.set(box.x+box.w,0,box.y+box.h); 
+                poP2.set(0,0,1); 
+                this.drawB1()
+            }
+            if(box.bool1[2]===true){
+                poP.set(box.x+box.w,0,box.y+box.h);
+                poP1.set(box.x,0,box.y+box.h); 
+                poP2.set(0,0,1); 
+                this.drawB1()
+            }
+             if(box.bool1[3]===true){
+                poP.set(box.x,0,box.y+box.h);
+                poP1.set(box.x,0,box.y); 
+                poP2.set(0,0,1); 
+                this.drawB1()
+            }
+        }
+
+        this.drawB1 = function() {
+            
+            
+            vertices.push(poP.x,-distOt,poP.z);
+            vertices.push(poP.x,distOt,poP.z);
+            vertices.push(poP1.x,-distOt,poP1.z);
+
+            
+            uv.push(0,0)
+            uv.push(0,1)
+            uv.push(1,0) 
+            
+            
+
+            normal.push(poP2.x,poP2.y,poP2.z);
+            normal.push(poP2.x,poP2.y,poP2.z);
+            normal.push(poP2.x,poP2.y,poP2.z);
+
+
+            vertices.push(poP.x,distOt,poP.z);
+            vertices.push(poP1.x,distOt,poP1.z);
+            vertices.push(poP1.x,-distOt,poP1.z);
+
+            
+            uv.push(0,1)
+            uv.push(1,1)
+            uv.push(1,0)           
+
+            normal.push(poP2.x,poP2.y,poP2.z);
+            normal.push(poP2.x,poP2.y,poP2.z);
+            normal.push(poP2.x,poP2.y,poP2.z);
+
+
+            /////////////////////////////////
+
+            vertices.push(poP.x,distOt,poP.z);
+            vertices.push(poP.x,-distOt,poP.z);            
+            vertices.push(poP1.x,-distOt,poP1.z);
+
+            uv.push(0,1)            
+            uv.push(0,0)            
+            uv.push(1,0) 
+            
+            
+
+            normal.push(poP2.x*-1,poP2.y*-1,poP2.z*-1);
+            normal.push(poP2.x*-1,poP2.y*-1,poP2.z*-1);
+            normal.push(poP2.x*-1,poP2.y*-1,poP2.z*-1);
+
+            vertices.push(poP1.x,distOt,poP1.z);
+            vertices.push(poP.x,distOt,poP.z);            
+            vertices.push(poP1.x,-distOt,poP1.z);
+
+            uv.push(1,1)            
+            uv.push(0,1)            
+            uv.push(1,0)           
+
+            normal.push(poP2.x*-1,poP2.y*-1,poP2.z*-1);
+            normal.push(poP2.x*-1,poP2.y*-1,poP2.z*-1);
+            normal.push(poP2.x*-1,poP2.y*-1,poP2.z*-1);
+
+
+
+
+
+
+           /* var r=1000
+            var rY=10
+            for (var i = 0; i < 111; i++) {
+                vertices.push(poP.x,Math.random()*rY-rY/2,poP.y);
+                vertices.push(poP.x,Math.random()*rY-rY/2,poP.y);
+                vertices.push(poP.x,Math.random()*rY-rY/2,poP.y);
+
+                uv.push(0,0) 
+                uv.push(1,0)
+                uv.push(0,1)
+
+                normal.push(poP2.x,poP2.y,poP2.z);
+                normal.push(poP2.x,poP2.y,poP2.z);
+                normal.push(poP2.x,poP2.y,poP2.z);*/
+           // }
+        }
+
+        /////////
 
         this.drawStroke = function(box) {
             if (box.sides.length) {
@@ -579,6 +757,7 @@ export class KRUmnik  {
                 }
             }        
         }
+
 
         var dinBox
         this.setGeomB=function(box){   

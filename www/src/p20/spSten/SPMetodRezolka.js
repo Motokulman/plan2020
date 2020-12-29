@@ -12,7 +12,7 @@ export class SPMetodRezolka  {
 		
 		//this.cont3dL.rotation.x=Math.PI/2;
 
-		var debug=true;
+		var debug=false;
 
 		
 		
@@ -22,7 +22,7 @@ export class SPMetodRezolka  {
 			this.cont3dL = new THREE.Object3D();
 	    	this.par.content3d.add(this.cont3dL); 
 		
-	    	this.cont3dL.position.x=1200
+	    	this.cont3dL.position.x=1200;
 
 			this.plane=new PlaneXZ();
 			this.plane1=new PlaneXZ();

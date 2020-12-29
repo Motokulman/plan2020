@@ -74,7 +74,7 @@ export class WorldBlok  {
 
 
         this.getBlok=function(id){
-            trace(id)
+          
             let o=   this.arrObj[id]             
             for (var i = 0; i < this.array.length; i++) {
                 if(this.array[i].life==true)continue;
@@ -90,7 +90,7 @@ export class WorldBlok  {
             if(o.obj.str[0]=="BInSten")blok= new BInSten(this,o,this.sobBlok);
             if(blok==undefined)blok= new Blok(this,o,this.sobBlok);
 
-            trace(blok)
+           
             blok.idArr=this.array.length;
             this.array.push(blok);
 

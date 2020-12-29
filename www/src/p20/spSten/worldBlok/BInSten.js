@@ -86,8 +86,9 @@ export class BInSten extends Blok {
                 this._width=w;
                 this._height=h;
                 this._delph=d;
+
             }
-            
+            console.warn("$$$&&",this._height)
 
             let sizeLine=this.par._sizeLine
             let colorLine=this.par._colorLine_
@@ -113,7 +114,12 @@ export class BInSten extends Blok {
                 this.graphics.lineStyle(sizeLine, colorLine, 1);
                 this.graphics.drawRect(this.rect.x,-this._delph/2-(sizeLine/2),this.rect.w,this._delph+sizeLine);
                 this.graphics.lineStyle(sizeLine/2, colorLine, 1);
-                this.graphics.drawRect(this.rect.x,-40,this.rect.w,80);
+                this.graphics.drawRect(this.rect.x,-sizeLine*10,this.rect.w,sizeLine*20);
+                
+                this.lineSegments.position.z=-this.rect.y;
+
+                this.lineSegments.scale.set(this.rect.w,this.rect.h,1);
+
             }
             if(this.typeStr1 == "Door"){
                 this.graphics.lineStyle(sizeLine, colorLine, 1);
@@ -131,16 +137,22 @@ export class BInSten extends Blok {
                 this.graphics.lineTo(pp.x, pp.y);
                 this.graphics.moveTo(pp.x, pp.y);
                 this.graphics.quadraticCurveTo(ppp.x + (ppp.x /4), -ppp.y + (ppp.y /4) , this.rect.w/2, cc.y)
+
+                this.lineSegments.position.z=-this.rect.y;
+                this.lineSegments.scale.set(this.rect.w,this.rect.h,1);
             }
             if(this.typeStr1 == "Not"){
                 this.graphics.lineStyle(sizeLine/2, colorLine, 1);
                 this.graphics.drawRect(this.rect.x-(sizeLine*1.5)/2,-this._delph/2-(sizeLine*1.5)/2,this.rect.w+sizeLine*1.5, this._delph+sizeLine*1.5);
+               
+                this.lineSegments.scale.set(this.rect.w,this.rect.h,1);
+                this.lineSegments.position.z=-this.rect.y;
             }
             this.stAct.draw1();
 
            
 
-            this.lineSegments.scale.set(this.rect.w,this.rect.h,1);
+            
         }
 
         this.postParent=function(){            
@@ -152,13 +164,20 @@ export class BInSten extends Blok {
             this.stAct.sahAct=this._active ? 40: 0;
         }
 
+
         //перехват
-        this.redrahHHH=function(y){
+        this.redrahHHH=function(h,h1){
             if(this.typeStr1 == "Window"){
-                trace("$$$@@etHeight=",y);
-                this.body.position.y=y
+                //trace("$$$@@etHeight=",h,h1,this._height,this._delph,this.body.uuid);
+                this.body.position.y=h1+this._height+120 //+ this._height; //y
+                //trace("!!!",this.body.position)
 
             }
+            if(this.typeStr1 == "Door"||this.typeStr1 == "Not"){
+                trace(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>",this._height)
+                this.body.position.y=h1+ this._height
+            }
+
         }
 
 

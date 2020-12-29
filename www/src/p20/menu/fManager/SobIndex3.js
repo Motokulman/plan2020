@@ -30,9 +30,9 @@ export class SobIndex3  extends SobIndex {
                 if(blok.parent==undefined){
 
                     if(pos.o && pos.o.type&&pos.o.type=="SpliceSten"){
-                        trace(">>>",blok.parent,blok)
+
                         if(pos.o.windows.isBlokPlace(blok)==true){                            
-                            pos.o.addBlok(blok);
+                            pos.o.addBlok(blok);                            
                             global.dragPic.stop()  
                         }                                              
                     }

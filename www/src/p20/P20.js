@@ -17,6 +17,8 @@ export class P20  {
         this.sizeMax=this.par.sizeMax
         this.sobSP=undefined;
 
+        this._boolMax=true
+
         this.startFund='{"colorC0":"#ffc0b0","colorC1":"#3a11b5","delphC0":27,"delphC1":75, "delphPlus":15, "sizeLine":1,"colorLine":"#000000"}'
         this.sOFund=JSON.parse(this.startFund);
         
@@ -35,7 +37,8 @@ export class P20  {
         this.korektRect = new KorektRect();
         this.korektLine = new KorektLine();
 
-        this.pm=new PM(par.visi3D,this.objectBase)
+        this.pm=new PM(par.visi3D,this.objectBase);
+
 
 
       /*  var m=this.pm.matDop.getIDReturn(13)
@@ -237,7 +240,8 @@ export class P20  {
             for (var i = 0; i < this.array.length; i++) {
                 o.array[i]=this.array[i].getObj();
             } 
-            if(this.sGposition!=undefined)o.position= this.sGposition()        
+            if(this.sGposition!=undefined)o.position= this.sGposition()    
+            trace(o)    
             return o;
         }
 
@@ -259,6 +263,7 @@ export class P20  {
             }
             this._index=-1
             this.index=o.index;
+            trace(">>>>>",o)  
         }
 
         this.getRect=function(num){           
@@ -270,9 +275,49 @@ export class P20  {
             return s.getRect()
         }
 
+
+        this.mouseup=function(e){
+            self.boolMax=true
+            if (dcmParam.mobile == false) {
+                document.removeEventListener('mouseup', self.mouseup);
+            } else {
+                document.removeEventListener('touchend', self.mouseup);
+            }
+        }
+
+
+        this.mousedown=function(e){
+            self.boolMax=false;
+            if (dcmParam.mobile == false) {
+                document.addEventListener('mouseup', self.mouseup);
+            } else {
+                document.addEventListener('touchend', self.mouseup);
+            }
+        }
+        if (dcmParam.mobile == false) {
+            document.addEventListener('mousedown', self.mousedown);
+        } else {
+            document.addEventListener('touchstart', self.mousedown);
+        }
+
+
         this.korektHeight();
         this.fun("complit");
     }
+
+
+    set boolMax(value) {  
+        if(this._boolMax!= value) {
+            this._boolMax= value;
+            trace("this._boolMax  >>",this._boolMax)
+            for (var i = 0; i < this.array.length; i++) {           
+                this.array[i].boolMax= value;
+            }
+        }    
+              
+    }    
+    get boolMax() { return  this._boolMax;}
+
 
 
     set index(value) {       

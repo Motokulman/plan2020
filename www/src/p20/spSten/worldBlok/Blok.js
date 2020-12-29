@@ -69,7 +69,7 @@ export class Blok  {
         this._height=this.rect.h;
         this._delph=this.rect.d;  
 
-        trace(">>>>>>>>>>>>>>",this._width)      
+        trace(">>>>>>>>@@>>>>>>",this._height,this.obj.mod.r)      
 
         this.col=parseInt(this.obj.str[2],2)
         this.col1=parseInt(this.obj.str[3],2)
@@ -88,9 +88,9 @@ export class Blok  {
             this.body.col1=this.col1
             this.body.offset=this.offset
 
-            this._width=this.obj.mod.r[3];
-            this._height=this.obj.mod.r[5];
-            this._delph=this.obj.mod.r[4];
+            //this._width=this.obj.mod.r[3];
+            //this._height=this.obj.mod.r[5];
+            //this._delph=this.obj.mod.r[4];
             this.dragWHD();
 
             if(this.funInit!=undefined)this.funInit()
@@ -106,8 +106,9 @@ export class Blok  {
         this.setPosition=function(x,y,z){   
             if(self._parent!=undefined){
                 if(self._parent.type=="SPLWindow"){               
-                    this.vector=self._parent.getGlob(x,y,this.body.position._y,this) 
-                    this.setReal(this.vector.x,this.vector.y,this.vector.z)
+                    this.vector=self._parent.getGlob(x,y,this.body.position._y,this)
+                    this.body.position.x=this.vector.x
+                    //this.setReal(this.vector.x,this.vector.y,this.vector.z)
                     this.render();
                 }
             }
@@ -135,7 +136,7 @@ export class Blok  {
         }
 
 
-        this.redrahHHH=function(h){  
+        this.redrahHHH=function(h,h1){  
             trace("#redrahHHH##",h);
         }
 
@@ -149,6 +150,7 @@ export class Blok  {
                 this._width=w;
                 this._height=h;
                 this._delph=d;
+                trace("$$$2$$$$",this._height); 
             }
         }
 
@@ -156,10 +158,11 @@ export class Blok  {
         this.funGetObj=undefined
 
         this.setObj=function(o){
-
+            
             this._width=o.w||o.width;
             this._height=o.h||o.height;
-            this._delph=o.d||o.delph;   
+            this._delph=o.d||o.delph; 
+            trace("$$$1$$$$",this._height,o); 
 
             if(this.unik!=undefined)if(this.unik.setObj!=undefined)if(o.unik!=undefined)this.unik.setObj(o.unik)
             this.setReal(o.x,o.y,o.z);
@@ -212,7 +215,7 @@ export class Blok  {
             this._height= value;
             this.dragWHD();
             
-            
+            trace("$$$3$$$$",this._height); 
         }
     }    
     get height() { return  this._height;}   

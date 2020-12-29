@@ -454,10 +454,12 @@ export class DebKR  {
             if(br.bool[2]==true)dp.dLineParam(br.x+br.w,br.y+br.h,br.x,br.y+br.h,0xff0000,3.0);
             if(br.bool[3] == true)dp.dLineParam(br.x, br.y, br.x, br.y+br.h,0xff0000,3.5);  
 
-            if(br.bool1[0]==true)dp.dLineParam(br.x,br.y,br.x+br.w,br.y,0x0000ff,4.0);           
-            if(br.bool1[1]==true)dp.dLineParam(br.x+br.w,br.y,br.x+br.w,br.y+br.h,0x0000ff,4.0)
-            if(br.bool1[2]==true)dp.dLineParam(br.x+br.w,br.y+br.h,br.x,br.y+br.h,0x0000ff,4.0);
-            if(br.bool1[3] == true)dp.dLineParam(br.x, br.y, br.x, br.y+br.h,0x0000ff,4.0); 
+
+            if(br.bool1[0]==true)dp.dLineParam(br.x,br.y,br.x+br.w,br.y,0x0000ff,2.0);           
+            if(br.bool1[1]==true)dp.dLineParam(br.x+br.w,br.y,br.x+br.w,br.y+br.h,0x0000ff,2.5)
+            if(br.bool1[2]==true)dp.dLineParam(br.x+br.w,br.y+br.h,br.x,br.y+br.h,0x0000ff,3.0);
+            if(br.bool1[3] == true)dp.dLineParam(br.x, br.y, br.x, br.y+br.h,0x0000ff,3.5); 
+
 
             www=0.1
             if(self.check2.value==true)www=1
@@ -472,7 +474,7 @@ export class DebKR  {
             if(br.boolPoli==true)dp.dLineParam(br.x,br.y,br.x+br.w,br.y+br.h,col,www);  
             else dp.dLineParam(br.x,br.y+br.h,br.x+br.w,br.y,col,www);
             
-            if(self.check2.value==true)return
+            if(self.check2.value==true)return;
             p.x=br.x+br.w/2;
             p.y=br.y+7;
             dp.dText(p,Math.round(br.u*100)/100+"u"+Math.round(br.u1*100)/100);   

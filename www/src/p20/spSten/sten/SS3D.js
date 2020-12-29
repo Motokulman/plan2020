@@ -82,9 +82,23 @@ export class SS3D  {
 			
             this.cont3d.position.z=-(this._height+this._height1)
        		
-            this.drawGrani();
-            this.drawLittel();
-            this.drawVerg();
+            
+
+
+            this.cont3d.visible=this.par.par._boolMax;
+            this.cont3dL.visible=!this.par.par._boolMax;
+            if(this.par.par._boolMax==true){
+				this.drawGrani();
+				this.drawVerg();
+            }else{
+            	this.drawLittel();
+            	this.par.par.addObjFun1(this.par);
+            }
+
+            
+            
+            
+
 		}
 
 
@@ -109,7 +123,7 @@ export class SS3D  {
 		this.arrGrani[1].boolInvert	=true
 
 		
-
+		this.arrGrani[0].arr[2].vergLittel=this.vergLittel
 
 		this.drawVerg= function () {
 			
@@ -276,7 +290,7 @@ export class SGrani{
 	  	this.boolInvert=false;
 
 	  	
-
+	  	
 
 
 	    this.arrP=[new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3()]
@@ -400,16 +414,25 @@ export class SGrani{
 
 			this.korektRect.boolDebug=false;
 			this.boolVergDrag=false;
-			
+
+			this.korektRect.colizY= this.par._height1+ this.par._height;//-this.arrP[i].x;
+
+
 			for (var i = 0; i < 5; i++) {
-				if(this.par.par.idArr==0)if(this.idArr==1)if(i==2)	this.korektRect.boolDebug=true;	
+				//if(this.par.par.idArr==0)if(this.idArr==1)if(i==2)	this.korektRect.boolDebug=true;	
+				/*if(this.arr[i].vergLittel!=undefined){
+					this.korektRect.boolDebug=true;	
+					
+				}*/
 				if(this.arr[i].dist!=0){
 					if(i==2){									
-						this.korektRect.colizX=0//-this.arrP[i].x;
+						this.korektRect.colizX=-this.arrP[i].x;
 						this.arr[i].setNaRect(
 						0,this.par.par.windows.world,
 						this.h,
 						this.y,null,this.arrP[i].x);
+
+
 					}
 					else{
 						this.arr[i].setNaRect(
@@ -450,6 +473,8 @@ export class GronSten {
 		this.rendSahTextur=0
 		this.idArr=-1
 		this._material=par._material
+
+		this.vergLittel=undefined
 
 		this.mesh=new THREE.Mesh(this.geometry,this._material)//this.par.par.par.par.mat);	
 		this.mesh.rotation.x=Math.PI/2;
@@ -629,17 +654,19 @@ export class GronSten {
 
 			//this.mesh.position.z=-_h;
 			this.par.korektRect.rect=this.rect;	
-			this.par.korektRect.coliz=_coliz	
+			this.par.korektRect.coliz=_coliz;	
 
-			this.par.korektRect.arrLine=this.arrLine
+			this.par.korektRect.arrLine=this.arrLine;
 			
-			this.par.korektRect.pS=this.pS
+			this.par.korektRect.pS=this.pS;
 			this.par.korektRect.korektGrid();
 			this.par.korektRect.setGeom(this.geometry, this.rendSahTextur);
 			
 			this.korektLine();
 
 			this.boolVergDrag=this.par.korektRect.boolVergDrag;
+
+			if(this.vergLittel!==undefined)this.vergLittel.drawWindow(this.par.korektRect, _xSm);
 
 			
 		}
@@ -759,8 +786,14 @@ export class VergLittel{
 		this._material=material;
 		this.mesh=new THREE.Mesh(this.geometry,this._material)
 		this.par.cont3d.add(this.mesh)
-
 		this.normalPosit=new THREE.Vector3(0,1,0)
+
+
+		this.geometry1=new PlaneXZ();
+		this._material1=material;
+		this.mesh1=new THREE.Mesh(this.geometry1,this._material1)
+		this.par.cont3d.add(this.mesh1)
+
 
 
 		this.arrLine=[];
@@ -854,27 +887,16 @@ export class VergLittel{
 				trace(this.par.par.idArr+">>>>>>>>>>",this.arrLine)
 				trace(this.korektLine.aTri);*/
 			}
-/*			*/
-			
-			/*if(gran.boolVergDrag==false&&gran1.boolVergDrag==false){
-				this.geometry.clear()
-				for (var i = 1; i < gran.arrP.length-1; i++) {				
-					this.geometry.addTri(gran.arrP[0],gran.arrP[i],gran.arrP[i+1])
-				}
-				for (var i = gran1.arrP.length-2; i >=1 ; i--) {				
-					this.geometry.addTri(gran1.arrP[gran1.arrP.length-1],gran1.arrP[i],gran1.arrP[i-1])
-				}
-				this.geometry.redrag(this.normalPosit)
+		}	
 
 
-				if(this.mesh.visible==false)this.mesh.visible=true
-			}else{
-				if(this.mesh.visible==true)this.mesh.visible=false
-			}*/	
+		this.drawWindow=function(kR,xxx){
+			trace(this.par.par._delph)
+			this.mesh1.position.x=xxx
+			kR.setGeomBool1(this.geometry1, this.par.par._delph);
+		}
+		
 
-
-
-		}		
 	}
 	set material(value) {		
         if(this._material!==value){

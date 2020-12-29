@@ -114,7 +114,7 @@ export function SpPolygon (_stage, _unikName) {
 	this.shTr
 	this.dragNaTriang=function(){
 		this.arrPosition.length = 0;	
-		for (var i = 0; i < this.array.length; i++) {			
+		for (var i = 0; i < this.array.length; i++) {
 			this.arrPosition.push(this.array[i].position);
 		}
 		this.triangulateShape.segment.x = 0.5;
