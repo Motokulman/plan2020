@@ -1,3 +1,4 @@
+import { TextureSize } from './TextureSize.js';
 
 export class TextureObject {
     constructor(_dCont,_fun) {
@@ -45,58 +46,77 @@ export class TextureObject {
             var a = self.image.link.split("/");
             var s = a[a.length - 1];
             if (s.length > 20) s = s.substr(0, 20) + "..";
-            self.resLabel.text = self.image.picWidth + "x" + self.image.picHeight + "px";
+            // self.resLabel.text = self.image.picWidth + "x" + self.image.picHeight + "px";
 
-            self.size256But.visible = self.image.picWidth > 256 || self.image.picHeight > 256;
-            self.size512But.visible = self.image.picWidth > 512 || self.image.picHeight > 512;
+            // self.size256But.visible = self.image.picWidth > 256 || self.image.picHeight > 256;
+            // self.size512But.visible = self.image.picWidth > 512 || self.image.picHeight > 512;
 
             if (Number.isInteger(Math.log2(self.image.picWidth)) && Number.isInteger(Math.log2(self.image.picHeight))) {
-                self.resLabel.colorText1 = self.colorT;
-                self.resizeButton.visible = false;
-            } else {
-                self.resLabel.colorText1 = '#ff0000';
-                self.resizeButton.visible = true;
+                // self.resLabel.colorText1 = self.colorT;
+                // self.resizeButton.visible = false;
+                self.resize.visible=true
+            } else {                
+                self.resize.objDin =  self.objDin
+                self.resize.image =  self.image
+
+                self.resize.visible=true
+ 
+                // self.resLabel.colorText1 = '#ff0000';
+                // self.resizeButton.visible = true;
             }
         });
         this.image.width = this.image.height = this.panel.width;
-
-
+/////////////////////////////////////////////////////////////////////////////////////////
         var yy = this.panel.height+(this.margin*2)
 
-        this.size256But = new DButton(this.info, 0, yy, '256', async () => {
-            const width = Math.min(2 ** Math.floor(Math.log2(this.image.picWidth)), 256);
-            const height = Math.min(2 ** Math.floor(Math.log2(this.image.picHeight)), 256);
-            this.setResizedImage(width, height);
-        });
-        this.size512But = new DButton(this.info, 0, yy, '512', async () => {
-            const width = Math.min(2 ** Math.floor(Math.log2(this.image.picWidth)), 512);
-            const height = Math.min(2 ** Math.floor(Math.log2(this.image.picHeight)), 512);
-            this.setResizedImage(width, height);
-        });
-        this.resizeButton = new DButton(this.info, 0, yy, "res", async () => {
-            const width = 2 ** Math.floor(Math.log2(self.image.picWidth));
-            const height = 2 ** Math.floor(Math.log2(self.image.picHeight));
-            this.setResizedImage(width, height);
-        });
+        this.dCont11 = new DPanel(this.info, this.margin, yy);
+        // this.dCont11.width = this._width - (this.margin * 2);
+        this.dCont11.width = this.allWh - this.margin;
+        
+        // this.dCont.visible=this._active
+        this.resize = new TextureSize(this.dCont11.content, this.image, this.objDin, function(s,p,p1){ 
+            self.image.link = s.link
+            self.startTextur()
+        }, this.dCont11.width)
 
-        this.size256But.width = this.size512But.width = this.resizeButton.width =  (this.allWh-this.margin*2) / 3;
-        this.size256But.height = this.size512But.height = this.lineHeight / 2 - this.margin * 2;
-        this.resizeButton.height = this.lineHeight - this.margin * 2;
+        yy += 32
 
-        this.size256But.x = this.margin;
-        this.size512But.x = this.size256But.x + this.size256But.width + this.margin;
-        this.resizeButton.x = this.size512But.x + this.size512But.width + this.margin;
+        // this.size256But = new DButton(this.info, 0, yy, '256', async () => {
+        //     const width = Math.min(2 ** Math.floor(Math.log2(this.image.picWidth)), 256);
+        //     const height = Math.min(2 ** Math.floor(Math.log2(this.image.picHeight)), 256);
+        //     this.setResizedImage(width, height);
+        // });
+        // this.size512But = new DButton(this.info, 0, yy, '512', async () => {
+        //     const width = Math.min(2 ** Math.floor(Math.log2(this.image.picWidth)), 512);
+        //     const height = Math.min(2 ** Math.floor(Math.log2(this.image.picHeight)), 512);
+        //     this.setResizedImage(width, height);
+        // });
+        // this.resizeButton = new DButton(this.info, 0, yy, "res", async () => {
+        //     const width = 2 ** Math.floor(Math.log2(self.image.picWidth));
+        //     const height = 2 ** Math.floor(Math.log2(self.image.picHeight));
+        //     this.setResizedImage(width, height);
+        // });
 
-        this.size256But.visible = this.size512But.visible = this.resizeButton.visible = false;
+        // this.size256But.width = this.size512But.width = this.resizeButton.width =  (this.allWh-this.margin*2) / 3;
+        // this.size256But.height = this.size512But.height = this.lineHeight / 2 - this.margin * 2;
+        // this.resizeButton.height = this.lineHeight - this.margin * 2;
 
-        yy +=  this.size256But.height+this.margin;
+        // this.size256But.x = this.margin;
+        // this.size512But.x = this.size256But.x + this.size256But.width + this.margin;
+        // this.resizeButton.x = this.size512But.x + this.size512But.width + this.margin;
 
-        this.resLabel = new DLabel(this.panel, this.margin, yy, "null")
-        this.resLabel.fontSize = 12;
-        this.colorT = this.resLabel.colorText1;
+        // this.size256But.visible = this.size512But.visible = this.resizeButton.visible = false;
 
-        yy -=  this.size512But.height+this.margin;
-        yy +=  this.resizeButton.height+this.margin;
+        // yy +=  this.size256But.height+this.margin;
+
+        // this.resLabel = new DLabel(this.panel, this.margin, yy, "null")
+        // this.resLabel.fontSize = 12;
+        // this.colorT = this.resLabel.colorText1;
+
+        // yy -=  this.size512But.height+this.margin;
+        // yy +=  this.resizeButton.height+this.margin;
+
+/////////////////////////////////////////////////////////////////////////////////////////
 
         this.loadButton = new DButton(this.info, this.margin,  yy, "load", function (b) {
             self.uploadImage(this.files[0]);
@@ -291,9 +311,8 @@ export class TextureObject {
                     id = i/2
                     boolCheck = true
                     self.fun("novaTexeurBig", boolXZ[i], self.texture);
-                    trace('boolXZ[i]',boolXZ[i])
                 } else {
-                     self.fun("novaTexeurBig", boolXZ[i], null);
+                    self.fun("novaTexeurBig", boolXZ[i], null);
                 }
             }            
             if (boolCheck != true){
@@ -339,7 +358,6 @@ export class TextureObject {
             var s=this.sah;
             setTimeout(function() {
                 if(self.sah==s)self.save()
-                    trace('(this.object)', (self.objDin.id))
             }, 500);
         } 
     }
@@ -359,12 +377,12 @@ export class TextureObject {
         this.textXZ();
     }
 
-    redraw() {
-        let l = 'https://alphakp.ru' + this.objDin.src
+    redraw(p) {
+        let l = p!= undefined ? p : 'https://alphakp.ru' + this.objDin.src
+
         this.image._link = '';
         this.image.link = l;
     }
-
 
     set visible(value) {
         if (this._visible == value) return;
@@ -377,6 +395,11 @@ export class TextureObject {
     }
     get visible() { return this._visible; }
 
+    set width(v) {
+        if (this._width == v) return;
+        this._width = v;
+    }
+    get width() { return this._width; }
 
     set height(v) {
         if (this._height == v) return;

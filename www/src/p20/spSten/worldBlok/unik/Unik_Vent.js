@@ -315,24 +315,22 @@ export class Unik_Vent {
         this.control=function (){
 
                 for (var i = 0; i <  this.arrayInfo.length; i++) {
-                    let e = this.arrayInfo[i].param
-                    
-                    if (e == 'numHeightGlav') {
+                    let rrr = this.arrayInfo[i].param
+                    if (rrr == 'numHeightGlav') {
                         this.arrayInfo[i].min = Math.abs(this._height1)
                         if (this.numHeightGlav < this.arrayInfo[i].min) this.numHeightGlav = this.arrayInfo[i].min
                     }
 
-                    if (e == 'numHeightGlav') {
+                    if (rrr == 'numHeightGlav') {
                         this.arrayInfo[i].max = Math.abs(this._height)-this._wh
                         if (this.numHeightGlav > this.arrayInfo[i].max) this.numHeightGlav = this.arrayInfo[i].max
                     }
 
-                    if (e == 'wh') {
+                    if (rrr == 'wh') {
                         this.arrayInfo[i].max = Math.abs(this._delph)
-                        if (this.wh > this.arrayInfo[i].max) this.wh = this._delph
+                        if (this.wh > this.arrayInfo[i].max) this.wh = this.par._width
                     }
                 }
-
         }
 
         var e;  
@@ -376,7 +374,6 @@ export class Unik_Vent {
             this._wh1 = value;
             this._wh = value;
 
-            this.ddddd()
             if(this.korWit)this.korWit()
             this.par.dragWHD()
             this.par.par.render()
@@ -388,7 +385,7 @@ export class Unik_Vent {
         if(this._numHeightGlav!=value){
             this._numHeightGlav = value;
             this._numHeight= -value;
-            this.ddddd()
+            // this.ddddd()
             this.par.dragWHD()
             this.par.par.render()
         }
@@ -399,7 +396,7 @@ export class Unik_Vent {
         if(this._glavBool!=value){
             this._glavBool = value;
 
-            this.ddddd()
+            // this.ddddd()
             this.par.dragWHD()
             this.par.par.render()
         }
@@ -410,7 +407,7 @@ export class Unik_Vent {
         if(this._bool!=value){
             this._bool = value;
             this.getSize()
-            this.ddddd()
+
             if(this.korWit)this.korWit()
             this.par.dragWHD()
             this.par.par.render()
@@ -422,7 +419,7 @@ export class Unik_Vent {
     set bool1(value) {
         if(this._bool1!=value){
             this._bool1 = value;
-            this.ddddd()
+            // this.ddddd()
             this.par.dragWHD()
             this.par.par.render()
         }
@@ -432,7 +429,7 @@ export class Unik_Vent {
     set bool2(value) {
         if(this._bool2!=value){
             this._bool2 = value;
-            this.ddddd()
+            // this.ddddd()
             this.par.dragWHD()
             this.par.par.render()
         }
@@ -442,7 +439,7 @@ export class Unik_Vent {
     set bool3(value) {
         if(this._bool3!=value){
             this._bool3 = value;
-            this.ddddd()
+            // this.ddddd()
             this.par.dragWHD()
             this.par.par.render()
         }

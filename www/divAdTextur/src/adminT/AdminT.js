@@ -1,6 +1,7 @@
 
 
 import { TextureBD } from './TextureBD.js';
+import { TexturePhoto } from './TexturePhoto.js';
 import { MVisi3D } from './visi3D/MVisi3D.js';
 import { SceneSB } from './visi3D/SceneSB.js';
 
@@ -8,7 +9,7 @@ export class AdminT {
     constructor() {
     	this.type="AdminT";
     	var self=this;
-        this.whv =62;
+        this.whv = 62;
         this.otstup = 2
         this.linkO = 'https://alphakp.ru'
 
@@ -65,7 +66,6 @@ export class AdminT {
             if (s === 'novaTexeurBig') {
                 self.material[p] = p1
                 self.material.needsUpdate=true
-                trace(self.material)
             }
             self.visi3D.intRend=1
         })
@@ -100,6 +100,8 @@ export class AdminT {
 
         self.visi3D.intRend=1
 
+        this.aa = new TexturePhoto(this.div, this.visi3D, 10, 10)
+
         this.sizeWindow = function(w,h){  
             var w = document.documentElement.clientWidth;
             var h = document.documentElement.clientHeight;
@@ -117,9 +119,9 @@ export class AdminT {
             this.window.x = this.textureBD.width+this.otstup
             this.window.y = this.whv 
             this.window.width = w - this.textureBD.width - (this.otstup*3)
-            this.window.height = h - (this.whv - (this.otstup*4))
+            this.window.height = h - this.whv - (this.otstup)
 
-            this.visi3D.sizeWindow(0, 0,  this.window.width, this.window.height - 30);
+            this.visi3D.sizeWindow(0, 0,  this.window.width, this.window.height - 32);
         }
     }
 
