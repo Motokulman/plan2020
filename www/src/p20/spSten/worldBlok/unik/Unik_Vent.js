@@ -210,7 +210,7 @@ export class Unik_Vent {
             }
 
             this.graphics.moveTo(this.array[_structures][0].x, this.array[_structures][0].z)
-            for (var i = 0; i < sah+1; i++) {
+            for (var i = 0; i < sah+2; i++) {
                 var p0=this.getP(_structures, _position)
                 this.graphics.lineTo(p0.x, p0.z)
             }
