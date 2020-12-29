@@ -25,7 +25,7 @@ export class BInSten extends Blok {
             this.planeXZ,
             this.par.lineBasicMaterial2
         )
-        trace('this.planeXZ',this.planeXZ)
+
 
         /*this.lineSegments = new THREE.Mesh(   
             this.planeXZ
@@ -106,7 +106,7 @@ export class BInSten extends Blok {
             this.graphics.drawRect(-this._width/2-sizeLine,-this._delph/2-sizeLine,this._width+(sizeLine*2),this._delph+(sizeLine*2));
             this.graphics.endFill()
 
-
+          
 
             if(this.typeStr1 == "Window"){
 
@@ -151,6 +151,16 @@ export class BInSten extends Blok {
         this.drawActive=function(){            
             this.stAct.sahAct=this._active ? 40: 0;
         }
+
+        //перехват
+        this.redrahHHH=function(y){
+            if(this.typeStr1 == "Window"){
+                trace("$$$@@etHeight=",y);
+                this.body.position.y=y
+
+            }
+        }
+
 
         this.init()
     }

@@ -53,6 +53,7 @@ export class SPLWindow  {
   			blok.parent=this;
   			this.content2d.addChild(blok.content2d)  
   			this.par.draw1(true)
+  			blok.redrahHHH(this._height);
   			
   			this.par.content3d.add(blok.content3d)  
 	    	return -1;	    	
@@ -275,7 +276,7 @@ export class SPLWindow  {
         if(this._height!=value){
             this._height= value;
             for (var i = 0; i < this.array.length; i++) {
-                this.array[i].redrahHHH();
+                this.array[i].redrahHHH(this._height);
             }        	
         }
     }    

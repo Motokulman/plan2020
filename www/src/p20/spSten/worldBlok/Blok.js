@@ -33,7 +33,7 @@ export class Blok  {
         this._rotation=0    
         this.boxHelper=undefined
         this._life=true;
-        this._parent=undefined
+        this._parent=undefined;
 
         this.unik=undefined;
         this.uuid=calc.generateRendom(2);
@@ -61,9 +61,15 @@ export class Blok  {
         this.rect.h= this.obj.mod.r[4];
         this.rect.d= this.obj.mod.r[5];
 
+
+
+
+
         this._width=this.rect.w;
         this._height=this.rect.h;
-        this._delph=this.rect.d;        
+        this._delph=this.rect.d;  
+
+        trace(">>>>>>>>>>>>>>",this._width)      
 
         this.col=parseInt(this.obj.str[2],2)
         this.col1=parseInt(this.obj.str[3],2)
@@ -99,9 +105,8 @@ export class Blok  {
         this.vector;
         this.setPosition=function(x,y,z){   
             if(self._parent!=undefined){
-                if(self._parent.type=="SPLWindow"){                    
-                    this.vector=self._parent.getGlob(x,y,z,this)                 
-                
+                if(self._parent.type=="SPLWindow"){               
+                    this.vector=self._parent.getGlob(x,y,this.body.position._y,this) 
                     this.setReal(this.vector.x,this.vector.y,this.vector.z)
                     this.render();
                 }
@@ -115,22 +120,23 @@ export class Blok  {
             this._x=x;
             this._y=y;
             this._z=z;
-            this.body.position.set(x,0);
+            this.body.position.set(x,y);
             if(this._parent)this._parent.drawDeb();            
         }
 
         this.drag=function(){            
             self.content2d.x=self.body.position.x;
             self.content2d.y=0;
+            trace(">>>",self.body.position)
+            self.content3d.position.x=self.body.position.x;            
+            self.content3d.position.z=-self.body.position.y;
 
-            self.content3d.position.x=self.body.position.x;
-            
-            self.content3d.position.z=self.rect.y;
+
         }
 
 
-        this.redrahHHH=function(){  
-            trace("#redrahHHH##");
+        this.redrahHHH=function(h){  
+            trace("#redrahHHH##",h);
         }
 
         
@@ -178,7 +184,10 @@ export class Blok  {
         }
         //trace("===========================================================================",this.type);
         //if(this.type=="Blok")this.init(); 
-            
+        
+       
+
+
         this.drawActive=undefined
     }
     set active(value) {

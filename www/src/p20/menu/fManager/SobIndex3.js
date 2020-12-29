@@ -26,9 +26,11 @@ export class SobIndex3  extends SobIndex {
             self.korektAP(pos);
 
             if(blok!=undefined){
-
+                
                 if(blok.parent==undefined){
+
                     if(pos.o && pos.o.type&&pos.o.type=="SpliceSten"){
+                        trace(">>>",blok.parent,blok)
                         if(pos.o.windows.isBlokPlace(blok)==true){                            
                             pos.o.addBlok(blok);
                             global.dragPic.stop()  
