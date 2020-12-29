@@ -18,7 +18,9 @@
 	var nameList=arrayList[0];
 
 
-	var url='https://alphakp.ru/api'
+
+	var arrayURL=['https://alphakp.ru/api','https://alphakp.ru/api11'];
+	var url=arrayURL[0];
 
 
 
@@ -277,6 +279,8 @@
 		new DLabel(wind,100,10,"id:")
 		var iii=new DInput(wind,120,2,id,function(){
 			id=this.value
+			localStorage.object.id=id
+			localStorage.save()
 			openObj(objectBase);
 		})
 		iii.width=50
@@ -288,17 +292,72 @@
 
 			nameList=arrayList[this.index]
 			openObj(objectBase);
+			localStorage.object.nameList=nameList
+			localStorage.save()
 		});
 		ccc.height=28;
 
 
 		new DLabel(wind,400,10,"idFile:")
-		var iii=new DInput(wind,450,2,idFile,function(){
-			idFile=this.value
+		var iii1=new DInput(wind,450,2,idFile,function(){
+			idFile=this.value			
 			openObj(objectBase);
+			localStorage.object.idFile=idFile
+			localStorage.save()
+
 		})
-		iii.width=50
-		iii.height=28
+		iii1.width=50
+		iii1.height=28
+
+
+		new DLabel(wind,570,10,"url:")
+		let ccc1=new DComboBox(wind,600, 2, arrayURL, function(){
+
+			url=arrayURL[this.index]
+			openObj(objectBase);
+			localStorage.object.url=url
+			localStorage.save()
+		});
+		ccc1.height=28;
+		ccc1.width=300;
+
+		var localStorage=new LocalStorage(null,"sdxsdftgf")
+
+trace(localStorage.object.id, localStorage.object)
+
+		if(localStorage.object.id==undefined){
+			localStorage.object.id=id;
+
+		}
+		if(localStorage.object.nameList==undefined)localStorage.object.nameList=nameList;
+		if(localStorage.object.url==undefined)localStorage.object.url=url;
+		if(localStorage.object.idFile==undefined)localStorage.object.idFile=idFile;
+
+
+trace(localStorage.object.id, localStorage.object)
+		idFile=localStorage.object.idFile;
+		id=localStorage.object.id;
+		nameList=localStorage.object.nameList;
+		url=localStorage.object.url;
+
+
+		iii.value=id+""
+		iii1.value=idFile+""
+
+
+		nameList=localStorage.object.nameList;
+		for (var i = 0; i < arrayList.length; i++) {
+			if(arrayList[i]==nameList)ccc.index=i
+		}
+
+
+		url=localStorage.object.url;
+
+		for (var i = 0; i < arrayURL.length; i++) {
+			if(arrayURL[i]==url)ccc1.index=i
+		}
+
+
 
 		
 		for (var i = 0; i < array.length; i++) {
@@ -409,6 +468,63 @@
             return null;
         }
     }
+
+
+
+
+	function LocalStorage(fun,_key) {
+		this.fun = fun;
+		var self = this;
+		this.object;
+		this.key = _key||'shirt';
+		this.object; // тут храняться все данные с localStorage
+		var b;
+		// инициализация localStorage
+		this.initLoad=function() {
+			b=true;
+			this.object = window.localStorage[this.key];
+			if(this.object == "undefined")b=false;
+			if(this.object == undefined)b=false;
+			
+			// проверка пуст ли  localStorage
+			if(b == false) {
+				this.object = this.getStartObj(); // если localStorage пуст, записываем обьект с функции getStartObj
+			}else {
+				this.object = jQuery.parseJSON(this.object); // если localStorage не пуст записываем содержимое предварительно
+			}
+			trace(">>",b,this.object)			
+		}
+		
+		// если localStorage пуст, записываем обьект
+		this.getStartObj = function() {
+			var obj = {
+				activ:false,
+				dubag:false,
+				menu:{},
+				xz:{}
+			};
+			return obj;
+		}
+
+		// сохраняем в localStorage данные
+		this.save = function() {
+			trace("save")		
+			window.localStorage[this.key] = JSON.stringify(self.object);
+		}
+
+		// сохраняем в localStorage данные
+		this.clear = function() {
+			window.localStorage[this.key] = undefined;
+		}
+		self.initLoad();
+		//setTimeout(function() {self.initLoad();}, 1);
+			
+	}
+
+
+
+
+
 
 </script>
 
