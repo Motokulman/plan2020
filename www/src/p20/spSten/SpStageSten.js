@@ -140,7 +140,7 @@ export function SpStageSten (par,  fun) {
     this.texture = new THREE.TextureLoader().load('resources/image/pic.png');  
     this.texture.wrapS = THREE.RepeatWrapping;
 	this.texture.wrapT = THREE.RepeatWrapping;
-	this.texture.repeat.y=-1
+	this.texture.repeat.y=-1;
 
 
 
@@ -563,7 +563,7 @@ Object.defineProperties(SpStageSten.prototype, {
 			pp=	Math.round(value+this._height1)
 			for (var i = 0; i < this.avp.length; i++) {				
 				if(this.avp[i].position.z>=ppOld){
-					this.avp[i].position.z=pp
+					//this.avp[i].position.z=pp
 				}
 			}
 			for (var i = 0; i < this.arrPoint.length; i++) {				

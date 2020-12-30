@@ -117,6 +117,7 @@ export function SpPolygon (_stage, _unikName) {
 		for (var i = 0; i < this.array.length; i++) {
 			this.arrPosition.push(this.array[i].position);
 		}
+		
 		this.triangulateShape.segment.x = 0.5;
 		this.triangulateShape.segment.y = 0.5;
 		this.triangulateShape.segment.width = this.rectBig.w;

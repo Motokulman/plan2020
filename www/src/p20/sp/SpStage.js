@@ -259,7 +259,7 @@ SpStage.prototype = {
 				if(Math.round(p.x)==Math.round(this.avp[i].position.x)){
 					if(Math.round(p.y)==Math.round(this.avp[i].position.y)){
 						if(Math.round(p.z)==Math.round(this.avp[i].position.z)){
-							
+							trace(p.z)
 							return this.avp[i]
 						}
 					}

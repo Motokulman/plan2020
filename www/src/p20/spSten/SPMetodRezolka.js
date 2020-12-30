@@ -238,7 +238,11 @@ export class SPMetodRezolka  {
 
 		this.sort1OtPol=function(_sten, _arrTiang, _shTr){
 			if(calc.isRectS(_sten.rectBig,this.pol.rectBig)==false)return;
-
+			
+			if(_sten.par._boolMax==false){
+				_sten.par.addObjFun1(_sten)
+				return;
+			}
 			this.setSten(_sten)
 			/*this.sortStenPoint(sten)
 
