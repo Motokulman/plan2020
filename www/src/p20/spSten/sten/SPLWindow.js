@@ -44,6 +44,7 @@ export class SPLWindow  {
   		this.array=[];
   		var _blok, ii
   		this.addBlok = function(blok){
+  			
 	    	if(blok.parent!=undefined)blok.parent.removeBlok(blok)  	
   			//if(this.isArrPos(blok)!=-1)this.removeBlok(blok)  
   			this.delph=par._delph;
@@ -53,9 +54,9 @@ export class SPLWindow  {
   			blok.parent=this;
   			this.content2d.addChild(blok.content2d)  
   			this.par.draw1(true)
-  			blok.redrahHHH(this._height,this._height1);
-  			
-  			this.par.content3d.add(blok.content3d)  
+  			blok.redrahHHH(this._height,this._height1);  			
+  			this.par.content3d.add(blok.content3d);  
+  			this.par.par.fun("startTikInfo");
 	    	return -1;	    	
 	    }
 
@@ -70,6 +71,7 @@ export class SPLWindow  {
 	    		this.removeBlok(blok);
 	    		this.world.remove(blok.body);
 	    		this.par.draw1(true)
+	    		this.par.par.fun("startTikInfo")
 	    		return _blok;	
 	    	}	    	
 	    	return ii;	    		
@@ -237,6 +239,15 @@ export class SPLWindow  {
 		}
 		this.drawDeb = function () {
 			if(this.deb)this.world.drawDeb()
+		}
+
+
+		var oInfo={}
+		oInfo.type=this.type;
+		this.getInfo=function(a){ 
+			for (var i = 0; i < this.array.length; i++) {
+				this.array[i].getInfo(a);
+			}
 		}	
 
 

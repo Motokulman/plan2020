@@ -181,7 +181,12 @@ export function SpStageSten (par,  fun) {
 	this.getVP=function(str){ return new SpVPXz(this);}
 
 
-
+	this.getInfo=function(a){ 
+		for (var i = 0; i < this.arrSplice.length; i++) {
+			if (this.arrSplice[i].life == false) continue;
+			this.arrSplice[i].getInfo(a);
+		}	
+	}
 
 
 	
@@ -372,11 +377,12 @@ export function SpStageSten (par,  fun) {
 		//this.debugPixi.clearD();
 
 		for (let i = 0; i < self.arrObj1.length; i++) {
-			trace(i+"  ",self.arrObj1[i])
+			
 			self.arrObj1[i].dragPost();
 			
 		}
 		self.arrObj1.length=0;
+		self.fun("startTikInfo");
 		return true;	
 	}	
 
@@ -551,8 +557,7 @@ Object.defineProperties(SpStageSten.prototype, {
 		set: function (value) {	
 					
 			
-			for (var i = 0; i < this.arrSplice.length; i++) {
-				
+			for (var i = 0; i < this.arrSplice.length; i++) {				
 				if(this.arrSplice[i].height>=this._height){
 					this.arrSplice[i].height = value;
 					this.arrSplice[i].draw1();

@@ -149,20 +149,29 @@ export class Blok  {
             if(w!==undefined){
                 this._width=w;
                 this._height=h;
-                this._delph=d;
-                trace("$$$2$$$$",this._height); 
+                this._delph=d;                
             }
         }
 
         this.funSetObj=undefined
         this.funGetObj=undefined
 
+
+        var oInfo={}
+        oInfo.type=this.type;
+        oInfo.obj=this.obj;
+        this.getInfo=function(a){ 
+            a.push(oInfo)
+        }   
+
+
+
+
         this.setObj=function(o){
             
             this._width=o.w||o.width;
             this._height=o.h||o.height;
-            this._delph=o.d||o.delph; 
-            trace("$$$1$$$$",this._height,o); 
+            this._delph=o.d||o.delph;             
 
             if(this.unik!=undefined)if(this.unik.setObj!=undefined)if(o.unik!=undefined)this.unik.setObj(o.unik)
             this.setReal(o.x,o.y,o.z);

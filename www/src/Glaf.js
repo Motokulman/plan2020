@@ -104,6 +104,12 @@ export class Glaf  {
         });       
 
         this.p20=new P20(this,function(s,p,p1){                  
+            if(s=="getInfo"){ 
+                self.render()
+                self.menu.setInfoArr(p)
+                return;
+            }
+
             if(s=="render"){ 
                 self.intRend=p ? p: 1          
                 return;

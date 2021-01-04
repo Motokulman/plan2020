@@ -195,6 +195,19 @@ export function SpliceSten (_stage) {
 	}
 
 
+	var oInfo={}
+	oInfo.type=this.type;
+	this.getInfo=function(a){ 
+		oInfo.square=this.ss3d.square;
+		oInfo.square01=this.ss3d.square01;
+		oInfo.square10=this.ss3d.square10;
+		oInfo.square01h1=this.ss3d.square01h1;
+		oInfo.square10h1=this.ss3d.square10h1;
+		a.push(oInfo);
+		this.windows.getInfo(a);
+	}
+
+
 	///////////////////////////////
 	
     // setTimeout(function() {

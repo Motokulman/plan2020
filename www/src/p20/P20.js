@@ -69,6 +69,11 @@ export class P20  {
         
 
         this.sobSP=function(s,p,p1){
+            if(s=="startTikInfo"){
+                self.startTikInfo(100);
+                return
+            }
+
             self.fun(s,p,p1)
         }
 
@@ -241,7 +246,7 @@ export class P20  {
                 o.array[i]=this.array[i].getObj();
             } 
             if(this.sGposition!=undefined)o.position= this.sGposition()    
-            trace(o)    
+            
             return o;
         }
 
@@ -263,7 +268,7 @@ export class P20  {
             }
             this._index=-1
             this.index=o.index;
-            trace(">>>>>",o)  
+            this.startTikInfo();
         }
 
         this.getRect=function(num){           
@@ -275,6 +280,29 @@ export class P20  {
             return s.getRect()
         }
 
+        var arrInfo=[]
+        this.getInfo=function(){ 
+            arrInfo.length=0;
+            for (var i = 0; i < this.array.length; i++) {
+                this.array[i].getInfo(arrInfo);
+            }            
+            this.fun("getInfo",arrInfo);
+        }
+
+
+        this.sah=0
+        this.startTikInfo=function(t){
+            if(t==undefined)t=500
+            this.sah++;
+            var s=this.sah;
+            setTimeout(function() {
+                if(self.sah==s)self.getInfo();
+            }, t);
+        }  
+
+
+
+
 
         this.mouseup=function(e){
             self.boolMax=true
@@ -283,6 +311,7 @@ export class P20  {
             } else {
                 document.removeEventListener('touchend', self.mouseup);
             }
+           // self.getInfo();
         }
 
 
