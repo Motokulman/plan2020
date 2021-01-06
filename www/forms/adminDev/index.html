@@ -1,0 +1,111 @@
+<!DOCTYPE html><html><head>
+<meta charset="UTF-8">
+<title>login</title>
+
+<script src='../lib/jquery-1.11.3.js'></script>
+<script src='../lib/tween.min.js'></script>
+<script src='../lib/three.min.js'></script>
+<script src='../lib/divLib.js'></script>
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+	#stats { position: absolute; top:0; left: 200px; }
+</style>
+
+</head>
+<meta name="viewport" content="width=device-width,height=device-height,user-scalable=no user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+
+<script type="module">
+
+	import { Main } from './Main.js';
+	window.trace = window.console.log.bind(window.console);
+
+
+
+	var main
+	
+
+
+	function init(){
+
+		
+		main=new Main(document.body, function(s,p,p1){
+
+		})
+
+		window.dcmParam = new DCM();
+
+		/*var dCont=new DCont(document.body);
+
+		otstup=5//dcmParam._otstup;
+		wh=dcmParam.wh;
+		win=new DWindow(dCont,100,100,"Вход")
+		win.width=dcmParam.wb||200
+		var yy=otstup
+
+		new DLabel(win.content,otstup,yy,"логин:")
+		yy+=wh;
+		var in0=new DInput(win.content,otstup,yy,"admin");
+		in0.width=win.width-otstup*2
+		yy+=wh;
+
+		new DLabel(win.content,otstup,yy,"пороль:")
+		yy+=wh;
+		var in1=new DInput(win.content,otstup,yy,"admin");
+		in1.width=win.width-otstup*2
+		yy+=wh+otstup;
+
+		var bu=new DButton(win.content,otstup,yy,"ВОЙТИ",function(){
+			new DLabel(win.content, win.width+otstup,otstup,"1 Проверка логин/admin 2. переход на понель этого юзера, этот юзер  forms/adminDev/index.html").width=200
+		});
+		bu.width=win.width-otstup*2;
+		yy+=wh+otstup;
+		win.height=yy+wh
+
+
+		trace("@@@",win,dCont);*/
+
+
+
+		window.onresize = sizeWindow;
+		sizeWindow();
+	}
+
+	function sizeWindow () {
+		var w = document.documentElement.clientWidth;
+		var h = document.documentElement.clientHeight;
+		if(window.innerWidth!=undefined)w = window.innerWidth;
+		if(window.innerHeight!=undefined)h = window.innerHeight;
+		main.sizeWindow(w,h)
+		
+	}
+	//{src: 'resources/font/montserrat/montserratlight.ttf', type:"FontFace", name:'Montserrat'},
+	document.addEventListener("DOMContentLoaded", function() {
+		init()
+	});
+</script>	
+
+<style type="text/css">
+	#stats { position: absolute; top:0; left: 200px; }
+	@font-face {
+	  font-family: "Montserrat";
+	  src: url(resources/font/montserrat/montserratlight.ttf) format("truetype");
+	}
+	/*@font-face {
+	  font-family: "SFUIDisplay-Light";
+	  src: url(resources/font/SFUIDisplay-Light.ttf) format("truetype");
+	}*/
+</style>
+
+
+<body >
+
+</body></html>

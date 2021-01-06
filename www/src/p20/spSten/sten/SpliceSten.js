@@ -185,13 +185,13 @@ export function SpliceSten (_stage) {
 
 
 	this.poiskGran=function(){
-		this.matematik.poiskGran()
+		this.matematik.poiskGran();
 	}
 
 	var rez,bp,bp1,res
 	var arrayCol=[]
 	this.isRect=function(r,b){
-		return this.matematik.isRect(r,b)
+		return this.matematik.isRect(r,b);
 	}
 
 
