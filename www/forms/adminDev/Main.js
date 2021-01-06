@@ -48,9 +48,9 @@ export class Main  {
 
 		this.param.wh=32;
 		this.param.otstup=5;
-
+		this.param.mobile=false
 		this.param.whb=32;
-        this.param.wb=250;
+        this.param.wb=150;
         this.param.otMy=26;
         this.param.sizeBase=180;
         this.param.color="#c60f30";
@@ -65,6 +65,9 @@ export class Main  {
 
 		this.param.logo="null";
 		this.param.link="null";
+
+		this.param.server="http://192.168.1.116:8000/api/v1/";
+
 	/**/
 
 		var array=[];
@@ -75,10 +78,19 @@ export class Main  {
 
 		this.init=function(){ 
 
+
+			this.param.mobile=dcmParam.mobile
+
 			array[array.length]=this.menuVerh=new MenuVerh(this,function(s,p){	})
 
-			array[array.length]=this.menuLeft=new MenuLeft(this,function(s,p){	})
+			array[array.length]=this.menuLeft=new MenuLeft(this,function(s,p,p1){
+				if(s=="sobThree"){
+					self.menuCent.setSob(p)
+				}
+			})
 			array[array.length]=this.menuCent=new MenuCent(this,function(s,p){	})
+
+
 
 
 
@@ -342,8 +354,8 @@ export class Main  {
   			//if (w < this.param.maxW) w = this.param.maxW;
 			//if (h< this.param.maxH) h = this.param.maxH;
 			
-			s= w/800;
-			if(s>h/600)s=h/600;
+			s= w/100;
+			if(s>h/100)s=h/100;
 
 
 			if(s>1)s=1;

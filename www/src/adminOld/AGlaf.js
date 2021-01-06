@@ -23,7 +23,7 @@ function AGlaf(main) {
 
     this.ser = window.location.href;
     var arrParams = this.ser.split("?");   
-    var aa=arrParams[0].split("index");        
+    var aa=arrParams[0].split("index")        
     this.server=aa[0];
 
 

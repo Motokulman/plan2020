@@ -65,19 +65,19 @@
 
   		
   		this.load = function(obj, fun){	
-			var s=this.server+"src/phpBase.php";		
+			/*var s=this.server+"src/phpBase.php";		
 			$.post(s, obj, function(data){			
 				if (fun) fun(data);
-			});
+			});*/
 
 		}
 
 		
 		this.savePhoto = function(_file, _image, fun){
-			var s=this.server+"src/forModel.php";
+			/*var s=this.server+"src/forModel.php";
 			$.post(s, {file : _file, image : _image}, function(){
 				if (fun) fun();			
-			});
+			});*/
 		};
 
 		this.init()

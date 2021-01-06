@@ -17,17 +17,61 @@ export class MenuLeft  {
         this.dCont=new DCont(par.dCont);
 
 		
+        function pic(d){
+            return "../../resources/image/notIcon.png";
+        }    
 
-        this.init=function(){
-            this.panel=new DPanel(this.dCont,0,0)
+
+
+        this.init=function(){           
+
+            this.three=new DThreeBool(this.dCont,0,0,function(o){                
+                self.fun("sobThree", o.obj.valueName);
+            }); 
+
+            var arr=[]
+          /*  arr.push({uuid:Math.random(),name:"План", valueName:"plan3ds", link:pic(1),array:[
+                    {uuid:Math.random(),name:"Список", valueName:"plan3dsList",link:pic(2),array:[]}, 
+                    {uuid:Math.random(),name:"Добавить",valueName:"plan3dsCreat" ,link:pic(3),array:[]}
+                ]})*/
+
+            arr.push({uuid:Math.random(),name:"Объекты", valueName:"objects3d", link:pic(1),array:[
+                    {uuid:Math.random(),name:"Список", valueName:"objects3dList",link:pic(2),array:[]}, 
+                    {uuid:Math.random(),name:"Добавить",valueName:"objects3dCreat" ,link:pic(3),array:[]}
+                ]})
+
+            arr.push({uuid:Math.random(),name:"Матерьялы", valueName:"materials", link:pic(1),array:[
+                    {uuid:Math.random(),name:"Список", valueName:"materialsList",link:pic(2),array:[]}, 
+                    {uuid:Math.random(),name:"Добавить",valueName:"materialsCreat" ,link:pic(3),array:[]}
+                ]})
+            arr.push({uuid:Math.random(),name:"Текстуры", valueName:"textures", link:pic(1),array:[
+                    {uuid:Math.random(),name:"Список", valueName:"texturesList",link:pic(2),array:[]}, 
+                    {uuid:Math.random(),name:"Добавить",valueName:"texturesCreat" ,link:pic(3),array:[]}
+                ]})
+
+            
+            this.three.setObj(arr,"array","name");
+
         }
 
 
 
         this.setParam=function(){ 
-            this.panel.width= this.param.wb;
-            this.panel.x=this.param.otstup
-            this.panel.y=this.param.otstup*4+this.param.wh
+         
+            this.three.x=this.param.otstup;
+            this.three.y=this.param.otstup*4+this.param.wh;
+
+
+            this.three.heightBut=this.param.wh
+
+
+           
+
+            if(this.param.mobile==true){
+                this.three.width=this.param.wh;
+            }else{
+                this.three.width=this.param.wb;
+            }     
 
             this.sizeWindow()
         }
@@ -44,11 +88,11 @@ export class MenuLeft  {
   				h=_h;
   				s=_s;
   			}
-
-            this.panel.height=h/s-(this.param.otstup*5+this.param.wh)
-
-           
+      
+            this.three.height=h/s-(this.param.otstup*5+this.param.wh)                 
   		}
+
+
   	}
 }
 
