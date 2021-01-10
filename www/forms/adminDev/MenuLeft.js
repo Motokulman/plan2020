@@ -39,16 +39,16 @@ export class MenuLeft  {
                     {uuid:Math.random(),name:"Добавить",valueName:"plan3dsCreat" ,link:pic(3),array:[]}
                 ]})*/
 
-            arr.push({uuid:Math.random(),name:"Объекты", valueName:"objects3d", link:pic(1),array:[
+            arr.push({uuid:Math.random(),name:"Объекты", valueName:"objects3d", link:pic(5),array:[
                     {uuid:Math.random(),name:"Список", valueName:"objects3dList",link:pic(2),array:[]}, 
                     {uuid:Math.random(),name:"Добавить",valueName:"objects3dCreat" ,link:pic(3),array:[]}
                 ]})
 
-            arr.push({uuid:Math.random(),name:"Матерьялы", valueName:"materials", link:pic(1),array:[
+            arr.push({uuid:Math.random(),name:"Матерьялы", valueName:"materials", link:pic(6),array:[
                     {uuid:Math.random(),name:"Список", valueName:"materialsList",link:pic(2),array:[]}, 
                     {uuid:Math.random(),name:"Добавить",valueName:"materialsCreat" ,link:pic(3),array:[]}
                 ]})
-            arr.push({uuid:Math.random(),name:"Текстуры", valueName:"textures", link:pic(1),array:[
+            arr.push({uuid:Math.random(),name:"Текстуры", valueName:"textures", link:pic(3),array:[
                     {uuid:Math.random(),name:"Список", valueName:"texturesList",link:pic(2),array:[]}, 
                     {uuid:Math.random(),name:"Добавить",valueName:"texturesCreat" ,link:pic(3),array:[]}
                 ]})
