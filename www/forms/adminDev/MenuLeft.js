@@ -16,12 +16,16 @@ export class MenuLeft  {
 
         this.dCont=new DCont(par.dCont);
 
-		
-        function pic(d){
-            return "../../resources/image/notIcon.png";
-        }    
+        var sah = 1;
+        var pic =  function(n) {
+          let linkPic  = '../../resources/forms/'
+          let typePic  = 'w.png'
+          sah = n != undefined ? n : sah
+          let ret =  linkPic+sah+typePic
+          sah += 1
 
-
+          return ret
+        }
 
         this.init=function(){           
 
@@ -50,7 +54,7 @@ export class MenuLeft  {
                 ]})
 
             
-    
+
             this.three.setObj(arr,"array","name");
 
         }
