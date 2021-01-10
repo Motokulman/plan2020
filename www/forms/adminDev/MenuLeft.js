@@ -50,6 +50,7 @@ export class MenuLeft  {
                 ]})
 
             
+    
             this.three.setObj(arr,"array","name");
 
         }
