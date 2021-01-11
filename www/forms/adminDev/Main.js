@@ -85,13 +85,14 @@ export class Main  {
 
 			array[array.length]=this.menuLeft=new MenuLeft(this,function(s,p,p1){
 				if(s=="sobThree"){
+					trace(p)
 					self.menuCent.setSob(p)
 				}
 			})
 			array[array.length]=this.menuCent=new MenuCent(this,function(s,p){	})
 
 
-
+			self.menuCent.setSob("texturesList")
 
 
 
