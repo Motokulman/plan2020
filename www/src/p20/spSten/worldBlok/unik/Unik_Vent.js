@@ -79,9 +79,12 @@ export class Unik_Vent {
 
         // задаем начальные точки
         this.upStart=function(){
+           
             this.control()
+          
             this._delph = this.par._delph/2;   
             this._wh = this.par._width
+         
             this._wh1 = this._bool == true ? this.par._width/2 : this.par._width
 
             this.sizeLine = this.par.par._sizeLine
@@ -310,6 +313,7 @@ export class Unik_Vent {
         }
 
         this.control=function (){
+
                 for (var i = 0; i <  this.arrayInfo.length; i++) {
                     let rrr = this.arrayInfo[i].param
                     if (rrr == 'numHeightGlav') {
@@ -349,6 +353,7 @@ export class Unik_Vent {
                     if (this.arrayInfo[i].param == 'numHeightGlav') this.arrayInfo[i].activMouse = true
                 }
             }
+            
             this.control()
         }
 

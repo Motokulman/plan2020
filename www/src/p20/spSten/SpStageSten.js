@@ -37,7 +37,7 @@ export function SpStageSten (par,  fun) {
 	
 	this.aDefolt=par.aDefolt;
 
-
+	this._boolMax=true
 
 	//var ooo=this.pm.matDop.getIDReturn(15);
 
@@ -140,7 +140,7 @@ export function SpStageSten (par,  fun) {
     this.texture = new THREE.TextureLoader().load('resources/image/pic.png');  
     this.texture.wrapS = THREE.RepeatWrapping;
 	this.texture.wrapT = THREE.RepeatWrapping;
-	this.texture.repeat.y=-1
+	this.texture.repeat.y=-1;
 
 
 
@@ -181,10 +181,13 @@ export function SpStageSten (par,  fun) {
 	this.getVP=function(str){ return new SpVPXz(this);}
 
 
+	this.getInfo=function(a){ 
+		for (var i = 0; i < this.arrSplice.length; i++) {
+			if (this.arrSplice[i].life == false) continue;
+			this.arrSplice[i].getInfo(a);
+		}	
+	}
 
-	this.arrFun=[];
-	this.arrObj=[];
-	
 
 	
 	this.render=function(){	
@@ -328,6 +331,10 @@ export function SpStageSten (par,  fun) {
 	}
 
 
+
+	this.arrFun=[];
+	this.arrObj=[];
+
 	this.addObjFun=function(o){
 		for (let i = 0; i < this.arrObj.length; i++) {
 			if(this.arrObj[i]._uuid==o._uuid){
@@ -349,6 +356,36 @@ export function SpStageSten (par,  fun) {
 		self.arrObj.length=0;
 		return true;	
 	}	
+
+
+
+	this.arrFun1=[];
+	this.arrObj1=[];
+
+	this.addObjFun1=function(o){
+		for (let i = 0; i < this.arrObj1.length; i++) {
+			if(this.arrObj1[i]._uuid==o._uuid){
+				return;
+			}
+		}
+		
+		this.arrObj1.push(o);
+	}
+
+	this.doRender1=function(){
+		if(self.arrObj1.length==0)return false;	
+		//this.debugPixi.clearD();
+
+		for (let i = 0; i < self.arrObj1.length; i++) {
+			
+			self.arrObj1[i].dragPost();
+			
+		}
+		self.arrObj1.length=0;
+		self.fun("startTikInfo");
+		return true;	
+	}	
+
 }
 SpStageSten.prototype = Object.create(SpStage.prototype);
 SpStageSten.prototype.constructor = SpStageSten;
@@ -467,6 +504,20 @@ Object.defineProperties(SpStageSten.prototype, {
 
 
 
+	boolMax: {
+		set: function (value) {	
+			if(this._boolMax!=value)	{
+				this._boolMax = value;
+				
+
+				if(this._boolMax==true)this.doRender1()
+			}			
+		},
+		get: function () {			
+		 	return this._boolMax;
+		}
+	},
+
 
 	mashtab: {
 		set: function (value) {	
@@ -506,8 +557,7 @@ Object.defineProperties(SpStageSten.prototype, {
 		set: function (value) {	
 					
 			
-			for (var i = 0; i < this.arrSplice.length; i++) {
-				
+			for (var i = 0; i < this.arrSplice.length; i++) {				
 				if(this.arrSplice[i].height>=this._height){
 					this.arrSplice[i].height = value;
 					this.arrSplice[i].draw1();
@@ -518,7 +568,7 @@ Object.defineProperties(SpStageSten.prototype, {
 			pp=	Math.round(value+this._height1)
 			for (var i = 0; i < this.avp.length; i++) {				
 				if(this.avp[i].position.z>=ppOld){
-					this.avp[i].position.z=pp
+					//this.avp[i].position.z=pp
 				}
 			}
 			for (var i = 0; i < this.arrPoint.length; i++) {				

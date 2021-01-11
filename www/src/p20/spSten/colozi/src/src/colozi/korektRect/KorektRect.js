@@ -16,7 +16,7 @@ export class KorektRect  {
         this.pS={x:0,y:0,w:100,h:100}//Параметры текстурировнаия и начало энного
 
 
-        this.rect={x:0,y:0,w:300,h:300};
+        this.rect={x:0,y:0,w:800,h:300};
 
 
         this.r={x:0,y:0,w:10,h:10,type:0};
@@ -27,8 +27,10 @@ export class KorektRect  {
         this.arrayCesh=[];
         this.arrDin=[];
         this.arrDinL=[];
-
-        this.coliz=null
+        
+        this.colizX=0;
+        this.colizY=0;
+        this.coliz=null;
         this.arrWin=[/*
             {x:100,y:100,w:100,h:100},
             {x:300,y:100,w:100,h:100}*/
@@ -115,7 +117,7 @@ export class KorektRect  {
                 this.arrayL[this.sahL].idArr=this.sah;
             }
             this.sahL++
-            return this.arrayL[this.sahL-1]
+            return this.arrayL[this.sahL-1];
         }
 
 
@@ -143,7 +145,7 @@ export class KorektRect  {
             this.krUColi.korectRect(); //* парсим окна в ректы
             for (var j = 0; j < this.arrWinDin.length; j++) {
                 for (var i = this.arrDin.length-1; i >=0 ; i--) {                
-                    this.reshik2(i,this.arrDin[i],this.arrWinDin[j])
+                    this.reshik2Old(i,this.arrDin[i],this.arrWinDin[j])
                 } 
             } 
         }
@@ -316,8 +318,139 @@ export class KorektRect  {
             } 
         }
         ////////////////////////////////////////////////////
+        this.testLine=function(ps,pf,ps1,pf1){        
+            if(ps1>=ps &&ps1<pf)return true;   //* окно.н >= блок.н && окно.н <= блок.к
+            if(ps>=ps1 &&ps<pf1)return true;   //* блок.н >= окно.н && блок.н <= окно.к
+            return false;
+        }
+
+        var bx,by,bx1,by1,n,n1,br
+        this.reshik2Old=function(_i,_br,_win){
+            _br.x1=_br.x+_br.w;   //* определяем координаты конца блока
+            _br.y1=_br.y+_br.h;
+
+            _win.x1=_win.x+_win.w;   //* опеределяем координаты конца окна
+            _win.y1=_win.y+_win.h;    
+            //this.calc
+           
+            bx=this.testLine(_br.x,_br.x1,_win.x,_win.x1)
+            by=this.testLine(_br.y,_br.y1,_win.y,_win.y1)
+
+            // console.log("---------- ID: " + _br.idArr + " -----------");
+            // console.log("BX:" + bx, "[", _br.x, _br.x1, "]", "[", _win.x, _win.x1, "]");
+            // console.log("BY:" + by, "[", _br.y, _br.y1, "]", "[", _win.y, _win.y1, "]");
+
+            
+            bx1=false
+            if(_br.x>=_win.x && _br.x1<=_win.x1)bx1=true
+            by1=false    
+            if(_br.y>=_win.y && _br.y1<=_win.y1)by1=true 
+
+            if(bx==true)if(by==true){               
+                   
+                
+                //в нутри удоляем                                 
+                if(bx1&&by1){                                             
+                    this.arrDin.splice(_i,1)
+                    return                                           
+                }
+
+                if(by1==true){                   
+                    if(_br.x<_win.x&&_br.x1>_win.x){//лево свободный
+                        br=null
+                        if(_br.x1>_win.x1){//хрень большая
+                            br=this.getR();                            
+                            br.set(_br);
+                            this.arrDin.push(br); 
+                            br.x1=br.x+br.w
+                            br.y1=br.y+br.h                           
+                        }
+
+                        n=(_win.x-_br.x)/_br.w                       
+                        _br.w=_br.w*n
+                        _br.u1=_br.u+(_br.u1-_br.u)*n
+                        _br.bool1[1]=true;
+                        _br.bool[1]=false;
+
+                        if(br!==null){
+                           n=((_win.x1)-br.x)/br.w 
+                           n1=br.w*n;
+                           br.w=br.w-n1;
+                           br.x+=n1;
+
+                           br.u=br.u+(br.u1-br.u)*n
+                           br.bool1[3]=true; 
+                           br.bool[3]=false;                          
+                        }
+                        return
+                    }
+                    if(_br.x>_win.x&&_br.x<_win.x1){//лево свободный
+                        n=((_win.x1)-_br.x)/_br.w                        
+                        n1=_br.w*n
+                        _br.w=_br.w-n1
+                        _br.x+=n1 
+                        _br.u=_br.u+(_br.u1-_br.u)*n                    
+                        _br.bool1[3]=true;
+                        _br.bool[3]=false;
+                        return
+                    }                 
+                }
+                if(bx1==true){                  
+                    if(_br.y<_win.y&&_br.y1>_win.y){//лево свободный
+                        br=null
+                        if(_br.y1>_win.y1){//хрень большая
+                            br=this.getR()                            
+                            br.set(_br);
+                            this.arrDin.push(br) 
+                            br.x1=br.x1
+                            br.y1=br.y1                            
+                        }
+
+                        n=(_win.y-_br.y)/_br.h                       
+                        _br.h=_br.h*n
+                        _br.v1=_br.v+(_br.v1-_br.v)*n
+                        _br.bool1[2]=true;
+                        _br.bool[2]=false;
+
+                        if(br!==null){
+                           n=((_win.y1)-br.y)/br.h 
+                           n1=br.h*n;
+                           br.h=br.h-n1;
+                           br.y+=n1;
+                           br.v=br.v+(br.v1-br.v)*n
+                           br.bool1[0]=true; 
+                           br.bool[0]=false;
+                     
+                        }  
+                        return
+                    }/**/
+
+                    if(_br.y>_win.y&&_br.y<_win.y1){//лево свободный
+                        n=((_win.y1)-_br.y)/_br.h                        
+                        n1=_br.h*n
+                        _br.h=_br.h-n1
+                        _br.y+=n1
+                        _br.v=_br.v+(_br.v1-_br.v)*n                     
+                        _br.bool1[0]=true;
+                        _br.bool[0]=false;
+                        return
+                    }                 
+                } 
+
+     
+                
+                //разрезаем на куски
+                // trace(_br, _win)
+                this.krUmnik.setBoxInRect(_br,_win)
+                this.arrDin.splice(_i,1)
+                return    
+            } 
+        }
+        ////////////////////////////////////////////////////
 
 
+
+        /////////////////////////
 
 
         var p={x:0,y:0};
@@ -354,6 +487,7 @@ export class KorektRect  {
             if(rd.y1<=_br.y)return;//ниже
 
 
+
             if(rd.y>=_br.y1){
                 if(this.nahVerh(_i,_br,rd)==true){
                     return
@@ -385,7 +519,7 @@ export class KorektRect  {
             ze=this.krUmnik.setBoxInRect(_br,rd,true)
            
             
-            if(rd.type==1){
+            if(rd.type==1){//линия в нутри
                 ze.arBig[ze.ry][ze.rx].boolPoli=true;
                 ze.arBig[ze.ry][ze.rx].boolNa=true;
 
@@ -398,7 +532,7 @@ export class KorektRect  {
                 }
 
             }
-            if(rd.type==0){
+            if(rd.type==0){//линия не косаеться
                 ze.arBig[ze.ry][ze.rx].boolPoli=false;
                 ze.arBig[ze.ry][ze.rx].boolNa=true;
                 
@@ -420,8 +554,8 @@ export class KorektRect  {
                 ze.arBig[ze.ry+1][ze.rx].bool1[0]=false;
             }
             if(ze.arBig[ze.ry-1]!=undefined){
-                if(ze.arBig[ze.ry-1][ze.rx-1]!=undefined)ze.arBig[ze.ry-1][ze.rx-1].bool1[1]=true;
-                if(ze.arBig[ze.ry-1][ze.rx+1]!=undefined)ze.arBig[ze.ry-1][ze.rx+1].bool1[3]=true;
+               // if(ze.arBig[ze.ry-1][ze.rx-1]!=undefined)ze.arBig[ze.ry-1][ze.rx-1].bool1[1]=true;
+                //if(ze.arBig[ze.ry-1][ze.rx+1]!=undefined)ze.arBig[ze.ry-1][ze.rx+1].bool1[3]=true;
 
                 
                
@@ -464,7 +598,7 @@ export class KorektRect  {
                 n=(rd.x-_br.x)/_br.w                       
                 _br.w=_br.w*n
                 _br.u1=_br.u+(_br.u1-_br.u)*n
-                _br.bool1[1]=true;
+               // _br.bool1[1]=true;
                 _br.bool[1]=false;
                 return true
             }
@@ -476,7 +610,7 @@ export class KorektRect  {
                 _br.w=_br.w-n1
                 _br.x+=n1 
                 _br.u=_br.u+(_br.u1-_br.u)*n                    
-                _br.bool1[3]=true;
+                //_br.bool1[3]=true;
                 _br.bool[3]=false;
                 return true
             }
@@ -493,13 +627,13 @@ export class KorektRect  {
                     br.w=br.w-n1
                     br.x+=n1 
                     br.u=br.u+(br.u1-br.u)*n                    
-                    br.bool1[3]=true;
+                   // br.bool1[3]=true;
                     br.bool[3]=false;                   
 
                     n=(rd.x-_br.x)/_br.w                       
                     _br.w=_br.w*n
                     _br.u1=_br.u+(_br.u1-_br.u)*n
-                    _br.bool1[1]=true;
+                   // _br.bool1[1]=true;
                     _br.bool[1]=false;
                 return true
             }
@@ -525,6 +659,11 @@ export class KorektRect  {
         //наполняем геометрию с текстурированием
         this.setGeom=function(geometry, _nGeom){
             this.krUmnik.setGeom(geometry, _nGeom)
+        }
+
+        //наполняем геометрию с текстурированием
+        this.setGeomBool1=function(geometry, dist, _nGeom){
+            this.krUmnik.setGeomBool1(geometry, dist, _nGeom)
         }
 
         //возврощает массив линий от верхушки

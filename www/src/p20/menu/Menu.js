@@ -12,6 +12,7 @@ import { MenuV3D } from './MenuV3D.js';
 
 import { MInfo} from './MInfo.js';
 
+import { MMani} from './MMani.js';
 
 import { LocalStorage } from './LocalStorageE6.js';
 
@@ -37,7 +38,6 @@ export class Menu  {
 	    this.array=[];
 
 		this.array[this.array.length] = this.mGridDrag = new MGridDrag(this, function(s,p,p1){ 
-
            	self.fun(s,p,p1)
         });
 
@@ -76,6 +76,9 @@ export class Menu  {
            // self.fun(s,p)
         });
 
+        this.array[this.array.length]=this.mMani = new MMani(this,function(s,p){
+           // self.fun(s,p)
+        });
 
         this.array[this.array.length]=global.mInfo=this.mInfo = new MInfo(this.par.dCont);
 
@@ -147,14 +150,15 @@ export class Menu  {
         	this.mDragScane.redrag();
         }
 
+        this.setInfoArr=function(a){        	
+        	this.mMani.setInfoArr(a);
+        }
+
 
         this.setSop=function(s,p,p1){
         	if(s=="rectSP"){
         		var r=self.par.p20.getRect(self.par.p20.index);
-        		
-        	 	
-	        	
-	        		self.mGridDrag.setRect(r,10, true);
+	        	self.mGridDrag.setRect(r,10, true);
 
         	}
 

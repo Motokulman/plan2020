@@ -3,7 +3,8 @@
 
 export class KRGronLine  {
     constructor() {         
-        this.type="KRGronLine";        
+        this.type="KRGronLine"; 
+        this.tipe="KRGronLine";        
         var self=this;
      
 

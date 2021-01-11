@@ -168,8 +168,7 @@ SpStage.prototype = {
 	* @return {Splice} линия
 	*/
 	craetSplice1: function () {
-		trace(this)
-		trace("this==",this.arrSplice)
+		
 		for (var i = 0; i < this.arrSplice.length; i++) {
 			if (this.arrSplice[i].life == false) {
 				this.arrSplice[i].life = true;								
@@ -259,11 +258,14 @@ SpStage.prototype = {
 				if (!this.avp[i].life) continue;							
 				if(Math.round(p.x)==Math.round(this.avp[i].position.x)){
 					if(Math.round(p.y)==Math.round(this.avp[i].position.y)){
-						return this.avp[i]
+						if(Math.round(p.z)==Math.round(this.avp[i].position.z)){
+							trace(p.z)
+							return this.avp[i]
+						}
 					}
 				}
 			}
-
+		
 			var o = this.craetVP();
 			o.position.setPoint(p);	
 			return o
@@ -350,7 +352,7 @@ SpStage.prototype = {
 			o.arrPol.push(this.arrPol[i].getObj());
 		}
 
-		trace(o.avp)
+		
 
 		return o;
 	},
@@ -385,7 +387,7 @@ SpStage.prototype = {
 
 		if (o.avp != undefined) {
 			for (var i = 0; i < o.avp.length; i++) {
-				newObj = this.craetVP();
+				newObj = this.craetVP();				
 				newObj.setObj(o.avp[i]);				
 			}
 		}

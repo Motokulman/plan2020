@@ -185,13 +185,26 @@ export function SpliceSten (_stage) {
 
 
 	this.poiskGran=function(){
-		this.matematik.poiskGran()
+		this.matematik.poiskGran();
 	}
 
 	var rez,bp,bp1,res
 	var arrayCol=[]
 	this.isRect=function(r,b){
-		return this.matematik.isRect(r,b)
+		return this.matematik.isRect(r,b);
+	}
+
+
+	var oInfo={}
+	oInfo.type=this.type;
+	this.getInfo=function(a){ 
+		oInfo.square=this.ss3d.square;
+		oInfo.square01=this.ss3d.square01;
+		oInfo.square10=this.ss3d.square10;
+		oInfo.square01h1=this.ss3d.square01h1;
+		oInfo.square10h1=this.ss3d.square10h1;
+		a.push(oInfo);
+		this.windows.getInfo(a);
 	}
 
 

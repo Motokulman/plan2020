@@ -81,7 +81,7 @@ export function SpVP (_stage) {
 
 
 	this.drawposit = function () {	
-		
+		console.warn("zzzz",self.position.z)
 		for (var i = 0; i < self.array.length; i++) {
 			if(self.array[i].drawpositVP)self.array[i].drawpositVP(self);
 		}

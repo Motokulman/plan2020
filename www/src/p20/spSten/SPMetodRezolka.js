@@ -12,7 +12,7 @@ export class SPMetodRezolka  {
 		
 		//this.cont3dL.rotation.x=Math.PI/2;
 
-		var debug=true;
+		var debug=false;
 
 		
 		
@@ -22,7 +22,7 @@ export class SPMetodRezolka  {
 			this.cont3dL = new THREE.Object3D();
 	    	this.par.content3d.add(this.cont3dL); 
 		
-	    	this.cont3dL.position.x=1200
+	    	this.cont3dL.position.x=1200;
 
 			this.plane=new PlaneXZ();
 			this.plane1=new PlaneXZ();
@@ -134,7 +134,8 @@ export class SPMetodRezolka  {
 
 			for (var i = 0; i < this.par.arrSplice.length; i++) {
 				if (this.par.arrSplice[i].life==false) continue;
-					this.sort1OtPol(this.par.arrSplice[i],_poli.arrTiang,_poli.shTr)
+					//this.setSten(this.par.arrSplice[i])
+					this.sort1OtPol(this.par.arrSplice[i], _poli.arrTiang, _poli.shTr)
 
 				//this.sort1(this.par.arrPol[i]);
 			}
@@ -156,6 +157,8 @@ export class SPMetodRezolka  {
 
 
 		this.sortStenPoint=function(_sten){
+			//Отрезалка от точке стены
+			return
 			bbb=false
 			zz=_sten.height+_sten.height1;
 			
@@ -235,8 +238,13 @@ export class SPMetodRezolka  {
 
 		this.sort1OtPol=function(_sten, _arrTiang, _shTr){
 			if(calc.isRectS(_sten.rectBig,this.pol.rectBig)==false)return;
-
-			this.sortStenPoint(sten)
+			
+			if(_sten.par._boolMax==false){
+				_sten.par.addObjFun1(_sten)
+				return;
+			}
+			this.setSten(_sten)
+			/*this.sortStenPoint(sten)
 
 			sten=_sten
 			arrGrani=sten.ss3d.arrGrani	
@@ -258,22 +266,12 @@ export class SPMetodRezolka  {
 				gronSten1=arrGrani[3].arr[i];
 				this.sort2(arrGrani[1].arrPGlob[i],arrGrani[1].arrPGlob[i+1], sten.height+sten.height1, _arrTiang, _shTr);
 			}
-
-			/*for (var i = 3; i < 5; i++) {
-				gronSten=arrGrani[0].arr[i];
-				gronSten1=arrGrani[2].arr[i];
-				this.sort2(arrGrani[0].arrPGlob[i],arrGrani[0].arrPGlob[i+1], sten.height+sten.height1, _arrTiang, _shTr);
-			}*/
+			*/
 
 
-/*
-			var i=4
-			var j=0
-			gronSten=arrGrani[j].arr[i];
-			gronSten1=arrGrani[j+2].arr[i];
-			this.sort2(arrGrani[j].arrPGlob[i],arrGrani[j].arrPGlob[i+1], sten.height+sten.height1)*/
 
-			sten.ss3d.drawVerg()			
+			sten.ss3d.drawVerg()
+
 		}
 
 
@@ -409,11 +407,11 @@ export class SPMetodRezolka  {
 				if(debug==true)this.plane2.addLine({x:rez[0].x,y:rez[0].y,z:rez[0].z},{x:rez[1].x,y:rez[1].y,z:rez[1].z})
 			}
 			//моно взять треугольники
-			var json={}
+			/*var json={}
 			json.tr=tr
 			json.tr1=tr1
 			var s=JSON.stringify(json)
-			trace(s)
+			trace(s)*/
 		}
 
 

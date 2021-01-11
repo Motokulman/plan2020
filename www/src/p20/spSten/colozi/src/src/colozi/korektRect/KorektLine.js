@@ -175,8 +175,8 @@ export class KorektLine  {
         this.kTri1=function(){ 
             sahhh++;
             bNa=true
-           // if(sahhh==2)return
-            trace("===========================================",sahhh)    
+           // if(sahhh==1)return
+     
 
             this.arTriang.length=0
             po=-1;
@@ -213,7 +213,7 @@ export class KorektLine  {
             pd=p;
             pd.boolP=true;
             pd1=null;
-            trace(pd)
+   
       
             this.arTriang.push(pd);
 
@@ -228,7 +228,7 @@ export class KorektLine  {
                     return
                 }
             }
-          //  trace("^",p)
+        
 
             this.kTPoisk(pd)
 
@@ -243,13 +243,13 @@ export class KorektLine  {
 
             dd2=999999;
             ddi=-1
-            //trace(p.z)    
+            
             for (var i = 0; i < this.arrPointM.length; i++) {//поиск на одном уровне Z
                 if(this.arrPointM[i].boolP==true)continue
                 if(this.arrPointM[i].array.length!=1)continue   
                 if(this.arrPointM[i].p.z!==p.p.z)continue 
                 dd1=this.getDist3D(this.arrPointM[i].p, p.p);//Растояние до ночала   
-                //trace(i+"    == "+dd1)
+                
                 if(dd1<dd2){
                     dd2=dd1
                     ddi=i
@@ -260,7 +260,7 @@ export class KorektLine  {
             
             if(ddi!==-1){
                 if(dd2>dd && bNa==false){
-                    trace("!!!!!!!!!!",bNa)
+               
                     arrDuble.push(p,poindDin)
                     this.kTPoisk3(this.arTriang)
 
@@ -284,21 +284,19 @@ export class KorektLine  {
                 if(this.arrPointM[i].bM!==!p.bM)continue 
 
                 dd1=this.getDist3D(this.arrPointM[i].p, p.p);//Растояние до ночала   
-                //trace(i+"    == "+dd1)
+        
                 if(dd1<dd2){
                     dd2=dd1
                     ddi=i
                 }                   
             }
 
-           // trace(ddi,dd1,dd2,dd)
+ 
 
             if(ddi!==-1){
-                if(dd2>dd&& bNa==false){
-                  //  trace(ddi,dd1,dd2,dd,"!!!!!!!!!!!!!!!!!!!!!!!!!")
+                if(dd2>dd&& bNa==false){             
                     arrDuble.push(p,poindDin)
                     this.kTPoisk3(this.arTriang)
-
                     this.kTri1()
                 }else{
                     bNa=false
@@ -309,7 +307,7 @@ export class KorektLine  {
             }
 
 
-           // trace("!!!!!!!!!!!!",this.arTriang)
+  
             arrDuble.push(p,poindDin)
             this.kTPoisk3(this.arTriang)
           
@@ -331,16 +329,13 @@ export class KorektLine  {
 
         //Оброботка прагалок
         this.kTPoisk4=function(){
-            trace("!!!!######################kTPoisk4#################!!!",arrDuble)
-            for (var i = 0; i < arrDuble.length; i++) {
-                trace(i+"  ",arrDuble[i].p)
-            }
+        
 
 
             for (var i = 0; i < arrDuble.length; i+=2) {
                 for (var j = i+2;  j< arrDuble.length; j+=2) {
                     if(this.kT4(arrDuble[i],arrDuble[i+1],arrDuble[j],arrDuble[j+1])==true){
-                        trace(">>>>>",i,j)
+                    
                         arrDuble.splice(j,2)
                         arrDuble.splice(i,2)
                         this.kTPoisk4()
@@ -355,17 +350,14 @@ export class KorektLine  {
         var __p,__p1,__p2,__p3,trtr
 
         this.kT4=function(p,p1,p2,p3){
-           /* trace(p.p)
-            trace(p1.p)
-            trace(p2.p)
-            trace(p3.p)*/
+           
              __p=null
             _p=this.getDist2D(p.p,p2.p)
             _p1=this.getDist2D(p.p,p3.p)
-           // trace(_p,_p1)
+  
 
             if(_p<0.01){
-                trace("!!!!###kT4###!!!")  
+                
                 if(this.getDist2D(p1.p,p3.p)<0.01){
                     __p=p
                     __p1=p1
@@ -376,7 +368,7 @@ export class KorektLine  {
                  
             }
             if(_p1<0.01){
-                trace("!@@@@@@@##kT4###!!!")  
+                
                 if(this.getDist2D(p1.p,p2.p)<0.01){
                     __p=p
                     __p1=p1
@@ -433,11 +425,7 @@ export class KorektLine  {
             }
 
 
-            trace("!!!!#######kT4###!!!",this.getDist2D(_p.p,_p2.p))   
-            
-            if(this.getDist2D(_p.p,_p2.p)<0.01){
-                trace("!!!!######################kT4#################!!!")    
-            }*/
+           */
 
             return false;
         }
@@ -513,7 +501,7 @@ export class KorektLine  {
             for (var i = 0; i < aR.length; i++) {
                 this.arTriang.unshift(aR[i].p);
             }
-          //  trace(this.arTriang)
+   
             this.korectTriang3(this.arTriang)
         }
 */

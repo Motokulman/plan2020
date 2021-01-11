@@ -107,6 +107,7 @@ SpPol.prototype = {
 			o.array.push({
 				x:this.array[i].position.x,
 				y:this.array[i].position.y,
+				z:this.array[i].position.z,
 				tipe:this.array[i].tipe
 			})			
 		}
