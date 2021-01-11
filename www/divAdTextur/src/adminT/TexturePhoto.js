@@ -42,10 +42,10 @@ export class TexturePhoto {
             var alpha=true;
             var color=0xffffff;
 
-            if(self.visi3D.alpha==false){
-                alpha=false;            
-                self.visi3D.renderer.setClearColor(color, 1);
-            }
+            // if(self.visi3D.alpha==false){
+            //     alpha=false;            
+            //     self.visi3D.renderer.setClearColor(color, 1);
+            // }
 
             var ww=self.visi3D._width
             var hh=self.visi3D._height
@@ -60,6 +60,8 @@ export class TexturePhoto {
             
             self.visi3D.sizeWindow(0,0,ww,hh)
             self.visi3D.utility.debug=d
+
+
             if(alpha==false){
                 self.visi3D.renderer.setClearColor(self.visi3D.color, 1);
                 
@@ -70,6 +72,46 @@ export class TexturePhoto {
         this.butPic.loadImeg("src/admin/icon/i2.png")
         this.butPic.width=this.butPic.height=25
         xx+= this.butPic.width + this.otstup
+
+        this.butPic1=new DButton(this.panel.content, xx, this.otstup, " ",function(base64){        
+            var d=self.visi3D.utility.debug;
+            self.visi3D.utility.debug=false
+            var sk=self.visi3D.utility.sky.active
+            self.visi3D.utility.sky.active=false
+
+
+            var alpha=true;
+            var color=0xffffff;
+
+            if(self.visi3D.alpha==false){
+                alpha=false;            
+                self.visi3D.renderer.setClearColor(color, 1);
+            }
+
+            var ww=self.visi3D._width
+            var hh=self.visi3D._height
+            
+            self.visi3D.sizeWindow(0,0,256,256)
+            self.visi3D.render();
+
+            var base64 = self.visi3D.renderer.domElement.toDataURL("image/png");
+            self.fotoDrag.setLink(base64, true);
+
+
+            
+            self.visi3D.sizeWindow(0,0,ww,hh)
+            self.visi3D.utility.debug=d
+            self.visi3D.utility.sky.active=sk
+            if(alpha==false){
+                self.visi3D.renderer.setClearColor(self.visi3D.color, 1);
+                
+            }
+            self.image.link = base64
+            trace(base64)
+        })
+        this.butPic1.loadImeg("src/admin/icon/i2.png")
+        this.butPic1.width=this.butPic1.height=25
+        xx+= this.butPic1.width + this.otstup
 
         this.panel.width = xx+this.otstup
     }
