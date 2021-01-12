@@ -1,13 +1,13 @@
 
-export class MCGal  {
+export class MenuMCGal  {
     constructor(par,fun,_x,_y) {          
-        this.type="MCGal";
+        this.type="MenuMCGal";
         this.fun=fun
         this.par=par
         var self=this;   
 
         this.param=par.param;
-        this.otstup= 4 || par.param.otstup
+        this.otstup=this.param.otstup
 
         this.x = 0 || _x
         this.y = 0 || _y
@@ -50,6 +50,22 @@ export class MCGal  {
                 this.name= p1
                 return
             }
+        }
+
+        this.setParam=function(){ 
+            this.y = this.param.wh + this.otstup
+            this.sizeWindow()
+        }
+
+        var w,h,s
+        this.sizeWindow = function(_w,_h,_s){
+            if(_w){
+                w=_w;
+                h=_h;
+                s=_s;
+            }
+            this.width=w/s-(this.param.otstup);
+            this.height=h/s-(this.param.otstup*2+this.param.wh)   
         }
     }
     

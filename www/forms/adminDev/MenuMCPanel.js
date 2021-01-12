@@ -1,17 +1,21 @@
+import { MenuMCParam } from './MenuMCParam.js';
 
-export class MCPanel  {
+
+export class MenuMCPanel  {
     constructor(par,fun,_x,_y) {          
-        this.type="MCPanel";
+        this.type="MenuMCPanel";
         this.fun=fun
         this.par=par
         var self=this;   
 
+        this.param=par.param;
+
         this._x = 0 || _x
         this._y = 0 || _y
 
-        this._width = 525
-        this._height = 50
-        this.otstup = 5
+        this._width = 5
+        this._height = this.param.wh
+        this.otstup = this.param.otstup
         this._activePanel=false
 
 
@@ -26,6 +30,8 @@ export class MCPanel  {
 
         this.panel = new DPanel(this.dCont, 0, 0)
         this.panel.color1 = '#008cba'
+        this.panel.height = this._height
+
 
         this.setSob=function(s,p,p1){ 
             //trace('setSob', 's', s, 'p', p, 'p1', p1)
@@ -40,10 +46,26 @@ export class MCPanel  {
             }
         }
 
+        this.sobxzP=function(s,p,p1){
+            if(s=="mdBool"){
+                let b=true
+                // trace(p.uuid,self.array)
+                for (var i = 0; i < self.array.length; i++) {
+                    b=false
+                    
+                    if(p)if(p.uuid==self.array[i].uuid){
+                        b=true
+                    }
+                    // trace(i+"  "+b+"  "+self.array[i].uuid)
+                    self.array[i].bool=b;
+                }
+            }
 
+            if(s=="sobCmena"){   
+                self.fun("sobCmena", p, p1)
+            }
+        }
        
-
-
 
         this.getXZP=function(typeComp){
             for (var i = 0; i <  this.arrayCesh.length; i++) {
@@ -54,9 +76,8 @@ export class MCPanel  {
                     }
                 }
             }
-            this.arrayCesh.push(new XZParam(this, typeComp));
+            this.arrayCesh.push(new MenuMCParam(this, typeComp,this.sobxzP));
             this.arrayCesh[this.arrayCesh.length-1].idArr=this.arrayCesh.length-1
-
             return this.arrayCesh[this.arrayCesh.length-1];
         }
 
@@ -64,27 +85,45 @@ export class MCPanel  {
         this.clear=function(p){
             self.array.length=0;
             for (var i = 0; i <  this.arrayCesh.length; i++) {
-                 this.arrayCesh[i].clear()
+                this.arrayCesh[i].clear()
             }
         }
 
 
         
         this.setVisi=function(p){
+            this.clear()
             var positionX = this.otstup
             for (var i = 0; i < p.length; i++) {
                 let o=this.getXZP(p[i].cmena)
                 o.x = positionX;
-                /*p[i].x = positionX;
-                p[i].idArr = i*/
-
-
+                o.y = this.otstup
                 o.setObj(p[i]);
+
+                self.array.push(o)
                 positionX += p[i].width+this.otstup
             }
-            trace("sdgfsdgsdfg!!!!!!!!!!!!!!!!")
-            trace(this.arrayCesh)
+            // trace(this.arrayCesh)
         }
+
+
+        this.setParam=function(){ 
+            this.x = this.otstup
+            this.sizeWindow()
+        }
+
+        var w,h,s
+        this.sizeWindow = function(_w,_h,_s){
+            if(_w){
+                w=_w;
+                h=_h;
+                s=_s;
+            }
+            this.width=w/s-(this.otstup);
+            this.height=this.param.wh;
+            this.array[this.array.length-1].width = this.width-this.array[this.array.length-1].x-this.otstup
+        }
+
     }
 
     set x(value) {
@@ -126,150 +165,4 @@ export class MCPanel  {
         }             
     }
     get activePanel() { return this._activePanel; }
-}
-
-
-
-
-export class XZParam  {
-    constructor(par, _typeComp, _fun) {  
-        this.type="param";
-        this.par=par
-        var self=this;
-        this.fun=_fun;
-
-        this._active=true
-        this.typeComp=_typeComp
-
-        this.fontSize = 16;
-        this._x = 0
-        this._y = 0
-        this.otstup=this.par.otstup
-                        
-        this.param=undefined
-        this.width=undefined
-        this.title=undefined
-        this.cmena=undefined
-        this.cmenaGal=undefined
-        this.value=undefined
-        this.idArr=0
-
-        this.dCont=new DCont(this.par.panel.content);
-
-
-
-
-
-        this.init=function(){
-            
-            this.label=new DLabel(this.dCont, 0, 0, "null");
-            this.comp =  this.addComponent(this.typeComp, this.title) 
-            
-             /*if (this.cmena != undefined) this.XZComponent = this.addComponent(this.typeComp, this.title)
-           this.panel = new DPanel (this.dCont, this.x, 0)
-            this.panel.width=this.width
-            this.panel.alpha=0.3
-            this.panel.div.addEventListener('mousedown', self.mousedown);
-            */
-        }
-
-
-        this.down=function(o){
-            trace(o)
-        }
-
-        this.addComponent = function (_type) {
-        //DComboBox //DButton //DImage //DInput //DCheckBox //undefined
-            var component = null;
-
-            if (_type == 'DComboBox') {
-                component = new DComboBox(this.dCont, 0, 0, ["nullxz"], this.down);
-                component.width = this.width - this.otstup * 2;
-            }   
-
-            if (_type == 'DButton') {
-                component = new DButton(this.dCont, 0, 0, '', this.down);
-                component.width = this.width - this.otstup * 2;
-            }
-
-            if (_type == 'DImage') {
-                component = new DImage(this.dCont, 0, 0, null, this.down);
-            }
-
-            if (_type == 'DInput') {
-                component = new DInput(this.dCont, 0, 0, "null"), this.down;
-                component.fontSize = this.fontSize;
-                component.width = this.width - this.otstup * 2;
-                component.height = this.fontSize;
-            }
-
-            if (_type == 'DCheckBox') {
-                component = new DCheckBox(this.dCont, 0, 0, "null", this.down);
-                component.fontSize = this.fontSize;
-                component.width = this.width - this.otstup * 2;
-                component.height = this.fontSize;
-            }
-
-          
-         
-         
-            return component;
-        };
-
-      
-
-
-        this.mousedown = function (e) {
-            trace(e.target)
-            trace(e)
-        };
-        
-
-
-        this.setObj=function(o){
-            this.param = o.param
-            this.width = o.width
-            this.title = o.title
-            this.cmena = o.cmena
-            this.cmenaGal = o.cmenaGal
-            this.value = o.value
-           
-          
-
-                   
-        }
-        
-        this.clear=function(){
-            this.active=false;
-
-        }
-        this.init() 
-    }
-
-    set active(value) {
-        if(this._active!=value){
-            this._active=value
-            this.dCont.visible=value
-            /*this.label.activeble = value
-            this.XZComponent.activeble = value == true ? false : true*/
-        }
-    }    
-    get active() { return  this._active;}
-
-    set x(value) {
-        if(this._x!=value){
-            this._x=value
-            trace(value)
-            this.dCont.x=value            
-        }
-    }    
-    get x() { return  this._x;}
-
-    // set y(value) {
-    //     if(this._y!=value){
-    //         this._y=value
-    //         this.dCont.y=value;
-    //     }
-    // }    
-    // get y() { return  this._y;}
 }
